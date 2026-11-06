@@ -64,6 +64,12 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Prizes are defined in `LB_PRIZE` in `index.html`. Admin moderation actions must not set `S.adm`.
 - Test SQL changes in a local PostgreSQL first (role `anon`), then give the owner one paste-ready file.
 
+## Orders balance (version 41)
+
+- `ordReward(s)` decides an order's payout when it completes and on the card: `min(kps0 × rc × order multipliers, max(run × cap, rmin)) × busy`. `rc`, `cap` and `rmin` live in `ORD_D`. The run cap keeps orders from exploding right after an ascension.
+- `S.orders.heat` (+1 per order, -1 per 4 minutes) drives the "customers busy" multiplier `ordBusy()`.
+- Click targets follow the recent click rate (`ordCps`), buy targets follow buildings owned. Item drops from orders can't add more cookies than the order itself.
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass. After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

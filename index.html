@@ -1280,6 +1280,8 @@ html{-webkit-tap-highlight-color:transparent}
 :root[data-device="phone"][data-orient="landscape"] .cookie-stage{width:min(100%,40vh,170px)}
 
 /* V40: Bestenliste – Zeiträume, Preise, Admin */
+.ochip.busy{background:rgba(255,107,107,.16);border-color:rgba(255,107,107,.45)}
+.ochip.busy b{color:var(--warn)}
 .lbtabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:6px 0 10px;width:100%}
 .lbtabs button{white-space:nowrap}
 .lbprize{border-radius:16px;padding:12px;margin-bottom:10px;background:linear-gradient(135deg,rgba(255,187,46,.18),rgba(255,110,170,.12));border:1px solid rgba(255,187,46,.35)}
@@ -2542,8 +2544,14 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=40;
+const NEWS_VER=41;
 const NEWS=[
+  {v:41,sum:['Aufträge sind jetzt dynamisch und fairer, besonders nach einem Aufstieg.','Orders are now dynamic and fairer, especially after ascending.'],items:[
+    ['change','Belohnungen wachsen mit deiner Runde: höchstens 2 % / 4 % / 6 % der Kekse, die du in dieser Runde gebacken hast (leicht / mittel / schwer). Direkt nach einem Aufstieg geben Aufträge also weniger, später mehr.','Rewards grow with your run: at most 2% / 4% / 6% of the cookies baked this run (easy / medium / hard). Right after ascending orders give less, later more.'],
+    ['change','Klick- und Kaufaufträge passen sich an: Wer schnell klickt oder viele Gebäude hat, bekommt größere Aufgaben.','Click and buy orders adapt: if you click fast or own many buildings, you get bigger tasks.'],
+    ['change','Viele Aufträge kurz hintereinander machen die Kunden „beschäftigt“: Die Belohnung sinkt eine Weile und erholt sich in ein paar Minuten.','Many orders in a row make customers “busy”: rewards drop for a while and recover within a few minutes.'],
+    ['change','Ruf gibt jetzt bis zu +15 % Produktion (vorher +25 %). Beim Aufstieg werden offene Aufträge neu gewürfelt.','Reputation now gives up to +15% production (was +25%). Open orders are re-rolled when you ascend.']
+  ]},
   {v:40,sum:['Neu: Wochen- und Monatspreise in der Bestenliste, schnellere Updates und ein neuer Look für Welt und Shop.','New: Weekly and monthly leaderboard prizes, faster updates, and a fresh look for World and Shop.'],items:[
     ['new','Bestenliste: Neue Reiter „Diese Woche“ und „Dieser Monat“. Gezählt werden die Kekse, die du in dem Zeitraum backst. Die Top 3 bekommen Edelsteine, Sternenkrümel und Kekse.','Leaderboard: New “This week” and “This month” tabs. They count the cookies you bake during that period. The top 3 win gems, star crumbs and cookies.'],
     ['change','Die Bestenliste ist jetzt viel schneller aktuell: Dein Punktestand wird jede Minute gesendet, die offene Liste aktualisiert sich alle 30 Sekunden.','The leaderboard is much faster now: your score is sent every minute and the open board refreshes every 30 seconds.'],
@@ -2754,7 +2762,7 @@ const NEWS=[
   {v:7,sum:['Neu: Kundenaufträge. Kunden bestellen Kekse und du bekommst Belohnungen.','New: customer orders. Customers order cookies and you get rewards.'],items:[
     ['new','Aufträge: Ein neuer Tab. Kunden wollen z. B. Kekse, Klicks oder neue Gebäude in kurzer Zeit.','Orders: A new tab. Customers want e.g. cookies, clicks or new buildings in a short time.'],
     ['new','Belohnung: Du bekommst Kekse. Schwere Aufträge geben sogar einen Gegenstand.','Reward: You get cookies. Hard orders even give an item.'],
-    ['new','Ruf: Jeder erledigte Auftrag gibt Ruf. Mehr Ruf bedeutet bis zu +25 % Produktion.','Reputation: Every finished order gives reputation. More reputation means up to +25% production.'],
+    ['new','Ruf: Jeder erledigte Auftrag gibt Ruf. Mehr Ruf bedeutet bis zu +15 % Produktion.','Reputation: Every finished order gives reputation. More reputation means up to +15% production.'],
     ['new','4 neue Erfolge für Aufträge und ein Bereich im Admin-Panel.','4 new achievements for orders and a section in the admin panel.']
   ]},
   {v:6,sum:['Endgame: mehr Gebäude, mehr Upgrades und ein viel größerer Himmelsbaum.','Endgame: more buildings, more upgrades and a much bigger heavenly tree.'],items:[
@@ -2813,12 +2821,13 @@ const CUST=[
 ];
 const ORD_TYPES=['bake','click','buy'];
 const ORD_D={
-  easy:{f:.8,T:60,clk:[40,30],buy:[3,90],rc:120,rmin:100,rep:1},
-  mid:{f:1.2,T:90,clk:[100,40],buy:[6,120],rc:300,rmin:500,rep:2},
-  hard:{f:1.8,T:120,clk:[180,45],buy:[12,150],rc:600,rmin:2000,rep:4}
+  easy:{f:.8,T:60,clk:[40,30],buy:[3,90],rc:45,rmin:100,rep:1,cf:.55,bp:.04,cap:.02,cmin:10},
+  mid:{f:1.2,T:90,clk:[100,40],buy:[6,120],rc:90,rmin:500,rep:2,cf:.75,bp:.07,cap:.04,cmin:25},
+  hard:{f:1.8,T:120,clk:[180,45],buy:[12,150],rc:180,rmin:2000,rep:4,cf:.95,bp:.1,cap:.06,cmin:50}
 };
 function sanOrders(o){
-  const r={slots:[null,null,null],rep:0,done:0,cd:0};
+  const r={slots:[null,null,null],rep:0,done:0,cd:0,heat:0};
+  if(o&&typeof o.heat==='number'&&isFinite(o.heat)) r.heat=Math.max(0,Math.min(20,o.heat));
   const nn=(v,d)=>(typeof v==='number'&&isFinite(v)&&v>=0)?v:(d||0);
   if(!o||typeof o!=='object') return r;
   r.rep=Math.floor(nn(o.rep));r.done=Math.floor(nn(o.done));r.cd=Math.min(300,nn(o.cd));
@@ -3266,7 +3275,7 @@ function recalc(){
   if(S.runT<300){gm*=2;clickT*=2;}
   {const ph=curPhase(),wx=curWeather();gm*=envV(ph.prod)*envV(wx.prod);clickT*=envV(ph.click)*envV(wx.click);goldRate*=envV(ph.gold)*envV(wx.gold);durM*=envV(wx.dur);}
   gm*=1+.01*(S.hero.lvl-1)+.005*S.hero.tower.best;
-  gm*=1+Math.min(.25,.001*S.orders.rep);
+  gm*=1+Math.min(.15,.0006*S.orders.rep);
   WFX=calcWFX();gm*=WFX.prod;clickT*=WFX.click;goldRate*=WFX.gold;costMult*=WFX.cost;
   let frenzy=1,clickBuff=1,sugarM=1,spellM=1;
   for(const f of S.buffs){if(f.id==='frenzy') frenzy=7;if(f.id==='clickfrenzy') clickBuff=150;if(f.id==='b_sugar') sugarM=2;if(f.id==='b_turbo') clickBuff*=3;if(f.id==='b_sale') costMult*=.85;if(f.id==='b_magnet') goldRate*=.5;if(f.id==='s_click') clickBuff*=10;if(f.id==='s_sale') costMult*=.8;if(f.id==='s_time') spellM=5;}
@@ -3846,9 +3855,18 @@ function genOrder(){
   const type=ORD_TYPES[Math.floor(Math.random()*3)],D=ORD_D[diff];
   let target,time;
   if(type==='bake'){time=D.T;const cv=Math.min(C.click,1+C.kps0*.25);target=nice(Math.max(D.rmin,(C.kps0+3*cv)*time*D.f));}
-  else if(type==='click'){target=D.clk[0];time=D.clk[1];}
-  else{target=D.buy[0];time=D.buy[1];}
+  else if(type==='click'){time=D.clk[1];target=nice(Math.min(time*8,Math.max(D.clk[0],ordCps*time*D.cf)));}
+  else{time=D.buy[1];const owned=S.b.reduce((a,n)=>a+n,0);target=Math.max(D.buy[0],Math.ceil(owned*D.bp));}
   return {c:Math.floor(Math.random()*CUST.length),type,diff,target,time,cookies:Math.ceil(Math.max(D.rmin,C.kps0*D.rc)),rep:D.rep,item:diff==='hard',st:'offer',t:0,sa:0,sc:0,sb:0};
+}
+/* V41: Aufträge wachsen mit der Runde mit */
+let ordCps=2,ordLastClicks=null;
+setInterval(()=>{if(ordLastClicks===null){ordLastClicks=S.clicks;return;}const d=Math.max(0,S.clicks-ordLastClicks);ordLastClicks=S.clicks;if(d>0||ordCps>.3) ordCps=ordCps*.92+d*.08;},1000);
+const ordBusy=()=>1/(1+.25*(S.orders.heat||0));
+function ordReward(s){
+  const D=ORD_D[s.diff]||ORD_D.easy;
+  const cap=Math.max(Math.max(S.run,0)*D.cap,D.rmin);
+  return Math.ceil(Math.min(C.kps0*D.rc*WFX.ord*qualOrd(),cap)*ordBusy());
 }
 function ensureOrders(){S.orders.slots.forEach((s,i)=>{if(!s) S.orders.slots[i]=genOrder();});}
 function ordProg(s){
@@ -3864,19 +3882,20 @@ function acceptOrder(i){
 }
 function completeOrder(i){
   const s=S.orders.slots[i];if(!s) return;
-  const g=Math.ceil(s.cookies*WFX.ord*qualOrd());
+  const g=ordReward(s);
   S.cookies+=g;S.run+=g;S.all+=g;
   S.orders.slots.forEach(o=>{if(o&&o.st==='active'&&o.type==='bake') o.sa+=g;});
-  S.orders.rep+=s.rep;S.orders.done++;addPP(3);
+  S.orders.rep+=s.rep;S.orders.done++;S.orders.heat=Math.min(20,(S.orders.heat||0)+1);addPP(3);
   if(s.diff==='hard') starRoll(.06,tt('Auftrag','Order'));
   toast(tr('ord_ok',{n:tx(CUST[s.c].n),c:fmt(g)}),true);
-  if(s.item){if(S.all>=BOX_UNLOCK) rollItem();else{const x=g;S.cookies+=x;S.run+=x;S.all+=x;}}
+  if(s.item){if(S.all>=BOX_UNLOCK){const a0=S.all;rollItem();const extra=S.all-a0;if(extra>g){const cut=extra-g;S.cookies=Math.max(0,S.cookies-cut);S.run-=cut;S.all-=cut;}}else{const x=g;S.cookies+=x;S.run+=x;S.all+=x;}}
   S.orders.slots[i]={st:'cool',t:15,c:s.c};
   recalc();checkAch(false);
 }
 function tickOrders(dt){
   const O=S.orders;
   if(O.cd>0) O.cd=Math.max(0,O.cd-dt);
+  if(O.heat>0) O.heat=Math.max(0,O.heat-dt/240);
   O.slots.forEach((s,i)=>{
     if(!s) return;
     if(s.st==='active'){
@@ -3911,8 +3930,8 @@ const ordCards=[];
 function updOrders(){
   if(panes.orders.hidden) return;
   const O=S.orders;
-  {const bn=(Math.round(Math.min(25,O.rep*.1)*10)/10).toLocaleString(LOC[LANG]),os=document.getElementById('ordStats'),
-    oh='<span class="obico">'+art('scroll')+'</span><span class="obtx"><b>'+tt('Auftragsbrett','Order board')+'</b><small>'+tr('ord_lead')+'</small></span><span class="ochips"><span class="ochip"><i>'+tt('Ruf','Reputation')+'</i><b>'+fmt(O.rep)+'</b></span><span class="ochip"><i>'+tt('Produktion','Production')+'</i><b>+'+bn+' %</b></span><span class="ochip"><i>'+tt('Erledigt','Done')+'</i><b>'+fmt(O.done)+'</b></span></span>';
+  {const bn=(Math.round(Math.min(15,O.rep*.06)*10)/10).toLocaleString(LOC[LANG]),busy=ordBusy(),os=document.getElementById('ordStats'),
+    oh='<span class="obico">'+art('scroll')+'</span><span class="obtx"><b>'+tt('Auftragsbrett','Order board')+'</b><small>'+tr('ord_lead')+'</small></span><span class="ochips"><span class="ochip"><i>'+tt('Ruf','Reputation')+'</i><b>'+fmt(O.rep)+'</b></span><span class="ochip"><i>'+tt('Produktion','Production')+'</i><b>+'+bn+' %</b></span><span class="ochip"><i>'+tt('Erledigt','Done')+'</i><b>'+fmt(O.done)+'</b></span>'+(busy<.97?'<span class="ochip busy" title="'+tt('Viele Aufträge in kurzer Zeit: Die Kunden zahlen gerade weniger. Das erholt sich in ein paar Minuten.','Lots of orders in a short time: customers pay less for now. This recovers within a few minutes.')+'"><i>'+tt('Kunden beschäftigt','Customers busy')+'</i><b>×'+(Math.round(busy*100)/100).toLocaleString(LOC[LANG])+'</b></span>':'')+'</span>';
    if(os._h!==oh){os.innerHTML=oh;os._h=oh;}}
   const rr=document.getElementById('ordReroll');
   rr.textContent=O.cd>0?tr('ord_reroll_cd',{t:mmss(O.cd)}):tr('ord_reroll');
@@ -3929,7 +3948,7 @@ function updOrders(){
     if(cool){c.btn.hidden=true;c.st.textContent=tr('ord_cool',{t:mmss(s.t)});return;}
     c.df.className='odiff d-'+s.diff;c.df.textContent=tr('ord_'+s.diff);
     c.task.textContent=tr('ord_'+s.type,{n:fmt(s.target),t:mmss(s.time)});
-    c.rew.textContent=tr('ord_reward',{c:fmt(s.cookies),r:s.rep})+(s.item?tr('ord_item'):'');
+    c.rew.textContent=tr('ord_reward',{c:fmt(ordReward(s)),r:s.rep})+(s.item?tr('ord_item'):'');
     if(s.st==='offer'){c.btn.hidden=false;c.btn.textContent=tr('ord_accept');c.st.textContent='';}
     else{
       c.btn.hidden=true;
@@ -4173,6 +4192,7 @@ function resetRun(gain,chalId){
   const oldUp=S.up;
   const keep={name:S.name,codes:S.codes,lb:S.lb,adm:S.adm,tamp:S.tamp,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
   S=Object.assign(fresh(),keep);
+  S.orders.slots=[null,null,null];S.orders.heat=0;
   if(gain>0){S.eg.ascT++;if(egHas('c_keep')) S.up=oldUp;}
   const w=S.w;
   w.gar.plots=[null,null,null,null,null,null];w.mana=0;

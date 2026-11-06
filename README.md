@@ -90,19 +90,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 40
-- **New:** Weekly and monthly leaderboards. **This week** and **This month** count the cookies you bake in that period, and the top 3 win gems, star crumbs and cookies. Prizes arrive the next time the winners play.
-- **Changed:** The leaderboard updates much faster: your score is sent every minute and the open board refreshes every 30 seconds.
-- **New:** The Shop has a bar at the top that jumps straight to each section, and every section is now its own card.
-- **Changed:** A more modern World tab: framed map, cleaner material chips and place panels with a smooth transition.
+### Version 41
+- **Changed:** Orders are now dynamic and fairer. Rewards grow with your run: at most 2% / 4% / 6% of the cookies baked this run (easy / medium / hard), so orders give less right after ascending and more later.
+- **Changed:** Click and buy orders adapt to how fast you click and how many buildings you own.
+- **Changed:** Finishing many orders in a row makes customers "busy": rewards drop for a while and recover within a few minutes.
+- **Changed:** Reputation now gives up to +15% production (was +25%). Open orders are re-rolled when you ascend.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Wochen- und Monats-Bestenlisten. **Diese Woche** und **Dieser Monat** zählen die Kekse, die du im Zeitraum backst. Die Top 3 gewinnen Edelsteine, Sternenkrümel und Kekse. Die Preise kommen beim nächsten Spielstart an.
-- **Geändert:** Die Bestenliste ist viel schneller aktuell: Dein Punktestand wird jede Minute gesendet, die offene Liste aktualisiert sich alle 30 Sekunden.
-- **Neu:** Im Shop springt eine Leiste oben direkt zu jedem Bereich, und jeder Bereich ist jetzt eine eigene Karte.
-- **Geändert:** Ein modernerer Welt-Tab: eingerahmte Karte, klarere Material-Chips und Ortsfenster mit sanftem Übergang.
+- **Geändert:** Aufträge sind jetzt dynamisch und fairer. Belohnungen wachsen mit deiner Runde: höchstens 2 % / 4 % / 6 % der Kekse, die du in dieser Runde gebacken hast (leicht / mittel / schwer). Direkt nach einem Aufstieg geben Aufträge also weniger, später mehr.
+- **Geändert:** Klick- und Kaufaufträge passen sich an, wie schnell du klickst und wie viele Gebäude du hast.
+- **Geändert:** Viele Aufträge hintereinander machen die Kunden „beschäftigt“: Die Belohnung sinkt eine Weile und erholt sich in ein paar Minuten.
+- **Geändert:** Ruf gibt jetzt bis zu +15 % Produktion (vorher +25 %). Offene Aufträge werden beim Aufstieg neu gewürfelt.
 
 </details>
 
