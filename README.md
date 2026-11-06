@@ -45,7 +45,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📐 **Fits every device** | Separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
-| 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank among everyone's bakeries. |
+| 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
 | 🛡️ **Anti-cheat** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. |
 | 🔒 **Protected admin panel** | The admin panel needs a password, so regular players can't use it. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
@@ -79,7 +79,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📐 **Passt auf jedes Gerät**: eigene Layouts für Handy (hochkant und quer), Tablet und Computer
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
-- 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit
+- 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit; Wochen- und Monatspreise für die Top 3, Updates jede Minute
 - 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, und die Bestenliste lehnt zu schnell wachsende Punkte ab
 - 🔒 **Admin-Panel mit Passwort**, damit nicht jeder es benutzen kann
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
@@ -90,17 +90,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 39
-- **New:** A layout for every device. The game detects whether you're on a phone, tablet or computer, and whether you hold your phone upright or sideways. Phones held sideways show the cookie and shop side by side, tablets get two columns, and computers a wider layout with a one-row header.
-- **New:** Under **Settings → Display** you can see the detected device and pick a layout yourself.
-- **Changed:** A cleaner look with smoother animations: a gentle start, soft tab changes and springy buttons. Hover effects only appear when you use a mouse.
+### Version 40
+- **New:** Weekly and monthly leaderboards. **This week** and **This month** count the cookies you bake in that period, and the top 3 win gems, star crumbs and cookies. Prizes arrive the next time the winners play.
+- **Changed:** The leaderboard updates much faster: your score is sent every minute and the open board refreshes every 30 seconds.
+- **New:** The Shop has a bar at the top that jumps straight to each section, and every section is now its own card.
+- **Changed:** A more modern World tab: framed map, cleaner material chips and place panels with a smooth transition.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Ein Layout für jedes Gerät. Das Spiel erkennt, ob du am Handy, Tablet oder Computer spielst und ob du das Handy hochkant oder quer hältst. Am Handy quer stehen Keks und Laden nebeneinander, am Tablet in zwei Spalten, am Computer breiter mit einer Kopfzeile in einer Reihe.
-- **Neu:** Unter **Einstellungen → Anzeige** siehst du das erkannte Gerät und kannst das Layout selbst wählen.
-- **Geändert:** Ruhigeres Design mit flüssigeren Animationen: sanfter Start, weiche Reiterwechsel und federnde Knöpfe. Hover-Effekte gibt es nur mit der Maus.
+- **Neu:** Wochen- und Monats-Bestenlisten. **Diese Woche** und **Dieser Monat** zählen die Kekse, die du im Zeitraum backst. Die Top 3 gewinnen Edelsteine, Sternenkrümel und Kekse. Die Preise kommen beim nächsten Spielstart an.
+- **Geändert:** Die Bestenliste ist viel schneller aktuell: Dein Punktestand wird jede Minute gesendet, die offene Liste aktualisiert sich alle 30 Sekunden.
+- **Neu:** Im Shop springt eine Leiste oben direkt zu jedem Bereich, und jeder Bereich ist jetzt eine eigene Karte.
+- **Geändert:** Ein modernerer Welt-Tab: eingerahmte Karte, klarere Material-Chips und Ortsfenster mit sanftem Übergang.
 
 </details>
 
