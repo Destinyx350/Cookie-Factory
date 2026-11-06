@@ -15,6 +15,29 @@
 <style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
 <body>
+<script>
+/* V39: Gerät erkennen, bevor die Seite gezeichnet wird. */
+(function(){
+  var de=document.documentElement,mm=function(q){try{return matchMedia(q).matches}catch(e){return false}};
+  function detect(){
+    var w=innerWidth,h=innerHeight,sh=Math.min(w,h),ua=navigator.userAgent||'',tp=navigator.maxTouchPoints||0;
+    var coarse=mm('(pointer: coarse)'),hover=mm('(hover: hover)');
+    var touch=coarse||(!hover&&tp>0);
+    var ipad=/iPad/.test(ua)||(navigator.platform==='MacIntel'&&tp>1);
+    var phoneUA=!ipad&&/iPhone|iPod|Android.+Mobile|Windows Phone/.test(ua);
+    var auto=touch?((phoneUA||sh<600)?'phone':'tablet'):(w<600?'phone':w<1000?'tablet':'desktop');
+    var pick=null;try{pick=localStorage.getItem('keksfabrik-device');}catch(e){}
+    var dev=(pick==='phone'||pick==='tablet'||pick==='desktop')?pick:auto;
+    var o=w>h?'landscape':'portrait',inp=touch?'touch':'mouse';
+    if(de.dataset.device!==dev) de.dataset.device=dev;
+    if(de.dataset.orient!==o) de.dataset.orient=o;
+    if(de.dataset.input!==inp) de.dataset.input=inp;
+    return {device:dev,auto:auto,pick:pick||'auto',orient:o,input:inp};
+  }
+  window.__kfDevice=detect;detect();
+  var t=0;addEventListener('resize',function(){clearTimeout(t);t=setTimeout(function(){detect();if(window.__kfDeviceChanged) window.__kfDeviceChanged();},120);});
+})();
+</script>
 <title>Keksfabrik</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1173,6 +1196,92 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
 @keyframes bhPop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
 .tut .twhy{display:block;color:var(--muted);font-size:12.5px;margin:1px 0 2px}
 :root[data-motion="off"] .rshine,:root[data-motion="off"] .bhint,:root[data-motion="off"] #worldPane .hero .hico{animation:none}
+
+/* ================= V39: Layouts für jedes Gerät, ruhiger und flüssiger ================= */
+:root{--ease-out:cubic-bezier(.2,.8,.2,1);--ease-spring:cubic-bezier(.2,1.3,.35,1)}
+html{-webkit-tap-highlight-color:transparent}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+:root[data-look] body::after{opacity:.045}
+
+/* Flüssige, einheitliche Rückmeldung */
+.btn,.tab,.seg button,.chip,.iconbtn,.gochip,.lbbar{transition:transform .2s var(--ease-spring),background-color .2s,color .2s,box-shadow .2s,opacity .2s,filter .2s}
+.btn:active,.tab:active,.seg button:active,.iconbtn:active,.chip:active,.gochip:active,.lbbar:active{transform:scale(.94)}
+:root[data-input="mouse"] .iconbtn:hover,:root[data-input="mouse"] .gochip:hover,:root[data-input="mouse"] .lbbar:hover{transform:translateY(-2px);filter:brightness(1.08)}
+:root[data-input="touch"] .cookie:hover svg{transform:none}
+:focus-visible{outline-offset:3px}
+
+/* Eröffnung und Reiterwechsel */
+.wrap>.top{animation:riseIn .5s var(--ease-out) backwards}
+.game>.stage{animation:riseIn .55s .07s var(--ease-out) backwards}
+/* Nur einblenden: eine Verschiebung würde die feste Reiterleiste am Handy mitnehmen. */
+.game>.store{animation:fadeIn2 .5s .14s var(--ease-out) backwards}
+.pane:not([hidden]){animation:paneIn .34s var(--ease-out)}
+.gsub:not([hidden]),.wsub:not([hidden]),.asub:not([hidden]){animation:paneIn .3s var(--ease-out)}
+.overlay:not([hidden])>.dlg{animation:dlgIn2 .34s var(--ease-spring)}
+@keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn2{from{opacity:0}to{opacity:1}}
+@keyframes paneIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes dlgIn2{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+
+/* Computer: breiter, Kopfzeile in einer Reihe */
+:root[data-device="desktop"] .wrap{max-width:1280px}
+@media (min-width:1200px){:root[data-device="desktop"] .game{grid-template-columns:minmax(360px,420px) minmax(0,1fr);gap:24px}}
+
+/* Tablet: zwei Spalten, große Tippflächen */
+@media (min-width:740px){
+  :root[data-device="tablet"] .wrap{max-width:1240px}
+  :root[data-device="tablet"] .game{grid-template-columns:minmax(280px,36%) minmax(0,1fr);align-items:start;gap:16px}
+  :root[data-device="tablet"] .stage{position:sticky;top:16px}
+  :root[data-device="tablet"] .stage-in{padding:22px 14px 16px}
+  :root[data-device="tablet"] .cookie-stage{width:min(100%,260px)}
+  :root[data-device="tablet"] .mini{gap:8px}
+}
+:root[data-device="tablet"] .tab{padding-top:8px;padding-bottom:8px}
+:root[data-device="tablet"] .iconbtn{width:44px;height:44px}
+
+/* Handy hochkant: kompakter, der Keks bleibt im Blick */
+:root[data-device="phone"][data-orient="portrait"] .wrap{padding-top:12px}
+:root[data-device="phone"][data-orient="portrait"] .top{margin-bottom:12px}
+:root[data-device="phone"][data-orient="portrait"] .stage-in{padding:18px 14px 14px}
+:root[data-device="phone"][data-orient="portrait"] .cookie-stage{width:min(100%,236px);margin:14px auto 10px}
+:root[data-device="phone"][data-orient="portrait"] .mini{margin-top:12px;padding-top:12px}
+
+/* Handy quer: Keks links, Laden rechts */
+:root[data-device="phone"][data-orient="landscape"] .wrap{max-width:none;padding-block:8px 16px}
+:root[data-device="phone"][data-orient="landscape"] .top{margin-bottom:8px;gap:8px;flex-wrap:nowrap}
+:root[data-device="phone"][data-orient="landscape"] .topr{flex-wrap:nowrap;gap:6px}
+:root[data-look][data-device="phone"][data-orient="landscape"] h1{font-size:19px}
+:root[data-look][data-device="phone"][data-orient="landscape"] .logo{width:30px;height:30px}
+:root[data-device="phone"][data-orient="landscape"] .plname,:root[data-device="phone"][data-orient="landscape"] .ttlchip,:root[data-device="phone"][data-orient="landscape"] .note,:root[data-device="phone"][data-orient="landscape"] .newsbtn>span[data-i18n]{display:none!important}
+:root[data-device="phone"][data-orient="landscape"] .iconbtn{width:36px;height:36px}
+:root[data-device="phone"][data-orient="landscape"] .game{grid-template-columns:minmax(220px,34%) minmax(0,1fr);gap:10px;align-items:start}
+:root[data-device="phone"][data-orient="landscape"] .stage{position:sticky;top:8px}
+:root[data-device="phone"][data-orient="landscape"] .stage-in{padding:10px 10px 10px}
+:root[data-look][data-device="phone"][data-orient="landscape"] .count{font-size:32px}
+:root[data-device="phone"][data-orient="landscape"] .cookie-stage{width:min(100%,44vh,190px);margin:6px auto 4px}
+:root[data-device="phone"][data-orient="landscape"] .bhint{display:none!important}
+:root[data-device="phone"][data-orient="landscape"] .mini{margin-top:6px;padding-top:6px;gap:4px}
+:root[data-device="phone"][data-orient="landscape"] .mini dt{font-size:9px}
+:root[data-look][data-device="phone"][data-orient="landscape"] .tabs{position:static;border-radius:0;padding:10px 14px;background:none;border:0;box-shadow:none}
+:root[data-look][data-device="phone"][data-orient="landscape"] .wrap{padding-bottom:16px}
+:root[data-look][data-device="phone"][data-orient="landscape"] .toasts{padding-bottom:0}
+
+/* Feinschliff Handy */
+:root[data-device="phone"][data-orient="portrait"] .cookie-stage{width:min(100%,210px);margin:10px auto 8px}
+:root[data-look][data-device="phone"][data-orient="portrait"] .count{font-size:44px}
+:root[data-device="phone"][data-orient="portrait"] .unit{margin-top:4px}
+:root[data-device="phone"][data-orient="portrait"] .bhint{font-size:12.5px;padding:6px 12px;margin-bottom:4px}
+:root[data-device="phone"] .mini dt{letter-spacing:.06em}
+:root[data-device="phone"][data-orient="portrait"] .mini{gap:8px}
+:root[data-device="phone"][data-orient="landscape"] .unit{display:none}
+:root[data-device="phone"][data-orient="landscape"] .kps{margin-top:4px;font-size:13px}
+:root[data-device="phone"][data-orient="landscape"] .buffs{flex-wrap:nowrap;gap:4px;margin-top:6px;overflow:hidden;justify-content:center}
+:root[data-device="phone"][data-orient="landscape"] .buffs .buff{font-size:10.5px;padding:2px 8px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+:root[data-device="phone"][data-orient="landscape"] .cookie-stage{width:min(100%,40vh,170px)}
+
+/* Einstellungen: erkanntes Gerät */
+.devinfo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px;color:var(--muted);font-size:13px}
+.devinfo b{color:var(--fg)}
 </style>
 
 <div class="wrap">
@@ -1376,6 +1485,12 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
 <div class="seg setseg" id="setSeg"><button type="button" data-sp="disp" aria-pressed="true"></button><button type="button" data-sp="snd" aria-pressed="false"></button><button type="button" data-sp="game" aria-pressed="false"></button><button type="button" data-sp="save" aria-pressed="false"></button><button type="button" data-sp="admin" aria-pressed="false" data-i18n="tab_admin"></button></div>
 <p class="small" id="setNone" hidden></p>
 <div class="spane" data-spane="opt">
+        <div class="optsec" data-sc="disp">
+          <h2 id="devT"></h2>
+          <p class="small" id="devP"></p>
+          <div class="seg" id="devSeg" style="margin-top:8px"><button type="button" data-dev="auto"></button><button type="button" data-dev="phone"></button><button type="button" data-dev="tablet"></button><button type="button" data-dev="desktop"></button></div>
+          <div class="devinfo" id="devInfo"></div>
+        </div>
         <div class="optsec" data-sc="disp">
           <h2 data-i18n="opt_lang"></h2>
           <div class="seg langseg">
@@ -2367,8 +2482,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=38;
+const NEWS_VER=39;
 const NEWS=[
+  {v:39,sum:['Neu: Ein Layout für jedes Gerät, dazu ein ruhigeres Design und flüssigere Animationen.','New: A layout for every device, plus a cleaner look and smoother animations.'],items:[
+    ['new','Das Spiel erkennt, ob du am Handy, Tablet oder Computer spielst, und passt sich an. Am Handy quer stehen Keks und Laden nebeneinander, am Tablet in zwei Spalten, am Computer breiter.','The game detects whether you play on a phone, tablet or computer and adapts. On a phone held sideways the cookie and shop sit side by side, tablets get two columns, and computers a wider layout.'],
+    ['new','Unter Einstellungen → Anzeige siehst du das erkannte Gerät und kannst das Layout selbst wählen.','Under Settings → Display you can see the detected device and pick the layout yourself.'],
+    ['change','Ruhigeres Design und flüssigere Animationen: sanfter Start, weiche Reiterwechsel, federnde Knöpfe. Hover-Effekte gibt es nur noch mit der Maus.','Cleaner look and smoother animations: a gentle start, soft tab changes and springy buttons. Hover effects now only appear with a mouse.']
+  ]},
   {v:38,sum:['Updates kommen jetzt sofort an.','Updates now arrive right away.'],items:[
     ['new','Wenn es eine neue Version gibt, erscheint oben ein Hinweis. Ein Tipp auf „Jetzt aktualisieren“ lädt sie, dein Spielstand wird vorher gespeichert.','When a new version is out, a notice appears at the top. Tap “Update now” to load it. Your game is saved first.'],
     ['change','Das Spiel holt sich beim Öffnen immer die neueste Version, statt bis zu 10 Minuten eine alte zu zeigen.','The game always loads the newest version when you open it, instead of showing an old one for up to 10 minutes.']
@@ -7604,7 +7724,7 @@ function updV34Txt(){
   set('shareT',tt('Teilen','Share'));
   set('shareP',tt('Kopiere diesen Text und schick ihn deinen Freunden.','Copy this text and send it to your friends.'));
   set('shareCopy',tt('Kopieren','Copy'));set('shareClose',tt('Schließen','Close'));
-  updApp();renderLb();
+  updApp();renderLb();updDev();
 }
 
 /* ======================= V35: Bestenliste ======================= */
@@ -7708,6 +7828,26 @@ setInterval(()=>{if(!lbOn()) return;const c=lbCheat();if(c!==lbCheatWas){lbCheat
 if(lbOn()&&S.lb.on) setTimeout(lbRefresh,3000);
 function tampWarn(){toast(tt('Dieser Spielstand wurde außerhalb des Spiels verändert. Er kann nicht in die Bestenliste.','This save was changed outside the game. It can’t join the leaderboard.'),true);updV34Txt();}
 if(S.tamp&&hadSave&&!S.tampSeen){S.tampSeen=1;setTimeout(tampWarn,1500);}
+
+/* ======================= V39: Gerät & Layout ======================= */
+const DEVN={auto:['Automatisch','Automatic'],phone:['Handy','Phone'],tablet:['Tablet','Tablet'],desktop:['Computer','Computer']};
+function updDev(){
+  const d=window.__kfDevice?window.__kfDevice():{device:'desktop',auto:'desktop',pick:'auto',orient:'landscape',input:'mouse'};
+  const set=(id,t)=>{const e=$id(id);if(e&&e.textContent!==t) e.textContent=t;};
+  set('devT',tt('Layout für dein Gerät','Layout for your device'));
+  set('devP',tt('Das Spiel erkennt dein Gerät und passt die Ansicht an. Du kannst das Layout hier auch selbst wählen.','The game detects your device and adapts the view. You can also pick the layout yourself here.'));
+  document.querySelectorAll('#devSeg [data-dev]').forEach(b=>{b.textContent=tx(DEVN[b.dataset.dev]);b.setAttribute('aria-pressed',b.dataset.dev===d.pick?'true':'false');});
+  const info=$id('devInfo');if(info){
+    const h=tt('Erkannt: ','Detected: ')+'<b>'+tx(DEVN[d.auto])+'</b> · '+(d.input==='touch'?tt('Touch','touch'):tt('Maus','mouse'))+' · '+(d.orient==='portrait'?tt('hochkant','upright'):tt('quer','sideways'))+(d.pick!=='auto'?' · '+tt('Gewählt: ','Chosen: ')+'<b>'+tx(DEVN[d.device])+'</b>':'');
+    if(info._h!==h){info._h=h;info.innerHTML=h;}
+  }
+}
+$id('devSeg').addEventListener('click',e=>{
+  const b=e.target.closest('[data-dev]');if(!b) return;
+  try{if(b.dataset.dev==='auto') localStorage.removeItem('keksfabrik-device');else localStorage.setItem('keksfabrik-device',b.dataset.dev);}catch(x){}
+  updDev();toast(tt('Layout: ','Layout: ')+tx(DEVN[b.dataset.dev]));
+});
+window.__kfDeviceChanged=updDev;
 
 /* ======================= V38: Neue Version sofort melden ======================= */
 let updShown=0,updLast=0;
