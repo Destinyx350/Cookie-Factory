@@ -42,6 +42,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🎁 **Secret codes** | Type a code under **Settings → Game** to get cookies, gems or a boost. Each code works once per save. |
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
+| 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank among everyone's bakeries. |
 | 🛡️ **Anti-cheat** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. |
@@ -74,6 +75,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🎁 **Geheime Codes** unter **Einstellungen → Spiel**: Kekse, Edelsteine oder ein Schub, einmal pro Spielstand
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
+- 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit
 - 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, und die Bestenliste lehnt zu schnell wachsende Punkte ab
@@ -86,17 +88,15 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 37
-- **New:** A trophy at the top of the screen opens the leaderboard and shows your rank.
-- **New:** Saves are now sealed. If a save is changed outside the game (browser tools, edited files or text), it's flagged and can't join the leaderboard. You can check your save under **Settings → Saving**.
-- **Changed:** The leaderboard rejects scores that grow faster than the game allows.
+### Version 38
+- **New:** When a new version is out, a notice appears at the top of the game. Tap **Update now** to load it. Your game is saved first.
+- **Changed:** The game always loads the newest version when you open it, instead of showing an old one for up to 10 minutes.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Ein Pokal oben auf dem Bildschirm öffnet die Bestenliste und zeigt deinen Platz.
-- **Neu:** Spielstände sind jetzt versiegelt. Wird ein Spielstand außerhalb des Spiels geändert (Browser-Werkzeuge, bearbeitete Dateien oder Texte), wird er markiert und kann nicht in die Bestenliste. Prüfen kannst du das unter **Einstellungen → Speichern**.
-- **Geändert:** Die Bestenliste lehnt Punkte ab, die schneller wachsen, als das Spiel es erlaubt.
+- **Neu:** Wenn es eine neue Version gibt, erscheint oben im Spiel ein Hinweis. Tippe auf **Jetzt aktualisieren**, um sie zu laden. Dein Spielstand wird vorher gespeichert.
+- **Geändert:** Das Spiel lädt beim Öffnen immer die neueste Version, statt bis zu 10 Minuten eine alte zu zeigen.
 
 </details>
 
