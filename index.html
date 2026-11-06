@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Keksfabrik / Cookie Factory: Backe, baue und erobere das Keks-Universum! Kostenloses Idle-Spiel im Browser.">
+<meta name="theme-color" content="#1a1036">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Keksfabrik">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
 <body>
@@ -296,6 +305,7 @@ input[type=text]:focus{outline:2px solid var(--accent);outline-offset:0}
 .namein:focus{outline:2px solid var(--accent);outline-offset:1px}
 .nameerr{color:var(--warn);font-size:13px;min-height:18px;margin:6px 2px 8px}
 .plname{font-size:13px;font-weight:700;color:var(--muted);max-width:18ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:560px){.brandrow{flex-wrap:wrap;row-gap:2px}.plname{order:5;flex-basis:100%;max-width:none;padding-left:44px}}
 .admlock{max-width:380px;margin:16px auto 8px;text-align:center;display:grid;gap:10px;justify-items:center}
 .admlock .lockico{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--panel-2);color:var(--accent)}
 .admlock .lockico svg{width:28px;height:28px}
@@ -303,6 +313,15 @@ input[type=text]:focus{outline:2px solid var(--accent);outline-offset:0}
 .admlock .namein{text-align:center}
 .admlock .nameerr{margin:0}
 .admlockbar{display:flex;justify-content:flex-end;margin-bottom:8px}
+/* V34: Codes, Speicherdatei, App, Teilen */
+.coderow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.coderow .namein{flex:1 1 180px;min-width:0;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.coderow .namein::placeholder{text-transform:none;letter-spacing:0;font-weight:400}
+.nameerr.ok{color:var(--good)}
+.appstate{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.apphint{background:var(--panel-2);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px;line-height:1.5}
+#shareOv{z-index:100}
+#shareBox{width:100%;min-height:96px;margin:10px 0 12px;resize:vertical}
 .dhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
 .dhead h2{font-size:22px;margin:0}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -1141,7 +1160,7 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
       <button type="button" class="btn iconbtn ntfbtn" id="ntfBtn" aria-label="Meldungen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="badge nb" id="ntfBadge" hidden>0</span></button>
       <span class="note" id="saveNote"></span>
       <button type="button" class="btn newsbtn" id="newsBtn"><span class="nico" aria-hidden="true"></span><span data-i18n="news"></span><span class="badge" id="newsBadge" hidden data-i18n="news_tag"></span></button>
-      <button type="button" class="btn iconbtn" id="helpBtn" aria-label="Hilfe / Help" style="font:700 18px/1 var(--font-display)">?</button><button type="button" class="btn iconbtn" id="setBtn" data-aria="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <button type="button" class="btn iconbtn" id="installBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button><button type="button" class="btn iconbtn" id="shareBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button><button type="button" class="btn iconbtn" id="helpBtn" aria-label="Hilfe / Help" style="font:700 18px/1 var(--font-display)">?</button><button type="button" class="btn iconbtn" id="setBtn" data-aria="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </div>
   </header>
   <div class="curbar" id="curBar" hidden></div>
@@ -1408,6 +1427,12 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
           <div class="list" id="bkList" style="margin-top:10px"></div>
         </div>
         <div class="optsec" data-sc="save">
+          <h2 id="fileT"></h2>
+          <p class="small" id="fileP"></p>
+          <div class="btns" style="margin-top:10px"><button type="button" class="btn primary" id="fileDl"></button><button type="button" class="btn" id="fileUp"></button></div>
+          <input type="file" id="fileIn" accept=".keks,.txt,.json,text/plain,application/json" hidden>
+        </div>
+        <div class="optsec" data-sc="save">
           <h2 data-i18n="export"></h2>
           <div class="btns"><button type="button" class="btn" id="exportBtn" data-i18n="show_save"></button><button type="button" class="btn" id="copyBtn" data-i18n="copy"></button></div>
           <textarea id="exportBox" readonly data-ph="export_ph" data-aria="export"></textarea>
@@ -1416,6 +1441,17 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
           <h2 data-i18n="import"></h2>
           <textarea id="importBox" data-ph="import_ph" data-aria="import"></textarea>
           <div class="btns"><button type="button" class="btn" id="importBtn" data-i18n="load"></button></div>
+        </div>
+        <div class="optsec" data-sc="game">
+          <h2 id="codeT"></h2>
+          <p class="small" id="codeP"></p>
+          <form id="codeForm" class="coderow" novalidate><input type="text" id="codeIn" class="namein" maxlength="24" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="submit" class="btn primary" id="codeBtn"></button></form>
+          <p class="nameerr" id="codeMsg" aria-live="polite"></p>
+        </div>
+        <div class="optsec" data-sc="game">
+          <h2 id="appT"></h2>
+          <p class="small" id="appP"></p>
+          <div id="appState"></div>
         </div>
         <div class="optsec" data-sc="game">
           <h2 data-i18n="new_game"></h2>
@@ -1428,6 +1464,7 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
 </div></div>
 <div class="overlay" id="newsOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="newsT"><div class="dhead"><h2 id="newsT" data-i18n="news_title"></h2><button type="button" class="btn sm" id="newsClose" data-i18n="news_close"></button></div><div id="newsBody"></div></div></div>
 <div class="overlay" id="nameOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="nameT"><h2 id="nameT"></h2><p id="nameP"></p><form id="nameForm" novalidate><input type="text" id="nameIn" class="namein" maxlength="20" autocomplete="off" spellcheck="false"><p class="nameerr" id="nameErr" aria-live="polite"></p><div class="btns"><button type="submit" class="btn primary" id="nameOk"></button><button type="button" class="btn" id="nameCancel"></button></div></form></div></div>
+<div class="overlay" id="shareOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="shareT"><h2 id="shareT"></h2><p id="shareP" class="small"></p><textarea id="shareBox" readonly></textarea><div class="btns"><button type="button" class="btn primary" id="shareCopy"></button><button type="button" class="btn" id="shareClose"></button></div></div></div>
 <div class="overlay" id="awayOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="awayT"><div class="dhead"><h2 id="awayT"></h2><button type="button" class="btn sm primary" id="awayClose" data-i18n="away_close"></button></div><div id="awayBody"></div></div></div>
 <button type="button" class="btn undo" id="undoBtn" hidden></button>
 <div class="overlay" id="visOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="visT"><div class="dhead"><h2 id="visT"></h2><button type="button" class="btn sm" id="visClose"></button></div><div id="visBody"></div></div></div>
@@ -2300,8 +2337,14 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=33;
+const NEWS_VER=34;
 const NEWS=[
+  {v:34,sum:['Neu: Geheime Codes, Spielstand als Datei, die Keksfabrik als App und ein Teilen-Knopf.','New: Secret codes, save files, Cookie Factory as an app and a share button.'],items:[
+    ['new','Codes: Gib unter Einstellungen → Spiel einen geheimen Code ein und hol dir eine Belohnung. Jeder Code geht einmal pro Spielstand.','Codes: Enter a secret code under Settings → Game to get a reward. Each code works once per save.'],
+    ['new','Spielstand als Datei: Unter Einstellungen → Speichern kannst du deinen Spielstand herunterladen und auf einem anderen Gerät wieder laden.','Save files: Under Settings → Saving you can download your save and load it again on another device.'],
+    ['new','Als App installieren: Die Keksfabrik läuft jetzt wie eine App auf dem Startbildschirm, auch ohne Internet.','Install as an app: Cookie Factory now runs like an app from your home screen, even without internet.'],
+    ['new','Teilen-Knopf oben: Zeig deinen Freunden, wie viele Kekse deine Bäckerei schon gebacken hat.','Share button at the top: Show your friends how many cookies your bakery has baked.']
+  ]},
   {v:33,sum:['Neu: Namen für Spielstände und ein Passwort für das Admin-Panel.','New: Names for save files and a password for the admin panel.'],items:[
     ['new','Spielstände haben jetzt Namen. Beim ersten Start, bei „Neu starten“ und bei „Neues Spiel“ gibst du einen Namen ein.','Save files now have names. You enter one on first launch, with “Start new” and with “New game”.'],
     ['new','Der Name steht oben neben dem Titel. Ändern kannst du ihn in den Einstellungen unter Spielstände.','The name shows at the top next to the title. You can change it in the settings under Save slots.'],
@@ -2719,7 +2762,7 @@ let WFX=null;
 /* ======================= Spielstand ======================= */
 const defAdmin=()=>({prod:1,click:1,cost:1,speed:1,gold:1,goldPow:1,growth:1.15,ac:0,b:{}});
 function fresh(){
-  return {name:'',cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
+  return {name:'',codes:{},cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
 }
 function sanitize(o){
   const s=fresh();
@@ -2827,6 +2870,7 @@ function sanitize(o){
   if(o.qual&&typeof o.qual==='object') ['flour','butter','sugar','choc'].forEach(k=>{s.qual[k]=Math.max(0,Math.min(10,Math.floor(num(o.qual[k],0))));});
   if(o.sys&&typeof o.sys==='object'){s.sys.init=o.sys.init?1:0;if(o.sys.seen&&typeof o.sys.seen==='object') Object.keys(o.sys.seen).slice(0,40).forEach(k=>{if(o.sys.seen[k]) s.sys.seen[String(k).slice(0,12)]=1;});}
   s.name=cleanName(o.name);
+  if(o.codes&&typeof o.codes==='object') Object.keys(o.codes).slice(0,200).forEach(k=>{if(/^[0-9a-f]{12}$/.test(k)) s.codes[k]=num(o.codes[k],1)||1;});
   return s;
 }
 let storageOK=true;
@@ -3861,7 +3905,7 @@ function startEvent(id){
 function chalProgress(c){return Math.min(1,S.run/c.goal);}
 function resetRun(gain,chalId){
   const oldUp=S.up;
-  const keep={name:S.name,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
+  const keep={name:S.name,codes:S.codes,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
   S=Object.assign(fresh(),keep);
   if(gain>0){S.eg.ascT++;if(egHas('c_keep')) S.up=oldUp;}
   const w=S.w;
@@ -7065,7 +7109,7 @@ function applyLang(){
   document.querySelectorAll('.langseg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===LANG?'true':'false'));
   els.respecBtn.textContent=tr('respec');
   els.resetBtn.textContent=tr('wipe');
-  showName();
+  showName();updV34Txt();
   upSig='';treeSig='';
   rebuildAch();buildAdmin();buildNews();setSkin();showSaveNote();render();
 }
@@ -7332,6 +7376,150 @@ document.getElementById('stSlots').addEventListener('click',()=>closeStart(()=>{
 document.getElementById('stSet').addEventListener('click',()=>closeStart(()=>openSettings()));
 document.getElementById('stHelp').addEventListener('click',()=>closeStart(()=>openHelp()));
 document.getElementById('stShow').addEventListener('change',e=>{S.opt.start=e.target.checked;save();});
+
+/* ======================= V34: Codes, Speicherdatei, App, Teilen ======================= */
+const GAME_URL='https://destinyx350.github.io/Cookie-Factory/';
+const $id=id=>document.getElementById(id);
+/* Codes: Nur gesalzene SHA-256-Hashes stehen im Code, nie die Codes selbst. Siehe CLAUDE.md. */
+const CODE_SALT='0f2c9c581037b1cad448aae2';
+const CODES=[
+  {h:'d828a1ccb337f53e181b56f18d3bce84ee5445113661140f5cca77d3506ddc6f',n:['Startgeschenk','Starter gift'],r:()=>{const g=Math.max(5000,C.kps0*600);addCk(g);return '+'+fmt(g)+' '+tt('Kekse','cookies');}},
+  {h:'ed451ef345fa0c7f81011f74c6dd204faf023d83b64f237570d464ca73cce3ca',n:['Zuckerparty','Sugar party'],r:()=>{addBuff('b_sugar',600);return tt('Produktion ×2 für 10 Minuten','Production ×2 for 10 minutes');}},
+  {h:'7e9b508096ac1561ba8361fc029b31d89bb558232d632b011d88b7c2dd920ee6',n:['Edelstein-Geschenk','Gem gift'],r:()=>{S.w.mat.gem+=10;return '+10 '+matName('gem');}},
+  {h:'9e982c2e32dcdde135e22e2c2af3803b40c04eb18b1afe3366b0c380d72b99a8',until:Date.parse('2027-01-07T00:00:00'),n:['Winter-Überraschung','Winter surprise'],r:()=>{S.w.mat.gem+=25;const g=Math.max(50000,C.kps0*3600);addCk(g);return '+25 '+matName('gem')+' · +'+fmt(g)+' '+tt('Kekse','cookies');}}
+];
+let codeFails=0,codeWait=0;
+async function codeHash(c){
+  const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(CODE_SALT+':'+c));
+  return Array.from(new Uint8Array(d),b=>b.toString(16).padStart(2,'0')).join('');
+}
+$id('codeForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const inp=$id('codeIn'),msg=$id('codeMsg'),bad=t=>{msg.className='nameerr';msg.textContent=t;};
+  const c=inp.value.toUpperCase().replace(/[^A-Z0-9ÄÖÜ]/g,'');
+  if(!c){bad(tt('Gib zuerst einen Code ein.','Enter a code first.'));inp.focus();return;}
+  const wait=Math.ceil((codeWait-Date.now())/1000);
+  if(wait>0){bad(tt('Zu viele falsche Codes. Warte noch '+wait+' s.','Too many wrong codes. Wait '+wait+' s.'));return;}
+  if(!window.crypto||!crypto.subtle){bad(tt('Codes gehen nur auf einer sicheren Seite (https).','Codes only work on a secure page (https).'));return;}
+  let h='';try{h=await codeHash(c);}catch(x){}
+  const k=CODES.find(x=>x.h===h);
+  if(!k){codeFails++;if(codeFails>=8){codeFails=0;codeWait=Date.now()+60000;}bad(tt('Diesen Code gibt es nicht. Prüfe die Schreibweise.','That code doesn’t exist. Check the spelling.'));return;}
+  codeFails=0;
+  const id=h.slice(0,12);
+  if(S.codes[id]){bad(tt('Diesen Code hast du in diesem Spielstand schon eingelöst.','You already redeemed this code in this save.'));return;}
+  if(k.until&&Date.now()>k.until){bad(tt('Dieser Code ist abgelaufen.','This code has expired.'));return;}
+  const got=k.r();S.codes[id]=Date.now();recalc();save();render();
+  msg.className='nameerr ok';msg.textContent=tt('Eingelöst: ','Redeemed: ')+tx(k.n)+' · '+got;
+  inp.value='';snd('claim');toast(tx(k.n)+': '+got,true);
+});
+
+/* Spielstand als Datei */
+function saveFileName(){
+  const d=new Date(),p=n=>String(n).padStart(2,'0');
+  const nm=(S.name||'Keksfabrik').normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'Keksfabrik';
+  return nm+'-'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'.keks';
+}
+$id('fileDl').addEventListener('click',()=>{
+  save();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([enc(JSON.stringify(S))],{type:'text/plain'}));
+  a.download=saveFileName();document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);
+  toast(tt('Spielstand gespeichert: ','Save downloaded: ')+a.download);
+});
+let fileArm=0;
+$id('fileUp').addEventListener('click',()=>{
+  const b=$id('fileUp');
+  if(S.opt.ask!==false&&!fileArm){
+    b.classList.add('armed');b.textContent=tt('Ersetzt dein Spiel! Nochmal klicken','Replaces your game! Click again');
+    fileArm=setTimeout(()=>{fileArm=0;b.classList.remove('armed');updV34Txt();},5000);return;
+  }
+  clearTimeout(fileArm);fileArm=0;b.classList.remove('armed');updV34Txt();
+  $id('fileIn').value='';$id('fileIn').click();
+});
+$id('fileIn').addEventListener('change',async e=>{
+  const f=e.target.files&&e.target.files[0];if(!f) return;
+  if(f.size>8e6){toast(tt('Diese Datei ist zu groß für einen Spielstand.','This file is too big to be a save.'));return;}
+  let o=null;
+  try{const t=(await f.text()).trim();try{o=JSON.parse(dec(t));}catch(x){o=JSON.parse(t);}}catch(x){o=null;}
+  if(!o||typeof o!=='object'||typeof o.cookies!=='number'){toast(tt('Das ist keine Keksfabrik-Datei.','That isn’t a Cookie Factory save file.'));return;}
+  try{pushBackup();}catch(x){}
+  const s=sanitize(o);if(!s.name) s.name=S.name;
+  S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;
+  applyLang();rebuildAll();save();slotSig='';
+  toast(tt('Spielstand geladen','Save loaded')+(S.name?': '+S.name:'')+'. '+tt('Dein altes Spiel liegt unter Backups.','Your old game is under Backups.'),true);
+});
+
+/* Als App installieren */
+let installEvt=null;
+const isStandalone=()=>(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;updApp();});
+window.addEventListener('appinstalled',()=>{installEvt=null;updApp();toast(tt('Die Keksfabrik ist jetzt als App installiert!','Cookie Factory is now installed as an app!'),true);});
+async function doInstall(){
+  if(!installEvt){openSettings();showSetPane('game');return;}
+  installEvt.prompt();try{await installEvt.userChoice;}catch(x){}
+  installEvt=null;updApp();
+}
+function updApp(){
+  $id('installBtn').hidden=!installEvt||isStandalone();
+  const box=$id('appState');if(!box) return;
+  let h;
+  if(isStandalone()) h='<p class="nameerr ok">'+tt('Du spielst gerade in der App. 👍','You’re playing in the app right now. 👍')+'</p>';
+  else if(installEvt) h='<div class="appstate"><button type="button" class="btn primary" id="appInstall">'+tt('App installieren','Install app')+'</button></div>';
+  else if(isIOS) h='<div class="apphint">'+tt('Auf dem iPhone oder iPad: Tippe in Safari unten auf <b>Teilen</b> (Quadrat mit Pfeil) und dann auf <b>Zum Home-Bildschirm</b>.','On iPhone or iPad: In Safari, tap <b>Share</b> (the square with an arrow), then <b>Add to Home Screen</b>.')+'</div>';
+  else h='<div class="apphint">'+tt('Öffne das Menü deines Browsers und wähle <b>App installieren</b> oder <b>Zum Startbildschirm hinzufügen</b>.','Open your browser’s menu and choose <b>Install app</b> or <b>Add to Home screen</b>.')+'</div>';
+  box.innerHTML=h;
+}
+$id('installBtn').addEventListener('click',doInstall);
+$id('appState').addEventListener('click',e=>{if(e.target.closest('#appInstall')) doInstall();});
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
+}
+
+/* Teilen */
+function shareText(){
+  const who=S.name?tt('Meine Bäckerei „'+S.name+'“','My bakery “'+S.name+'”'):tt('Meine Keksfabrik','My cookie factory');
+  return who+tt(' hat schon '+fmt(S.all)+' Kekse gebacken! 🍪 Schaffst du mehr?',' has baked '+fmt(S.all)+' cookies! 🍪 Can you beat that?');
+}
+async function shareGame(){
+  const text=shareText();
+  if(navigator.share){
+    try{await navigator.share({title:tt('Keksfabrik','Cookie Factory'),text,url:GAME_URL});return;}
+    catch(x){if(x&&x.name==='AbortError') return;}
+  }
+  try{await navigator.clipboard.writeText(text+'\n'+GAME_URL);toast(tt('Kopiert! Füge es in einen Chat ein.','Copied! Paste it into a chat.'),true);return;}catch(x){}
+  $id('shareBox').value=text+'\n'+GAME_URL;$id('shareOv').hidden=false;$id('shareBox').focus();$id('shareBox').select();
+}
+$id('shareBtn').addEventListener('click',shareGame);
+$id('shareCopy').addEventListener('click',async()=>{
+  const b=$id('shareBox');b.focus();b.select();
+  try{await navigator.clipboard.writeText(b.value);}catch(x){try{document.execCommand('copy');}catch(y){}}
+  toast(tt('Kopiert!','Copied!'));
+});
+$id('shareClose').addEventListener('click',()=>{$id('shareOv').hidden=true;$id('shareBtn').focus();});
+$id('shareOv').addEventListener('click',e=>{if(e.target===$id('shareOv')){$id('shareOv').hidden=true;}});
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$id('shareOv').hidden){e.preventDefault();e.stopImmediatePropagation();$id('shareOv').hidden=true;}},true);
+
+function updV34Txt(){
+  const set=(id,t)=>{const e=$id(id);if(e) e.textContent=t;};
+  set('codeT',tt('Codes','Codes'));
+  set('codeP',tt('Hast du einen geheimen Code? Gib ihn hier ein und hol dir deine Belohnung. Jeder Code geht einmal pro Spielstand.','Got a secret code? Enter it here to get your reward. Each code works once per save.'));
+  set('codeBtn',tt('Einlösen','Redeem'));
+  $id('codeIn').placeholder=tt('Code eingeben','Enter code');$id('codeIn').setAttribute('aria-label',tt('Code','Code'));
+  set('fileT',tt('Spielstand als Datei','Save file'));
+  set('fileP',tt('Lade deinen Spielstand als Datei herunter und lade ihn auf einem anderen Gerät wieder hoch. Beim Laden wird dein aktuelles Spiel ersetzt und vorher als Backup gesichert.','Download your save as a file and load it on another device. Loading replaces your current game, which is kept as a backup first.'));
+  set('fileDl',tt('Herunterladen','Download'));
+  if(!fileArm) set('fileUp',tt('Datei laden','Load file'));
+  set('appT',tt('Als App spielen','Play as an app'));
+  set('appP',tt('Installiere die Keksfabrik auf deinem Handy oder Computer. Sie öffnet sich dann im Vollbild mit eigenem Symbol und läuft auch ohne Internet.','Install Cookie Factory on your phone or computer. It then opens full-screen with its own icon and works without internet.'));
+  $id('shareBtn').setAttribute('aria-label',tt('Teilen','Share'));$id('shareBtn').title=tt('Teilen','Share');
+  $id('installBtn').setAttribute('aria-label',tt('App installieren','Install app'));$id('installBtn').title=tt('App installieren','Install app');
+  set('shareT',tt('Teilen','Share'));
+  set('shareP',tt('Kopiere diesen Text und schick ihn deinen Freunden.','Copy this text and send it to your friends.'));
+  set('shareCopy',tt('Kopieren','Copy'));set('shareClose',tt('Schließen','Close'));
+  updApp();
+}
 
 /* --- Tasten für neue Fenster --- */
 document.addEventListener('keydown',e=>{
