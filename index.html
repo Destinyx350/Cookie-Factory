@@ -287,6 +287,22 @@ input[type=text]:focus{outline:2px solid var(--accent);outline-offset:0}
 @keyframes wig{0%,60%,100%{transform:rotate(0)}68%{transform:rotate(-16deg) scale(1.1)}76%{transform:rotate(14deg) scale(1.1)}84%{transform:rotate(-8deg)}92%{transform:rotate(4deg)}}
 .overlay{position:fixed;inset:0;z-index:90;background:rgba(5,12,16,.74);display:grid;place-items:center;padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));animation:fadeIn .2s ease-out}
 .dlg{width:min(580px,100%);max-height:min(84vh,760px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px 18px 20px;animation:dlgIn .32s cubic-bezier(.2,1.3,.4,1)}
+/* Spielername & Admin-Sperre */
+#nameOv{z-index:100}
+.namedlg{width:min(420px,100%)}
+.namedlg h2{margin:0 0 6px}
+.namedlg #nameP{margin:0 0 14px;color:var(--muted)}
+.namein{display:block;width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--fg);font-size:16px}
+.namein:focus{outline:2px solid var(--accent);outline-offset:1px}
+.nameerr{color:var(--warn);font-size:13px;min-height:18px;margin:6px 2px 8px}
+.plname{font-size:13px;font-weight:700;color:var(--muted);max-width:18ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admlock{max-width:380px;margin:16px auto 8px;text-align:center;display:grid;gap:10px;justify-items:center}
+.admlock .lockico{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--panel-2);color:var(--accent)}
+.admlock .lockico svg{width:28px;height:28px}
+.admlock h2{margin:0}
+.admlock .namein{text-align:center}
+.admlock .nameerr{margin:0}
+.admlockbar{display:flex;justify-content:flex-end;margin-bottom:8px}
 .dhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
 .dhead h2{font-size:22px;margin:0}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -1116,7 +1132,7 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
 
 <div class="wrap">
   <header class="top">
-    <div class="brandrow"><span class="logo" id="logo" aria-hidden="true"></span><h1 id="brand" data-i18n="brand">Keksfabrik</h1><button type="button" class="ttlchip" id="ttlChip" hidden></button></div>
+    <div class="brandrow"><span class="logo" id="logo" aria-hidden="true"></span><h1 id="brand" data-i18n="brand">Keksfabrik</h1><span class="plname" id="plName" hidden></span><button type="button" class="ttlchip" id="ttlChip" hidden></button></div>
     <div class="topr">
       <div class="seg langseg" role="group" aria-label="Sprache / Language">
         <button type="button" data-lang="de" aria-pressed="true">DE</button>
@@ -1411,6 +1427,7 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
 </div>
 </div></div>
 <div class="overlay" id="newsOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="newsT"><div class="dhead"><h2 id="newsT" data-i18n="news_title"></h2><button type="button" class="btn sm" id="newsClose" data-i18n="news_close"></button></div><div id="newsBody"></div></div></div>
+<div class="overlay" id="nameOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="nameT"><h2 id="nameT"></h2><p id="nameP"></p><form id="nameForm" novalidate><input type="text" id="nameIn" class="namein" maxlength="20" autocomplete="off" spellcheck="false"><p class="nameerr" id="nameErr" aria-live="polite"></p><div class="btns"><button type="submit" class="btn primary" id="nameOk"></button><button type="button" class="btn" id="nameCancel"></button></div></form></div></div>
 <div class="overlay" id="awayOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="awayT"><div class="dhead"><h2 id="awayT"></h2><button type="button" class="btn sm primary" id="awayClose" data-i18n="away_close"></button></div><div id="awayBody"></div></div></div>
 <button type="button" class="btn undo" id="undoBtn" hidden></button>
 <div class="overlay" id="visOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="visT"><div class="dhead"><h2 id="visT"></h2><button type="button" class="btn sm" id="visClose"></button></div><div id="visBody"></div></div></div>
@@ -2283,8 +2300,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=32;
+const NEWS_VER=33;
 const NEWS=[
+  {v:33,sum:['Neu: Namen für Spielstände und ein Passwort für das Admin-Panel.','New: Names for save files and a password for the admin panel.'],items:[
+    ['new','Spielstände haben jetzt Namen. Beim ersten Start, bei „Neu starten“ und bei „Neues Spiel“ gibst du einen Namen ein.','Save files now have names. You enter one on first launch, with “Start new” and with “New game”.'],
+    ['new','Der Name steht oben neben dem Titel. Ändern kannst du ihn in den Einstellungen unter Spielstände.','The name shows at the top next to the title. You can change it in the settings under Save slots.'],
+    ['change','Das Admin-Panel ist jetzt mit einem Passwort geschützt.','The admin panel is now protected by a password.']
+  ]},
   {v:32,sum:['Neuer Look für Aufträge, Welt, Abenteuer und Filialen. Dazu Kauf-Effekte und bessere Tipps für den Start.','New look for Orders, World, Adventure and Stores. Plus purchase effects and better tips for the start.'],items:[
     ['new','Aufträge: Auftragsbrett-Banner mit Ruf, Bonus und Anzahl als Chips. Jede Karte hat einen Farbstreifen für die Schwierigkeit.','Orders: order board banner with reputation, bonus and count as chips. Each card has a colour stripe for its difficulty.'],
     ['new','Welt: Materialien als Leiste, jeder Bereich als eigene Karte. Der Held hat ein Banner mit Stufen-Abzeichen, Filialen zeigen ihre Zahlen als Chips.','World: materials as a bar, each section as its own card. The hero gets a banner with a level badge, stores show their numbers as chips.'],
@@ -2697,7 +2719,7 @@ let WFX=null;
 /* ======================= Spielstand ======================= */
 const defAdmin=()=>({prod:1,click:1,cost:1,speed:1,gold:1,goldPow:1,growth:1.15,ac:0,b:{}});
 function fresh(){
-  return {cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
+  return {name:'',cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
 }
 function sanitize(o){
   const s=fresh();
@@ -2804,6 +2826,7 @@ function sanitize(o){
   if(o.cards&&typeof o.cards==='object'){const c=o.cards;s.cards.dust=Math.floor(num(c.dust,0));s.cards.opened=Math.floor(num(c.opened,0));if(c.own&&typeof c.own==='object') Object.keys(c.own).slice(0,40).forEach(k=>{if(/^[a-z]+\d$/.test(k)) s.cards.own[k]=Math.max(0,Math.min(5,Math.floor(num(c.own[k],0))));});}
   if(o.qual&&typeof o.qual==='object') ['flour','butter','sugar','choc'].forEach(k=>{s.qual[k]=Math.max(0,Math.min(10,Math.floor(num(o.qual[k],0))));});
   if(o.sys&&typeof o.sys==='object'){s.sys.init=o.sys.init?1:0;if(o.sys.seen&&typeof o.sys.seen==='object') Object.keys(o.sys.seen).slice(0,40).forEach(k=>{if(o.sys.seen[k]) s.sys.seen[String(k).slice(0,12)]=1;});}
+  s.name=cleanName(o.name);
   return s;
 }
 let storageOK=true;
@@ -3838,7 +3861,7 @@ function startEvent(id){
 function chalProgress(c){return Math.min(1,S.run/c.goal);}
 function resetRun(gain,chalId){
   const oldUp=S.up;
-  const keep={all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
+  const keep={name:S.name,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
   S=Object.assign(fresh(),keep);
   if(gain>0){S.eg.ascT++;if(egHas('c_keep')) S.up=oldUp;}
   const w=S.w;
@@ -6081,41 +6104,78 @@ document.getElementById('achF').addEventListener('click',e=>{const b=e.target.cl
 /* ===== Spielstände ===== */
 let slotSig='',slotConf={n:0,t:0};
 function slotInfo(n){
-  if(n===SLOT) return {all:S.all,asc:S.asc,t:Date.now(),act:1};
-  try{const raw=localStorage.getItem(slotKey(n));if(!raw) return null;const o=JSON.parse(raw);return {all:+o.all||0,asc:+o.asc||0,t:+o.t||0};}catch(e){return null;}
+  if(n===SLOT) return {all:S.all,asc:S.asc,t:Date.now(),act:1,name:S.name};
+  try{const raw=localStorage.getItem(slotKey(n));if(!raw) return null;const o=JSON.parse(raw);return {all:+o.all||0,asc:+o.asc||0,t:+o.t||0,name:cleanName(o.name)};}catch(e){return null;}
 }
 function updSlots(){
   if(els.setOv.hidden) return;
   const armed=Date.now()-slotConf.t<5000?slotConf.n:0,inf=[1,2,3].map(slotInfo);
-  const sig=LANG+'|'+SLOT+'|'+armed+'|'+inf.map(x=>x?Math.floor(Math.log10(x.all+1))+':'+x.asc+':'+(x.act?0:x.t):'-').join(',');
+  const sig=LANG+'|'+SLOT+'|'+armed+'|'+inf.map(x=>x?Math.floor(Math.log10(x.all+1))+':'+x.asc+':'+(x.act?0:x.t)+':'+x.name:'-').join(',');
   if(sig===slotSig) return;
   slotSig=sig;
   document.getElementById('slotList').innerHTML=inf.map((x,i)=>{
     const n=i+1,act=n===SLOT;
     let info=x?fmt(x.all)+' '+tt('Kekse insgesamt','cookies in total')+' · '+tt('Aufstiege: ','Ascensions: ')+x.asc+(act?'':' · '+new Date(x.t).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})):tt('leer','empty');
     let btn='';
-    if(act) btn='<span class="wk-on">'+tt('Aktiv','Active')+'</span>';
+    if(act) btn='<span class="wk-on">'+tt('Aktiv','Active')+'</span><button type="button" class="btn sm" data-slot="ren:'+n+'">'+(x.name?tt('Umbenennen','Rename'):tt('Name geben','Add name'))+'</button>';
     else btn='<button type="button" class="btn sm primary" data-slot="load:'+n+'">'+(x?tt('Laden','Load'):tt('Neu starten','Start new'))+'</button>'+(x?'<button type="button" class="btn sm'+(armed===n?' armed':'')+'" data-slot="del:'+n+'">'+(armed===n?tt('Sicher? Nochmal','Sure? Again'):tt('Löschen','Delete'))+'</button>':'');
-    return '<div class="slot'+(act?' act':'')+'"><span><b>'+tt('Platz ','Slot ')+n+'</b><span class="sub">'+info+'</span></span><div class="btns">'+btn+'</div></div>';
+    const nm=x&&x.name?escName(x.name):'';
+    return '<div class="slot'+(act?' act':'')+'"><span><b>'+(nm||tt('Platz ','Slot ')+n)+'</b><span class="sub">'+(nm?tt('Platz ','Slot ')+n+' · ':'')+info+'</span></span><div class="btns">'+btn+'</div></div>';
   }).join('');
 }
 document.getElementById('slotList').addEventListener('click',e=>{
   const b=e.target.closest('[data-slot]');if(!b) return;
   const [a,ns]=b.dataset.slot.split(':'),n=+ns;
+  if(a==='ren'){
+    askName({title:tt('Spielstand umbenennen','Rename save'),text:tt('Gib deinem Spielstand einen neuen Namen.','Give your save a new name.'),ok:tt('Speichern','Save'),value:S.name},nm=>{S.name=nm;save();showName();slotSig='';updSlots();toast(tt('Name gespeichert.','Name saved.'));});
+    return;
+  }
   if(n===SLOT) return;
   if(a==='del'){
     if(slotConf.n!==n||Date.now()-slotConf.t>5000){slotConf={n,t:Date.now()};slotSig='';updSlots();return;}
     slotConf={n:0,t:0};try{localStorage.removeItem(slotKey(n));}catch(err){}
     toast(tt('Platz ','Slot ')+n+tt(' gelöscht.',' deleted.'));slotSig='';updSlots();return;
   }
+  if(!slotInfo(n)){askName({title:tt('Neuer Spielstand','New save'),text:tt('Wie soll dein Spielstand in Platz '+n+' heißen?','What should your save in slot '+n+' be called?')},nm=>switchSlot(n,nm));return;}
+  switchSlot(n);
+});
+function switchSlot(n,nm){
   save();
   SLOT=n;SAVE_KEY=slotKey(n);try{localStorage.setItem('keksfabrik-slot',String(n));}catch(err){}
   const s=readSave(),l=LANG;
-  S=s||fresh();if(!s) S.opt.lang=l;
+  S=s||fresh();if(!s){S.opt.lang=l;S.name=nm||'';}
   S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;undo=null;
   applyLang();rebuildAll();save();slotSig='';
   toast(tt('Spielstand ','Save slot ')+n+(s?tt(' geladen.',' loaded.'):tt(': neues Spiel.',': new game.')),true);
+}
+
+/* ===== Spielername ===== */
+function cleanName(v){return String(v==null?'':v).replace(/[<>\u0000-\u001f\u007f]/g,'').replace(/\s+/g,' ').trim().slice(0,20);}
+function escName(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);}
+function showName(){const e=document.getElementById('plName');if(!e) return;e.textContent=S.name||'';e.hidden=!S.name;}
+const nameOv=document.getElementById('nameOv'),nameIn=document.getElementById('nameIn'),nameErr=document.getElementById('nameErr');
+let nameCb=null,nameCan=true,nameRet=null;
+function askName(o,cb){
+  nameCb=cb;nameCan=o.cancel!==false;nameRet=document.activeElement;
+  document.getElementById('nameT').textContent=o.title||tt('Wie heißt deine Bäckerei?','Name your bakery');
+  document.getElementById('nameP').textContent=o.text||tt('Gib deinem Spielstand einen Namen. Du kannst ihn später in den Einstellungen ändern.','Give your save a name. You can change it later in the settings.');
+  document.getElementById('nameOk').textContent=o.ok||tt('Los geht’s','Let’s go');
+  const c=document.getElementById('nameCancel');c.textContent=tt('Abbrechen','Cancel');c.hidden=!nameCan;
+  nameIn.placeholder=tt('z. B. Omas Backstube','e.g. Grandma’s Bakery');
+  nameIn.setAttribute('aria-label',tt('Name des Spielstands','Save name'));
+  nameIn.value=o.value||'';nameErr.textContent='';
+  nameOv.hidden=false;setTimeout(()=>{nameIn.focus();nameIn.select();},30);
+}
+function closeName(){nameOv.hidden=true;nameCb=null;if(nameRet&&nameRet.focus&&document.contains(nameRet)) nameRet.focus();}
+document.getElementById('nameForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const n=cleanName(nameIn.value);
+  if(n.length<2){nameErr.textContent=tt('Bitte gib einen Namen mit mindestens 2 Zeichen ein.','Please enter a name with at least 2 characters.');nameIn.focus();return;}
+  const cb=nameCb;closeName();if(cb) cb(n);
 });
+document.getElementById('nameCancel').addEventListener('click',()=>{if(nameCan) closeName();});
+nameOv.addEventListener('click',e=>{if(e.target===nameOv&&nameCan) closeName();});
+window.addEventListener('keydown',e=>{if(nameOv.hidden) return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();if(nameCan) closeName();}},true);
 
 document.querySelector('.brandrow').addEventListener('click',()=>{S.sec.title=(S.sec.title||0)+1;});
 
@@ -6371,6 +6431,7 @@ function armed(btn,armedKey,restore,action){
   });
 }
 function rebuildAll(){
+  showName();
   checkDay(true);rebSig='';workSig='';
   upSig='';upSeen=null;treeSig='';lootSig='';lastDraw=null;recalc();ensureOrders();ensureWorld();refreshAch();fillAdmin();setSkin();render();
 }
@@ -6739,7 +6800,45 @@ let XV=null;
 const ab=(act,label,cls)=>'<button type="button" class="btn sm'+(cls?' '+cls:'')+'" data-act="'+act+'">'+label+'</button>';
 const admCard=(title,body,extra)=>'<div class="admcard admitem" data-k="'+String(title+' '+(extra||'')).toLowerCase().replace(/"/g,'')+'"><h4>'+title+'</h4>'+body+'</div>';
 const xrow=k=>frow('x:'+k,tx(XV[k][2]));
+/* Admin-Sperre: Nur ein gesalzener, langsamer Hash des Passworts steht im Code, nie das Passwort selbst. */
+var ADM_KEY='keksfabrik-admin',ADM_SALT='cc41055918420ef4b5d51c8663244fd5',ADM_ITER=150000,ADM_HASH='0ab689e6cbc41b35531f987ad3a12e4754fa413f15809c0575630143077df3e9';
+var admOK=false,admFails=0,admWait=0;
+try{admOK=sessionStorage.getItem(ADM_KEY)===ADM_HASH||localStorage.getItem(ADM_KEY)===ADM_HASH;}catch(e){}
+async function admHash(pw){
+  const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);
+  const salt=Uint8Array.from(ADM_SALT.match(/../g),x=>parseInt(x,16));
+  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt,iterations:ADM_ITER},key,256);
+  return Array.from(new Uint8Array(bits),b=>b.toString(16).padStart(2,'0')).join('');
+}
+function admLockHTML(){
+  return '<form class="admlock" id="admLockF" novalidate><span class="lockico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span><h2>'+tt('Admin-Panel ist gesperrt','Admin panel is locked')+'</h2><p class="small">'+tt('Gib das Admin-Passwort ein, um es zu öffnen.','Enter the admin password to open it.')+'</p>'
+    +'<input type="password" class="namein" id="admPw" autocomplete="current-password" aria-label="'+tt('Admin-Passwort','Admin password')+'" placeholder="'+tt('Passwort','Password')+'">'
+    +'<label class="chk"><input type="checkbox" id="admRem"><span>'+tt('Auf diesem Gerät entsperrt lassen','Keep unlocked on this device')+'</span></label>'
+    +'<button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button><p class="nameerr" id="admPwErr" aria-live="polite"></p></form>';
+}
+els.admin.addEventListener('submit',async e=>{
+  if(e.target.id!=='admLockF') return;
+  e.preventDefault();
+  const inp=document.getElementById('admPw'),err=document.getElementById('admPwErr'),rem=document.getElementById('admRem').checked;
+  const wait=Math.ceil((admWait-Date.now())/1000);
+  if(wait>0){err.textContent=tt('Zu viele Versuche. Warte noch '+wait+' s.','Too many tries. Wait '+wait+' s.');return;}
+  if(!window.crypto||!crypto.subtle){err.textContent=tt('Entsperren geht nur auf einer sicheren Seite (https).','Unlocking only works on a secure page (https).');return;}
+  let ok=false;try{ok=(await admHash(inp.value))===ADM_HASH;}catch(x){}
+  if(!ok){
+    admFails++;if(admFails>=5){admFails=0;admWait=Date.now()+30000;}
+    err.textContent=tt('Falsches Passwort.','Wrong password.');inp.value='';inp.focus();return;
+  }
+  admOK=true;admFails=0;
+  try{(rem?localStorage:sessionStorage).setItem(ADM_KEY,ADM_HASH);}catch(x){}
+  buildAdmin();toast(tt('Admin-Panel entsperrt.','Admin panel unlocked.'));
+});
+els.admin.addEventListener('click',e=>{
+  if(!e.target.closest('#admLockBtn')) return;
+  admOK=false;try{sessionStorage.removeItem(ADM_KEY);localStorage.removeItem(ADM_KEY);}catch(x){}
+  buildAdmin();toast(tt('Admin-Panel gesperrt.','Admin panel locked.'));
+});
 function buildAdmin(){
+  if(!admOK){XV=null;els.admin.innerHTML=admLockHTML();return;}
   XV=admXV();
   const P={};
   P.quick=admCard(tt('Kekse','Cookies'),'<div class="btns">'+[1e6,1e9,1e12,1e15,1e18,1e21,1e24].map(v=>ab('add:'+v,'+'+fmt(v))).join('')+ab('mul10',tr('adm_x10'))+ab('mul1000','×1000')+ab('zero',tt('Auf 0','Set to 0'))+'</div>')
@@ -6773,7 +6872,7 @@ function buildAdmin(){
     +admCard(tt('Speichern','Saving'),'<div class="btns">'+ab('savenow',tt('Jetzt speichern','Save now'))+ab('backup',tt('Backup anlegen','Create backup'))+'</div>')
     +admCard(tt('Spielstand-Daten','Save data'),'<div class="btns">'+ab('json',tt('Daten anzeigen','Show data'))+'</div><textarea id="admJson" readonly hidden></textarea><p class="small" id="admJsonN"></p>',tt('json export','json export'))
     +admCard(tr('adm_reset'),'<div class="btns">'+ab('reset:admin',tr('adm_reset_btn'))+'</div>');
-  let h='<div class="admhead"><div class="admstats">'+[['ck',tt('Kekse','Cookies')],['kps',tt('pro Sek.','per sec')],['clk',tt('pro Klick','per click')],['chips',tt('Chips','Chips')],['spd',tt('Tempo','Speed')]].map(([k,l])=>'<span><small>'+l+'</small><b data-al="'+k+'"></b></span>').join('')+'</div>'
+  let h='<div class="admlockbar"><button type="button" class="btn sm" id="admLockBtn">'+tt('Admin sperren','Lock admin')+'</button></div><div class="admhead"><div class="admstats">'+[['ck',tt('Kekse','Cookies')],['kps',tt('pro Sek.','per sec')],['clk',tt('pro Klick','per click')],['chips',tt('Chips','Chips')],['spd',tt('Tempo','Speed')]].map(([k,l])=>'<span><small>'+l+'</small><b data-al="'+k+'"></b></span>').join('')+'</div>'
     +'<input type="search" class="setq" id="admQ" autocomplete="off" placeholder="'+tt('Admin durchsuchen …','Search admin …')+'"><div class="seg admseg" id="admSeg">'+ADM_TABS.map(t=>'<button type="button" data-ap="'+t[0]+'" aria-pressed="'+(t[0]===admTab)+'">'+tt(t[1],t[2])+'</button>').join('')+'</div></div>'
     +ADM_TABS.map(t=>'<div class="admpane" data-ap="'+t[0]+'">'+P[t[0]]+'</div>').join('')+'<p class="small" id="admNone" hidden>'+tt('Nichts gefunden.','Nothing found.')+'</p>';
   els.admin.innerHTML=h;
@@ -6825,7 +6924,7 @@ function admAct2(p){
 }
 
 function fillAdmin(){
-  if(!els.admin.firstChild) return;
+  if(!admOK||!els.admin.firstChild) return;
   const act=document.activeElement;
   els.admin.querySelectorAll('input[data-f]').forEach(inp=>{
     if(inp===act) return;
@@ -6946,12 +7045,15 @@ els.copyBtn.addEventListener('click',()=>{
 els.importBtn.addEventListener('click',()=>{
   try{
     const s=sanitize(JSON.parse(dec(els.importBox.value)));
+    if(!s.name) s.name=S.name;
     S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;els.importBox.value='';
     applyLang();rebuildAll();save();toast(tr('toast_loaded'));
   }catch(e){toast(tr('toast_invalid'));}
 });
 armed(els.resetBtn,'wipe_confirm',()=>{els.resetBtn.textContent=tr('wipe');},()=>{
-  const l=LANG;S=fresh();S.opt.lang=l;els.fx.checked=true;rebuildAll();save();toast(tr('toast_new'));
+  askName({title:tt('Neues Spiel','New game'),text:tt('Wie soll dein neuer Spielstand heißen? Dein bisheriger Fortschritt in diesem Platz wird gelöscht.','What should your new save be called? Your current progress in this slot will be erased.'),ok:tt('Neu starten','Start over')},nm=>{
+    const l=LANG;S=fresh();S.opt.lang=l;S.name=nm;els.fx.checked=true;rebuildAll();save();slotSig='';toast(tr('toast_new'));
+  });
 });
 
 /* Sprache */
@@ -6963,6 +7065,7 @@ function applyLang(){
   document.querySelectorAll('.langseg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===LANG?'true':'false'));
   els.respecBtn.textContent=tr('respec');
   els.resetBtn.textContent=tr('wipe');
+  showName();
   upSig='';treeSig='';
   rebuildAch();buildAdmin();buildNews();setSkin();showSaveNote();render();
 }
@@ -7205,7 +7308,7 @@ function renderStart(){
   document.getElementById('stSub').textContent=tt('Backe, baue und erobere das Keks-Universum!','Bake, build and conquer the cookie universe!');
   let c='';
   if(has){
-    c='<div class="stk"><span>'+tt('Kekse','Cookies')+'</span><b>'+fmt(S.cookies)+'</b></div><div class="stk"><span>'+tt('pro Sekunde','per second')+'</span><b>'+fmtRate(C.kps)+'</b></div><div class="stk"><span>'+tt('Rang','Rank')+'</span><b>'+tx([RANKS[rankIdx()][1],RANKS[rankIdx()][2]])+'</b></div>';
+    c=(S.name?'<p class="stway">'+tt('Willkommen zurück, ','Welcome back, ')+escName(S.name)+'!</p>':'')+'<div class="stk"><span>'+tt('Kekse','Cookies')+'</span><b>'+fmt(S.cookies)+'</b></div><div class="stk"><span>'+tt('pro Sekunde','per second')+'</span><b>'+fmtRate(C.kps)+'</b></div><div class="stk"><span>'+tt('Rang','Rank')+'</span><b>'+tx([RANKS[rankIdx()][1],RANKS[rankIdx()][2]])+'</b></div>';
     if(r&&r.gain>0) c+='<p class="stway">'+tt('Während du weg warst: +','While you were away: +')+fmt(r.gain)+' '+tt('Kekse','cookies')+' ('+fmtDur(r.gap)+')</p>';
   }else c='<p class="stway">'+tt('Ein neues Abenteuer wartet. Klick auf den Keks und leg los!','A new adventure awaits. Click the cookie and get started!')+'</p>';
   document.getElementById('stCard').innerHTML=c;
@@ -7216,7 +7319,9 @@ function renderStart(){
   document.getElementById('stShowL').textContent=tt('Startbildschirm beim Öffnen zeigen','Show start screen when opening');
   document.getElementById('stShow').checked=S.opt.start!==false;
 }
+let mustName=!hadSave;
 function closeStart(then){
+  if(mustName&&!S.name){askName({cancel:false},nm=>{mustName=false;S.name=nm;save();showName();closeStart(then);});return;}
   startOv.hidden=true;startDone=true;getCtx();
   if(then) then();
   else if(awayRep&&!awayShown){awayShown=true;setTimeout(()=>showAway(awayRep),250);}

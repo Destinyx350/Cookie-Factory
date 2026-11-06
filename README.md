@@ -38,7 +38,8 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📅 **Daily rewards** | A 7-day login streak and three daily tasks with a bonus chest. |
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
 | ☀️ **Living world** | Time of day and weather change while you play. Combos and boosts speed things up. |
-| 💾 **Saves itself** | Progress saves automatically, with multiple save slots. |
+| 💾 **Named saves** | Progress saves automatically in 3 save slots. Every new game gets a name, which shows at the top of the screen. |
+| 🔒 **Protected admin panel** | The admin panel needs a password, so regular players can't use it. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
 ### 🕹️ How to play
@@ -63,10 +64,31 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🏆 **175 Erfolge**, Ziele und Statistiken
 - 📅 **Tägliche Belohnungen**: 7-Tage-Serie und drei Tagesaufgaben
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
-- 💾 **Automatisches Speichern** mit mehreren Speicherständen
+- 💾 **Spielstände mit Namen**: 3 Speicherplätze, jedes neue Spiel bekommt einen Namen
+- 🔒 **Admin-Panel mit Passwort**, damit nicht jeder es benutzen kann
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
 **[▶ Jetzt spielen](https://destinyx350.github.io/Cookie-Factory/)**
+
+---
+
+## 📝 What's new · Neuigkeiten
+
+### Version 33
+- **New:** Save files now have names. You enter one on first launch, when you start a new save slot, and when you start a new game.
+- **New:** Your save's name shows at the top next to the title. Rename it any time in **Settings → Saving**.
+- **Changed:** The admin panel is now protected by a password.
+
+<details>
+<summary>Deutsch</summary>
+
+- **Neu:** Spielstände haben jetzt Namen. Du gibst einen ein beim ersten Start, bei „Neu starten“ in einem Speicherplatz und bei „Neues Spiel“.
+- **Neu:** Der Name steht oben neben dem Titel. Ändern kannst du ihn jederzeit unter **Einstellungen → Speichern**.
+- **Geändert:** Das Admin-Panel ist jetzt mit einem Passwort geschützt.
+
+</details>
+
+Older updates are listed in the game under **What's New**.
 
 ---
 
