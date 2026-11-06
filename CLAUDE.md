@@ -1,6 +1,6 @@
 # Cookie Factory (Keksfabrik): rules for every change
 
-The whole game is one file, `index.html`. It is published with GitHub Pages from the `main` branch.
+The game is one file, `index.html`. `manifest.webmanifest`, `sw.js` (offline support) and `icons/` make it installable as an app. It is published with GitHub Pages from the `main` branch.
 
 ## Every update must also update the docs
 
@@ -13,6 +13,7 @@ Do these in the **same commit** as the change, every time:
 2. **In-game "What's New"** (`NEWS` in `index.html`)
    - Raise `NEWS_VER` by 1 and add a matching `{v:N, sum:[de,en], items:[[type,de,en], …]}` entry at the top of `NEWS`.
    - The version number must match the README.
+3. **sw.js**: raise `CACHE` (`keksfabrik-vN`) to the new version number so installed apps drop old files.
 
 ## Languages
 
@@ -25,6 +26,13 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - To change the password: pick a new one, generate a new random 16-byte salt, compute
   `pbkdf2_hmac('sha256', password, salt, 150000)` and replace `ADM_SALT` and `ADM_HASH`.
   Unlocks saved in players' browsers stop working automatically.
+
+## Redeem codes
+
+- Codes live in `CODES` in `index.html`. Only a SHA-256 hash is stored: `sha256(CODE_SALT + ':' + CODE)` as hex, where `CODE` is upper-case letters and digits only (spaces and dashes are removed when a player types it).
+- **Never** write a code in plain text in any file, commit, comment or README. Tell the owner the codes in chat only.
+- Each entry: `{h:'<hash>', until:Date.parse('YYYY-MM-DDT00:00:00') /* optional */, n:[de,en], r:()=>{ /* give reward */ return 'text shown to player'; }}`.
+- Used codes are stored per save in `S.codes` (first 12 hex characters of the hash).
 
 ## Before pushing
 

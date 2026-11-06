@@ -39,6 +39,10 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
 | ☀️ **Living world** | Time of day and weather change while you play. Combos and boosts speed things up. |
 | 💾 **Named saves** | Progress saves automatically in 3 save slots. Every new game gets a name, which shows at the top of the screen. |
+| 🎁 **Secret codes** | Type a code under **Settings → Game** to get cookies, gems or a boost. Each code works once per save. |
+| 📁 **Save files** | Download your save as a file and load it on another device. |
+| 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
+| 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
 | 🔒 **Protected admin panel** | The admin panel needs a password, so regular players can't use it. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
@@ -65,6 +69,10 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📅 **Tägliche Belohnungen**: 7-Tage-Serie und drei Tagesaufgaben
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
 - 💾 **Spielstände mit Namen**: 3 Speicherplätze, jedes neue Spiel bekommt einen Namen
+- 🎁 **Geheime Codes** unter **Einstellungen → Spiel**: Kekse, Edelsteine oder ein Schub, einmal pro Spielstand
+- 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
+- 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
+- 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🔒 **Admin-Panel mit Passwort**, damit nicht jeder es benutzen kann
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
@@ -74,17 +82,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 33
-- **New:** Save files now have names. You enter one on first launch, when you start a new save slot, and when you start a new game.
-- **New:** Your save's name shows at the top next to the title. Rename it any time in **Settings → Saving**.
-- **Changed:** The admin panel is now protected by a password.
+### Version 34
+- **New:** Secret codes. Enter one under **Settings → Game** to get a reward. Each code works once per save, and some codes expire.
+- **New:** Save files. Under **Settings → Saving**, download your save and load it again on another device. Your current game is backed up first.
+- **New:** Install Cookie Factory as an app. It opens full-screen from your home screen and works without internet.
+- **New:** A share button at the top shows your friends how many cookies your bakery has baked.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Spielstände haben jetzt Namen. Du gibst einen ein beim ersten Start, bei „Neu starten“ in einem Speicherplatz und bei „Neues Spiel“.
-- **Neu:** Der Name steht oben neben dem Titel. Ändern kannst du ihn jederzeit unter **Einstellungen → Speichern**.
-- **Geändert:** Das Admin-Panel ist jetzt mit einem Passwort geschützt.
+- **Neu:** Geheime Codes. Gib einen unter **Einstellungen → Spiel** ein und hol dir eine Belohnung. Jeder Code geht einmal pro Spielstand, manche laufen ab.
+- **Neu:** Spielstand als Datei. Unter **Einstellungen → Speichern** lädst du deinen Spielstand herunter und auf einem anderen Gerät wieder hoch. Dein aktuelles Spiel wird vorher gesichert.
+- **Neu:** Die Keksfabrik als App. Sie startet im Vollbild vom Startbildschirm und läuft auch ohne Internet.
+- **Neu:** Ein Teilen-Knopf oben zeigt deinen Freunden, wie viele Kekse deine Bäckerei gebacken hat.
 
 </details>
 
@@ -94,7 +104,7 @@ Older updates are listed in the game under **What's New**.
 
 ## 💻 Run it locally
 
-The whole game is a single `index.html` file with no build step. Download it and open it in your browser, or serve the folder:
+The game is a single `index.html` file with no build step. `manifest.webmanifest`, `sw.js` and the `icons` folder make it installable as an app. Download the files and open `index.html` in your browser, or serve the folder:
 
 ```bash
 python3 -m http.server 8000
