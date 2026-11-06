@@ -28,15 +28,31 @@ The leaderboard is already built into the game. It stays hidden until it is conn
 
 ## How it works
 
-- Players join from the **Goals** tab with their bakery name. Their total **cookies baked** is sent when they open the leaderboard and every 5 minutes while they play.
+- Players join from the trophy at the top (or the **Goals** tab) with their bakery name. Their total **cookies baked** is sent every minute while they play, and the board refreshes every 30 seconds while it's open.
 - Scores only go up. Updates sent less than 20 seconds apart are ignored.
 - Saves that used the admin panel can't join.
 - Players can leave at any time, which deletes their entry.
 
+## Weekly and monthly prizes, bans and admin tools (version 40)
+
+Run [`leaderboard-v2.sql`](leaderboard-v2.sql) once in the **SQL Editor** (clear the editor first, paste, **Run**). It's safe to run again and never deletes scores. Then run the one-line admin password setup the owner received privately. It isn't stored in this repository.
+
+- **This week / This month boards** count the cookies a player bakes during that week or month (weeks start Monday 00:00 UTC, months on the 1st).
+- When a week or month ends, the **top 3** are recorded automatically. Their game hands out the prize the next time they play:
+
+  | Place | Weekly prize | Monthly prize |
+  | --- | --- | --- |
+  | 🥇 1st | 100 gems + 2 h of cookies | 300 gems + 8 star crumbs + 6 h of cookies |
+  | 🥈 2nd | 60 gems + 1 h of cookies | 200 gems + 5 star crumbs + 4 h of cookies |
+  | 🥉 3rd | 30 gems + 30 min of cookies | 100 gems + 3 star crumbs + 2 h of cookies |
+
+- **Admin panel → Leaderboard** (needs the admin password): see every player, **Remove** them, **Ban** them (they can't rejoin until unbanned), **Reset game** (their own save is wiped the next time they open the game, with a notice), **Unban**, or **Clear the whole leaderboard**.
+- Saves live in each player's own browser, so a reset can only reach players who joined the leaderboard. It happens when their game next connects.
+
 ## Anti-cheat
 
 - Saves changed outside the game (browser tools, edited files or text) are flagged and can't join.
-- The database rejects new entries above 1e15 cookies, and scores that grow more than 10x per 5 minutes (above 100 million). The game only sends a score every 5 minutes, so honest players stay inside the limit.
+- The database rejects new entries above 1e15 cookies, and scores that grow more than 10x per 5 minutes (above 100 million). The game sends a score every minute and caps it just under this limit, so honest players are never rejected; their score catches up within minutes.
 - If your project was set up before version 37, run [`leaderboard-anticheat-update.sql`](leaderboard-anticheat-update.sql) once in the **SQL Editor** to add the database check.
 
 ## Removing a fake or rude entry
