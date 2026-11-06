@@ -34,6 +34,13 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Each entry: `{h:'<hash>', until:Date.parse('YYYY-MM-DDT00:00:00') /* optional */, n:[de,en], r:()=>{ /* give reward */ return 'text shown to player'; }}`.
 - Used codes are stored per save in `S.codes` (first 12 hex characters of the hash).
 
+## Leaderboard
+
+- Code is in the `V35: Bestenliste` block of `index.html`; the database setup is `docs/leaderboard-setup.sql`, and owner steps are in `docs/LEADERBOARD.md`.
+- It is live: `LB_URL` and `LB_KEY` point to the owner's Supabase project (project ID `nmmlemtljjvfurlrvuvm`). The key is the publishable (public) key, which is safe in the code. Never put a `service_role` or secret key in the repo.
+- Emptying `LB_URL` and `LB_KEY` hides the leaderboard again.
+- Saves that used the admin panel (`S.adm`, or admin values that aren't the defaults) must never be able to submit scores.
+
 ## Before pushing
 
 - Check that the script still parses, and play through the change in a browser (desktop and phone width) with no console errors.
