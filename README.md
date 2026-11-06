@@ -43,6 +43,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
+| 🏆 **Leaderboard** *(coming soon)* | Compare your bakery with everyone else's in the Goals tab. Saves that used the admin panel can't join. |
 | 🔒 **Protected admin panel** | The admin panel needs a password, so regular players can't use it. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
@@ -73,6 +74,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
+- 🏆 **Bestenliste** *(bald)*: vergleiche deine Bäckerei mit allen anderen im Tab Ziele
 - 🔒 **Admin-Panel mit Passwort**, damit nicht jeder es benutzen kann
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
@@ -82,19 +84,15 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 34
-- **New:** Secret codes. Enter one under **Settings → Game** to get a reward. Each code works once per save, and some codes expire.
-- **New:** Save files. Under **Settings → Saving**, download your save and load it again on another device. Your current game is backed up first.
-- **New:** Install Cookie Factory as an app. It opens full-screen from your home screen and works without internet.
-- **New:** A share button at the top shows your friends how many cookies your bakery has baked.
+### Version 35
+- **Coming soon:** A leaderboard. It's built and will be switched on soon. You'll find it in the **Goals** tab and can join with your bakery name.
+- **Changed:** Saves that used the admin panel can't join the leaderboard, so it stays fair.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Geheime Codes. Gib einen unter **Einstellungen → Spiel** ein und hol dir eine Belohnung. Jeder Code geht einmal pro Spielstand, manche laufen ab.
-- **Neu:** Spielstand als Datei. Unter **Einstellungen → Speichern** lädst du deinen Spielstand herunter und auf einem anderen Gerät wieder hoch. Dein aktuelles Spiel wird vorher gesichert.
-- **Neu:** Die Keksfabrik als App. Sie startet im Vollbild vom Startbildschirm und läuft auch ohne Internet.
-- **Neu:** Ein Teilen-Knopf oben zeigt deinen Freunden, wie viele Kekse deine Bäckerei gebacken hat.
+- **Bald:** Eine Bestenliste. Sie ist fertig gebaut und wird bald eingeschaltet. Du findest sie dann im Tab **Ziele** und machst mit deinem Bäckerei-Namen mit.
+- **Geändert:** Spielstände, in denen das Admin-Panel benutzt wurde, können nicht in die Bestenliste. So bleibt sie fair.
 
 </details>
 
@@ -111,6 +109,8 @@ python3 -m http.server 8000
 ```
 
 Then open http://localhost:8000.
+
+To switch on the leaderboard, follow [docs/LEADERBOARD.md](docs/LEADERBOARD.md).
 
 <div align="center">
 <sub>Made with 🍪 by <a href="https://github.com/Destinyx350">Destinyx350</a></sub>

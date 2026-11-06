@@ -322,6 +322,24 @@ input[type=text]:focus{outline:2px solid var(--accent);outline-offset:0}
 .apphint{background:var(--panel-2);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px;line-height:1.5}
 #shareOv{z-index:100}
 #shareBox{width:100%;min-height:96px;margin:10px 0 12px;resize:vertical}
+/* V35: Bestenliste */
+.lbbar{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:8px;align-items:center;width:100%;margin:8px 0 2px;text-align:left;border:0;border-radius:14px;padding:8px 12px 8px 8px;background:linear-gradient(180deg,var(--panel-3),var(--panel-2));color:var(--fg);box-shadow:0 3px 0 var(--sh);cursor:pointer;font:inherit}
+.lbbar .ico{width:30px;height:30px;border-radius:9px}.lbbar .ico svg{width:22px;height:22px}
+.lbbar small{display:block;color:var(--muted);font-size:11px}
+.lbbar b{display:block;font:700 14px/1.2 var(--font-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbbar .go{color:var(--accent);font:700 20px/1 var(--font-display)}
+.lbme{background:var(--panel-2);border-radius:14px;padding:12px;display:grid;gap:8px;margin:10px 0 12px}
+.lbme .row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.lbme .big{font:800 22px/1.1 var(--font-display)}
+.lblist{display:grid;gap:4px}
+.lbrow{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--panel-2)}
+.lbrow.me{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.lbrow .rk{font:700 15px/1 var(--font-display);text-align:center;color:var(--muted)}
+.lbrow .rk.m1{color:#f1c24a}.lbrow .rk.m2{color:#cdd6df}.lbrow .rk.m3{color:#d9925a}
+.lbrow .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lbrow .sc{font-variant-numeric:tabular-nums;font-weight:700}
+.lbfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.lbmsg{color:var(--muted);text-align:center;padding:18px 8px}
 .dhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
 .dhead h2{font-size:22px;margin:0}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -1267,6 +1285,7 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
 
       <div class="pane" data-pane="ach" role="tabpanel" hidden>
         <div class="gover" id="gOver"></div>
+        <button type="button" class="lbbar" id="lbBar" hidden></button>
         <div class="seg gseg" id="gSeg"><button type="button" data-g="daily" aria-pressed="true" data-i18n="g_daily"></button><button type="button" data-g="wheel" aria-pressed="false" id="gWheelB"></button><button type="button" data-g="ttl" aria-pressed="false" id="gTtlB"></button><button type="button" data-g="pass" aria-pressed="false" data-i18n="g_pass"></button><button type="button" data-g="ach" aria-pressed="false" data-i18n="g_ach"></button><button type="button" data-g="book" aria-pressed="false" data-i18n="g_book"></button><button type="button" data-g="stats" aria-pressed="false" data-i18n="g_stats"></button></div>
         <div class="gsub" data-gsub="daily"><div id="dailyBox"></div></div>
         <div class="gsub" data-gsub="wheel" hidden><div class="whwrap"><div class="whbox"><div class="whptr" aria-hidden="true"></div><div id="wheelSvg"></div></div><div id="wheelInfo"></div></div></div>
@@ -1465,6 +1484,7 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
 <div class="overlay" id="newsOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="newsT"><div class="dhead"><h2 id="newsT" data-i18n="news_title"></h2><button type="button" class="btn sm" id="newsClose" data-i18n="news_close"></button></div><div id="newsBody"></div></div></div>
 <div class="overlay" id="nameOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="nameT"><h2 id="nameT"></h2><p id="nameP"></p><form id="nameForm" novalidate><input type="text" id="nameIn" class="namein" maxlength="20" autocomplete="off" spellcheck="false"><p class="nameerr" id="nameErr" aria-live="polite"></p><div class="btns"><button type="submit" class="btn primary" id="nameOk"></button><button type="button" class="btn" id="nameCancel"></button></div></form></div></div>
 <div class="overlay" id="shareOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="shareT"><h2 id="shareT"></h2><p id="shareP" class="small"></p><textarea id="shareBox" readonly></textarea><div class="btns"><button type="button" class="btn primary" id="shareCopy"></button><button type="button" class="btn" id="shareClose"></button></div></div></div>
+<div class="overlay" id="lbOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="lbT"><div class="dhead"><h2 id="lbT"></h2><button type="button" class="btn sm" id="lbClose"></button></div><div id="lbBody"></div></div></div>
 <div class="overlay" id="awayOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="awayT"><div class="dhead"><h2 id="awayT"></h2><button type="button" class="btn sm primary" id="awayClose" data-i18n="away_close"></button></div><div id="awayBody"></div></div></div>
 <button type="button" class="btn undo" id="undoBtn" hidden></button>
 <div class="overlay" id="visOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="visT"><div class="dhead"><h2 id="visT"></h2><button type="button" class="btn sm" id="visClose"></button></div><div id="visBody"></div></div></div>
@@ -2337,8 +2357,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=34;
+const NEWS_VER=35;
 const NEWS=[
+  {v:35,sum:['Bald: Eine Bestenliste für alle Bäckereien.','Coming soon: a leaderboard for every bakery.'],items:[
+    ['new','Die Bestenliste ist fertig gebaut und wird bald eingeschaltet. Dann findest du sie im Tab Ziele und kannst mit deinem Bäckerei-Namen mitmachen.','The leaderboard is built and will be switched on soon. You’ll find it in the Goals tab and can join with your bakery name.'],
+    ['change','Spielstände, in denen das Admin-Panel benutzt wurde, können nicht in die Bestenliste. So bleibt sie fair.','Saves that used the admin panel can’t join the leaderboard. This keeps it fair.']
+  ]},
   {v:34,sum:['Neu: Geheime Codes, Spielstand als Datei, die Keksfabrik als App und ein Teilen-Knopf.','New: Secret codes, save files, Cookie Factory as an app and a share button.'],items:[
     ['new','Codes: Gib unter Einstellungen → Spiel einen geheimen Code ein und hol dir eine Belohnung. Jeder Code geht einmal pro Spielstand.','Codes: Enter a secret code under Settings → Game to get a reward. Each code works once per save.'],
     ['new','Spielstand als Datei: Unter Einstellungen → Speichern kannst du deinen Spielstand herunterladen und auf einem anderen Gerät wieder laden.','Save files: Under Settings → Saving you can download your save and load it again on another device.'],
@@ -2762,7 +2786,7 @@ let WFX=null;
 /* ======================= Spielstand ======================= */
 const defAdmin=()=>({prod:1,click:1,cost:1,speed:1,gold:1,goldPow:1,growth:1.15,ac:0,b:{}});
 function fresh(){
-  return {name:'',codes:{},cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
+  return {name:'',codes:{},lb:{on:0,id:''},adm:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
 }
 function sanitize(o){
   const s=fresh();
@@ -2870,6 +2894,8 @@ function sanitize(o){
   if(o.qual&&typeof o.qual==='object') ['flour','butter','sugar','choc'].forEach(k=>{s.qual[k]=Math.max(0,Math.min(10,Math.floor(num(o.qual[k],0))));});
   if(o.sys&&typeof o.sys==='object'){s.sys.init=o.sys.init?1:0;if(o.sys.seen&&typeof o.sys.seen==='object') Object.keys(o.sys.seen).slice(0,40).forEach(k=>{if(o.sys.seen[k]) s.sys.seen[String(k).slice(0,12)]=1;});}
   s.name=cleanName(o.name);
+  if(o.lb&&typeof o.lb==='object'){s.lb.on=o.lb.on?1:0;if(typeof o.lb.id==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(o.lb.id)) s.lb.id=o.lb.id;}
+  s.adm=o.adm?1:0;
   if(o.codes&&typeof o.codes==='object') Object.keys(o.codes).slice(0,200).forEach(k=>{if(/^[0-9a-f]{12}$/.test(k)) s.codes[k]=num(o.codes[k],1)||1;});
   return s;
 }
@@ -3905,7 +3931,7 @@ function startEvent(id){
 function chalProgress(c){return Math.min(1,S.run/c.goal);}
 function resetRun(gain,chalId){
   const oldUp=S.up;
-  const keep={name:S.name,codes:S.codes,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
+  const keep={name:S.name,codes:S.codes,lb:S.lb,adm:S.adm,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
   S=Object.assign(fresh(),keep);
   if(gain>0){S.eg.ascT++;if(egHas('c_keep')) S.up=oldUp;}
   const w=S.w;
@@ -6993,6 +7019,7 @@ function fillAdmin(){
   els.admin.querySelectorAll('[data-aseg]').forEach(sg=>{const cur=String(sg.dataset.aseg==='speed'?S.admin.speed:(S.admin.ac||0));sg.querySelectorAll('[data-v]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===cur?'true':'false'));});
 }
 function admSet(f,v){
+  S.adm=1;
   const [g,a,b]=f.split(':');
   if(g==='x'){if(XV&&XV[a]) XV[a][1](v);}
   else if(g==='r'){
@@ -7017,6 +7044,7 @@ function admSet(f,v){
   recalc();render();fillAdmin();
 }
 function toggleUnlock(g,id,on){
+  S.adm=1;
   const map=g==='up'?S.up:g==='ach'?S.ach:S.tree;
   if(on) map[id]=1;else delete map[id];
   if(g==='tree'){const spent=TREE.reduce((s,n)=>s+(S.tree[n.id]?n.cost:0),0);if(spent>S.chips) S.chips=spent;treeSig='';}
@@ -7025,6 +7053,7 @@ function toggleUnlock(g,id,on){
 function addCookies(v){S.cookies+=v;S.run+=v;S.all+=v;}
 function admAct(act){
   const p=act.split(':');
+  if(!['savenow','backup','json','scan'].includes(p[0])) S.adm=1;
   if(admAct2(p)){recalc();refreshAch();render();fillAdmin();save();return;}
   if(p[0]==='add'){const v=+p[1];addCookies(v);toast(tr('toast_added',{n:fmt(v)}));}
   else if(p[0]==='mul10'){const v=S.cookies*9;addCookies(v);toast(tr('toast_added',{n:fmt(v)}));}
@@ -7518,8 +7547,98 @@ function updV34Txt(){
   set('shareT',tt('Teilen','Share'));
   set('shareP',tt('Kopiere diesen Text und schick ihn deinen Freunden.','Copy this text and send it to your friends.'));
   set('shareCopy',tt('Kopieren','Copy'));set('shareClose',tt('Schließen','Close'));
-  updApp();
+  updApp();renderLb();
 }
+
+/* ======================= V35: Bestenliste ======================= */
+// To switch the leaderboard on, fill in your Supabase Project URL and anon public key (see docs/LEADERBOARD.md).
+const LB_URL='',LB_KEY='';
+const lbOn=()=>!!(LB_URL&&LB_KEY);
+let lbTop=null,lbRank=0,lbErr=false,lbBusy=false,lbLast=0,lbSent=0;
+const lbCheat=()=>{const a=S.admin;return !!S.adm||['prod','click','cost','speed','gold','goldPow'].some(k=>a[k]!==1)||a.growth!==1.15||(a.ac||0)>0||Object.keys(a.b||{}).length>0;};
+const lbScore=()=>Math.floor(Math.min(S.all,9.9e299));
+function lbUUID(){
+  if(crypto.randomUUID) return crypto.randomUUID();
+  const b=crypto.getRandomValues(new Uint8Array(16));b[6]=b[6]&15|64;b[8]=b[8]&63|128;
+  const h=Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');
+  return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20);
+}
+async function lbApi(path,body){
+  const r=await fetch(LB_URL.replace(/\/+$/,'')+'/rest/v1/'+path,{method:body?'POST':'GET',headers:{apikey:LB_KEY,Authorization:'Bearer '+LB_KEY,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const t=await r.text();return t?JSON.parse(t):null;
+}
+async function lbSubmit(){
+  if(!lbOn()||!S.lb.on||!S.name||lbCheat()) return;
+  if(!S.lb.id){S.lb.id=lbUUID();save();}
+  await lbApi('rpc/submit_score',{p_id:S.lb.id,p_name:S.name,p_score:lbScore()});
+  lbSent=Date.now();
+}
+async function lbRefresh(){
+  if(!lbOn()||lbBusy) return;
+  lbBusy=true;lbErr=false;renderLb();
+  try{
+    try{await lbSubmit();}catch(x){}
+    const top=await lbApi('leaderboard?select=name,score,updated_at&order=score.desc,updated_at.asc&limit=50');
+    lbTop=Array.isArray(top)?top:[];
+    lbRank=S.lb.on&&!lbCheat()?(Number(await lbApi('rpc/leaderboard_rank',{p_score:lbScore()}))||0):0;
+    lbLast=Date.now();
+  }catch(x){lbErr=true;}
+  lbBusy=false;renderLb();
+}
+function lbJoin(){
+  if(lbCheat()) return;
+  if(!S.name){askName({text:tt('Unter diesem Namen erscheint deine Bäckerei in der Bestenliste.','Your bakery shows up on the leaderboard under this name.')},nm=>{S.name=nm;save();showName();lbJoin();});return;}
+  S.lb.on=1;if(!S.lb.id) S.lb.id=lbUUID();save();
+  toast(tt('Du bist jetzt in der Bestenliste!','You joined the leaderboard!'),true);
+  lbRefresh();
+}
+async function lbLeave(){
+  S.lb.on=0;save();lbRank=0;
+  try{if(S.lb.id) await lbApi('rpc/leave_leaderboard',{p_id:S.lb.id});}catch(x){}
+  toast(tt('Deine Bäckerei ist nicht mehr in der Bestenliste.','Your bakery left the leaderboard.'));
+  lbRefresh();
+}
+function renderLb(){
+  const bar=$id('lbBar');if(!bar) return;
+  bar.hidden=!lbOn();if(!lbOn()) return;
+  const status=lbCheat()?tt('Nicht verfügbar: Admin benutzt','Not available: admin used'):!S.lb.on?tt('Mitmachen und vergleichen','Join and compare'):lbRank?tt('Du bist auf Platz ','You’re #')+fmt(lbRank):tt('Du bist dabei','You’re on the board');
+  const bh='<span class="ico">'+art('crown')+'</span><span><small>'+tt('Bestenliste','Leaderboard')+'</small><b>'+status+'</b></span><span class="go" aria-hidden="true">›</span>';
+  if(bar._h!==bh){bar._h=bh;bar.innerHTML=bh;}
+  $id('lbT').textContent=tt('Bestenliste','Leaderboard');
+  $id('lbClose').textContent=tt('Schließen','Close');
+  if($id('lbOv').hidden) return;
+  let me='<div class="lbme">';
+  if(lbCheat()) me+='<p class="small" style="margin:0">'+tt('In diesem Spielstand wurde das Admin-Panel benutzt. Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save used the admin panel. To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
+  else if(!S.lb.on) me+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+tt('Dein Bäckerei-Name und deine gebackenen Kekse sind dann für alle sichtbar.','Your bakery name and cookies baked will be visible to everyone.')+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
+  else me+='<div class="row"><span><span class="sub" style="display:block">'+escName(S.name||'')+'</span><span class="big">'+(lbRank?tt('Platz ','#')+fmt(lbRank):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+tt('Kekse gebacken','Cookies baked')+'</span><b>'+fmt(lbScore())+'</b></span></div>';
+  me+='</div>';
+  let list;
+  if(lbBusy&&!lbTop) list='<p class="lbmsg">'+tt('Lädt …','Loading …')+'</p>';
+  else if(lbErr&&!lbTop) list='<p class="lbmsg">'+tt('Die Bestenliste ist gerade nicht erreichbar. Prüfe dein Internet und versuch es nochmal.','The leaderboard can’t be reached right now. Check your internet and try again.')+'</p>';
+  else if(lbTop&&!lbTop.length) list='<p class="lbmsg">'+tt('Noch niemand dabei. Sei die erste Bäckerei!','Nobody here yet. Be the first bakery!')+'</p>';
+  else list='<div class="lblist">'+(lbTop||[]).map((r,i)=>{
+      const mine=S.lb.on&&r.name===S.name&&lbRank===i+1;
+      return '<div class="lbrow'+(mine?' me':'')+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i+1)+'</span><span class="nm">'+escName(String(r.name||''))+'</span><span class="sc">'+fmt(+r.score||0)+'</span></div>';
+    }).join('')+'</div>';
+  const when=lbLast?tt('Stand: ','Updated ')+new Date(lbLast).toLocaleTimeString(LOC[LANG],{hour:'2-digit',minute:'2-digit'}):'';
+  const foot='<div class="lbfoot"><span class="small">'+(lbErr&&lbTop?tt('Aktualisieren hat nicht geklappt. ','Couldn’t refresh. '):'')+when+'</span><span class="btns">'+(S.lb.on&&!lbCheat()?'<button type="button" class="btn sm" data-lb="leave">'+tt('Verlassen','Leave')+'</button>':'')+'<button type="button" class="btn sm" data-lb="refresh"'+(lbBusy?' disabled':'')+'>'+(lbBusy?tt('Lädt …','Loading …'):tt('Aktualisieren','Refresh'))+'</button></span></div>';
+  $id('lbBody').innerHTML=me+list+foot;
+}
+function openLb(){$id('lbOv').hidden=false;renderLb();if(Date.now()-lbLast>15000) lbRefresh();$id('lbClose').focus();}
+function closeLb(){if($id('lbOv').hidden) return;$id('lbOv').hidden=true;$id('lbBar').focus();}
+$id('lbBar').addEventListener('click',openLb);
+$id('lbClose').addEventListener('click',closeLb);
+$id('lbOv').addEventListener('click',e=>{
+  if(e.target===$id('lbOv')){closeLb();return;}
+  const b=e.target.closest('[data-lb]');if(!b) return;
+  if(b.dataset.lb==='join') lbJoin();else if(b.dataset.lb==='leave') lbLeave();else if(b.dataset.lb==='refresh') lbRefresh();
+});
+window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$id('lbOv').hidden&&$id('nameOv').hidden){e.preventDefault();e.stopImmediatePropagation();closeLb();}},true);
+setInterval(()=>{if(lbOn()&&S.lb.on&&!document.hidden&&Date.now()-lbSent>5*60000) lbSubmit().catch(()=>{});},60000);
+let lbCheatWas=null;
+setInterval(()=>{if(!lbOn()) return;const c=lbCheat();if(c!==lbCheatWas){lbCheatWas=c;renderLb();}else{const bar=$id('lbBar');if(bar&&!bar.hidden) renderLb();}},1000);
+if(lbOn()&&S.lb.on) setTimeout(lbRefresh,3000);
 
 /* --- Tasten für neue Fenster --- */
 document.addEventListener('keydown',e=>{
