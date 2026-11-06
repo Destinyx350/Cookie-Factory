@@ -42,6 +42,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🎁 **Secret codes** | Type a code under **Settings → Game** to get cookies, gems or a boost. Each code works once per save. |
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
+| 📐 **Fits every device** | Separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank among everyone's bakeries. |
@@ -75,6 +76,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🎁 **Geheime Codes** unter **Einstellungen → Spiel**: Kekse, Edelsteine oder ein Schub, einmal pro Spielstand
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
+- 📐 **Passt auf jedes Gerät**: eigene Layouts für Handy (hochkant und quer), Tablet und Computer
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit
@@ -88,15 +90,17 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 38
-- **New:** When a new version is out, a notice appears at the top of the game. Tap **Update now** to load it. Your game is saved first.
-- **Changed:** The game always loads the newest version when you open it, instead of showing an old one for up to 10 minutes.
+### Version 39
+- **New:** A layout for every device. The game detects whether you're on a phone, tablet or computer, and whether you hold your phone upright or sideways. Phones held sideways show the cookie and shop side by side, tablets get two columns, and computers a wider layout with a one-row header.
+- **New:** Under **Settings → Display** you can see the detected device and pick a layout yourself.
+- **Changed:** A cleaner look with smoother animations: a gentle start, soft tab changes and springy buttons. Hover effects only appear when you use a mouse.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Wenn es eine neue Version gibt, erscheint oben im Spiel ein Hinweis. Tippe auf **Jetzt aktualisieren**, um sie zu laden. Dein Spielstand wird vorher gespeichert.
-- **Geändert:** Das Spiel lädt beim Öffnen immer die neueste Version, statt bis zu 10 Minuten eine alte zu zeigen.
+- **Neu:** Ein Layout für jedes Gerät. Das Spiel erkennt, ob du am Handy, Tablet oder Computer spielst und ob du das Handy hochkant oder quer hältst. Am Handy quer stehen Keks und Laden nebeneinander, am Tablet in zwei Spalten, am Computer breiter mit einer Kopfzeile in einer Reihe.
+- **Neu:** Unter **Einstellungen → Anzeige** siehst du das erkannte Gerät und kannst das Layout selbst wählen.
+- **Geändert:** Ruhigeres Design mit flüssigeren Animationen: sanfter Start, weiche Reiterwechsel und federnde Knöpfe. Hover-Effekte gibt es nur mit der Maus.
 
 </details>
 

@@ -51,6 +51,12 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - **Server:** `submit_score` in `docs/leaderboard-setup.sql` rejects new entries above 1e15 and growth above 10x per 5 minutes (above 100 million). The game sends a score at most every 5 minutes (`S.lb.t`) so honest players stay inside that limit. Changes to it must also be given to the owner as a paste-ready SQL file (like `docs/leaderboard-anticheat-update.sql`) to run in the Supabase SQL Editor.
 - No browser game can stop someone who edits the game code itself; these checks catch the common tricks and protect the leaderboard.
 
+## Device layouts
+
+- An inline script at the top of `<body>` sets `data-device` (phone / tablet / desktop), `data-orient` (portrait / landscape) and `data-input` (touch / mouse) on `<html>` before the page paints, and again on resize. A manual choice is stored in `localStorage['keksfabrik-device']` (per device, not in the save).
+- Per-device CSS lives in the `V39` block at the end of the main stylesheet. Check layout changes on phone upright and sideways, tablet upright and sideways, and desktop.
+- Never animate `transform` on an element that contains a `position: fixed` child (like the phone tab bar inside `.store`), or the fixed child moves with it. Opening animations use `backwards` fill so nothing stays applied afterwards.
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass. After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.
