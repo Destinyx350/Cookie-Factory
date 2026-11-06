@@ -33,6 +33,12 @@ The leaderboard is already built into the game. It stays hidden until it is conn
 - Saves that used the admin panel can't join.
 - Players can leave at any time, which deletes their entry.
 
+## Anti-cheat
+
+- Saves changed outside the game (browser tools, edited files or text) are flagged and can't join.
+- The database rejects new entries above 1e15 cookies, and scores that grow more than 10x per 5 minutes (above 100 million). The game only sends a score every 5 minutes, so honest players stay inside the limit.
+- If your project was set up before version 37, run [`leaderboard-anticheat-update.sql`](leaderboard-anticheat-update.sql) once in the **SQL Editor** to add the database check.
+
 ## Removing a fake or rude entry
 
 In Supabase, open **Table Editor → leaderboard**, find the row, and delete it.

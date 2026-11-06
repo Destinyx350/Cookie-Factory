@@ -18,9 +18,16 @@ revoke all on public.leaderboard from anon, authenticated;
 grant select (name, score, updated_at) on public.leaderboard to anon;
 
 -- Players can only write through this function. It checks the name and score,
--- never lowers a score, and ignores updates sent less than 20 seconds apart.
+-- never lowers a score, ignores updates sent less than 20 seconds apart, and
+-- rejects scores that grow faster than the game allows (anti-cheat):
+--   * a new entry may start at up to 1e15 cookies,
+--   * above 100 million, a score may grow at most 10x per 5 minutes since the last saved score.
 create or replace function public.submit_score(p_id uuid, p_name text, p_score double precision)
 returns void language plpgsql security definer set search_path = public as $$
+declare
+  old_score double precision;
+  old_time  timestamptz;
+  hrs       double precision;
 begin
   p_name := btrim(regexp_replace(coalesce(p_name, ''), '\s+', ' ', 'g'));
   if char_length(p_name) < 2 or char_length(p_name) > 20 or p_name ~ '[<>]' then
@@ -29,11 +36,18 @@ begin
   if p_score is null or p_score = 'NaN'::double precision or p_score < 0 or p_score >= 1e300 then
     raise exception 'invalid score';
   end if;
-  insert into leaderboard (id, name, score, updated_at)
-  values (p_id, p_name, p_score, now())
-  on conflict (id) do update
-    set name = excluded.name, score = greatest(leaderboard.score, excluded.score), updated_at = now()
-    where leaderboard.updated_at < now() - interval '20 seconds';
+  select score, updated_at into old_score, old_time from leaderboard where id = p_id;
+  if not found then
+    if p_score > 1e15 then raise exception 'score too high for a new entry'; end if;
+    insert into leaderboard (id, name, score, updated_at) values (p_id, p_name, p_score, now());
+    return;
+  end if;
+  if old_time > now() - interval '20 seconds' then return; end if;
+  hrs := extract(epoch from (now() - old_time)) / 3600.0;
+  if p_score > greatest(old_score, 1e8) * power(10::double precision, least(12 * hrs, 290)) then
+    raise exception 'score grew too fast';
+  end if;
+  update leaderboard set name = p_name, score = greatest(score, p_score), updated_at = now() where id = p_id;
 end $$;
 
 -- Your place on the board for a given score.
