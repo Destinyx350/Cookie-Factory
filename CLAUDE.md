@@ -37,7 +37,8 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 ## Leaderboard
 
 - Code is in the `V35: Bestenliste` block of `index.html`; the database setup is `docs/leaderboard-setup.sql`, and owner steps are in `docs/LEADERBOARD.md`.
-- It is hidden while `LB_URL` and `LB_KEY` are empty. To switch it on, fill in the owner's Supabase Project URL and **anon public** key (public by design), change the README feature row and What's New from "coming soon" to live, and bump the version as usual.
+- It is live: `LB_URL` and `LB_KEY` point to the owner's Supabase project (project ID `nmmlemtljjvfurlrvuvm`). The key is the publishable (public) key, which is safe in the code. Never put a `service_role` or secret key in the repo.
+- Emptying `LB_URL` and `LB_KEY` hides the leaderboard again.
 - Saves that used the admin panel (`S.adm`, or admin values that aren't the defaults) must never be able to submit scores.
 
 ## Before pushing

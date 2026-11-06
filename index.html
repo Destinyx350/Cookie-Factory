@@ -2357,8 +2357,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=35;
+const NEWS_VER=36;
 const NEWS=[
+  {v:36,sum:['Neu: Die Bestenliste ist da!','New: The leaderboard is live!'],items:[
+    ['new','Bestenliste im Tab Ziele: Mach mit deinem Bäckerei-Namen mit und vergleiche deine gebackenen Kekse mit allen anderen. Die Top 3 bekommen Gold, Silber und Bronze.','Leaderboard in the Goals tab: Join with your bakery name and compare your cookies baked with everyone else. The top 3 get gold, silver and bronze.'],
+    ['new','Dein Platz steht direkt im Tab Ziele. Du kannst die Bestenliste jederzeit wieder verlassen.','Your rank shows right in the Goals tab. You can leave the leaderboard at any time.']
+  ]},
   {v:35,sum:['Bald: Eine Bestenliste für alle Bäckereien.','Coming soon: a leaderboard for every bakery.'],items:[
     ['new','Die Bestenliste ist fertig gebaut und wird bald eingeschaltet. Dann findest du sie im Tab Ziele und kannst mit deinem Bäckerei-Namen mitmachen.','The leaderboard is built and will be switched on soon. You’ll find it in the Goals tab and can join with your bakery name.'],
     ['change','Spielstände, in denen das Admin-Panel benutzt wurde, können nicht in die Bestenliste. So bleibt sie fair.','Saves that used the admin panel can’t join the leaderboard. This keeps it fair.']
@@ -7551,8 +7555,8 @@ function updV34Txt(){
 }
 
 /* ======================= V35: Bestenliste ======================= */
-// To switch the leaderboard on, fill in your Supabase Project URL and anon public key (see docs/LEADERBOARD.md).
-const LB_URL='',LB_KEY='';
+// Supabase project and its public (publishable) key. See docs/LEADERBOARD.md. Empty values hide the leaderboard.
+const LB_URL='https://nmmlemtljjvfurlrvuvm.supabase.co',LB_KEY='sb_publishable_STHuGWpHxg6efQhuvc_sQQ_xO5AvI5J';
 const lbOn=()=>!!(LB_URL&&LB_KEY);
 let lbTop=null,lbRank=0,lbErr=false,lbBusy=false,lbLast=0,lbSent=0;
 const lbCheat=()=>{const a=S.admin;return !!S.adm||['prod','click','cost','speed','gold','goldPow'].some(k=>a[k]!==1)||a.growth!==1.15||(a.ac||0)>0||Object.keys(a.b||{}).length>0;};

@@ -43,7 +43,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
-| 🏆 **Leaderboard** *(coming soon)* | Compare your bakery with everyone else's in the Goals tab. Saves that used the admin panel can't join. |
+| 🏆 **Leaderboard** | Join with your bakery name in the **Goals** tab and see your rank among everyone's bakeries. Saves that used the admin panel can't join. |
 | 🔒 **Protected admin panel** | The admin panel needs a password, so regular players can't use it. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
@@ -74,7 +74,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
-- 🏆 **Bestenliste** *(bald)*: vergleiche deine Bäckerei mit allen anderen im Tab Ziele
+- 🏆 **Bestenliste** im Tab **Ziele**: mach mit deinem Bäckerei-Namen mit und sieh deinen Platz
 - 🔒 **Admin-Panel mit Passwort**, damit nicht jeder es benutzen kann
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
@@ -84,15 +84,15 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 35
-- **Coming soon:** A leaderboard. It's built and will be switched on soon. You'll find it in the **Goals** tab and can join with your bakery name.
-- **Changed:** Saves that used the admin panel can't join the leaderboard, so it stays fair.
+### Version 36
+- **New:** The leaderboard is live! Open the **Goals** tab, tap **Leaderboard** and join with your bakery name. The top 3 get gold, silver and bronze.
+- **New:** Your rank shows right in the Goals tab, and you can leave the leaderboard at any time.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Bald:** Eine Bestenliste. Sie ist fertig gebaut und wird bald eingeschaltet. Du findest sie dann im Tab **Ziele** und machst mit deinem Bäckerei-Namen mit.
-- **Geändert:** Spielstände, in denen das Admin-Panel benutzt wurde, können nicht in die Bestenliste. So bleibt sie fair.
+- **Neu:** Die Bestenliste ist da! Öffne den Tab **Ziele**, tippe auf **Bestenliste** und mach mit deinem Bäckerei-Namen mit. Die Top 3 bekommen Gold, Silber und Bronze.
+- **Neu:** Dein Platz steht direkt im Tab Ziele, und du kannst die Bestenliste jederzeit verlassen.
 
 </details>
 
