@@ -41,6 +41,15 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Emptying `LB_URL` and `LB_KEY` hides the leaderboard again.
 - Saves that used the admin panel (`S.adm`, or admin values that aren't the defaults) must never be able to submit scores.
 
+## Anti-cheat
+
+- **Save seal:** every save written to storage, backups, export text and save files goes through `sealJSON(S)`, which appends a `sig` hash. `sanitize()` checks it with `sealState()`; a missing or wrong seal sets `S.tamp=1` (sticky). Never write a save with plain `JSON.stringify(S)`.
+- `sealMigrate()` seals saves that existed before version 37 once per browser (marker `keksfabrik-seal`).
+- The seal secret is inside `sealHash()`. Don't print it in chat, the README or comments.
+- Flagged (`S.tamp`) and admin-used (`S.adm`) saves can never submit leaderboard scores (`lbCheat()`).
+- **Server:** `submit_score` in `docs/leaderboard-setup.sql` rejects new entries above 1e15 and growth above 10,000x per hour (above 100 million). Changes to it must also be given to the owner as a paste-ready SQL file (like `docs/leaderboard-anticheat-update.sql`) to run in the Supabase SQL Editor.
+- No browser game can stop someone who edits the game code itself; these checks catch the common tricks and protect the leaderboard.
+
 ## Before pushing
 
 - Check that the script still parses, and play through the change in a browser (desktop and phone width) with no console errors.

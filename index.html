@@ -340,6 +340,12 @@ input[type=text]:focus{outline:2px solid var(--accent);outline-offset:0}
 .lbrow .sc{font-variant-numeric:tabular-nums;font-weight:700}
 .lbfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
 .lbmsg{color:var(--muted);text-align:center;padding:18px 8px}
+/* V37: Bestenliste oben & Schutz */
+.lbtb{position:relative}
+.lbtb .nb{position:absolute;top:-4px;right:-8px;margin:0;min-width:18px;line-height:18px;font-size:10px;padding:0 4px}
+.sealrow{display:flex;align-items:center;gap:8px;margin-top:8px;font-weight:700}
+.sealrow.bad{color:var(--warn)}.sealrow.ok{color:var(--good)}
+.lbnote{color:var(--warn);font-size:13px;margin:0}
 .dhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
 .dhead h2{font-size:22px;margin:0}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -1178,7 +1184,7 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
       <button type="button" class="btn iconbtn ntfbtn" id="ntfBtn" aria-label="Meldungen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="badge nb" id="ntfBadge" hidden>0</span></button>
       <span class="note" id="saveNote"></span>
       <button type="button" class="btn newsbtn" id="newsBtn"><span class="nico" aria-hidden="true"></span><span data-i18n="news"></span><span class="badge" id="newsBadge" hidden data-i18n="news_tag"></span></button>
-      <button type="button" class="btn iconbtn" id="installBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button><button type="button" class="btn iconbtn" id="shareBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button><button type="button" class="btn iconbtn" id="helpBtn" aria-label="Hilfe / Help" style="font:700 18px/1 var(--font-display)">?</button><button type="button" class="btn iconbtn" id="setBtn" data-aria="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <button type="button" class="btn iconbtn" id="installBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button><button type="button" class="btn iconbtn lbtb" id="lbTopBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg><span class="badge nb" id="lbTopRk" hidden></span></button><button type="button" class="btn iconbtn" id="shareBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button><button type="button" class="btn iconbtn" id="helpBtn" aria-label="Hilfe / Help" style="font:700 18px/1 var(--font-display)">?</button><button type="button" class="btn iconbtn" id="setBtn" data-aria="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </div>
   </header>
   <div class="curbar" id="curBar" hidden></div>
@@ -1448,6 +1454,7 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
         <div class="optsec" data-sc="save">
           <h2 id="fileT"></h2>
           <p class="small" id="fileP"></p>
+          <div class="sealrow" id="sealRow"></div>
           <div class="btns" style="margin-top:10px"><button type="button" class="btn primary" id="fileDl"></button><button type="button" class="btn" id="fileUp"></button></div>
           <input type="file" id="fileIn" accept=".keks,.txt,.json,text/plain,application/json" hidden>
         </div>
@@ -2357,8 +2364,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=36;
+const NEWS_VER=37;
 const NEWS=[
+  {v:37,sum:['Neu: Bestenliste oben als Pokal und ein Schutz gegen Schummeln.','New: Leaderboard as a trophy at the top and protection against cheating.'],items:[
+    ['new','Oben gibt es jetzt einen Pokal. Er öffnet die Bestenliste und zeigt deinen Platz.','There is now a trophy at the top. It opens the leaderboard and shows your rank.'],
+    ['new','Spielstände sind jetzt versiegelt. Wer seinen Spielstand außerhalb des Spiels ändert (Browser-Werkzeuge, bearbeitete Dateien oder Texte), kann nicht mehr in die Bestenliste.','Saves are now sealed. If a save is changed outside the game (browser tools, edited files or text), it can no longer join the leaderboard.'],
+    ['change','Die Bestenliste lehnt Punkte ab, die schneller wachsen, als das Spiel es erlaubt.','The leaderboard rejects scores that grow faster than the game allows.']
+  ]},
   {v:36,sum:['Neu: Die Bestenliste ist da!','New: The leaderboard is live!'],items:[
     ['new','Bestenliste im Tab Ziele: Mach mit deinem Bäckerei-Namen mit und vergleiche deine gebackenen Kekse mit allen anderen. Die Top 3 bekommen Gold, Silber und Bronze.','Leaderboard in the Goals tab: Join with your bakery name and compare your cookies baked with everyone else. The top 3 get gold, silver and bronze.'],
     ['new','Dein Platz steht direkt im Tab Ziele. Du kannst die Bestenliste jederzeit wieder verlassen.','Your rank shows right in the Goals tab. You can leave the leaderboard at any time.']
@@ -2790,11 +2802,12 @@ let WFX=null;
 /* ======================= Spielstand ======================= */
 const defAdmin=()=>({prod:1,click:1,cost:1,speed:1,gold:1,goldPow:1,growth:1.15,ac:0,b:{}});
 function fresh(){
-  return {name:'',codes:{},lb:{on:0,id:''},adm:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
+  return {name:'',codes:{},lb:{on:0,id:''},adm:0,tamp:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
 }
 function sanitize(o){
   const s=fresh();
   if(!o||typeof o!=='object') return s;
+  const seal=sealState(o);
   const num=(v,d)=>(typeof v==='number'&&isFinite(v)&&v>=0)?v:(d||0);
   s.cookies=num(o.cookies);s.run=num(o.run);s.all=Math.max(num(o.all),s.run);
   s.clicks=Math.floor(num(o.clicks));s.gold=Math.floor(num(o.gold));
@@ -2900,6 +2913,7 @@ function sanitize(o){
   s.name=cleanName(o.name);
   if(o.lb&&typeof o.lb==='object'){s.lb.on=o.lb.on?1:0;if(typeof o.lb.id==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(o.lb.id)) s.lb.id=o.lb.id;}
   s.adm=o.adm?1:0;
+  s.tamp=o.tamp||seal!=='ok'?1:0;
   if(o.codes&&typeof o.codes==='object') Object.keys(o.codes).slice(0,200).forEach(k=>{if(/^[0-9a-f]{12}$/.test(k)) s.codes[k]=num(o.codes[k],1)||1;});
   return s;
 }
@@ -2913,6 +2927,35 @@ function readSave(){
 function enc(str){const bytes=new TextEncoder().encode(str);let bin='';bytes.forEach(b=>{bin+=String.fromCharCode(b);});return btoa(bin);}
 function dec(b64){const bin=atob(b64.trim());const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes);}
 
+/* V37: Spielstand-Siegel. Erkennt Spielstände, die außerhalb des Spiels geändert wurden. */
+function sealHash(str){
+  const k='64e78344ef81515b13764efac867108e',t=k+'|'+str+'|'+k;
+  let a=0x9e3779b1,b=0x85ebca77,c=0xc2b2ae3d,d=0x27d4eb2f;
+  for(let i=0;i<t.length;i++){
+    const x=t.charCodeAt(i);
+    a=Math.imul(a^x,2654435761);b=Math.imul(b^x,1597334677);c=Math.imul(c^x,2246822507);d=Math.imul(d^x,3266489909);
+    a=((a<<13)|(a>>>19))+b|0;b=((b<<17)|(b>>>15))+c|0;c=((c<<11)|(c>>>21))+d|0;d=((d<<7)|(d>>>25))+a|0;
+  }
+  return [a,b,c,d].map(v=>{v^=v>>>16;v=Math.imul(v,2246822507);v^=v>>>13;v=Math.imul(v,3266489909);v^=v>>>16;return (v>>>0).toString(16).padStart(8,'0');}).join('');
+}
+function sealJSON(o){const j=JSON.stringify(o);return j.slice(0,-1)+(j.length>2?',':'')+'"sig":"'+sealHash(j)+'"}';}
+function sealState(o){
+  if(!o||typeof o!=='object') return 'bad';
+  if(typeof o.sig!=='string') return 'none';
+  const {sig,...rest}=o;return sealHash(JSON.stringify(rest))===sig?'ok':'bad';
+}
+(function sealMigrate(){
+  try{
+    if(localStorage.getItem('keksfabrik-seal')) return;
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);if(!/^keksfabrik-save-v1(-s\d+)?$/.test(k)) continue;
+      const o=JSON.parse(localStorage.getItem(k));if(o&&typeof o==='object'&&sealState(o)==='none') localStorage.setItem(k,sealJSON(o));
+    }
+    const bk=JSON.parse(localStorage.getItem('keksfabrik-backups-v1')||'[]');
+    if(Array.isArray(bk)){bk.forEach(x=>{try{const o=JSON.parse(x.s);if(sealState(o)==='none') x.s=sealJSON(o);}catch(e){}});localStorage.setItem('keksfabrik-backups-v1',JSON.stringify(bk));}
+    localStorage.setItem('keksfabrik-seal','1');
+  }catch(e){}
+})();
 let S=readSave();
 const hadSave=!!S;
 if(!S) S=fresh();
@@ -2923,7 +2966,7 @@ function showSaveNote(){
 }
 function save(){
   S.t=Date.now();lastSaveAt=S.t;
-  try{localStorage.setItem(SAVE_KEY,JSON.stringify(S));storageOK=true;}catch(e){storageOK=false;}
+  try{localStorage.setItem(SAVE_KEY,sealJSON(S));storageOK=true;}catch(e){storageOK=false;}
   saveTime=new Date().toLocaleTimeString(LOC[LANG],{hour:'2-digit',minute:'2-digit'});
   showSaveNote();
 }
@@ -3935,7 +3978,7 @@ function startEvent(id){
 function chalProgress(c){return Math.min(1,S.run/c.goal);}
 function resetRun(gain,chalId){
   const oldUp=S.up;
-  const keep={name:S.name,codes:S.codes,lb:S.lb,adm:S.adm,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
+  const keep={name:S.name,codes:S.codes,lb:S.lb,adm:S.adm,tamp:S.tamp,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
   S=Object.assign(fresh(),keep);
   if(gain>0){S.eg.ascT++;if(egHas('c_keep')) S.up=oldUp;}
   const w=S.w;
@@ -5567,7 +5610,7 @@ let bkSig='',bkConf={i:-1,t:0},lastBk=0;
 function readBk(){try{const a=JSON.parse(localStorage.getItem(BK_KEY)||'[]');return Array.isArray(a)?a.filter(x=>x&&typeof x.s==='string'&&typeof x.t==='number'):[];}catch(e){return [];}}
 function pushBackup(){
   lastBk=Date.now();
-  try{const a=readBk();a.unshift({t:lastBk,c:S.all,s:JSON.stringify(S)});localStorage.setItem(BK_KEY,JSON.stringify(a.slice(0,3)));}catch(e){}
+  try{const a=readBk();a.unshift({t:lastBk,c:S.all,s:sealJSON(S)});localStorage.setItem(BK_KEY,JSON.stringify(a.slice(0,3)));}catch(e){}
   bkSig='';
 }
 function updBk(){
@@ -7112,9 +7155,9 @@ els.admin.addEventListener('click',e=>{
 els.fx.checked=S.opt.fx;
 els.fx.addEventListener('change',()=>{S.opt.fx=els.fx.checked;});
 els.saveBtn.addEventListener('click',()=>{save();toast(tr('toast_saved'));});
-els.exportBtn.addEventListener('click',()=>{S.t=Date.now();els.exportBox.value=enc(JSON.stringify(S));els.exportBox.focus();els.exportBox.select();});
+els.exportBtn.addEventListener('click',()=>{S.t=Date.now();els.exportBox.value=enc(sealJSON(S));els.exportBox.focus();els.exportBox.select();});
 els.copyBtn.addEventListener('click',()=>{
-  if(!els.exportBox.value) els.exportBox.value=enc(JSON.stringify(S));
+  if(!els.exportBox.value) els.exportBox.value=enc(sealJSON(S));
   const done=()=>toast(tr('toast_copied'));
   const fallback=()=>{els.exportBox.focus();els.exportBox.select();toast(tr('toast_select'));};
   try{navigator.clipboard.writeText(els.exportBox.value).then(done,fallback);}catch(e){fallback();}
@@ -7123,6 +7166,7 @@ els.importBtn.addEventListener('click',()=>{
   try{
     const s=sanitize(JSON.parse(dec(els.importBox.value)));
     if(!s.name) s.name=S.name;
+    if(s.tamp&&!S.tamp) setTimeout(tampWarn,400);
     S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;els.importBox.value='';
     applyLang();rebuildAll();save();toast(tr('toast_loaded'));
   }catch(e){toast(tr('toast_invalid'));}
@@ -7455,7 +7499,7 @@ function saveFileName(){
 $id('fileDl').addEventListener('click',()=>{
   save();
   const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([enc(JSON.stringify(S))],{type:'text/plain'}));
+  a.href=URL.createObjectURL(new Blob([enc(sealJSON(S))],{type:'text/plain'}));
   a.download=saveFileName();document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);
   toast(tt('Spielstand gespeichert: ','Save downloaded: ')+a.download);
@@ -7478,6 +7522,7 @@ $id('fileIn').addEventListener('change',async e=>{
   if(!o||typeof o!=='object'||typeof o.cookies!=='number'){toast(tt('Das ist keine Keksfabrik-Datei.','That isn’t a Cookie Factory save file.'));return;}
   try{pushBackup();}catch(x){}
   const s=sanitize(o);if(!s.name) s.name=S.name;
+  if(s.tamp) setTimeout(tampWarn,400);
   S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;
   applyLang();rebuildAll();save();slotSig='';
   toast(tt('Spielstand geladen','Save loaded')+(S.name?': '+S.name:'')+'. '+tt('Dein altes Spiel liegt unter Backups.','Your old game is under Backups.'),true);
@@ -7543,6 +7588,7 @@ function updV34Txt(){
   set('fileT',tt('Spielstand als Datei','Save file'));
   set('fileP',tt('Lade deinen Spielstand als Datei herunter und lade ihn auf einem anderen Gerät wieder hoch. Beim Laden wird dein aktuelles Spiel ersetzt und vorher als Backup gesichert.','Download your save as a file and load it on another device. Loading replaces your current game, which is kept as a backup first.'));
   set('fileDl',tt('Herunterladen','Download'));
+  const sr=$id('sealRow');if(sr){sr.className='sealrow '+(S.tamp?'bad':'ok');sr.textContent=S.tamp?tt('⚠ Dieser Spielstand wurde außerhalb des Spiels verändert.','⚠ This save was changed outside the game.'):tt('✓ Spielstand-Siegel intakt','✓ Save seal intact');}
   if(!fileArm) set('fileUp',tt('Datei laden','Load file'));
   set('appT',tt('Als App spielen','Play as an app'));
   set('appP',tt('Installiere die Keksfabrik auf deinem Handy oder Computer. Sie öffnet sich dann im Vollbild mit eigenem Symbol und läuft auch ohne Internet.','Install Cookie Factory on your phone or computer. It then opens full-screen with its own icon and works without internet.'));
@@ -7558,8 +7604,8 @@ function updV34Txt(){
 // Supabase project and its public (publishable) key. See docs/LEADERBOARD.md. Empty values hide the leaderboard.
 const LB_URL='https://nmmlemtljjvfurlrvuvm.supabase.co',LB_KEY='sb_publishable_STHuGWpHxg6efQhuvc_sQQ_xO5AvI5J';
 const lbOn=()=>!!(LB_URL&&LB_KEY);
-let lbTop=null,lbRank=0,lbErr=false,lbBusy=false,lbLast=0,lbSent=0;
-const lbCheat=()=>{const a=S.admin;return !!S.adm||['prod','click','cost','speed','gold','goldPow'].some(k=>a[k]!==1)||a.growth!==1.15||(a.ac||0)>0||Object.keys(a.b||{}).length>0;};
+let lbTop=null,lbRank=0,lbErr=false,lbBusy=false,lbLast=0,lbSent=0,lbNote='';
+const lbCheat=()=>{const a=S.admin;return !!S.adm||!!S.tamp||['prod','click','cost','speed','gold','goldPow'].some(k=>a[k]!==1)||a.growth!==1.15||(a.ac||0)>0||Object.keys(a.b||{}).length>0;};
 const lbScore=()=>Math.floor(Math.min(S.all,9.9e299));
 function lbUUID(){
   if(crypto.randomUUID) return crypto.randomUUID();
@@ -7569,8 +7615,9 @@ function lbUUID(){
 }
 async function lbApi(path,body){
   const r=await fetch(LB_URL.replace(/\/+$/,'')+'/rest/v1/'+path,{method:body?'POST':'GET',headers:{apikey:LB_KEY,Authorization:'Bearer '+LB_KEY,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  const t=await r.text();return t?JSON.parse(t):null;
+  const t=await r.text();
+  if(!r.ok){let m='HTTP '+r.status;try{m=JSON.parse(t).message||m;}catch(x){}throw new Error(m);}
+  return t?JSON.parse(t):null;
 }
 async function lbSubmit(){
   if(!lbOn()||!S.lb.on||!S.name||lbCheat()) return;
@@ -7582,7 +7629,7 @@ async function lbRefresh(){
   if(!lbOn()||lbBusy) return;
   lbBusy=true;lbErr=false;renderLb();
   try{
-    try{await lbSubmit();}catch(x){}
+    lbNote='';try{await lbSubmit();}catch(x){const m=String(x&&x.message||'');if(/too fast|too high/.test(m)) lbNote=m;}
     const top=await lbApi('leaderboard?select=name,score,updated_at&order=score.desc,updated_at.asc&limit=50');
     lbTop=Array.isArray(top)?top:[];
     lbRank=S.lb.on&&!lbCheat()?(Number(await lbApi('rpc/leaderboard_rank',{p_score:lbScore()}))||0):0;
@@ -7605,17 +7652,22 @@ async function lbLeave(){
 }
 function renderLb(){
   const bar=$id('lbBar');if(!bar) return;
-  bar.hidden=!lbOn();if(!lbOn()) return;
-  const status=lbCheat()?tt('Nicht verfügbar: Admin benutzt','Not available: admin used'):!S.lb.on?tt('Mitmachen und vergleichen','Join and compare'):lbRank?tt('Du bist auf Platz ','You’re #')+fmt(lbRank):tt('Du bist dabei','You’re on the board');
+  bar.hidden=!lbOn();
+  const tb=$id('lbTopBtn'),rk=$id('lbTopRk');
+  if(tb){tb.hidden=!lbOn();tb.setAttribute('aria-label',tt('Bestenliste','Leaderboard')+(lbRank&&S.lb.on&&!lbCheat()?' · '+tt('Platz ','#')+lbRank:''));tb.title=tt('Bestenliste','Leaderboard');const show=lbRank>0&&S.lb.on&&!lbCheat();rk.hidden=!show;if(show){const v=lbRank>99?'99+':String(lbRank);if(rk.textContent!==v) rk.textContent=v;}}
+  if(!lbOn()) return;
+  const status=S.tamp?tt('Nicht verfügbar: Spielstand verändert','Not available: save modified'):lbCheat()?tt('Nicht verfügbar: Admin benutzt','Not available: admin used'):!S.lb.on?tt('Mitmachen und vergleichen','Join and compare'):lbRank?tt('Du bist auf Platz ','You’re #')+fmt(lbRank):tt('Du bist dabei','You’re on the board');
   const bh='<span class="ico">'+art('crown')+'</span><span><small>'+tt('Bestenliste','Leaderboard')+'</small><b>'+status+'</b></span><span class="go" aria-hidden="true">›</span>';
   if(bar._h!==bh){bar._h=bh;bar.innerHTML=bh;}
   $id('lbT').textContent=tt('Bestenliste','Leaderboard');
   $id('lbClose').textContent=tt('Schließen','Close');
   if($id('lbOv').hidden) return;
   let me='<div class="lbme">';
-  if(lbCheat()) me+='<p class="small" style="margin:0">'+tt('In diesem Spielstand wurde das Admin-Panel benutzt. Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save used the admin panel. To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
+  if(S.tamp) me+='<p class="small" style="margin:0">'+tt('Dieser Spielstand wurde außerhalb des Spiels verändert (z. B. mit Browser-Werkzeugen oder einer bearbeiteten Datei). Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save was changed outside the game (for example with browser tools or an edited file). To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
+  else if(lbCheat()) me+='<p class="small" style="margin:0">'+tt('In diesem Spielstand wurde das Admin-Panel benutzt. Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save used the admin panel. To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
   else if(!S.lb.on) me+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+tt('Dein Bäckerei-Name und deine gebackenen Kekse sind dann für alle sichtbar.','Your bakery name and cookies baked will be visible to everyone.')+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
   else me+='<div class="row"><span><span class="sub" style="display:block">'+escName(S.name||'')+'</span><span class="big">'+(lbRank?tt('Platz ','#')+fmt(lbRank):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+tt('Kekse gebacken','Cookies baked')+'</span><b>'+fmt(lbScore())+'</b></span></div>';
+  if(lbNote) me+='<p class="lbnote">'+(/too high/.test(lbNote)?tt('Dein Punktestand ist für einen neuen Eintrag zu hoch. Melde dich beim Besitzer des Spiels.','Your score is too high for a new entry. Please contact the game’s owner.'):tt('Dein neuer Punktestand wurde nicht gespeichert, weil er schneller gewachsen ist, als das Spiel es erlaubt. Später versucht es das Spiel nochmal.','Your new score wasn’t saved because it grew faster than the game allows. The game will try again later.'))+'</p>';
   me+='</div>';
   let list;
   if(lbBusy&&!lbTop) list='<p class="lbmsg">'+tt('Lädt …','Loading …')+'</p>';
@@ -7629,9 +7681,11 @@ function renderLb(){
   const foot='<div class="lbfoot"><span class="small">'+(lbErr&&lbTop?tt('Aktualisieren hat nicht geklappt. ','Couldn’t refresh. '):'')+when+'</span><span class="btns">'+(S.lb.on&&!lbCheat()?'<button type="button" class="btn sm" data-lb="leave">'+tt('Verlassen','Leave')+'</button>':'')+'<button type="button" class="btn sm" data-lb="refresh"'+(lbBusy?' disabled':'')+'>'+(lbBusy?tt('Lädt …','Loading …'):tt('Aktualisieren','Refresh'))+'</button></span></div>';
   $id('lbBody').innerHTML=me+list+foot;
 }
-function openLb(){$id('lbOv').hidden=false;renderLb();if(Date.now()-lbLast>15000) lbRefresh();$id('lbClose').focus();}
-function closeLb(){if($id('lbOv').hidden) return;$id('lbOv').hidden=true;$id('lbBar').focus();}
+function openLb(){lbFrom=document.activeElement;$id('lbOv').hidden=false;renderLb();if(Date.now()-lbLast>15000) lbRefresh();$id('lbClose').focus();}
+let lbFrom=null;
+function closeLb(){if($id('lbOv').hidden) return;$id('lbOv').hidden=true;const f=lbFrom&&!lbFrom.hidden&&lbFrom.offsetParent?lbFrom:$id('lbTopBtn');if(f&&f.focus) f.focus();}
 $id('lbBar').addEventListener('click',openLb);
+$id('lbTopBtn').addEventListener('click',openLb);
 $id('lbClose').addEventListener('click',closeLb);
 $id('lbOv').addEventListener('click',e=>{
   if(e.target===$id('lbOv')){closeLb();return;}
@@ -7643,6 +7697,8 @@ setInterval(()=>{if(lbOn()&&S.lb.on&&!document.hidden&&Date.now()-lbSent>5*60000
 let lbCheatWas=null;
 setInterval(()=>{if(!lbOn()) return;const c=lbCheat();if(c!==lbCheatWas){lbCheatWas=c;renderLb();}else{const bar=$id('lbBar');if(bar&&!bar.hidden) renderLb();}},1000);
 if(lbOn()&&S.lb.on) setTimeout(lbRefresh,3000);
+function tampWarn(){toast(tt('Dieser Spielstand wurde außerhalb des Spiels verändert. Er kann nicht in die Bestenliste.','This save was changed outside the game. It can’t join the leaderboard.'),true);updV34Txt();}
+if(S.tamp&&hadSave&&!S.tampSeen){S.tampSeen=1;setTimeout(tampWarn,1500);}
 
 /* --- Tasten für neue Fenster --- */
 document.addEventListener('keydown',e=>{

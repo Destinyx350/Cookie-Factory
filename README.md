@@ -43,7 +43,8 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
-| 🏆 **Leaderboard** | Join with your bakery name in the **Goals** tab and see your rank among everyone's bakeries. Saves that used the admin panel can't join. |
+| 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank among everyone's bakeries. |
+| 🛡️ **Anti-cheat** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. |
 | 🔒 **Protected admin panel** | The admin panel needs a password, so regular players can't use it. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
@@ -74,7 +75,8 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
-- 🏆 **Bestenliste** im Tab **Ziele**: mach mit deinem Bäckerei-Namen mit und sieh deinen Platz
+- 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit
+- 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, und die Bestenliste lehnt zu schnell wachsende Punkte ab
 - 🔒 **Admin-Panel mit Passwort**, damit nicht jeder es benutzen kann
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
@@ -84,15 +86,17 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 36
-- **New:** The leaderboard is live! Open the **Goals** tab, tap **Leaderboard** and join with your bakery name. The top 3 get gold, silver and bronze.
-- **New:** Your rank shows right in the Goals tab, and you can leave the leaderboard at any time.
+### Version 37
+- **New:** A trophy at the top of the screen opens the leaderboard and shows your rank.
+- **New:** Saves are now sealed. If a save is changed outside the game (browser tools, edited files or text), it's flagged and can't join the leaderboard. You can check your save under **Settings → Saving**.
+- **Changed:** The leaderboard rejects scores that grow faster than the game allows.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Die Bestenliste ist da! Öffne den Tab **Ziele**, tippe auf **Bestenliste** und mach mit deinem Bäckerei-Namen mit. Die Top 3 bekommen Gold, Silber und Bronze.
-- **Neu:** Dein Platz steht direkt im Tab Ziele, und du kannst die Bestenliste jederzeit verlassen.
+- **Neu:** Ein Pokal oben auf dem Bildschirm öffnet die Bestenliste und zeigt deinen Platz.
+- **Neu:** Spielstände sind jetzt versiegelt. Wird ein Spielstand außerhalb des Spiels geändert (Browser-Werkzeuge, bearbeitete Dateien oder Texte), wird er markiert und kann nicht in die Bestenliste. Prüfen kannst du das unter **Einstellungen → Speichern**.
+- **Geändert:** Die Bestenliste lehnt Punkte ab, die schneller wachsen, als das Spiel es erlaubt.
 
 </details>
 
