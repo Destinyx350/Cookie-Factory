@@ -47,7 +47,7 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - `sealMigrate()` seals saves that existed before version 37 once per browser (marker `keksfabrik-seal`).
 - The seal secret is inside `sealHash()`. Don't print it in chat, the README or comments.
 - Flagged (`S.tamp`) and admin-used (`S.adm`) saves can never submit leaderboard scores (`lbCheat()`).
-- **Server:** `submit_score` in `docs/leaderboard-setup.sql` rejects new entries above 1e15 and growth above 10,000x per hour (above 100 million). Changes to it must also be given to the owner as a paste-ready SQL file (like `docs/leaderboard-anticheat-update.sql`) to run in the Supabase SQL Editor.
+- **Server:** `submit_score` in `docs/leaderboard-setup.sql` rejects new entries above 1e15 and growth above 10x per 5 minutes (above 100 million). The game sends a score at most every 5 minutes (`S.lb.t`) so honest players stay inside that limit. Changes to it must also be given to the owner as a paste-ready SQL file (like `docs/leaderboard-anticheat-update.sql`) to run in the Supabase SQL Editor.
 - No browser game can stop someone who edits the game code itself; these checks catch the common tricks and protect the leaderboard.
 
 ## Before pushing

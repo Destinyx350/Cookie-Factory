@@ -22,7 +22,7 @@ begin
   end if;
   if old_time > now() - interval '20 seconds' then return; end if;
   hrs := extract(epoch from (now() - old_time)) / 3600.0;
-  if p_score > greatest(old_score, 1e8) * power(10::double precision, least(4 * hrs, 290)) then
+  if p_score > greatest(old_score, 1e8) * power(10::double precision, least(12 * hrs, 290)) then
     raise exception 'score grew too fast';
   end if;
   update leaderboard set name = p_name, score = greatest(score, p_score), updated_at = now() where id = p_id;

@@ -21,7 +21,7 @@ grant select (name, score, updated_at) on public.leaderboard to anon;
 -- never lowers a score, ignores updates sent less than 20 seconds apart, and
 -- rejects scores that grow faster than the game allows (anti-cheat):
 --   * a new entry may start at up to 1e15 cookies,
---   * above 100 million, a score may grow at most 10,000x per hour since the last saved score.
+--   * above 100 million, a score may grow at most 10x per 5 minutes since the last saved score.
 create or replace function public.submit_score(p_id uuid, p_name text, p_score double precision)
 returns void language plpgsql security definer set search_path = public as $$
 declare
@@ -44,7 +44,7 @@ begin
   end if;
   if old_time > now() - interval '20 seconds' then return; end if;
   hrs := extract(epoch from (now() - old_time)) / 3600.0;
-  if p_score > greatest(old_score, 1e8) * power(10::double precision, least(4 * hrs, 290)) then
+  if p_score > greatest(old_score, 1e8) * power(10::double precision, least(12 * hrs, 290)) then
     raise exception 'score grew too fast';
   end if;
   update leaderboard set name = p_name, score = greatest(score, p_score), updated_at = now() where id = p_id;
