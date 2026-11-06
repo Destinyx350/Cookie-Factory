@@ -14,6 +14,7 @@ Do these in the **same commit** as the change, every time:
    - Raise `NEWS_VER` by 1 and add a matching `{v:N, sum:[de,en], items:[[type,de,en], …]}` entry at the top of `NEWS`.
    - The version number must match the README.
 3. **sw.js**: raise `CACHE` (`keksfabrik-vN`) to the new version number so installed apps drop old files.
+4. **version.json**: set `{"v":N}` to the new version number. Running games compare it with `NEWS_VER` and show the "Update now" notice.
 
 ## Languages
 
@@ -49,6 +50,11 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Flagged (`S.tamp`) and admin-used (`S.adm`) saves can never submit leaderboard scores (`lbCheat()`).
 - **Server:** `submit_score` in `docs/leaderboard-setup.sql` rejects new entries above 1e15 and growth above 10x per 5 minutes (above 100 million). The game sends a score at most every 5 minutes (`S.lb.t`) so honest players stay inside that limit. Changes to it must also be given to the owner as a paste-ready SQL file (like `docs/leaderboard-anticheat-update.sql`) to run in the Supabase SQL Editor.
 - No browser game can stop someone who edits the game code itself; these checks catch the common tricks and protect the leaderboard.
+
+## Shipping changes
+
+- The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass. After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.
+- Only merge Claude's own PRs from the session branch, never someone else's.
 
 ## Before pushing
 

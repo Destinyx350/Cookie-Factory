@@ -1,6 +1,6 @@
 // Keksfabrik service worker: lets the game open offline and as an installed app.
 // Raise CACHE with every game update (see CLAUDE.md) so old files are cleared out.
-const CACHE = 'keksfabrik-v37';
+const CACHE = 'keksfabrik-v38';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -20,11 +20,15 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
 
-  // The game page: always try the network first so players get updates right away.
+  // The version file is how the game notices updates: never cache it.
+  if (url.origin === location.origin && url.pathname.endsWith('/version.json')) return;
+
+  // The game page: always ask the server for the newest version first (skipping the
+  // browser's 10-minute page cache), and fall back to the saved copy when offline.
   if (req.mode === 'navigate' || (url.origin === location.origin && url.pathname.endsWith('/index.html'))) {
     e.respondWith(
-      fetch(req)
-        .then((res) => { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('./index.html', copy)); return res; })
+      fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' })
+        .then((res) => { if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('./index.html', copy)); } return res; })
         .catch(() => caches.match('./index.html').then((r) => r || caches.match('./')))
     );
     return;

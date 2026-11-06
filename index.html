@@ -346,6 +346,8 @@ input[type=text]:focus{outline:2px solid var(--accent);outline-offset:0}
 .sealrow{display:flex;align-items:center;gap:8px;margin-top:8px;font-weight:700}
 .sealrow.bad{color:var(--warn)}.sealrow.ok{color:var(--good)}
 .lbnote{color:var(--warn);font-size:13px;margin:0}
+/* V38: Update-Hinweis */
+#updBar{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:120;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;width:max-content;max-width:calc(100% - 32px);padding:8px 8px 8px 16px;border-radius:16px;background:var(--panel-3);color:var(--fg);border:1.5px solid var(--accent);box-shadow:0 10px 30px rgba(0,0,0,.45);font-weight:700;animation:dlgIn .32s cubic-bezier(.2,1.3,.4,1)}
 .dhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
 .dhead h2{font-size:22px;margin:0}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -1492,6 +1494,7 @@ body.eco *,body.eco *::before,body.eco *::after{animation:none!important;transit
 <div class="overlay" id="nameOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="nameT"><h2 id="nameT"></h2><p id="nameP"></p><form id="nameForm" novalidate><input type="text" id="nameIn" class="namein" maxlength="20" autocomplete="off" spellcheck="false"><p class="nameerr" id="nameErr" aria-live="polite"></p><div class="btns"><button type="submit" class="btn primary" id="nameOk"></button><button type="button" class="btn" id="nameCancel"></button></div></form></div></div>
 <div class="overlay" id="shareOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="shareT"><h2 id="shareT"></h2><p id="shareP" class="small"></p><textarea id="shareBox" readonly></textarea><div class="btns"><button type="button" class="btn primary" id="shareCopy"></button><button type="button" class="btn" id="shareClose"></button></div></div></div>
 <div class="overlay" id="lbOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="lbT"><div class="dhead"><h2 id="lbT"></h2><button type="button" class="btn sm" id="lbClose"></button></div><div id="lbBody"></div></div></div>
+<div id="updBar" role="status" hidden></div>
 <div class="overlay" id="awayOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="awayT"><div class="dhead"><h2 id="awayT"></h2><button type="button" class="btn sm primary" id="awayClose" data-i18n="away_close"></button></div><div id="awayBody"></div></div></div>
 <button type="button" class="btn undo" id="undoBtn" hidden></button>
 <div class="overlay" id="visOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="visT"><div class="dhead"><h2 id="visT"></h2><button type="button" class="btn sm" id="visClose"></button></div><div id="visBody"></div></div></div>
@@ -2364,8 +2367,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=37;
+const NEWS_VER=38;
 const NEWS=[
+  {v:38,sum:['Updates kommen jetzt sofort an.','Updates now arrive right away.'],items:[
+    ['new','Wenn es eine neue Version gibt, erscheint oben ein Hinweis. Ein Tipp auf „Jetzt aktualisieren“ lädt sie, dein Spielstand wird vorher gespeichert.','When a new version is out, a notice appears at the top. Tap “Update now” to load it. Your game is saved first.'],
+    ['change','Das Spiel holt sich beim Öffnen immer die neueste Version, statt bis zu 10 Minuten eine alte zu zeigen.','The game always loads the newest version when you open it, instead of showing an old one for up to 10 minutes.']
+  ]},
   {v:37,sum:['Neu: Bestenliste oben als Pokal und ein Schutz gegen Schummeln.','New: Leaderboard as a trophy at the top and protection against cheating.'],items:[
     ['new','Oben gibt es jetzt einen Pokal. Er öffnet die Bestenliste und zeigt deinen Platz.','There is now a trophy at the top. It opens the leaderboard and shows your rank.'],
     ['new','Spielstände sind jetzt versiegelt. Wer seinen Spielstand außerhalb des Spiels ändert (Browser-Werkzeuge, bearbeitete Dateien oder Texte), kann nicht mehr in die Bestenliste.','Saves are now sealed. If a save is changed outside the game (browser tools, edited files or text), it can no longer join the leaderboard.'],
@@ -7701,6 +7708,27 @@ setInterval(()=>{if(!lbOn()) return;const c=lbCheat();if(c!==lbCheatWas){lbCheat
 if(lbOn()&&S.lb.on) setTimeout(lbRefresh,3000);
 function tampWarn(){toast(tt('Dieser Spielstand wurde außerhalb des Spiels verändert. Er kann nicht in die Bestenliste.','This save was changed outside the game. It can’t join the leaderboard.'),true);updV34Txt();}
 if(S.tamp&&hadSave&&!S.tampSeen){S.tampSeen=1;setTimeout(tampWarn,1500);}
+
+/* ======================= V38: Neue Version sofort melden ======================= */
+let updShown=0,updLast=0;
+async function checkUpdate(){
+  if(updShown||navigator.onLine===false||Date.now()-updLast<60000) return;
+  updLast=Date.now();
+  try{
+    const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok) return;
+    const v=Number((await r.json()).v);if(v>NEWS_VER) showUpdate(v);
+  }catch(e){}
+}
+function showUpdate(v){
+  updShown=v;const b=$id('updBar');
+  b.innerHTML='<span>🍪 '+tt('Version '+v+' ist da!','Version '+v+' is ready!')+'</span><button type="button" class="btn sm primary" id="updGo">'+tt('Jetzt aktualisieren','Update now')+'</button>';
+  b.hidden=false;
+}
+$id('updBar').addEventListener('click',e=>{if(e.target.closest('#updGo')){save();location.reload();}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden) checkUpdate();});
+window.addEventListener('online',checkUpdate);
+setInterval(checkUpdate,5*60000);
+setTimeout(checkUpdate,15000);
 
 /* --- Tasten für neue Fenster --- */
 document.addEventListener('keydown',e=>{
