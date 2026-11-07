@@ -123,6 +123,39 @@ module.exports = async function browserTests(url) {
   check(await d.evaluate(() => !document.querySelector('#admSeg [data-ap="mod"]').offsetParent && !!document.querySelector('#admSeg [data-ap="quick"]').offsetParent), 'admin "Game" group hides the online tabs');
   await d.click('#setClose');
 
+  // 5c. Social (v48): profiles, friends, war card, invites
+  await goals(a); await a.click('#lbBar'); await a.waitForSelector('#lbBody .pname', { timeout: 8000 }).catch(() => {});
+  await a.locator('#lbBody .pname').first().click();
+  await a.waitForSelector('#profOv:not([hidden]) .phead', { timeout: 8000 }).catch(() => {});
+  check(/Alpha/.test(await text(a, '#profOv')), 'tapping a leaderboard name opens the player profile', await text(a, '#profOv'));
+  await a.click('#profClose'); await a.click('#lbClose');
+  if (await c.isVisible('#rwOv')) await c.click('#rwClose');
+  if (await c.isVisible('#clubOv')) await c.click('#clubClose');
+  await goals(c); await c.click('#clubBar'); await c.click('#clubBody [data-clt=friends]');
+  await c.waitForSelector('#frAddF', { timeout: 8000 }); await c.fill('#frAddF [name=fu]', 'alpha_ci'); await c.click('#frAddF button[type=submit]'); await c.waitForTimeout(1000);
+  check(/alpha_ci/.test(await text(c, '#clubBody')), 'send a friend request from the Friends tab');
+  await c.click('#clubClose');
+  await goals(a); await a.click('#clubBar'); await a.click('#clubBody [data-clt=friends]');
+  await a.waitForSelector('[data-fr^="yes:"]', { timeout: 8000 }).catch(() => {});
+  await a.click('[data-fr^="yes:"]'); await a.waitForTimeout(1000);
+  check((await pool.query("select count(*)::int n from kf_friends where status = 'ok'")).rows[0].n === 1, 'accept a friend request');
+  check(/gamma_ci/.test(await text(a, '#clubBody .lblist')), 'the new friend shows in the list');
+  await a.click('#clubBody [data-clt=mine]'); await a.waitForSelector('.warcard', { timeout: 8000 }).catch(() => {});
+  check(await a.isVisible('.warcard'), 'the club page shows the weekend club war');
+  await a.click('#clubClose');
+  const ectx = await browser.newContext({ viewport: { width: 1280, height: 820 }, extraHTTPHeaders: { 'x-test-ip': '10.0.0.5' } });
+  await ectx.route(LB + '/**', handle); await ectx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+  const e = await ectx.newPage(); e.on('pageerror', x => errors.push('invite: ' + x.message));
+  await e.goto(url + '?ref=alpha_ci'); await e.waitForTimeout(800);
+  check(/alpha_ci invited you/.test(await text(e, '#stRef')) || /alpha_ci hat dich/.test(await text(e, '#stRef')), 'an invite link shows who invited you');
+  check(!/ref=/.test(e.url()), 'the invite code is removed from the address bar');
+  await e.locator('#startOv [data-lang=en]').click(); await e.click('#stGo');
+  if (await e.isVisible('#nameOv')) { await e.fill('#nameIn', 'Invited Bakery'); await e.click('#nameOk'); }
+  await e.addStyleTag({ content: '#introOv{display:none!important}' });
+  await signup(e, 'epsilon_ci'); await e.waitForTimeout(1200);
+  check((await pool.query("select count(*)::int n from kf_referrals r join kf_accounts a on a.id = r.inviter where a.username = 'alpha_ci'")).rows[0].n === 1, 'signing up through an invite link records the invite');
+  await ectx.close();
+
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {
     await b.evaluate(t => { const e = document.querySelector('[data-tab="' + t + '"]'); if (e) e.click(); }, tab); await b.waitForTimeout(200);

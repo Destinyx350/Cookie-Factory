@@ -111,4 +111,45 @@ module.exports = async function sqlTests() {
   check((await rpc('admin_backup', { p_pass: tok, p_action: 'restore_account', p_data: { id: bid, user: 'test_alpha' } })).restored === 1, 'restore a deleted account');
   check(!!(await rpc('acc_login', { p_user: 'test_alpha', p_pass: 'secret456' })).token, 'restored account signs in with its old password');
   await expectError(rpc('admin_backup', { p_pass: 'nope', p_action: 'list' }), /wrong admin password/, 'backups need an admin session');
+
+  // Profiles, friends, invites, club wars (v48)
+  const c1 = await rpc('acc_signup', { p_user: 'test_gamma', p_pass: 'secret123' }, '3.3.3.3');
+  await rpc('acc_profile', { p_token: c1.token, p_data: { ach: 12, asc: 2, title: 'Baker <b>', bakery: 'Gamma Bakes', evil: 'x' } });
+  const pr = await rpc('player_profile', { p_name: 'TEST_GAMMA' });
+  check(pr.username === 'test_gamma' && pr.stats.ach === 12 && !pr.stats.evil && !pr.stats.title, 'profile shows only safe public numbers', pr.stats);
+  check((await rpc('player_profile', { p_name: 'Test Bakery' })).rank === 1, 'profile works by leaderboard name');
+  await expectError(rpc('player_profile', { p_name: 'nobody_here' }), /player not found/, 'unknown profile');
+  const fl = await rpc('friend_request', { p_token: c1.token, p_user: 'test_beta' });
+  check(fl.outgoing[0] === 'test_beta', 'send a friend request');
+  check((await rpc('friend_list', { p_token: b.token })).incoming[0] === 'test_gamma', 'the other player sees the request');
+  check((await rpc('social_claim', { p_token: b.token })).friend_requests === 1, 'friend requests are counted for the badge');
+  const ok = await rpc('friend_answer', { p_token: b.token, p_user: 'test_gamma', p_accept: true });
+  check(ok.friends.length === 1 && ok.friends[0].username === 'test_gamma', 'accept a friend request');
+  await expectError(rpc('friend_request', { p_token: c1.token, p_user: 'test_gamma' }), /cannot add yourself/, 'you cannot add yourself');
+  check((await rpc('friend_remove', { p_token: c1.token, p_user: 'test_beta' })).friends.length === 0, 'remove a friend');
+  check((await rpc('ref_claim', { p_token: c1.token, p_ref: 'test_beta' })).ok, 'a new account can name who invited it');
+  await rpc('social_claim', { p_token: c1.token });
+  check((await q("select count(*)::int n from kf_mail m join kf_accounts a on a.id = m.to_acc where a.username = 'test_gamma' and not m.claimed")).rows[0].n === 0, 'no invite bonus before baking a million cookies');
+  await q("update kf_accounts set club_hw = 2e6 where username = 'test_gamma'");
+  const rc = await rpc('social_claim', { p_token: c1.token });
+  check(rc.mail.some(m => /Welcome bonus/.test(m.title)), 'invite bonus for the new player');
+  check((await rpc('social_claim', { p_token: b.token })).mail.some(m => /test_gamma/.test(m.title)), 'invite bonus for the inviter');
+  // Club wars: two clubs bake on a weekend, the winner gets a trophy and prizes
+  await q('delete from kf_club_members; delete from kf_clubs; delete from kf_club_week; delete from kf_wars');
+  const c2 = await rpc('acc_signup', { p_user: 'test_delta', p_pass: 'secret123' }, '4.4.4.4');
+  const A = await rpc('club_create', { p_token: c1.token, p_name: 'War Club A', p_emoji: '🍩', p_descr: '' }, '3.3.3.3');
+  await rpc('club_create', { p_token: c2.token, p_name: 'War Club B', p_emoji: '🍪', p_descr: '' }, '4.4.4.4');
+  await q("insert into kf_club_week (week, account, club, gain) select lb_week(now()), a.id, m.club, case when a.username = 'test_gamma' then 5e8 else 3e8 end from kf_accounts a join kf_club_members m on m.account = a.id");
+  const W = async (sql, args, weekend = true) => { const cl = await pool.connect(); try { await cl.query('begin'); await cl.query("select set_config('kf.test_weekend', $1, true)", [String(weekend)]); await cl.query('set local role anon'); const r = await cl.query(sql, args); await cl.query('commit'); return r.rows[0] && r.rows[0].v; } finally { cl.release(); } };
+  const mine = await W('select club_mine($1) v', [c1.token]);
+  check(mine.war && mine.war.vs === 'War Club B' && mine.war.current, 'clubs are paired for the weekend war', mine.war);
+  await q("update kf_accounts set save_at = now() - interval '10 minutes', club_hw = 1e9 where username in ('test_gamma', 'test_delta')");
+  await W('select acc_save($1, $2, $3) v', [c2.token, SAVE, 5e9]);
+  const mid = await W('select club_mine($1) v', [c1.token]);
+  check(mid.war.them > 0 && mid.war.me === 0, 'weekend baking counts for the war', mid.war);
+  await q("update kf_wars set wk = lb_week(now() - interval '7 days')");
+  const after = await W('select club_mine($1) v', [c2.token], false);
+  check(after.war.closed && after.war.won && after.club.trophies === 1, 'the winning club gets a trophy', after.war);
+  check((await W('select social_claim($1) v', [c2.token], false)).mail.some(m => /War Club B/.test(m.title)), 'winning members get a prize');
+  check((await rpc('club_list', {})).some(c => c.name === 'War Club B' && c.trophies === 1), 'trophies show in the club list');
 };

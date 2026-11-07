@@ -119,6 +119,15 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - `updHints()` shows at most 3 hints plus a "+N" button. `S.opt.hc` sets `data-hc` for high contrast.
 - Speed: number formats are cached (`nf()`); don't call `toLocaleString` with options in hot paths. The background cookie canvas draws at 30 fps, only while visible, and measures its size with a `ResizeObserver`.
 
+## Social: profiles, friends, club wars, invites (version 48)
+
+- Server side is `docs/social-v8.sql` (needs parts 1–7). It replaces `acc_save` (adds weekend war gains), `club_mine` (adds `war`, `weekend`, `trophies`), `club_list` and `social_claim` (adds invite bonuses, war closing and `friend_requests`).
+- **Profiles:** `acc_profile` stores only whitelisted public numbers in `kf_accounts.profile` (sent at most every 10 min by `profPush()`); `player_profile(name)` works for usernames and leaderboard names. Any element with `data-prof="name"` opens the profile dialog.
+- **Friends:** `kf_friends (a asked b, pending/ok)`, `friend_list/request/answer/remove`. The "Friends" tab lives in the club dialog.
+- **Club wars:** `kf_wars`, paired lazily on weekends by `kf_war_pair()` (unpaired clubs with gain this week, 1v2, 3v4…), closed by `kf_war_close()` after the week (trophy plus mail prizes). `kf_weekend()` honours the `kf.test_weekend` setting so tests can pretend it's a weekend; players can't set it.
+- **Invites:** `?ref=<username>` is stored in `localStorage['keksfabrik-ref']` and removed from the URL; after sign-up `ref_claim` records it (only for accounts under a day old). `kf_ref_rewards` mails both players once the new player has `club_hw` ≥ 1e6; an inviter is rewarded for at most 10 invites a week. `shareURL()` adds the ref when signed in.
+- Link previews: Open Graph tags in `<head>` and `docs/og-card.png` (1200×630).
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass (including the GitHub `Tests` check). After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

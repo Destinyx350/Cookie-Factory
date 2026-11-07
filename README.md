@@ -46,9 +46,12 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 👤 **Accounts** | Create an account with a username and password (no email needed). Your bakery is saved to it automatically, so you can keep playing on any device. Sign out other devices at any time. |
 | 👥 **Bakery clubs** | Start or join a club of up to 30 bakers, chat with your club, and bake together for weekly prizes for the top 3 clubs. |
 | 🎁 **Gifts** | Send gems or star crumbs to friends with an account (daily limits keep it fair). |
+| 🤝 **Friends and profiles** | Add friends, see who's online, and tap any name to see that player's profile. |
+| ⚔️ **Club wars** | Every weekend your club faces a club of similar strength. Winners collect trophies and gems. |
+| 💌 **Invites** | Share your invite link; when a friend starts playing through it, you both get a bonus. |
 | 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter, server codes, and a transfer code to move your save to another device. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
-| 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
+| 📣 **Share button** | Show your friends how many cookies your bakery has baked. Shared links show a preview card. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
 | 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
 | 🔒 **Protected admin panel** | The admin panel needs a password, and the online tools have a second password with a lockout after wrong tries. The admin can moderate reports, find players, mute, rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, and download backups (made automatically every week). |
@@ -84,6 +87,9 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 👤 **Konten**: Benutzername und Passwort (ohne E-Mail), deine Bäckerei auf jedem Gerät
 - 👥 **Bäckerei-Clubs** mit bis zu 30 Mitgliedern, Club-Chat und Wochenpreisen für die Top 3
 - 🎁 **Geschenke**: Edelsteine oder Sternenkrümel an Freunde mit Konto schicken
+- 🤝 **Freunde und Profile**: sieh, wer online ist, und tippe auf Namen für das Profil
+- ⚔️ **Clubkriege** jedes Wochenende mit Trophäen und Edelsteinen
+- 💌 **Einladungen**: Wer über deinen Link anfängt, bringt euch beiden einen Bonus
 - 🌍 **Online-Funktionen**: globale Events, Ankündigungen, Live-Zähler, Server-Codes und ein Transfer-Code fürs andere Gerät
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
@@ -98,23 +104,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 47
-- **Changed:** A clean new look: flat surfaces, fine edges and much less clutter.
-- **Changed:** The header shows only what you need. Language, help and sharing moved to **Settings**.
-- **Changed:** Saving is simpler: your account comes first, everything else is under **More options**.
-- **Changed:** At most 3 hints show at once; the rest are behind **+**.
-- **New:** **High contrast** option under **Settings → Display**.
-- **Changed:** Faster, especially on older phones (about a third less work per second).
+### Version 48
+- **New:** Player profiles. Tap a name in the leaderboard or your club to see that bakery.
+- **New:** Friends. A new **Friends** tab in clubs shows who's online and lets you send a gift in one tap.
+- **New:** Weekend club wars. Every Saturday and Sunday your club faces one of similar strength; the winner gets a trophy and every member 40 gems.
+- **New:** Invites. Share the game while signed in, and anyone who starts through your link earns you both a bonus. Shared links now show a preview card.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Geändert:** Neues, klares Design: flache Flächen, feine Kanten und viel weniger Gedränge.
-- **Geändert:** Die Kopfzeile zeigt nur noch das Nötigste. Sprache, Hilfe und Teilen sind jetzt in den **Einstellungen**.
-- **Geändert:** Speichern ist einfacher: Das Konto steht oben, alles andere unter **Weitere Möglichkeiten**.
-- **Geändert:** Höchstens 3 Hinweise auf einmal, der Rest hinter **+**.
-- **Neu:** **Hoher Kontrast** unter **Einstellungen → Anzeige**.
-- **Geändert:** Schneller, besonders auf älteren Handys (etwa ein Drittel weniger Arbeit pro Sekunde).
+- **Neu:** Spielerprofile. Tippe in der Bestenliste oder im Club auf einen Namen und sieh dir die Bäckerei an.
+- **Neu:** Freunde. Der neue Reiter **Freunde** bei den Clubs zeigt, wer online ist, und mit einem Tipp schickst du ein Geschenk.
+- **Neu:** Clubkriege am Wochenende. Jeden Samstag und Sonntag tritt dein Club gegen einen ähnlich starken an; der Gewinner bekommt eine Trophäe und jedes Mitglied 40 Edelsteine.
+- **Neu:** Einladungen. Teile das Spiel mit deinem Konto, und wer über deinen Link anfängt, bringt euch beiden einen Bonus. Geteilte Links zeigen jetzt eine Vorschau.
 
 </details>
 
