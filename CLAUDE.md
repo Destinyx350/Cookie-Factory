@@ -70,6 +70,12 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - `S.orders.heat` (+1 per order, -1 per 4 minutes) drives the "customers busy" multiplier `ordBusy()`.
 - Click targets follow the recent click rate (`ordCps`), buy targets follow buildings owned. Item drops from orders can't add more cookies than the order itself.
 
+## Online features (version 42)
+
+- Server side is `docs/online-v3.sql` (needs `leaderboard-v2.sql` first): admin codes (`kf_codes`, `redeem_code`), announcements (`kf_news`), global events (`kf_events`, multiplier 1–10), live counter (`kf_presence`, `kf_ping`, `kf_live`, same growth cap as the leaderboard), cloud transfer (`kf_saves`, `save_upload` / `save_download`, codes valid 24 h), admin tools (`admin_online`).
+- Client is the `V42` block. Event multipliers live in `GEV` and are applied in `recalc()` and `ordReward()`. Every player gets an anonymous id (`kfId()`, stored in `S.lb.id`) for pings and server codes.
+- Cloud transfer uploads the same sealed text as a save file, so the anti-cheat seal still applies.
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass. After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

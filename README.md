@@ -43,6 +43,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
 | 📐 **Fits every device** | Separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. |
+| 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter, server codes, and a transfer code to move your save to another device. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
@@ -77,6 +78,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
 - 📐 **Passt auf jedes Gerät**: eigene Layouts für Handy (hochkant und quer), Tablet und Computer
+- 🌍 **Online-Funktionen**: globale Events, Ankündigungen, Live-Zähler, Server-Codes und ein Transfer-Code fürs andere Gerät
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit; Wochen- und Monatspreise für die Top 3, Updates jede Minute
@@ -90,19 +92,21 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 41
-- **Changed:** Orders are now dynamic and fairer. Rewards grow with your run: at most 2% / 4% / 6% of the cookies baked this run (easy / medium / hard), so orders give less right after ascending and more later.
-- **Changed:** Click and buy orders adapt to how fast you click and how many buildings you own.
-- **Changed:** Finishing many orders in a row makes customers "busy": rewards drop for a while and recover within a few minutes.
-- **Changed:** Reputation now gives up to +15% production (was +25%). Open orders are re-rolled when you ascend.
+### Version 42
+- **New:** Global events. Sometimes everyone gets a boost at the same time, like double production, shown in a banner under the cookie with a countdown.
+- **New:** Announcements from Cookie Factory appear when you open the game.
+- **New:** A live counter on the start screen and leaderboard shows how many bakeries are online and how many cookies everyone has baked together.
+- **New:** Move to another device: under **Settings → Saving**, create a transfer code (valid for 24 hours) and enter it on your other device.
+- **New:** Codes can now also come straight from the server.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Geändert:** Aufträge sind jetzt dynamisch und fairer. Belohnungen wachsen mit deiner Runde: höchstens 2 % / 4 % / 6 % der Kekse, die du in dieser Runde gebacken hast (leicht / mittel / schwer). Direkt nach einem Aufstieg geben Aufträge also weniger, später mehr.
-- **Geändert:** Klick- und Kaufaufträge passen sich an, wie schnell du klickst und wie viele Gebäude du hast.
-- **Geändert:** Viele Aufträge hintereinander machen die Kunden „beschäftigt“: Die Belohnung sinkt eine Weile und erholt sich in ein paar Minuten.
-- **Geändert:** Ruf gibt jetzt bis zu +15 % Produktion (vorher +25 %). Offene Aufträge werden beim Aufstieg neu gewürfelt.
+- **Neu:** Globale Events. Manchmal bekommen alle gleichzeitig einen Schub, z. B. doppelte Produktion – mit Banner und Countdown unter dem Keks.
+- **Neu:** Ankündigungen der Keksfabrik erscheinen beim Start.
+- **Neu:** Ein Live-Zähler auf dem Startbildschirm und in der Bestenliste zeigt, wie viele Bäckereien online sind und wie viele Kekse alle zusammen gebacken haben.
+- **Neu:** Auf ein anderes Gerät mitnehmen: Unter **Einstellungen → Speichern** einen Transfer-Code erstellen (24 Stunden gültig) und auf dem anderen Gerät eingeben.
+- **Neu:** Codes können jetzt auch direkt vom Server kommen.
 
 </details>
 

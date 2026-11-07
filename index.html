@@ -1301,6 +1301,23 @@ html{-webkit-tap-highlight-color:transparent}
 @keyframes rwPop{from{transform:scale(.3) rotate(-20deg);opacity:0}to{transform:none;opacity:1}}
 .rwline{display:flex;align-items:center;gap:12px;text-align:left;background:var(--panel-2);border-radius:14px;padding:10px 12px;margin-top:8px}
 .rwline small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.admpane[data-ap="lb"],.admpane[data-ap="online"]{display:block!important}
+.admpane[data-ap="online"][hidden]{display:none!important}
+.admform{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;align-items:end;margin-top:6px}
+.admform label{display:grid;gap:4px;color:var(--muted)}
+.admform textarea{resize:vertical;font:inherit}
+.admform select{appearance:auto}
+.gevbar{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:8px}
+.gev{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;padding:5px 12px;border-radius:999px;background:linear-gradient(90deg,rgba(79,224,138,.22),rgba(255,187,46,.22));border:1px solid rgba(79,224,138,.5);font-size:13px;animation:gevPulse 2.4s ease-in-out infinite}
+.gev b{color:var(--good)}.gev small{color:var(--muted);font-size:11.5px}
+@keyframes gevPulse{50%{box-shadow:0 0 0 4px rgba(79,224,138,.12)}}
+.stlive{margin:10px 0 0;color:var(--muted);font-weight:600;font-size:14px;animation:fadeIn2 .5s ease-out}
+.lblive{margin:4px 0 8px;color:var(--muted);font-size:13px;text-align:center}
+.cloudcode{display:grid;gap:6px;justify-items:start;background:var(--panel-2);border-radius:14px;padding:12px;margin-top:10px}
+.cloudcode .ccode{font:800 24px/1 var(--font-display);letter-spacing:.08em;color:var(--accent);user-select:all}
+.cloudcode small{color:var(--muted)}
+.annc{text-align:left;background:var(--panel-2);border-radius:14px;padding:12px;margin-top:8px}
+.annc p{margin:6px 0 4px}.annc small{color:var(--muted);font-size:12px}
 .admpane[data-ap="lb"]{display:block!important}
 .admpane[data-ap="lb"][hidden]{display:none!important}
 .admlb{display:grid;gap:10px}
@@ -1369,7 +1386,7 @@ html{-webkit-tap-highlight-color:transparent}
         <div class="unit" data-i18n="cookies"></div>
         <div class="kps"><span data-i18n="per_sec"></span> <span id="kps">0</span></div><div class="qchip" id="qChip" hidden></div>
         <div class="wxfx" id="wxfx" aria-hidden="true"></div>
-        <div class="buffs" id="buffs"></div>
+        <div class="buffs" id="buffs"></div><div class="gevbar" id="gevBar" hidden></div>
         <div class="combo" id="combo" hidden><b id="comboT"></b><span class="cbar"><i id="comboW"></i></span></div>
         <div class="cookie-stage" id="cookieStage">
           <button type="button" class="cookie" id="cookie" data-aria="aria_cookie"></button>
@@ -1637,6 +1654,14 @@ html{-webkit-tap-highlight-color:transparent}
           <input type="file" id="fileIn" accept=".keks,.txt,.json,text/plain,application/json" hidden>
         </div>
         <div class="optsec" data-sc="save">
+          <h2 id="cloudT"></h2>
+          <p class="small" id="cloudP"></p>
+          <div class="btns" style="margin-top:10px"><button type="button" class="btn primary" id="cloudUp"></button></div>
+          <div class="cloudcode" id="cloudCode" hidden></div>
+          <form id="cloudForm" class="coderow" novalidate><input type="text" id="cloudIn" class="namein" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="KEKS-XXXX-XXXX"><button type="submit" class="btn" id="cloudGo"></button></form>
+          <p class="nameerr" id="cloudMsg" aria-live="polite"></p>
+        </div>
+        <div class="optsec" data-sc="save">
           <h2 data-i18n="export"></h2>
           <div class="btns"><button type="button" class="btn" id="exportBtn" data-i18n="show_save"></button><button type="button" class="btn" id="copyBtn" data-i18n="copy"></button></div>
           <textarea id="exportBox" readonly data-ph="export_ph" data-aria="export"></textarea>
@@ -1669,9 +1694,9 @@ html{-webkit-tap-highlight-color:transparent}
 <div class="overlay" id="newsOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="newsT"><div class="dhead"><h2 id="newsT" data-i18n="news_title"></h2><button type="button" class="btn sm" id="newsClose" data-i18n="news_close"></button></div><div id="newsBody"></div></div></div>
 <div class="overlay" id="nameOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="nameT"><h2 id="nameT"></h2><p id="nameP"></p><form id="nameForm" novalidate><input type="text" id="nameIn" class="namein" maxlength="20" autocomplete="off" spellcheck="false"><p class="nameerr" id="nameErr" aria-live="polite"></p><div class="btns"><button type="submit" class="btn primary" id="nameOk"></button><button type="button" class="btn" id="nameCancel"></button></div></form></div></div>
 <div class="overlay" id="shareOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="shareT"><h2 id="shareT"></h2><p id="shareP" class="small"></p><textarea id="shareBox" readonly></textarea><div class="btns"><button type="button" class="btn primary" id="shareCopy"></button><button type="button" class="btn" id="shareClose"></button></div></div></div>
-<div class="overlay" id="lbOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="lbT"><div class="dhead"><h2 id="lbT"></h2><button type="button" class="btn sm" id="lbClose"></button></div><div id="lbBody"></div></div></div>
+<div class="overlay" id="lbOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="lbT"><div class="dhead"><h2 id="lbT"></h2><button type="button" class="btn sm" id="lbClose"></button></div><p class="lblive" id="lbLive" hidden></p><div id="lbBody"></div></div></div>
 <div id="updBar" role="status" hidden></div>
-<div class="overlay" id="rwOv" hidden><div class="dlg namedlg rwdlg" role="dialog" aria-modal="true" aria-labelledby="rwT"><div class="rwburst" aria-hidden="true">🏆</div><h2 id="rwT"></h2><div id="rwBody"></div><div class="btns" style="justify-content:center;margin-top:14px"><button type="button" class="btn primary" id="rwClose"></button></div></div></div>
+<div class="overlay" id="rwOv" hidden><div class="dlg namedlg rwdlg" role="dialog" aria-modal="true" aria-labelledby="rwT"><div class="rwburst" id="rwBurst" aria-hidden="true">🏆</div><h2 id="rwT"></h2><div id="rwBody"></div><div class="btns" style="justify-content:center;margin-top:14px"><button type="button" class="btn primary" id="rwClose"></button></div></div></div>
 <div class="overlay" id="awayOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="awayT"><div class="dhead"><h2 id="awayT"></h2><button type="button" class="btn sm primary" id="awayClose" data-i18n="away_close"></button></div><div id="awayBody"></div></div></div>
 <button type="button" class="btn undo" id="undoBtn" hidden></button>
 <div class="overlay" id="visOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="visT"><div class="dhead"><h2 id="visT"></h2><button type="button" class="btn sm" id="visClose"></button></div><div id="visBody"></div></div></div>
@@ -1679,7 +1704,7 @@ html{-webkit-tap-highlight-color:transparent}
 <div class="curtip" id="curTip" hidden></div>
 <div class="overlay" id="helpOv" hidden><div class="dlg wide" role="dialog" aria-modal="true" aria-labelledby="helpT"><div class="dhead"><h2 id="helpT"></h2><button type="button" class="btn sm" id="helpClose"></button></div><input type="search" class="setq" id="helpQ" autocomplete="off"><div id="helpBody"></div></div></div>
 <div class="overlay" id="introOv" hidden><div class="dlg intro" role="dialog" aria-modal="true" id="introBody"></div></div>
-<div class="startov" id="startOv" hidden><div class="stbox"><div class="stlogo" id="stLogo"></div><h1 class="sttitle" id="stTitle"></h1><p class="stsub" id="stSub"></p><div class="stcard" id="stCard"></div><button type="button" class="btn primary stgo" id="stGo"></button><div class="btns c"><button type="button" class="btn" id="stSlots"></button><button type="button" class="btn" id="stSet"></button><button type="button" class="btn" id="stHelp"></button></div><div class="seg langseg" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" aria-pressed="true">DE</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div><label class="check stchk"><input type="checkbox" id="stShow" checked> <span id="stShowL"></span></label></div></div>
+<div class="startov" id="startOv" hidden><div class="stbox"><div class="stlogo" id="stLogo"></div><h1 class="sttitle" id="stTitle"></h1><p class="stsub" id="stSub"></p><div class="stcard" id="stCard"></div><p class="stlive" id="stLive" hidden></p><button type="button" class="btn primary stgo" id="stGo"></button><div class="btns c"><button type="button" class="btn" id="stSlots"></button><button type="button" class="btn" id="stSet"></button><button type="button" class="btn" id="stHelp"></button></div><div class="seg langseg" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" aria-pressed="true">DE</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div><label class="check stchk"><input type="checkbox" id="stShow" checked> <span id="stShowL"></span></label></div></div>
 <div class="overlay packov" id="packOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="packT"><h2 id="packT"></h2><div class="packcards" id="packCards"></div><div class="btns c"><button type="button" class="btn" id="packAll"></button><button type="button" class="btn primary" id="packDone"></button></div></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div id="flash" aria-hidden="true"></div>
@@ -2544,8 +2569,15 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=41;
+const NEWS_VER=42;
 const NEWS=[
+  {v:42,sum:['Neu: Online-Ankündigungen, globale Events, ein Live-Zähler und Spielstände per Code aufs andere Gerät.','New: Online announcements, global events, a live counter and moving your save to another device with a code.'],items:[
+    ['new','Globale Events: Manchmal gibt es für alle gleichzeitig z. B. doppelte Produktion. Ein Banner unter dem Keks zeigt, wie lange noch.','Global events: Sometimes everyone gets a boost at once, like double production. A banner under the cookie shows how long it lasts.'],
+    ['new','Ankündigungen: Neuigkeiten von der Keksfabrik erscheinen beim Start.','Announcements: News from Cookie Factory appears when you open the game.'],
+    ['new','Live-Zähler: Auf dem Startbildschirm und in der Bestenliste siehst du, wie viele Bäckereien gerade online sind und wie viele Kekse alle zusammen gebacken haben.','Live counter: The start screen and leaderboard show how many bakeries are online and how many cookies everyone has baked together.'],
+    ['new','Auf ein anderes Gerät mitnehmen: Unter Einstellungen → Speichern bekommst du einen Code (24 Stunden gültig) und gibst ihn auf dem anderen Gerät ein.','Move to another device: Under Settings → Saving you get a code (valid for 24 hours) and enter it on your other device.'],
+    ['new','Neue Codes kommen jetzt auch direkt vom Server. Halte die Augen offen!','New codes now also come straight from the server. Keep your eyes open!']
+  ]},
   {v:41,sum:['Aufträge sind jetzt dynamisch und fairer, besonders nach einem Aufstieg.','Orders are now dynamic and fairer, especially after ascending.'],items:[
     ['change','Belohnungen wachsen mit deiner Runde: höchstens 2 % / 4 % / 6 % der Kekse, die du in dieser Runde gebacken hast (leicht / mittel / schwer). Direkt nach einem Aufstieg geben Aufträge also weniger, später mehr.','Rewards grow with your run: at most 2% / 4% / 6% of the cookies baked this run (easy / medium / hard). Right after ascending orders give less, later more.'],
     ['change','Klick- und Kaufaufträge passen sich an: Wer schnell klickt oder viele Gebäude hat, bekommt größere Aufgaben.','Click and buy orders adapt: if you click fast or own many buildings, you get bigger tasks.'],
@@ -3173,6 +3205,8 @@ function save(){
   showSaveNote();
 }
 
+/* V42: globale Events (vom Server) */
+var GEV={prod:1,click:1,gold:1,orders:1};
 /* ======================= Berechnung ======================= */
 const freshUE=()=>({comboCap:0,comboDecay:1,grow:1,herb:0,monRew:1,monHp:1,exp:1,expGem:0,mana:0,manaR:0,stockSh:0,heroAtk:1,heroHp:1,sta:0,frSell:1,frCap:1,frMar:0,wkXP:1,wkMaster:0,wxMul:1,msAdd:0});
 let UE=freshUE();
@@ -3276,6 +3310,7 @@ function recalc(){
   {const ph=curPhase(),wx=curWeather();gm*=envV(ph.prod)*envV(wx.prod);clickT*=envV(ph.click)*envV(wx.click);goldRate*=envV(ph.gold)*envV(wx.gold);durM*=envV(wx.dur);}
   gm*=1+.01*(S.hero.lvl-1)+.005*S.hero.tower.best;
   gm*=1+Math.min(.15,.0006*S.orders.rep);
+  gm*=GEV.prod;clickT*=GEV.click;goldRate/=GEV.gold;
   WFX=calcWFX();gm*=WFX.prod;clickT*=WFX.click;goldRate*=WFX.gold;costMult*=WFX.cost;
   let frenzy=1,clickBuff=1,sugarM=1,spellM=1;
   for(const f of S.buffs){if(f.id==='frenzy') frenzy=7;if(f.id==='clickfrenzy') clickBuff=150;if(f.id==='b_sugar') sugarM=2;if(f.id==='b_turbo') clickBuff*=3;if(f.id==='b_sale') costMult*=.85;if(f.id==='b_magnet') goldRate*=.5;if(f.id==='s_click') clickBuff*=10;if(f.id==='s_sale') costMult*=.8;if(f.id==='s_time') spellM=5;}
@@ -3866,7 +3901,7 @@ const ordBusy=()=>1/(1+.25*(S.orders.heat||0));
 function ordReward(s){
   const D=ORD_D[s.diff]||ORD_D.easy;
   const cap=Math.max(Math.max(S.run,0)*D.cap,D.rmin);
-  return Math.ceil(Math.min(C.kps0*D.rc*WFX.ord*qualOrd(),cap)*ordBusy());
+  return Math.ceil(Math.min(C.kps0*D.rc*WFX.ord*qualOrd(),cap)*ordBusy()*GEV.orders);
 }
 function ensureOrders(){S.orders.slots.forEach((s,i)=>{if(!s) S.orders.slots[i]=genOrder();});}
 function ordProg(s){
@@ -7104,7 +7139,7 @@ function chkList(g,list){
 function unlockSec(g,titleKey,list){
   return '<details class="adm"><summary>'+tr('adm_unlock')+': '+tr(titleKey)+'</summary><div class="adm-body"><div class="btns"><button type="button" class="btn sm" data-act="all:'+g+'">'+tr('adm_all_on')+'</button><button type="button" class="btn sm" data-act="none:'+g+'">'+tr('adm_all_off')+'</button></div>'+chkList(g,list)+'</div></details>';
 }
-const ADM_TABS=[['lb','Bestenliste','Leaderboard'],['quick','Schnell','Quick'],['val','Werte','Values'],['bld','Gebäude','Buildings'],['unl','Freischalten','Unlock'],['world','Welt & Held','World & hero'],['end','Endgame','Endgame'],['tool','Werkzeuge','Tools']];
+const ADM_TABS=[['lb','Bestenliste','Leaderboard'],['online','Online','Online'],['quick','Schnell','Quick'],['val','Werte','Values'],['bld','Gebäude','Buildings'],['unl','Freischalten','Unlock'],['world','Welt & Held','World & hero'],['end','Endgame','Endgame'],['tool','Werkzeuge','Tools']];
 let admTab='quick',admPass='';
 function admXV(){
   const X={};
@@ -7202,14 +7237,14 @@ function buildAdmin(){
     +admCard(tt('Speichern','Saving'),'<div class="btns">'+ab('savenow',tt('Jetzt speichern','Save now'))+ab('backup',tt('Backup anlegen','Create backup'))+'</div>')
     +admCard(tt('Spielstand-Daten','Save data'),'<div class="btns">'+ab('json',tt('Daten anzeigen','Show data'))+'</div><textarea id="admJson" readonly hidden></textarea><p class="small" id="admJsonN"></p>',tt('json export','json export'))
     +admCard(tr('adm_reset'),'<div class="btns">'+ab('reset:admin',tr('adm_reset_btn'))+'</div>');
-  P.lb='<div id="admLb" class="admlb"></div>';
+  P.lb='<div id="admLb" class="admlb"></div>';P.online='<div id="admOn" class="admlb"></div>';
   let h='<div class="admlockbar"><button type="button" class="btn sm" id="admLockBtn">'+tt('Admin sperren','Lock admin')+'</button></div><div class="admhead"><div class="admstats">'+[['ck',tt('Kekse','Cookies')],['kps',tt('pro Sek.','per sec')],['clk',tt('pro Klick','per click')],['chips',tt('Chips','Chips')],['spd',tt('Tempo','Speed')]].map(([k,l])=>'<span><small>'+l+'</small><b data-al="'+k+'"></b></span>').join('')+'</div>'
     +'<input type="search" class="setq" id="admQ" autocomplete="off" placeholder="'+tt('Admin durchsuchen …','Search admin …')+'"><div class="seg admseg" id="admSeg">'+ADM_TABS.map(t=>'<button type="button" data-ap="'+t[0]+'" aria-pressed="'+(t[0]===admTab)+'">'+tt(t[1],t[2])+'</button>').join('')+'</div></div>'
     +ADM_TABS.map(t=>'<div class="admpane" data-ap="'+t[0]+'">'+P[t[0]]+'</div>').join('')+'<p class="small" id="admNone" hidden>'+tt('Nichts gefunden.','Nothing found.')+'</p>';
   els.admin.innerHTML=h;
   admShow();
   fillAdmin();
-  admLbRender();
+  admLbRender();admOnRender();
 }
 function admShow(){
   const q=(document.getElementById('admQ')||{value:''}).value.trim().toLowerCase();let n=0;
@@ -7695,6 +7730,14 @@ $id('codeForm').addEventListener('submit',async e=>{
   if(!window.crypto||!crypto.subtle){bad(tt('Codes gehen nur auf einer sicheren Seite (https).','Codes only work on a secure page (https).'));return;}
   let h='';try{h=await codeHash(c);}catch(x){}
   const k=CODES.find(x=>x.h===h);
+  if(!k&&lbOn()&&navigator.onLine!==false){
+    try{const g=await kfRedeem(c);codeFails=0;msg.className='nameerr ok';msg.textContent=tt('Eingelöst: ','Redeemed: ')+g.label+' · '+g.txt;inp.value='';snd('claim');toast(g.label+': '+g.txt,true);return;}
+    catch(x){const m=String(x&&x.message||'');
+      if(/already used/.test(m)){bad(tt('Diesen Code hast du schon eingelöst.','You already redeemed this code.'));return;}
+      if(/expired/.test(m)){bad(tt('Dieser Code ist abgelaufen.','This code has expired.'));return;}
+      if(/used up/.test(m)){bad(tt('Dieser Code wurde schon zu oft eingelöst.','This code has been used up.'));return;}
+      if(!/unknown code/.test(m)&&!lbMissing(x)){bad(tt('Keine Verbindung. Versuch es gleich nochmal.','No connection. Try again in a moment.'));return;}}
+  }
   if(!k){codeFails++;if(codeFails>=8){codeFails=0;codeWait=Date.now()+60000;}bad(tt('Diesen Code gibt es nicht. Prüfe die Schreibweise.','That code doesn’t exist. Check the spelling.'));return;}
   codeFails=0;
   const id=h.slice(0,12);
@@ -7812,7 +7855,7 @@ function updV34Txt(){
   set('shareT',tt('Teilen','Share'));
   set('shareP',tt('Kopiere diesen Text und schick ihn deinen Freunden.','Copy this text and send it to your friends.'));
   set('shareCopy',tt('Kopieren','Copy'));set('shareClose',tt('Schließen','Close'));
-  updApp();renderLb();updDev();updShopNav();
+  updApp();renderLb();updDev();updShopNav();updV42Txt();
 }
 
 /* ======================= V35/V40: Bestenliste ======================= */
@@ -7909,7 +7952,7 @@ function lbBanned(){
 }
 
 /* Preise abholen, Sperren und Zurücksetzen vom Admin */
-function lbShowMsg(title,html){$id('rwT').textContent=title;$id('rwBody').innerHTML=html;$id('rwClose').textContent=tt('Super!','Great!');$id('rwOv').hidden=false;$id('rwClose').focus();}
+function lbShowMsg(title,html,icon){$id('rwBurst').textContent=icon||'🏆';$id('rwT').textContent=title;$id('rwBody').innerHTML=html;$id('rwClose').textContent=tt('Super!','Great!');$id('rwOv').hidden=false;$id('rwClose').focus();}
 async function lbCheckStatus(){
   if(!lbOn()||!S.lb.id||lbV2===false) return;
   let st;try{st=await lbApi('rpc/lb_status',{p_id:S.lb.id});}catch(x){if(lbMissing(x)) lbV2=false;return;}
@@ -8019,6 +8062,184 @@ if(lbOn()&&S.lb.on) setTimeout(lbRefresh,3000);
 if(lbOn()&&S.lb.id) setTimeout(lbCheckStatus,4000);
 function tampWarn(){toast(tt('Dieser Spielstand wurde außerhalb des Spiels verändert. Er kann nicht in die Bestenliste.','This save was changed outside the game. It can’t join the leaderboard.'),true);updV34Txt();}
 if(S.tamp&&hadSave&&!S.tampSeen){S.tampSeen=1;setTimeout(tampWarn,1500);}
+
+/* ======================= V42: Online – Codes, Ankündigungen, Events, Live-Zähler, Cloud ======================= */
+let kfV3=null,kfEvents=[],kfLive=null,kfLastEv=0,kfLastNews=0;
+function kfId(){if(!S.lb.id){S.lb.id=lbUUID();save();}return S.lb.id;}
+const kfOk=()=>lbOn()&&kfV3!==false&&navigator.onLine!==false;
+const kfNote=x=>{if(lbMissing(x)) kfV3=false;};
+const lsGet=k=>{try{return localStorage.getItem(k);}catch(x){return null;}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v);}catch(x){}};
+
+/* Codes aus dem Admin-Panel */
+async function kfRedeem(c){
+  const r=await lbApi('rpc/redeem_code',{p_id:kfId(),p_code:c})||{};kfV3=true;
+  const parts=[];
+  if(r.gems){S.w.mat.gem+=r.gems;parts.push('+'+r.gems+' '+matName('gem'));}
+  if(r.stars){S.w.star.n+=r.stars;S.w.star.all=Math.max(S.w.star.all||0,S.w.star.n);parts.push('+'+r.stars+' '+tt('Sternenkrümel','star crumbs'));}
+  if(r.minutes){const g=Math.max(1000*r.minutes,C.kps0*60*r.minutes);addCk(g);parts.push('+'+fmt(g)+' '+tt('Kekse','cookies'));}
+  recalc();save();render();
+  return {label:r.label?escName(r.label):tt('Geschenk-Code','Gift code'),txt:parts.join(' · ')||tt('eingelöst','redeemed')};
+}
+
+/* Globale Events */
+const EVK={prod:['Produktion','production'],click:['Klicks','clicks'],gold:['Goldkekse','golden cookies'],orders:['Aufträge','orders']};
+const EVI={prod:'🏭',click:'👆',gold:'✨',orders:'📜'};
+async function kfLoadEvents(){
+  if(!kfOk()) return;kfLastEv=Date.now();
+  try{const r=await lbApi('kf_events?select=id,kind,mult,title,starts_at,ends_at&order=ends_at.asc');kfEvents=Array.isArray(r)?r:[];kfV3=true;}catch(x){kfNote(x);}
+  kfApplyEvents();
+}
+const kfActive=()=>{const n=Date.now();return kfEvents.filter(e=>n>=Date.parse(e.starts_at)&&n<Date.parse(e.ends_at)&&EVK[e.kind]);};
+function kfApplyEvents(){
+  const g={prod:1,click:1,gold:1,orders:1};
+  kfActive().forEach(e=>{g[e.kind]=Math.min(10,g[e.kind]*Math.max(1,Math.min(10,+e.mult||1)));});
+  const sig=JSON.stringify(g);if(sig!==kfApplyEvents._s){kfApplyEvents._s=sig;Object.assign(GEV,g);recalc();}
+  const bar=$id('gevBar');if(!bar) return;
+  const act=kfActive(),n=Date.now();
+  const h=act.map(e=>'<span class="gev"><span aria-hidden="true">'+EVI[e.kind]+'</span><b>×'+(Math.round(e.mult*100)/100).toLocaleString(LOC[LANG])+' '+tx(EVK[e.kind])+'</b>'+(e.title?'<small>'+escName(e.title)+'</small>':'')+'<small>'+tt('noch ','')+lbLeft(Date.parse(e.ends_at)-n)+tt('',' left')+'</small></span>').join('');
+  bar.hidden=!act.length;if(bar._h!==h){bar._h=h;bar.innerHTML=h;}
+}
+
+/* Ankündigungen */
+async function kfLoadNews(){
+  if(!kfOk()) return;kfLastNews=Date.now();
+  let r;try{r=await lbApi('kf_news?select=id,title,body,created_at&order=id.desc&limit=5');kfV3=true;}catch(x){kfNote(x);return;}
+  const seen=+(lsGet('keksfabrik-news-seen')||0),fresh=(r||[]).filter(n=>n.id>seen);
+  if(!fresh.length) return;
+  if(!startDone||!$id('rwOv').hidden||!$id('lbOv').hidden){kfLastNews=0;return;}
+  lsSet('keksfabrik-news-seen',String(Math.max(...fresh.map(n=>n.id))));
+  const html=fresh.slice(0,3).map(n=>'<div class="annc"><b>'+escName(n.title)+'</b>'+(n.body?'<p>'+escName(n.body).replace(/\n/g,'<br>')+'</p>':'')+'<small>'+new Date(n.created_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</small></div>').join('');
+  lbShowMsg(tt('Neuigkeiten von der Keksfabrik','News from Cookie Factory'),html,'📢');
+}
+
+/* Live-Zähler */
+async function kfPing(){
+  if(!kfOk()||document.hidden) return;
+  try{kfLive=await lbApi('rpc/kf_ping',{p_id:kfId(),p_baked:lbCheat()?0:Math.floor(Math.min(S.all,9.9e299))});kfV3=true;}catch(x){kfNote(x);}
+  renderLive();
+}
+function renderLive(){
+  const L=kfLive,t=L?'🌍 '+(L.online===1?tt('1 Bäckerei online','1 bakery online'):fmt(L.online)+tt(' Bäckereien online',' bakeries online'))+' · '+fmt(L.total)+tt(' Kekse weltweit gebacken',' cookies baked worldwide'):'';
+  ['stLive','lbLive'].forEach(id=>{const e=$id(id);if(!e) return;e.hidden=!t;if(e.textContent!==t) e.textContent=t;});
+}
+
+/* Cloud: Spielstand per Code auf ein anderes Gerät */
+let cloudArm=0;
+const fmtCloud=c=>'KEKS-'+c.slice(0,4)+'-'+c.slice(4,8);
+$id('cloudUp').addEventListener('click',async()=>{
+  const b=$id('cloudUp'),box=$id('cloudCode'),msg=$id('cloudMsg');msg.className='nameerr';msg.textContent='';
+  if(!lbOn()){msg.textContent=tt('Online-Funktionen sind nicht eingerichtet.','Online features aren’t set up.');return;}
+  b.disabled=true;b.textContent=tt('Lädt hoch …','Uploading …');
+  try{
+    save();const r=await lbApi('rpc/save_upload',{p_data:enc(sealJSON(S))});kfV3=true;
+    const code=fmtCloud(r.code),until=new Date(r.expires_at).toLocaleString(LOC[LANG],{weekday:'short',hour:'2-digit',minute:'2-digit'});
+    box.hidden=false;box.innerHTML='<b class="ccode">'+code+'</b><small>'+tt('Gültig bis ','Valid until ')+until+tt('. Gib ihn auf dem anderen Gerät unter Einstellungen → Speichern ein.','. Enter it on your other device under Settings → Saving.')+'</small><button type="button" class="btn sm" id="cloudCopy">'+tt('Kopieren','Copy')+'</button>';
+    box.dataset.code=code;
+  }catch(x){kfNote(x);msg.textContent=lbMissing(x)?tt('Die Datenbank kennt diese Funktion noch nicht.','The database doesn’t have this feature yet.'):tt('Hochladen hat nicht geklappt. Prüfe dein Internet.','Upload didn’t work. Check your internet.');}
+  b.disabled=false;updV42Txt();
+});
+$id('cloudCode').addEventListener('click',async e=>{
+  if(!e.target.closest('#cloudCopy')) return;
+  const c=$id('cloudCode').dataset.code;try{await navigator.clipboard.writeText(c);toast(tt('Code kopiert!','Code copied!'));}catch(x){toast(c);}
+});
+$id('cloudForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const inp=$id('cloudIn'),msg=$id('cloudMsg'),go=$id('cloudGo');msg.className='nameerr';
+  const raw=inp.value.trim();if(!raw){msg.textContent=tt('Gib zuerst einen Code ein.','Enter a code first.');inp.focus();return;}
+  if(S.opt.ask!==false&&!cloudArm){go.classList.add('armed');go.textContent=tt('Ersetzt dein Spiel! Nochmal','Replaces your game! Again');cloudArm=setTimeout(()=>{cloudArm=0;go.classList.remove('armed');updV42Txt();},5000);return;}
+  clearTimeout(cloudArm);cloudArm=0;go.classList.remove('armed');go.disabled=true;go.textContent=tt('Lädt …','Loading …');
+  try{
+    const t=await lbApi('rpc/save_download',{p_code:raw});kfV3=true;
+    let o=null;try{o=JSON.parse(dec(String(t)));}catch(x){try{o=JSON.parse(String(t));}catch(y){o=null;}}
+    if(!o||typeof o!=='object'||typeof o.cookies!=='number') throw new Error('bad save');
+    try{pushBackup();}catch(x){}
+    const s=sanitize(o);if(!s.name) s.name=S.name;
+    if(s.tamp) setTimeout(tampWarn,400);
+    S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;
+    applyLang();rebuildAll();save();slotSig='';inp.value='';
+    msg.className='nameerr ok';msg.textContent=tt('Spielstand geladen','Save loaded')+(S.name?': '+S.name:'')+'.';
+    toast(tt('Spielstand aus der Cloud geladen. Dein altes Spiel liegt unter Backups.','Save loaded from the cloud. Your old game is under Backups.'),true);
+  }catch(x){
+    kfNote(x);const m=String(x&&x.message||'');
+    msg.textContent=/unknown or expired/.test(m)?tt('Diesen Code gibt es nicht oder er ist abgelaufen (Codes gelten 24 Stunden).','That code doesn’t exist or has expired (codes last 24 hours).'):/bad save/.test(m)?tt('Unter diesem Code liegt kein gültiger Spielstand.','There’s no valid save under this code.'):lbMissing(x)?tt('Die Datenbank kennt diese Funktion noch nicht.','The database doesn’t have this feature yet.'):tt('Laden hat nicht geklappt. Prüfe dein Internet.','Loading didn’t work. Check your internet.');
+  }
+  go.disabled=false;updV42Txt();
+});
+
+function updV42Txt(){
+  const set=(id,t)=>{const e=$id(id);if(e&&e.textContent!==t) e.textContent=t;};
+  set('cloudT',tt('Auf ein anderes Gerät mitnehmen','Move to another device'));
+  set('cloudP',tt('Erstelle einen Code und gib ihn auf deinem anderen Gerät ein. Der Code gilt 24 Stunden. Beim Laden wird dein aktuelles Spiel ersetzt und vorher als Backup gesichert.','Create a code and enter it on your other device. The code lasts 24 hours. Loading replaces your current game, which is kept as a backup first.'));
+  if(!$id('cloudUp').disabled) set('cloudUp',tt('Transfer-Code erstellen','Create transfer code'));
+  if(!cloudArm&&!$id('cloudGo').disabled) set('cloudGo',tt('Laden','Load'));
+  $id('cloudIn').setAttribute('aria-label',tt('Transfer-Code','Transfer code'));
+  renderLive();kfApplyEvents();
+}
+
+/* Zeitplan */
+setInterval(()=>{kfApplyEvents();if(document.hidden) return;const n=Date.now();if(n-kfLastEv>120000) kfLoadEvents();if(n-kfLastNews>300000) kfLoadNews();},1000);
+setInterval(kfPing,60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){kfPing();kfLoadEvents();}});
+if(lbOn()){setTimeout(kfLoadEvents,1500);setTimeout(kfPing,2500);setTimeout(kfLoadNews,6000);}
+
+/* ======================= V42: Admin – Online ======================= */
+let admOnData=null,admOnErr='',admOnBusy=false,admOnArm={k:'',t:0};
+function admOnRender(){
+  const box=$id('admOn');if(!box) return;
+  const card=(t,b)=>'<div class="admcard"><h4>'+t+'</h4>'+b+'</div>';
+  if(!lbOn()){box.innerHTML=card(tt('Online','Online'),'<p class="small">'+tt('Online-Funktionen sind nicht eingerichtet.','Online features aren’t set up.')+'</p>');return;}
+  let h='';
+  if(!admPass){
+    h+=card(tt('Online-Werkzeuge','Online tools'),'<form class="coderow" id="admOnPwF" novalidate><input type="password" class="namein" id="admOnPw" autocomplete="current-password" placeholder="'+tt('Admin-Passwort','Admin password')+'" aria-label="'+tt('Admin-Passwort','Admin password')+'"><button type="submit" class="btn primary">'+tt('Laden','Load')+'</button></form>');
+    if(admOnErr) h+='<p class="nameerr">'+admOnErr+'</p>';
+    if(box._h!==h){box._h=h;box.innerHTML=h;}return;
+  }
+  if(admOnErr) h+='<p class="nameerr">'+admOnErr+'</p>';
+  const D=admOnData||{},L=D.live||{};
+  const arm=k=>admOnArm.k===k&&Date.now()-admOnArm.t<5000;
+  const dt=v=>v?new Date(v).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'∞';
+  h+=card('🌍 '+tt('Live','Live'),'<div class="admstats">'+[[tt('Jetzt online','Online now'),L.online],[tt('Heute','Today'),L.today],[tt('Spieler','Players'),L.players],[tt('Kekse weltweit','Cookies worldwide'),L.total!=null?fmt(L.total):'']].map(([l,v])=>'<span><small>'+l+'</small><b>'+(v==null?'–':typeof v==='number'?fmt(v):v)+'</b></span>').join('')+'</div><div class="btns" style="margin-top:8px"><button type="button" class="btn sm primary" data-ona="list">'+(admOnBusy?tt('Lädt …','Loading …'):tt('Aktualisieren','Refresh'))+'</button></div>');
+  h+=card('📢 '+tt('Ankündigung','Announcement'),'<form class="admform" id="admNewsF" novalidate><input class="namein" name="title" maxlength="80" placeholder="'+tt('Titel, z. B. Doppelte Kekse am Wochenende!','Title, e.g. Double cookies this weekend!')+'" style="grid-column:1/-1"><textarea class="namein" name="body" maxlength="600" rows="3" placeholder="'+tt('Nachricht (optional)','Message (optional)')+'" style="grid-column:1/-1"></textarea><label class="small">'+tt('Sichtbar für Tage','Visible for days')+'<input class="namein" name="days" type="number" min="0" step="1" value="3"></label><button type="submit" class="btn primary">'+tt('Veröffentlichen','Post')+'</button></form>'
+    +((D.news||[]).length?'<div class="admlbl">'+D.news.map(n=>'<div class="admlbr"><span class="rk">📢</span><span class="who"><b>'+escName(n.title)+'</b><small>'+(n.until&&Date.parse(n.until)<Date.now()?tt('abgelaufen','expired'):tt('bis ','until ')+dt(n.until))+'</small></span><span class="btns"><button type="button" class="btn sm'+(arm('news_del:'+n.id)?' armed':'')+'" data-ona="news_del:'+n.id+'">'+(arm('news_del:'+n.id)?tt('Sicher?','Sure?'):tt('Löschen','Delete'))+'</button></span></div>').join('')+'</div>':''));
+  h+=card('⚡ '+tt('Globales Event','Global event'),'<form class="admform" id="admEvF" novalidate><label class="small">'+tt('Art','Type')+'<select class="namein" name="kind">'+Object.keys(EVK).map(k=>'<option value="'+k+'">'+EVI[k]+' '+tx(EVK[k])+'</option>').join('')+'</select></label><label class="small">'+tt('Stärke','Strength')+'<select class="namein" name="mult">'+[1.5,2,3,5,10].map(m=>'<option value="'+m+'"'+(m===2?' selected':'')+'>×'+m+'</option>').join('')+'</select></label><label class="small">'+tt('Dauer in Stunden','Hours')+'<input class="namein" name="hours" type="number" min="1" step="1" value="24"></label><input class="namein" name="title" maxlength="60" placeholder="'+tt('Name, z. B. Kekswochenende','Name, e.g. Cookie weekend')+'"><button type="submit" class="btn primary" style="grid-column:1/-1">'+tt('Event starten','Start event')+'</button></form>'
+    +((D.events||[]).length?'<div class="admlbl">'+D.events.map(e=>{const live=Date.parse(e.ends_at)>Date.now();return '<div class="admlbr"><span class="rk">'+EVI[e.kind]+'</span><span class="who"><b>×'+e.mult+' '+tx(EVK[e.kind])+(e.title?' · '+escName(e.title):'')+'</b><small>'+(live?tt('läuft bis ','running until ')+dt(e.ends_at):tt('beendet ','ended ')+dt(e.ends_at))+'</small></span><span class="btns">'+(live?'<button type="button" class="btn sm'+(arm('event_end:'+e.id)?' armed':'')+'" data-ona="event_end:'+e.id+'">'+(arm('event_end:'+e.id)?tt('Sicher?','Sure?'):tt('Beenden','End now'))+'</button>':'')+'</span></div>';}).join('')+'</div>':''));
+  h+=card('🎁 '+tt('Codes','Codes'),'<form class="admform" id="admCodeF" novalidate><input class="namein" name="code" maxlength="24" placeholder="'+tt('CODE (Buchstaben/Zahlen)','CODE (letters/numbers)')+'" style="text-transform:uppercase"><input class="namein" name="label" maxlength="40" placeholder="'+tt('Name, z. B. Freunde-Geschenk','Name, e.g. Friends gift')+'"><label class="small">'+tt('Edelsteine','Gems')+'<input class="namein" name="gems" type="number" min="0" value="50"></label><label class="small">'+tt('Sternenkrümel','Star crumbs')+'<input class="namein" name="stars" type="number" min="0" value="0"></label><label class="small">'+tt('Minuten Produktion','Minutes of production')+'<input class="namein" name="minutes" type="number" min="0" value="30"></label><label class="small">'+tt('Max. Einlösungen (leer = unbegrenzt)','Max uses (empty = unlimited)')+'<input class="namein" name="max_uses" type="number" min="1"></label><label class="small">'+tt('Gültig für Tage (leer = immer)','Valid for days (empty = forever)')+'<input class="namein" name="days" type="number" min="1"></label><button type="submit" class="btn primary">'+tt('Code erstellen','Create code')+'</button></form>'
+    +((D.codes||[]).length?'<div class="admlbl">'+D.codes.map(c=>'<div class="admlbr"><span class="rk">🎁</span><span class="who"><b>'+escName(c.code)+(c.label?' · '+escName(c.label):'')+'</b><small>'+[c.gems?c.gems+' '+matName('gem'):'',c.stars?c.stars+' ⭐':'',c.minutes?c.minutes+' min':''].filter(Boolean).join(' + ')+' · '+tt('eingelöst ','used ')+c.uses+(c.max_uses?' / '+c.max_uses:'')+' · '+(c.expires_at?(Date.parse(c.expires_at)<Date.now()?tt('abgelaufen','expired'):tt('bis ','until ')+dt(c.expires_at)):tt('ohne Ablauf','no expiry'))+'</small></span><span class="btns"><button type="button" class="btn sm'+(arm('code_del:'+c.code)?' armed':'')+'" data-ona="code_del:'+escName(c.code)+'">'+(arm('code_del:'+c.code)?tt('Sicher?','Sure?'):tt('Löschen','Delete'))+'</button></span></div>').join('')+'</div>':''));
+  if(box._h!==h){box._h=h;box.innerHTML=h;}
+}
+async function admOnCall(action,data){
+  admOnBusy=true;admOnErr='';admOnRender();
+  try{
+    admOnData=await lbApi('rpc/admin_online',{p_pass:admPass,p_action:action,p_data:data||null});kfV3=true;
+    if(action!=='list') toast({code_add:tt('Code gespeichert.','Code saved.'),code_del:tt('Code gelöscht.','Code deleted.'),news_add:tt('Ankündigung veröffentlicht.','Announcement posted.'),news_del:tt('Ankündigung gelöscht.','Announcement deleted.'),event_add:tt('Event gestartet!','Event started!'),event_end:tt('Event beendet.','Event ended.')}[action]||'OK');
+    if(/^event/.test(action)) kfLoadEvents();
+  }catch(x){
+    const m=String(x&&x.message||'');
+    if(/wrong admin password/.test(m)){admPass='';admOnErr=tt('Falsches Passwort.','Wrong password.');}
+    else if(lbMissing(x)) admOnErr=tt('Die Datenbank kennt diese Funktionen noch nicht. Führe zuerst docs/online-v3.sql in Supabase aus.','The database doesn’t have these features yet. Run docs/online-v3.sql in Supabase first.');
+    else if(/check constraint|kf_codes_code_check/.test(m)) admOnErr=tt('Ungültige Eingabe. Codes: 3–24 Buchstaben oder Zahlen.','Invalid input. Codes: 3–24 letters or numbers.');
+    else admOnErr=tt('Hat nicht geklappt: ','Didn’t work: ')+escName(m);
+  }
+  admOnBusy=false;admOnArm={k:'',t:0};admOnRender();
+}
+els.admin.addEventListener('submit',e=>{
+  const f=e.target;if(!['admOnPwF','admNewsF','admEvF','admCodeF'].includes(f.id)) return;
+  e.preventDefault();
+  if(f.id==='admOnPwF'){const v=$id('admOnPw').value;if(!v) return;admPass=v;admOnCall('list');return;}
+  const d=Object.fromEntries(new FormData(f).entries());
+  if(f.id==='admNewsF'){if(!d.title||!d.title.trim()){admOnErr=tt('Bitte gib einen Titel ein.','Please enter a title.');admOnRender();return;}admOnCall('news_add',d);}
+  else if(f.id==='admEvF') admOnCall('event_add',d);
+  else{if(!/^[A-Za-z0-9]{3,24}$/.test((d.code||'').replace(/[\s-]/g,''))){admOnErr=tt('Codes: 3–24 Buchstaben oder Zahlen.','Codes: 3–24 letters or numbers.');admOnRender();return;}admOnCall('code_add',d);}
+});
+els.admin.addEventListener('click',e=>{
+  const b=e.target.closest('[data-ona]');if(!b) return;
+  const k=b.dataset.ona,[a,...rest]=k.split(':'),v=rest.join(':');
+  if(a==='list'){admOnCall('list');return;}
+  if(admOnArm.k!==k||Date.now()-admOnArm.t>5000){admOnArm={k,t:Date.now()};admOnRender();return;}
+  admOnCall(a,a==='code_del'?{code:v}:{id:v});
+});
+els.admin.addEventListener('click',e=>{const b=e.target.closest('#admSeg [data-ap="online"]');if(b) setTimeout(()=>{admOnRender();if(admPass&&!admOnData&&!admOnBusy) admOnCall('list');},0);});
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};
