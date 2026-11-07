@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Privacy · Datenschutz – Cookie Factory</title>
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<style>
+:root{--bg:#1b1430;--panel:#271d43;--text:#f3ecff;--muted:#bfb2dc;--accent:#ffc23d;--edge:rgba(255,255,255,.12)}
+@media (prefers-color-scheme:light){:root{--bg:#fbf7ff;--panel:#fff;--text:#22183a;--muted:#5d5276;--accent:#b8730a;--edge:rgba(0,0,0,.12)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:28px;line-height:1.2;margin:8px 0 4px}
+h2{font-size:20px;margin:28px 0 8px}
+h3{font-size:16px;margin:18px 0 4px}
+p,li{color:var(--text)}
+.muted{color:var(--muted);font-size:14px}
+a{color:var(--accent)}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 20px}
+nav a{padding:6px 14px;border:1px solid var(--edge);border-radius:999px;text-decoration:none;background:var(--panel)}
+section{background:var(--panel);border:1px solid var(--edge);border-radius:16px;padding:4px 18px 16px;margin-bottom:20px}
+ul{padding-left:20px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{text-align:left;vertical-align:top;padding:6px 8px;border-top:1px solid var(--edge)}
+</style>
+</head>
+<body>
+<main>
+<h1>🍪 Privacy · Datenschutz</h1>
+<p class="muted">Cookie Factory · Keksfabrik — last updated / Stand: November 2026</p>
+<nav><a href="#en">English</a><a href="#de">Deutsch</a><a href="./">▶ Back to the game · Zurück zum Spiel</a></nav>
+
+<section id="en" lang="en">
+<h2>In short</h2>
+<ul>
+<li>You can play without an account, email or real name.</li>
+<li>Your game is saved in your own browser. Online features (accounts, leaderboard, clubs, chat) store what they need on our database server.</li>
+<li>No tracking cookies, no analytics service, no ads on this website, and nothing is sold.</li>
+<li>Crash reports and the "player journey" statistics are anonymous.</li>
+</ul>
+
+<h2>Stored in your browser</h2>
+<p>Your save (3 slots), settings, automatic backups, your chosen device layout, and – if you sign in – a session token. Nothing of this leaves your device unless you use an online feature. You can delete it by clearing this site's data in your browser.</p>
+
+<h2>Stored on the server</h2>
+<p>The game uses <b>Supabase</b> as its database. Depending on what you use:</p>
+<table>
+<tr><th>What you use</th><th>What is stored</th></tr>
+<tr><td>Every game</td><td>A random player ID (not linked to your name), how many cookies you baked and when you last played (live counter, daily player numbers kept for 120 days), and which first steps you reached (for example "first building"). Anonymous crash reports: the error text, where in the code it happened, the game version and your browser type (the newest 300 are kept).</td></tr>
+<tr><td>Leaderboard</td><td>The bakery name you choose, your score and when it was updated.</td></tr>
+<tr><td>Account</td><td>Your username, your password only as a one-way hash (bcrypt, nobody can read it), your account save, a few public profile numbers (achievements, buildings, title), sign-in sessions (also only as hashes).</td></tr>
+<tr><td>Clubs, chat, friends, gifts</td><td>Your club membership, chat messages (each club keeps its last 200), reactions, friend list, gifts and messages from the admin, invites.</td></tr>
+<tr><td>Reports, bans, appeals</td><td>Chat reports you send or that concern you, mutes and bans with their reason, and ban appeals you write.</td></tr>
+<tr><td>Feedback</td><td>What you write, the kind (bug, idea, other), the game version, your browser type and – if you're signed in – your username (the newest 500 are kept).</td></tr>
+<tr><td>Push notifications</td><td>Your browser's push address and keys, only if you turn notifications on.</td></tr>
+</table>
+
+<h3>Your internet address</h3>
+<p>To stop spam and abuse (for example too many new accounts from one device), the game turns your IP address into a one-way code (hash) and stores only that code for a short time. The address itself isn't stored by the game. Our hosting providers keep their own short technical logs (see below).</p>
+
+<h2>Services we use</h2>
+<ul>
+<li><b>GitHub Pages</b> hosts the game files. GitHub can see your IP address when you load the game.</li>
+<li><b>Supabase</b> runs the database for all online features.</li>
+<li><b>Google Fonts</b> provides the two fonts, so your browser connects to Google when the game loads.</li>
+<li><b>Push services</b> of your browser maker (Google, Apple, Mozilla, Microsoft) deliver notifications if you turn them on.</li>
+<li><b>Game portals:</b> if you play on CrazyGames, GameDistribution or another portal, that site and its ad partners have their own privacy policies. Ads there are optional and only shown when you press "Watch an ad". This website has no ads.</li>
+</ul>
+
+<h2>Deleting your data</h2>
+<ul>
+<li><b>Account:</b> Settings → Saving → your account → "Delete account". This removes your account, its save, profile, sessions, friends and club membership. Chat messages you wrote stay in the chat under your name until they scroll away; weekly server backups are replaced within about 6 weeks.</li>
+<li><b>Leaderboard entry, chat messages or anything else:</b> ask with "Send feedback" in Settings → Game, or open an issue on <a href="https://github.com/Destinyx350/Cookie-Factory/issues" rel="noopener">GitHub</a>.</li>
+<li><b>Everything on your device:</b> clear this site's data in your browser settings.</li>
+</ul>
+
+<h2>Contact</h2>
+<p>Use "Send feedback" in Settings → Game, or <a href="https://github.com/Destinyx350/Cookie-Factory/issues" rel="noopener">GitHub issues</a>.</p>
+</section>
+
+<section id="de" lang="de">
+<h2>Kurz gesagt</h2>
+<ul>
+<li>Du kannst ohne Konto, E-Mail oder echten Namen spielen.</li>
+<li>Dein Spiel wird in deinem eigenen Browser gespeichert. Online-Funktionen (Konten, Bestenliste, Clubs, Chat) speichern das Nötige auf unserem Datenbank-Server.</li>
+<li>Keine Tracking-Cookies, kein Analyse-Dienst, keine Werbung auf dieser Website, und nichts wird verkauft.</li>
+<li>Absturzberichte und die Statistik zum „Spieler-Weg“ sind anonym.</li>
+</ul>
+
+<h2>In deinem Browser gespeichert</h2>
+<p>Dein Spielstand (3 Plätze), Einstellungen, automatische Backups, das gewählte Geräte-Layout und – wenn du angemeldet bist – ein Sitzungs-Schlüssel. Nichts davon verlässt dein Gerät, solange du keine Online-Funktion nutzt. Du kannst es löschen, indem du die Website-Daten im Browser löschst.</p>
+
+<h2>Auf dem Server gespeichert</h2>
+<p>Das Spiel nutzt <b>Supabase</b> als Datenbank. Je nachdem, was du nutzt:</p>
+<table>
+<tr><th>Was du nutzt</th><th>Was gespeichert wird</th></tr>
+<tr><td>Jedes Spiel</td><td>Eine zufällige Spieler-ID (nicht mit deinem Namen verbunden), wie viele Kekse du gebacken hast und wann du zuletzt gespielt hast (Live-Zähler, tägliche Spielerzahlen werden 120 Tage aufbewahrt), und welche ersten Schritte du erreicht hast (zum Beispiel „erstes Gebäude“). Anonyme Absturzberichte: Fehlertext, Stelle im Code, Spielversion und Browser-Typ (die neuesten 300 bleiben).</td></tr>
+<tr><td>Bestenliste</td><td>Der Bäckerei-Name, den du wählst, deine Punkte und wann sie aktualisiert wurden.</td></tr>
+<tr><td>Konto</td><td>Dein Benutzername, dein Passwort nur als Einweg-Hash (bcrypt, niemand kann es lesen), dein Konto-Spielstand, ein paar öffentliche Profilzahlen (Erfolge, Gebäude, Titel), Anmelde-Sitzungen (ebenfalls nur als Hash).</td></tr>
+<tr><td>Clubs, Chat, Freunde, Geschenke</td><td>Deine Club-Mitgliedschaft, Chat-Nachrichten (jeder Club behält die letzten 200), Reaktionen, Freundesliste, Geschenke und Nachrichten vom Admin, Einladungen.</td></tr>
+<tr><td>Meldungen, Sperren, Einsprüche</td><td>Chat-Meldungen, die du schickst oder die dich betreffen, Stummschaltungen und Sperren mit Grund, und Einsprüche, die du schreibst.</td></tr>
+<tr><td>Feedback</td><td>Was du schreibst, die Art (Fehler, Idee, Sonstiges), die Spielversion, dein Browser-Typ und – wenn du angemeldet bist – dein Benutzername (die neuesten 500 bleiben).</td></tr>
+<tr><td>Push-Benachrichtigungen</td><td>Die Push-Adresse und Schlüssel deines Browsers, nur wenn du Benachrichtigungen einschaltest.</td></tr>
+</table>
+
+<h3>Deine Internet-Adresse</h3>
+<p>Gegen Spam und Missbrauch (zum Beispiel zu viele neue Konten von einem Gerät) macht das Spiel aus deiner IP-Adresse einen Einweg-Code (Hash) und speichert nur diesen Code für kurze Zeit. Die Adresse selbst speichert das Spiel nicht. Unsere Hosting-Anbieter führen eigene, kurze technische Protokolle (siehe unten).</p>
+
+<h2>Genutzte Dienste</h2>
+<ul>
+<li><b>GitHub Pages</b> stellt die Spieldateien bereit. GitHub sieht deine IP-Adresse, wenn du das Spiel lädst.</li>
+<li><b>Supabase</b> betreibt die Datenbank für alle Online-Funktionen.</li>
+<li><b>Google Fonts</b> liefert die zwei Schriftarten, dein Browser verbindet sich also beim Laden mit Google.</li>
+<li><b>Push-Dienste</b> deines Browser-Herstellers (Google, Apple, Mozilla, Microsoft) stellen Benachrichtigungen zu, wenn du sie einschaltest.</li>
+<li><b>Spieleportale:</b> Wenn du auf CrazyGames, GameDistribution oder einem anderen Portal spielst, gelten dort deren Datenschutzregeln und die ihrer Werbepartner. Werbung gibt es dort nur freiwillig, wenn du „Werbung ansehen“ drückst. Diese Website hat keine Werbung.</li>
+</ul>
+
+<h2>Daten löschen</h2>
+<ul>
+<li><b>Konto:</b> Einstellungen → Speichern → dein Konto → „Konto löschen“. Das entfernt Konto, Spielstand, Profil, Sitzungen, Freunde und Club-Mitgliedschaft. Chat-Nachrichten bleiben unter deinem Namen im Chat, bis sie herausrutschen; die wöchentlichen Server-Backups werden innerhalb von etwa 6 Wochen ersetzt.</li>
+<li><b>Eintrag in der Bestenliste, Chat-Nachrichten oder anderes:</b> frag über „Feedback senden“ unter Einstellungen → Spiel oder auf <a href="https://github.com/Destinyx350/Cookie-Factory/issues" rel="noopener">GitHub</a>.</li>
+<li><b>Alles auf deinem Gerät:</b> lösche die Website-Daten in den Browser-Einstellungen.</li>
+</ul>
+
+<h2>Kontakt</h2>
+<p>Über „Feedback senden“ unter Einstellungen → Spiel oder über <a href="https://github.com/Destinyx350/Cookie-Factory/issues" rel="noopener">GitHub-Issues</a>.</p>
+</section>
+</main>
+</body>
+</html>

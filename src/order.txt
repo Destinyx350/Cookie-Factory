@@ -62,6 +62,8 @@ src/js/43d-v52-konto-sperre.js
 admin src/js/43e-admin-sperren.js
 admin src/js/43f-admin-team.js
 src/js/43g-v53-portal-werbung.js
+src/js/43h-v54-clubstufen-feedback.js
+admin src/js/43i-admin-alarme-feedback.js
 admin src/js/44-v40-admin-bestenliste-verwalten.js
 src/js/45-v40-shop-navigation-welt-uebergaenge.js
 src/js/46-v39-geraet-layout.js

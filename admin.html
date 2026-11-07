@@ -1679,6 +1679,22 @@ html{-webkit-tap-highlight-color:transparent}
 .adbtn{display:block;margin:6px auto 0;border:1px solid var(--edge);background:var(--panel-2);color:inherit;border-radius:999px;padding:6px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .adbtn:disabled{opacity:.55;cursor:default}
 
+/* V54: Club-Stufe, Feedback */
+.clublv{display:flex;align-items:center;gap:8px;margin:8px 0 2px}
+.lvbadge{flex:0 0 auto;font-weight:700;font-size:12px;padding:2px 10px;border-radius:999px;background:color-mix(in srgb,var(--accent) 22%,transparent);border:1px solid color-mix(in srgb,var(--accent) 55%,transparent)}
+.lvbar{flex:1;height:8px;border-radius:999px;background:var(--panel-2);overflow:hidden}
+.lvbar i{display:block;height:100%;background:var(--accent);border-radius:inherit}
+.clublv small{color:var(--muted);font-size:11px;white-space:nowrap}
+.clublvtxt{margin:2px 0 8px}
+.fbkind{display:flex;gap:4px;flex-wrap:wrap}
+.fbkind label{flex:1;min-width:0}
+.fbkind input{position:absolute;opacity:0;pointer-events:none}
+.fbkind span{display:block;text-align:center;padding:6px 8px;border-radius:999px;border:1px solid var(--edge);cursor:pointer;font-size:13px}
+.fbkind input:checked+span{background:color-mix(in srgb,var(--accent) 22%,transparent);border-color:var(--accent)}
+.fbkind input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+#fbF{display:grid;gap:8px}
+.fbbody{white-space:pre-wrap;color:var(--text)!important}
+
 </style>
 
 <div class="wrap">
@@ -2925,8 +2941,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=53;
+const NEWS_VER=54;
 const NEWS=[
+  {v:54,sum:['Neu: Club-Stufen mit Bonus für alle Mitglieder und ein Feedback-Knopf!','New: club levels with a bonus for every member, and a feedback button!'],items:[
+    ['new','Club-Stufen 1–10: Clubs sammeln XP, wenn Mitglieder in einer Woche mitbacken (100) und wenn sie Clubkriege gewinnen (500). Jede Stufe gibt allen Mitgliedern +1 % Produktion und +5 % auf Club-Preise.','Club levels 1–10: clubs earn XP when members bake in a week (100) and when they win club wars (500). Every level gives all members +1% production and +5% on club prizes.'],
+    ['new','Feedback senden: Unter Einstellungen → Spiel kannst du Fehler melden oder Ideen schicken.','Send feedback: report bugs or share ideas under Settings → Game.'],
+    ['new','Datenschutz-Info auf Deutsch und Englisch, ebenfalls unter Einstellungen → Spiel.','Privacy info in English and German, also under Settings → Game.']
+  ]},
   {v:53,sum:['Gesperrt? Jetzt kannst du Einspruch einlegen. Dazu mehr Moderation und Sicherheit.','Banned? You can now appeal. Plus more moderation and security.'],items:[
     ['new','Einspruch gegen eine Sperre: Gesperrte Spieler können direkt im Sperr-Hinweis einmal am Tag um eine Prüfung bitten und sehen die Antwort beim nächsten Anmelden.','Ban appeals: banned players can ask for a review right in the ban notice, once a day, and see the answer the next time they sign in.'],
     ['new','Moderatoren helfen jetzt mit: Sie kümmern sich um Meldungen im Club-Chat.','Moderators now help out: they take care of reports in club chat.'],
@@ -3456,7 +3477,7 @@ let WFX=null;
 /* ======================= Spielstand ======================= */
 const defAdmin=()=>({prod:1,click:1,cost:1,speed:1,gold:1,goldPow:1,growth:1.15,ac:0,b:{}});
 function fresh(){
-  return {name:'',codes:{},lb:{on:0,id:'',t:0,ls:0,pb:null,ban:0},adm:0,tamp:0,cb:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
+  return {name:'',codes:{},lb:{on:0,id:'',t:0,ls:0,pb:null,ban:0},adm:0,tamp:0,cb:0,clv:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
 }
 function sanitize(o){
   const s=fresh();
@@ -3464,7 +3485,7 @@ function sanitize(o){
   const seal=sealState(o);
   const num=(v,d)=>(typeof v==='number'&&isFinite(v)&&v>=0)?v:(d||0);
   s.cookies=num(o.cookies);s.run=num(o.run);s.all=Math.max(num(o.all),s.run);
-  s.clicks=Math.floor(num(o.clicks));s.gold=Math.floor(num(o.gold));s.cb=num(o.cb);
+  s.clicks=Math.floor(num(o.clicks));s.gold=Math.floor(num(o.gold));s.cb=num(o.cb);s.clv=Math.max(0,Math.min(10,Math.floor(num(o.clv))));
   s.chips=Math.floor(num(o.chips));s.asc=Math.floor(num(o.asc));
   s.t=num(o.t,Date.now());
   if(Array.isArray(o.b)) B.forEach((_,i)=>{s.b[i]=Math.floor(num(o.b[i]));});
@@ -3731,6 +3752,7 @@ function recalc(){
   gm*=1+.01*(S.hero.lvl-1)+.005*S.hero.tower.best;
   gm*=1+Math.min(.15,.0006*S.orders.rep);
   gm*=GEV.prod;clickT*=GEV.click;goldRate/=GEV.gold;
+  gm*=1+.01*Math.max(0,Math.min(9,(S.clv|0)-1));
   WFX=calcWFX();gm*=WFX.prod;clickT*=WFX.click;goldRate*=WFX.gold;costMult*=WFX.cost;
   let frenzy=1,clickBuff=1,sugarM=1,spellM=1;
   for(const f of S.buffs){if(f.id==='frenzy') frenzy=7;if(f.id==='clickfrenzy') clickBuff=150;if(f.id==='b_sugar') sugarM=2;if(f.id==='b_turbo') clickBuff*=3;if(f.id==='b_sale') costMult*=.85;if(f.id==='b_magnet') goldRate*=.5;if(f.id==='s_click') clickBuff*=10;if(f.id==='s_sale') costMult*=.8;if(f.id==='s_time') spellM=5;}
@@ -8297,7 +8319,7 @@ function updV34Txt(){
   set('shareT',tt('Teilen','Share'));
   set('shareP',tt('Kopiere diesen Text und schick ihn deinen Freunden.','Copy this text and send it to your friends.'));
   set('shareCopy',tt('Kopieren','Copy'));set('shareClose',tt('Schließen','Close'));
-  updApp();renderLb();updDev();updShopNav();updV42Txt();accRender();if(v44Ready) clubRender();if(typeof updV47Txt==='function'&&$id('saveMoreT')) updV47Txt();if(v48Ready) refNote();if(v49Ready){pushSynced=false;pushState();}
+  updApp();renderLb();updDev();updShopNav();updV42Txt();accRender();if(v44Ready) clubRender();if(typeof updV47Txt==='function'&&$id('saveMoreT')) updV47Txt();if(v48Ready) refNote();if(v49Ready){pushSynced=false;pushState();}if(v54Ready) updV54Txt();
 }
 
 /* ======================= V35/V40: Bestenliste ======================= */
@@ -8934,7 +8956,7 @@ async function socialClaim(){
     lines+='<div class="rwline"><span class="rwmed">🎁</span><span><b>'+n+' '+(g.kind==='stars'?tt('Sternenkrümel','star crumbs'):tt('Edelsteine','gems'))+'</b><small>'+tt('von ','from ')+escName(String(g.from||'?'))+(g.note?' · „'+escName(String(g.note))+'“':'')+'</small></span></div>';
   });
   rw.forEach(w=>{
-    const pl=Math.min(3,Math.max(1,w.place|0)),p=CLUB_PRIZE[pl-1];
+    const pl=Math.min(3,Math.max(1,w.place|0)),p=v54Ready?clubPrizeLv(CLUB_PRIZE[pl-1]):CLUB_PRIZE[pl-1];
     S.w.mat.gem+=p.gems;addCk(Math.max(10000*p.h,C.kps0*3600*p.h));
     lines+='<div class="rwline"><span class="rwmed m'+pl+'">'+['🥇','🥈','🥉'][pl-1]+'</span><span><b>'+tt('Platz ','#')+pl+' · '+escName(String(w.club||''))+' · '+tt('Woche ','Week ')+String(w.week||'').split('-')[1]+'</b><small>'+clubPrizeTxt(p)+'</small></span></div>';
   });
@@ -8958,6 +8980,7 @@ function clubBarHtml(){
   return '<span class="ico clubico" aria-hidden="true">👥</span><span><small>'+sub+'</small><b>'+main+'</b></span><span class="go" aria-hidden="true">›</span>';
 }
 function clubRender(){
+  if(v54Ready) clubLvlSync();
   const bar=$id('clubBar');if(!bar) return;
   bar.hidden=!clubOn();
   if(bar.hidden) {if(!$id('clubOv').hidden) closeClub();return;}
@@ -8992,8 +9015,8 @@ function clubMineHtml(){
       +'<form class="clubcard clubform" id="clubNewF" novalidate><h4>'+tt('Eigenen Club gründen','Start your own club')+'</h4><div class="clubemo" role="radiogroup" aria-label="'+tt('Symbol','Icon')+'">'+CLUB_EMO.map((e,i)=>'<label><input type="radio" name="emoji" value="'+e+'"'+(i===0?' checked':'')+'><span>'+e+'</span></label>').join('')+'</div><input class="namein" name="cname" maxlength="24" placeholder="'+tt('Clubname (3–24 Zeichen)','Club name (3–24 characters)')+'" aria-label="'+tt('Clubname','Club name')+'"><input class="namein" name="cdescr" maxlength="140" placeholder="'+tt('Beschreibung (optional)','Description (optional)')+'" aria-label="'+tt('Beschreibung','Description')+'"><button type="submit" class="btn primary"'+(clubBusy?' disabled':'')+'>'+tt('Club gründen','Create club')+'</button></form>';
   }
   const c=clubData.club,own=clubData.role==='owner',D=clubData;
-  let h='<div class="clubhead"><span class="clubemoji" aria-hidden="true">'+escName(c.emoji)+'</span><span><b>'+escName(c.name)+(c.trophies?' <span class="trophy" title="'+tt('Clubkrieg-Trophäen','Club war trophies')+'">🏆 ×'+c.trophies+'</span>':'')+'</b><small>'+(c.descr?escName(c.descr):tt('Keine Beschreibung','No description'))+'</small><small>'+D.members.length+'/30 '+tt('Mitglieder','members')+' · '+(c.open?tt('offen','open'):tt('geschlossen','closed'))+'</small></span></div>';
-  h+='<div class="lbprize"><div class="lbends"><span>'+tt('Diese Woche: Platz ','This week: #')+(D.rank||'–')+' · +'+fmt(+D.week_gain||0)+'</span><b data-clleft>'+clubWeekLeft()+'</b></div><div class="lbprizes">'+CLUB_PRIZE.map((p,i)=>'<div class="lbpz"><span class="rwmed m'+(i+1)+'">'+['🥇','🥈','🥉'][i]+'</span><small>'+clubPrizeTxt(p)+'</small></div>').join('')+'</div><p class="small" style="margin:6px 0 0">'+tt('Gezählt werden die Kekse, die ihr diese Woche backt (beim Speichern ins Konto). Jedes Mitglied, das mitbackt, bekommt den Preis.','Counts the cookies you bake this week (when your game saves to your account). Every member who bakes gets the prize.')+'</p></div>';
+  let h='<div class="clubhead"><span class="clubemoji" aria-hidden="true">'+escName(c.emoji)+'</span><span><b>'+escName(c.name)+(c.trophies?' <span class="trophy" title="'+tt('Clubkrieg-Trophäen','Club war trophies')+'">🏆 ×'+c.trophies+'</span>':'')+'</b><small>'+(c.descr?escName(c.descr):tt('Keine Beschreibung','No description'))+'</small><small>'+D.members.length+'/30 '+tt('Mitglieder','members')+' · '+(c.open?tt('offen','open'):tt('geschlossen','closed'))+'</small></span></div>'+(v54Ready?clubLvlHtml(c):'');
+  h+='<div class="lbprize"><div class="lbends"><span>'+tt('Diese Woche: Platz ','This week: #')+(D.rank||'–')+' · +'+fmt(+D.week_gain||0)+'</span><b data-clleft>'+clubWeekLeft()+'</b></div><div class="lbprizes">'+CLUB_PRIZE.map((p,i)=>'<div class="lbpz"><span class="rwmed m'+(i+1)+'">'+['🥇','🥈','🥉'][i]+'</span><small>'+clubPrizeTxt(v54Ready?clubPrizeLv(p):p)+'</small></div>').join('')+'</div><p class="small" style="margin:6px 0 0">'+tt('Gezählt werden die Kekse, die ihr diese Woche backt (beim Speichern ins Konto). Jedes Mitglied, das mitbackt, bekommt den Preis.','Counts the cookies you bake this week (when your game saves to your account). Every member who bakes gets the prize.')+'</p></div>';
   if(v48Ready) h+=warHtml(D);
   h+='<h4 class="clubh">'+tt('Mitglieder','Members')+'</h4><div class="lblist">'+D.members.map((m,i)=>{
     const me=accMe&&m.username.toLowerCase()===accMe.username.toLowerCase();
@@ -9013,7 +9036,7 @@ function clubListHtml(){
   const mine=clubIn()?clubData.club.id:'';
   return h+'<div class="lblist">'+clubList.map((c,i)=>{
     const full=c.members>=30,can=!clubIn()&&c.open&&!full;
-    return '<div class="lbrow clubrow" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3&&+c.week_gain>0?' m'+(i+1):'')+'">'+(i<3&&+c.week_gain>0?['🥇','🥈','🥉'][i]:escName(c.emoji))+'</span><span class="nm"><b>'+escName(c.name)+(c.trophies?' 🏆'+c.trophies:'')+'</b><small>'+c.members+'/30 · +'+fmt(+c.week_gain||0)+tt(' diese Woche',' this week')+(c.descr?' · '+escName(c.descr):'')+'</small></span><span class="sc">'+(c.id===mine?'<span class="small">'+tt('Dein Club','Your club')+'</span>':can?'<button type="button" class="btn sm primary" data-cl="join:'+c.id+'"'+(clubBusy?' disabled':'')+'>'+tt('Beitreten','Join')+'</button>':'<span class="small">'+(full?tt('voll','full'):!c.open?tt('geschlossen','closed'):'')+'</span>')+'</span></div>';
+    return '<div class="lbrow clubrow" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3&&+c.week_gain>0?' m'+(i+1):'')+'">'+(i<3&&+c.week_gain>0?['🥇','🥈','🥉'][i]:escName(c.emoji))+'</span><span class="nm"><b>'+escName(c.name)+(c.trophies?' 🏆'+c.trophies:'')+'</b><small>'+(c.level?tt('Stufe ','Level ')+c.level+' · ':'')+c.members+'/30 · +'+fmt(+c.week_gain||0)+tt(' diese Woche',' this week')+(c.descr?' · '+escName(c.descr):'')+'</small></span><span class="sc">'+(c.id===mine?'<span class="small">'+tt('Dein Club','Your club')+'</span>':can?'<button type="button" class="btn sm primary" data-cl="join:'+c.id+'"'+(clubBusy?' disabled':'')+'>'+tt('Beitreten','Join')+'</button>':'<span class="small">'+(full?tt('voll','full'):!c.open?tt('geschlossen','closed'):'')+'</span>')+'</span></div>';
   }).join('')+'</div>';
 }
 function clubGiftHtml(){
@@ -9340,6 +9363,7 @@ async function admSrvLoad(){
   if(v46Ready) admBkCall('list');
   if(v51Ready) admInsLoad();
   if(v53Ready) admWeekLoad();
+  if(v54aReady){admFbCall('list');admAlertState();}
   admSrvRender();
 }
 function admBars(rows){
@@ -9372,6 +9396,7 @@ function admSrvRender(){
     h+=admCardH('🏛️ '+tt('Saisons','Seasons'),'<p class="small">'+tt('Speichert die Top 10 der Bestenliste als beendete Saison (alle sehen sie in der Bestenliste) und startet sie danach neu.','Saves the leaderboard’s top 10 as a finished season (everyone sees it in the leaderboard), then starts it fresh.')+'</p><form class="coderow" id="admSeasonF" novalidate><input class="namein" name="name" maxlength="40" placeholder="'+tt('Name, z. B. Saison ','Name, e.g. Season ')+(Se.length+1)+'"><button type="submit" class="btn warn'+(armS?' armed':'')+'">'+(armS?tt('Wirklich? Nochmal','Really? Again'):tt('Saison beenden','End season'))+'</button></form>'
       +(Se.length?'<div class="admlbl">'+Se.map(s=>'<div class="admlbr"><span class="rk">🏛️</span><span class="who"><b>'+escName(s.name)+'</b><small>'+(s.top||[]).slice(0,3).map((t,i)=>['🥇','🥈','🥉'][i]+' '+escName(t.name)+' '+fmt(+t.score||0)).join(' · ')+'</small><small>'+admDT(s.archived_at)+'</small></span></div>').join('')+'</div>':''));
     if(v51Ready) h+=admInsHtml();
+    if(v54aReady) h+=admFbHtml()+admAlertHtml(false);
     h+=admCardH('💾 '+tt('Backups','Backups'),admBkHtml());
     const Lg=admLog||[];
     h+=admCardH('📜 '+tt('Admin-Protokoll','Admin log'),'<p class="small">'+tt('Jede Admin-Aktion auf dem Server, die neuesten zuerst.','Every admin action on the server, newest first.')+'</p>'+(Lg.length?'<div class="admlog">'+Lg.map(l=>'<div><small>'+admDT(l.at)+'</small><b>'+escName(l.action)+'</b>'+(l.detail?'<span>'+escName(l.detail)+'</span>':'')+'</div>').join('')+'</div>':'<p class="small">–</p>'));
@@ -9925,6 +9950,7 @@ function modOut(){
 
 /* ---------- Moderator: eigenes, kleines Panel ---------- */
 function modPanel(){
+  if(v54aReady&&admAlertOn===null) setTimeout(admAlertState,0);
   els.admin.innerHTML='<div class="admlockbar modbar"><span>👮 '+tt('Moderator: ','Moderator: ')+'<b>'+escName(modTok.name||'')+'</b></span><button type="button" class="btn sm" id="modOutBtn">'+tt('Abmelden','Sign out')+'</button></div><div id="modBox" class="admlb"></div>';
   modRender();modLoad();
 }
@@ -9954,6 +9980,7 @@ function modRender(){
   h+=admCardH('🔇 '+tt('Stummschalten','Mute')+' <small class="muted">('+M.length+')</small>','<form class="admform" id="modMuteF" novalidate><label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="user" maxlength="16" autocapitalize="off" spellcheck="false"></label><label class="small">'+tt('Stunden (höchstens 168)','Hours (at most 168)')+'<input class="namein" name="hours" type="number" min="1" max="168" value="24"></label><input class="namein" name="reason" maxlength="120" placeholder="'+tt('Grund (optional)','Reason (optional)')+'" style="grid-column:1/-1"><button type="submit" class="btn primary">'+tt('Stummschalten','Mute')+'</button></form>'
     +(M.length?'<div class="admlbl" style="margin-top:8px">'+M.map(m=>'<div class="admlbr"><span class="rk">🔇</span><span class="who"><b>'+escName(m.username)+'</b><small>'+tt('bis ','until ')+admDT(m.until)+(m.reason?' · '+escName(m.reason):'')+'</small></span><span class="btns"><button type="button" class="btn sm" data-moda="unmute:'+escName(m.username)+'">'+tt('Stumm aus','Unmute')+'</button></span></div>').join('')+'</div>':'')
     +'<p class="small" style="margin-top:6px">'+tt('Stumme Spieler können nicht im Club-Chat schreiben und keine Geschenke senden. Alles, was du tust, steht mit deinem Namen im Admin-Protokoll.','Muted players can’t write in club chat or send gifts. Everything you do is in the admin log with your name.')+'</p>');
+  if(v54aReady) h+=admAlertHtml(true);
   if(box._h!==h){box._h=h;box.innerHTML=h;}
 }
 els.admin.addEventListener('submit',e=>{
@@ -10118,6 +10145,139 @@ async function adInit(){
   }else if(AD_SDK==='gamedistribution'&&window.__kfGdReady){window.__kfGdEvent({name:'SDK_READY'});}
 }
 if(AD_SDK){adInit();setInterval(adRender,15000);}
+
+/* ======================= V54: Club-Stufen, Feedback, Datenschutz ======================= */
+var v54Ready=false;
+/* Club-Stufe: +1 % Produktion und +5 % Club-Preise pro Stufe über 1 (Stufe 1–10). Die Stufe kommt vom Server. */
+const clubLvBonus=lv=>({prod:Math.max(0,Math.min(9,(lv|0)-1)),prize:5*Math.max(0,Math.min(9,(lv|0)-1))});
+function clubLvlSync(){
+  let lv=null;
+  if(!clubSigned()) lv=0;
+  else if(clubData) lv=clubData.club&&clubData.club.level?(clubData.club.level.level|0):0;
+  if(lv!==null&&(S.clv|0)!==lv){S.clv=lv;recalc();}
+}
+function clubLvlHtml(c){
+  const L=c&&c.level;if(!L) return '';
+  const b=clubLvBonus(L.level),pct=L.next?Math.max(0,Math.min(100,Math.round((L.xp-L.cur)/(L.next-L.cur)*100))):100;
+  return '<div class="clublv"><span class="lvbadge" title="'+tt('Club-Stufe','Club level')+'">'+tt('Stufe ','Level ')+L.level+'</span><span class="lvbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></span><small>'+(L.next?fmt(L.xp)+' / '+fmt(L.next)+' XP':tt('Höchste Stufe!','Top level!'))+'</small></div>'
+    +'<p class="small clublvtxt">'+(b.prod?tt('Bonus für alle Mitglieder: +','Bonus for every member: +')+b.prod+tt(' % Produktion, Club-Preise +','% production, club prizes +')+b.prize+tt(' %. ','%. '):'')+tt('XP: 100 für jedes Mitglied, das in einer Woche mitbackt, 500 für jeden gewonnenen Clubkrieg.','XP: 100 for every member who bakes in a week, 500 for every club war won.')+'</p>';
+}
+const clubPrizeLv=p=>{const m=1+clubLvBonus(S.clv).prize/100;return m>1?{gems:Math.round(p.gems*m),h:p.h*m}:p;};
+
+/* Feedback: Fehler melden oder Ideen schicken (kommt im Admin-Panel an) */
+function fbOpen(){
+  const old=$id('fbOv');if(old) old.remove();
+  const ov=document.createElement('div');ov.className='overlay';ov.id='fbOv';
+  ov.innerHTML='<div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="fbT"><h2 id="fbT">💬 '+tt('Feedback senden','Send feedback')+'</h2>'
+    +(lbOn()?'<form class="accform" id="fbF" novalidate><div class="seg fbkind" role="radiogroup" aria-label="'+tt('Art','Kind')+'">'+[['bug','🐞',tt('Fehler','Bug')],['idea','💡',tt('Idee','Idea')],['other','💬',tt('Sonstiges','Other')]].map(([k,ic,l],i)=>'<label><input type="radio" name="kind" value="'+k+'"'+(i===0?' checked':'')+'><span>'+ic+' '+l+'</span></label>').join('')+'</div>'
+      +'<textarea class="namein" name="body" maxlength="1000" rows="5" placeholder="'+tt('Was ist passiert, oder was wünschst du dir?','What happened, or what would you like?')+'"></textarea>'
+      +'<p class="small">'+tt('Geht an den Entwickler. Mitgeschickt werden die Spielversion, dein Browser und – wenn du angemeldet bist – dein Benutzername. Mehr in der Datenschutz-Info.','Goes to the developer. The game version, your browser and – if you’re signed in – your username are sent along. More in the privacy info.')+'</p>'
+      +'<p class="nameerr" id="fbErr" aria-live="polite"></p><div class="btns"><button type="submit" class="btn primary">'+tt('Senden','Send')+'</button><button type="button" class="btn" id="fbClose">'+tt('Abbrechen','Cancel')+'</button></div></form>'
+      :'<p>'+tt('Feedback geht gerade nicht.','Feedback isn’t available right now.')+'</p><div class="btns"><button type="button" class="btn" id="fbClose">OK</button></div>')+'</div>';
+  document.body.appendChild(ov);
+  const close=()=>ov.remove();
+  ov.querySelector('#fbClose').addEventListener('click',close);
+  ov.addEventListener('click',e=>{if(e.target===ov) close();});
+  ov.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close();}});
+  const ta=ov.querySelector('textarea');if(ta) ta.focus();
+  const f=ov.querySelector('#fbF');if(!f) return;
+  f.addEventListener('submit',async e=>{
+    e.preventDefault();const d=Object.fromEntries(new FormData(f).entries()),body=String(d.body||'').trim(),err=$id('fbErr');
+    if(body.length<5){err.textContent=tt('Schreib bitte mindestens ein paar Wörter.','Please write at least a few words.');return;}
+    const btn=f.querySelector('[type=submit]');btn.disabled=true;err.textContent='';
+    try{
+      await lbApi('rpc/kf_feedback_send',{p_id:kfId(),p_token:accTok||null,p_kind:d.kind||'other',p_body:body,p_ver:NEWS_VER,p_ua:String(navigator.userAgent||'').slice(0,200)});
+      close();toast(tt('Danke! Dein Feedback ist angekommen.','Thanks! Your feedback was sent.'),true);
+    }catch(x){
+      btn.disabled=false;const m=String(x.message||'');
+      err.textContent=/too many requests/.test(m)?tt('Heute hast du schon genug geschickt. Versuch es morgen nochmal.','You’ve sent enough for today. Try again tomorrow.'):lbMissing(x)?tt('Feedback geht erst nach dem nächsten Server-Update.','Feedback works after the next server update.'):tt('Keine Verbindung. Versuch es gleich nochmal.','No connection. Try again in a moment.');
+    }
+  });
+}
+const PRIVACY_URL=window.KF_PORTAL?'https://destinyx350.github.io/Cookie-Factory/privacy.html':'privacy.html';
+(function(){
+  const row=$id('helpSetBtn')&&$id('helpSetBtn').parentElement;if(!row) return;
+  const fb=document.createElement('button');fb.type='button';fb.className='btn';fb.id='fbSetBtn';row.appendChild(fb);
+  const pv=document.createElement('a');pv.className='btn';pv.id='privSetBtn';pv.href=PRIVACY_URL;pv.target='_blank';pv.rel='noopener';row.appendChild(pv);
+  fb.addEventListener('click',()=>{closeSettings();fbOpen();});
+})();
+function updV54Txt(){set$('fbSetBtn',tt('💬 Feedback senden','💬 Send feedback'));set$('privSetBtn',tt('🔒 Datenschutz','🔒 Privacy'));}
+updV54Txt();
+v54Ready=true;
+
+/* Nur in admin.html (nicht im Spiel für Spieler). */
+/* ======================= V54: Alarme aufs Handy und Feedback der Spieler ======================= */
+var v54aReady=false;
+let admAlertOn=null,admAlertBusy=false,admAlertErr='';
+const admAlertTok=()=>admPass||(typeof modTok!=='undefined'&&modTok?modTok.t:'');
+const admAlertRe=()=>{if(admPass) admSrvRender();else if(typeof modRender==='function') modRender();};
+async function admAlertState(){
+  const t=admAlertTok();if(!t||!pushOk()){admAlertOn=false;admAlertRe();return;}
+  try{const s=await pushSub();if(!s){admAlertOn=false;}else{const r=await lbApi('rpc/admin_push',{p_pass:t,p_action:'status',p_data:{endpoint:s.endpoint}});admAlertOn=!!(r&&r.on);}admAlertErr='';}
+  catch(x){admAlertOn=false;if(lbMissing(x)) admAlertErr=tt('Alarme brauchen zuerst docs/community-v13.sql.','Alerts need docs/community-v13.sql first.');}
+  admAlertRe();
+}
+async function admAlertSet(on){
+  const t=admAlertTok();if(!t||admAlertBusy) return;
+  admAlertBusy=true;admAlertErr='';admAlertRe();
+  try{
+    if(on){
+      if(!pushOk()) throw new Error('unsupported');
+      const perm=await Notification.requestPermission();if(perm!=='granted') throw new Error('denied');
+      const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();
+      if(!sub){
+        let key=null;for(let i=0;i<4&&!key;i++){key=await lbApi('rpc/push_pubkey',{});if(!key) await new Promise(r=>setTimeout(r,2500));}
+        if(!key) throw new Error('not ready');
+        sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(key)});
+      }
+      const r=await lbApi('rpc/admin_push',{p_pass:t,p_action:'subscribe',p_data:{sub:sub.toJSON(),lang:LANG}});admAlertOn=!!(r&&r.on);
+      toast(tt('Alarme sind auf diesem Gerät an.','Alerts are on for this device.'),true);
+    }else{
+      const s=await pushSub();if(s) await lbApi('rpc/admin_push',{p_pass:t,p_action:'unsubscribe',p_data:{endpoint:s.endpoint}});
+      admAlertOn=false;toast(tt('Alarme sind auf diesem Gerät aus.','Alerts are off for this device.'));
+    }
+  }catch(x){
+    const m=String(x&&x.message||'');
+    admAlertErr=m==='denied'?tt('Benachrichtigungen sind im Browser blockiert. Erlaube sie in den Website-Einstellungen.','Notifications are blocked in the browser. Allow them in the site settings.'):m==='unsupported'?tt('Dieser Browser kann keine Push-Benachrichtigungen. Auf dem iPhone: admin.html zum Home-Bildschirm hinzufügen und von dort öffnen.','This browser can’t do push notifications. On iPhone: add admin.html to the home screen and open it from there.'):m==='not ready'?tt('Push wird auf dem Server noch eingerichtet. Versuch es in einer Minute nochmal.','Push is still being set up on the server. Try again in a minute.'):lbMissing(x)?tt('Alarme brauchen zuerst docs/community-v13.sql.','Alerts need docs/community-v13.sql first.'):admErrTxt(x);
+  }
+  admAlertBusy=false;admAlertRe();
+}
+function admAlertHtml(mod){
+  const what=mod?tt('neue Meldungen im Club-Chat','new reports in club chat'):tt('neue Meldungen, Einsprüche, Feedback und neue Fehlerarten','new reports, appeals, feedback and new kinds of crashes');
+  const st=admAlertOn===null?tt('Prüfe …','Checking …'):admAlertOn?tt('✅ An auf diesem Gerät.','✅ On for this device.'):tt('Aus auf diesem Gerät.','Off for this device.');
+  return admCardH('🔔 '+tt('Alarme aufs Handy','Alerts on your phone'),'<p class="small">'+tt('Eine Push-Benachrichtigung bei ','A push notification for ')+what+tt(' – höchstens eine pro Art alle 10 Minuten. Antippen öffnet admin.html.',' – at most one of each kind every 10 minutes. Tapping it opens admin.html.')+'</p><p class="small"><b>'+st+'</b></p>'
+    +'<div class="btns"><button type="button" class="btn sm '+(admAlertOn?'':'primary')+'" data-alrt="'+(admAlertOn?'off':'on')+'"'+(admAlertBusy?' disabled':'')+'>'+(admAlertBusy?tt('Moment …','One moment …'):admAlertOn?tt('Ausschalten','Turn off'):tt('Einschalten','Turn on'))+'</button></div>'
+    +(admAlertErr?'<p class="nameerr">'+admAlertErr+'</p>':''));
+}
+els.admin.addEventListener('click',e=>{const b=e.target.closest('[data-alrt]');if(b) admAlertSet(b.dataset.alrt==='on');});
+
+/* ---------- Feedback der Spieler (Server-Tab) ---------- */
+var admFb=null,admFbErr='';
+async function admFbCall(action,data,okTxt){
+  if(!admPass) return;
+  try{admFb=await lbApi('rpc/admin_feedback',{p_pass:admPass,p_action:action,p_data:data||null})||[];admFbErr='';if(okTxt) toast(okTxt);}
+  catch(x){admFbErr=lbMissing(x)?tt('Feedback braucht zuerst docs/community-v13.sql.','Feedback needs docs/community-v13.sql first.'):admErrTxt(x);}
+  admSrvRender();
+}
+const FB_ICON={bug:'🐞',idea:'💡',other:'💬'};
+function admFbHtml(){
+  const F=admFb||[],open=F.filter(f=>f.status==='open');
+  const row=f=>'<div class="admlbr'+(f.status==='open'?'':' done')+'"><span class="rk">'+(FB_ICON[f.kind]||'💬')+'</span><span class="who"><b>'+(f.username?escName(f.username):tt('ohne Konto','no account'))+' · v'+f.ver+'</b><small class="fbbody">'+escName(f.body)+'</small><small>'+admDT(f.created_at)+(f.ua?' · '+escName(f.ua.slice(0,80)):'')+'</small></span><span class="btns">'+(f.status==='open'?'<button type="button" class="btn sm" data-fba="done:'+f.id+'">'+tt('Erledigt','Done')+'</button>':'')+'<button type="button" class="btn sm warn" data-fba="delete:'+f.id+'">'+tt('Löschen','Delete')+'</button></span></div>';
+  return admCardH('💬 '+tt('Feedback von Spielern','Player feedback')+' <small class="muted">('+(admFb?open.length+' '+tt('offen','open'):'…')+')</small>',
+    '<p class="small">'+tt('Was Spieler über „Feedback senden“ in den Einstellungen schicken (höchstens 5 pro Gerät und Tag).','What players send with “Send feedback” in Settings (at most 5 per device a day).')+'</p>'
+    +(open.length?'<div class="admlbl">'+open.map(row).join('')+'</div>':'<p class="small">'+(admFb?tt('Kein neues Feedback.','No new feedback.'):tt('Lädt …','Loading …'))+'</p>')
+    +(F.length>open.length?'<details class="fold"><summary>'+tt('Erledigt','Done')+' ('+(F.length-open.length)+')</summary><div class="admlbl">'+F.filter(f=>f.status!=='open').map(row).join('')+'</div></details>':'')
+    +(admFbErr?'<p class="nameerr">'+admFbErr+'</p>':''));
+}
+els.admin.addEventListener('click',e=>{
+  const b=e.target.closest('[data-fba]');if(!b) return;
+  const [a,id]=b.dataset.fba.split(':');
+  admFbCall(a,{id:+id},a==='done'?tt('Erledigt.','Done.'):tt('Gelöscht.','Deleted.'));
+});
+
+v54aReady=true;
+if(admPass){admFbCall('list');admAlertState();}
+else if(typeof modTok!=='undefined'&&modTok) admAlertState();
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};

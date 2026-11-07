@@ -35,6 +35,7 @@ function modOut(){
 
 /* ---------- Moderator: eigenes, kleines Panel ---------- */
 function modPanel(){
+  if(v54aReady&&admAlertOn===null) setTimeout(admAlertState,0);
   els.admin.innerHTML='<div class="admlockbar modbar"><span>👮 '+tt('Moderator: ','Moderator: ')+'<b>'+escName(modTok.name||'')+'</b></span><button type="button" class="btn sm" id="modOutBtn">'+tt('Abmelden','Sign out')+'</button></div><div id="modBox" class="admlb"></div>';
   modRender();modLoad();
 }
@@ -64,6 +65,7 @@ function modRender(){
   h+=admCardH('🔇 '+tt('Stummschalten','Mute')+' <small class="muted">('+M.length+')</small>','<form class="admform" id="modMuteF" novalidate><label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="user" maxlength="16" autocapitalize="off" spellcheck="false"></label><label class="small">'+tt('Stunden (höchstens 168)','Hours (at most 168)')+'<input class="namein" name="hours" type="number" min="1" max="168" value="24"></label><input class="namein" name="reason" maxlength="120" placeholder="'+tt('Grund (optional)','Reason (optional)')+'" style="grid-column:1/-1"><button type="submit" class="btn primary">'+tt('Stummschalten','Mute')+'</button></form>'
     +(M.length?'<div class="admlbl" style="margin-top:8px">'+M.map(m=>'<div class="admlbr"><span class="rk">🔇</span><span class="who"><b>'+escName(m.username)+'</b><small>'+tt('bis ','until ')+admDT(m.until)+(m.reason?' · '+escName(m.reason):'')+'</small></span><span class="btns"><button type="button" class="btn sm" data-moda="unmute:'+escName(m.username)+'">'+tt('Stumm aus','Unmute')+'</button></span></div>').join('')+'</div>':'')
     +'<p class="small" style="margin-top:6px">'+tt('Stumme Spieler können nicht im Club-Chat schreiben und keine Geschenke senden. Alles, was du tust, steht mit deinem Namen im Admin-Protokoll.','Muted players can’t write in club chat or send gifts. Everything you do is in the admin log with your name.')+'</p>');
+  if(v54aReady) h+=admAlertHtml(true);
   if(box._h!==h){box._h=h;box.innerHTML=h;}
 }
 els.admin.addEventListener('submit',e=>{
