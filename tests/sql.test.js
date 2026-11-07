@@ -166,6 +166,11 @@ module.exports = async function sqlTests() {
   await rpc('gift_send', { p_token: b.token, p_to: 'test_gamma', p_kind: 'stars', p_amount: 1, p_note: '' }).catch(() => {});
   check((await q("select count(*)::int n from kf_push_queue q join kf_accounts a on a.id = q.account where a.username = 'test_gamma'")).rows[0].n === 0, 'no push is queued for players without push');
   await expectError(rpc('push_take', { p_secret: 'guess' }), /forbidden/, 'only the push sender can take notifications');
+  check((await q('select count(*)::int n from kf_push_cfg where length(secret) = 48')).rows[0].n === 1, 'the database makes its own push secret');
+  check((await rpc('push_pubkey', {})) === null, 'no public push key before the sender has run');
+  await expectError(asAnon('select vapid_priv from public.kf_push_cfg'), /permission denied/, 'players cannot read the push keys');
+  await q("update kf_push_cfg set vapid_pub = 'BTestPublicKey'");
+  check((await rpc('push_pubkey', {})) === 'BTestPublicKey', 'players get the public push key');
   await q("insert into kf_push_cfg (k, url, secret) values (1, 'https://example.invalid/kf-push', 'test-secret') on conflict (k) do update set secret = excluded.secret");
   const taken = await rpc('push_take', { p_secret: 'test-secret' });
   check(taken.length >= 2 && taken[0].subs[0].lang === 'de' && /Geschenk/.test(taken[0].t_de), 'the push sender gets the notifications with the device', taken.length);

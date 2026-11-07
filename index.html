@@ -2865,8 +2865,11 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=49;
+const NEWS_VER=50;
 const NEWS=[
+  {v:50,sum:['Push-Benachrichtigungen sind jetzt einfacher und sicherer eingerichtet.','Push notifications are now simpler and safer to set up.'],items:[
+    ['change','Push-Benachrichtigungen holen ihren Schlüssel jetzt vom Server. Wenn es beim ersten Mal „wird eingerichtet“ heißt, versuch es eine Minute später nochmal.','Push notifications now get their key from the server. If it says “being set up” the first time, try again a minute later.']
+  ]},
   {v:49,sum:['Neu: drei Gebäude fürs späte Spiel, 17 Erfolge und Push-Benachrichtigungen!','New: three late-game buildings, 17 achievements and push notifications!'],items:[
     ['new','Drei neue Gebäude nach dem Urknall-Ofen: Sternbild-Bäckerei, Quanten-Konditorei und Keks-Singularität – mit je 8 Upgrades.','Three new buildings after the Big Bang Oven: Constellation Bakery, Quantum Patisserie and Cookie Singularity – each with 8 upgrades.'],
     ['new','17 neue Erfolge, darunter „Komplette Fabrik“ und Ziele bis 10 Quintilliarden Kekse.','17 new achievements, including “Complete Factory” and goals up to 10 decillion cookies.'],
@@ -9513,7 +9516,6 @@ v48Ready=true;
 
 /* ======================= V49: Push-Benachrichtigungen ======================= */
 var v49Ready=false;
-const VAPID_PUB='BBGPPZ-TiVAiwkLwol7eM6rI1Owkm8wPJVkYNkyV7H6LfUZAQaHb-gSFae2nLhlQTgk_aDrZmsdLV1V6L_-kmT8';
 function b64u(s){const p='='.repeat((4-s.length%4)%4),b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(b,c=>c.charCodeAt(0));}
 const pushOk=()=>'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
 var pushOn=null,pushBusy=false,pushMsgT='',pushMsgOk=true,pushSynced=false;
@@ -9530,10 +9532,15 @@ async function pushEnable(){
   try{
     const perm=await Notification.requestPermission();if(perm!=='granted') throw new Error('denied');
     const reg=await navigator.serviceWorker.ready;
-    let sub=await reg.pushManager.getSubscription();if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUB)});
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub){
+      let key=null;for(let i=0;i<4&&!key;i++){key=await lbApi('rpc/push_pubkey',{});if(!key) await new Promise(r=>setTimeout(r,2500));}
+      if(!key) throw new Error('not ready');
+      sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(key)});
+    }
     await lbApi('rpc/push_subscribe',{p_token:accTok,p_sub:sub.toJSON(),p_lang:LANG});
     pushOn=true;pushSynced=true;pushMsgT=tt('Benachrichtigungen sind an. Du bekommst Bescheid bei Geschenken, Freundschaftsanfragen, Club-Preisen, Nachrichten vom Admin und globalen Events.','Notifications are on. You’ll hear about gifts, friend requests, club prizes, messages from the admin and global events.');pushMsgOk=true;
-  }catch(x){const m=String(x&&x.message||'');pushMsgT=/denied/.test(m)?tt('Benachrichtigungen sind blockiert. Erlaube sie in den Einstellungen deines Browsers.','Notifications are blocked. Allow them in your browser settings.'):lbMissing(x)?tt('Das kommt mit dem nächsten Server-Update.','This arrives with the next server update.'):tt('Hat nicht geklappt. Versuch es nochmal.','Didn’t work. Please try again.');pushMsgOk=false;}
+  }catch(x){const m=String(x&&x.message||'');pushMsgT=/denied/.test(m)?tt('Benachrichtigungen sind blockiert. Erlaube sie in den Einstellungen deines Browsers.','Notifications are blocked. Allow them in your browser settings.'):lbMissing(x)?tt('Das kommt mit dem nächsten Server-Update.','This arrives with the next server update.'):/not ready/.test(m)?tt('Push wird auf dem Server gerade eingerichtet. Versuch es in einer Minute nochmal.','Push is still being set up on the server. Try again in a minute.'):tt('Hat nicht geklappt. Versuch es nochmal.','Didn’t work. Please try again.');pushMsgOk=false;}
   pushBusy=false;pushRender();
 }
 async function pushDisable(){
