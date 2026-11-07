@@ -166,6 +166,14 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Player file `43d-v52-konto-sperre.js`: `banShow()` shows the ban with the appeal form; `43g-v53-portal-werbung.js`: rewarded ads only when `KF_PORTAL` is `crazygames` or `gamedistribution` (`tools/portal.js --sdk …`, looser CSP in those builds only, GD id from `--gd-id` or the `GD_GAME_ID` repo variable). `adMute` keeps game sound off during an ad. 20 minutes of production per ad, 5-minute wait.
 - The test stand-in for PostgREST (`tests/lib.js`) accepts digits in function names.
 
+## Club levels, feedback, admin alerts, privacy (version 54)
+
+- Server side is `docs/community-v13.sql` (needs parts 1–12). **Club levels:** `kf_club_xp(club)` = 100 per member-week with gain > 0 in `kf_club_week` + 500 per war won; `kf_club_level(xp)` gives level 1–10 with `cur`/`next` (thresholds 0, 300, 800, 1600, 2800, 4500, 7000, 10000, 14000, 20000). `club_mine` returns `club.level`, `club_list` returns `level`.
+- Client (`43h-v54-clubstufen-feedback.js`): `S.clv` (in the save) is synced from the club data in `clubRender()` (`clubLvlSync`); `recalc()` multiplies production by `1 + 0.01 × (level − 1)`, club prizes get `+5 % × (level − 1)` (`clubPrizeLv`). Feedback dialog `fbOpen()` → `kf_feedback_send` (5 per device a day); "Send feedback" and the privacy link sit next to Help in Settings → Game.
+- **Feedback:** `kf_feedback` (newest 500), `admin_feedback` (list/done/delete) in the Server tab (`43i-admin-alarme-feedback.js`).
+- **Admin alerts:** `kf_admin_push` (owner devices have `mod_id` null), `admin_push` (status/subscribe/unsubscribe, owner and moderators), `kf_push_queue.target` ('owner' | 'staff'), `.kind`, `.url`. `kf_admin_alert()` queues at most one alert per kind every 10 minutes and only if a device listens. Triggers: new report (staff), appeal, feedback, new crash type (owner). `push_take` sends `target` rows to admin devices and returns `url`; `push_gone` cleans both tables. The edge function adds `url` (only `[a-z0-9_.-]`) to the game address; `sw.js` focuses an `admin.html` window for admin alerts. Redeploy `supabase/functions/kf-push` after changing it.
+- **Privacy page:** `privacy.html` (static, own strict CSP, English and German). Keep it in sync when the game starts storing or sending something new.
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass (including the GitHub `Tests` check). After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

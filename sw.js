@@ -1,6 +1,6 @@
 // Keksfabrik service worker: lets the game open offline and as an installed app.
 // Raise CACHE with every game update (see CLAUDE.md) so old files are cleared out.
-const CACHE = 'keksfabrik-v53';
+const CACHE = 'keksfabrik-v54';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -62,7 +62,9 @@ self.addEventListener('notificationclick', (e) => {
   e.notification.close();
   const target = (e.notification.data && e.notification.data.url) || './';
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
-    for (const c of list) { if ('focus' in c) return c.focus(); }
+    // Admin alerts open admin.html; everything else opens (or focuses) the game.
+    const admin = /admin\.html$/.test(target);
+    for (const c of list) { if ('focus' in c && admin === /admin\.html/.test(c.url)) return c.focus(); }
     return self.clients.openWindow ? self.clients.openWindow(target) : null;
   }));
 });

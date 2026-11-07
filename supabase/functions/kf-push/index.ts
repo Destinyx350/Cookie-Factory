@@ -1,6 +1,7 @@
 // Keksfabrik / Cookie Factory push sender (Supabase Edge Function "kf-push").
 // The database wakes it (pg_net) whenever a notification is queued. It checks the shared secret, takes the waiting
-// notifications, sends them with Web Push and removes devices that no longer exist.
+// notifications, sends them with Web Push and removes devices that no longer exist. Admin alerts (version 54)
+// come with url "admin.html", so tapping them opens the admin version.
 // Nothing to configure: it reads its settings from the locked table kf_push_cfg with Supabase's built-in service key,
 // and on its first run it creates the push key pair and stores it there.
 // Deploy with "Verify JWT" turned off: the database calls it with the shared secret instead.
@@ -13,7 +14,7 @@ const H = { apikey: SRK, Authorization: "Bearer " + SRK, "Content-Type": "applic
 
 type Cfg = { secret: string; vapid_pub: string | null; vapid_priv: string | null };
 type Sub = { endpoint: string; p256dh: string; auth: string; lang: string };
-type Item = { id: number; t_de: string; t_en: string; b_de: string; b_en: string; subs: Sub[] };
+type Item = { id: number; t_de: string; t_en: string; b_de: string; b_en: string; url?: string | null; subs: Sub[] };
 
 async function getCfg(): Promise<Cfg> {
   const r = await fetch(SB + "/rest/v1/kf_push_cfg?k=eq.1&select=secret,vapid_pub,vapid_priv", { headers: H });
@@ -46,7 +47,7 @@ Deno.serve(async (req) => {
       const de = s.lang === "de";
       try {
         await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
-          JSON.stringify({ title: de ? it.t_de : it.t_en, body: de ? it.b_de : it.b_en, url: GAME }), { TTL: 86400 });
+          JSON.stringify({ title: de ? it.t_de : it.t_en, body: de ? it.b_de : it.b_en, url: GAME + (it.url && /^[a-z0-9_.-]{1,40}$/.test(it.url) ? it.url : "") }), { TTL: 86400 });
         sent++;
       } catch (e) {
         const code = (e as { statusCode?: number }).statusCode;

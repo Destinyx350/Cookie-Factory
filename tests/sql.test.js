@@ -312,4 +312,57 @@ module.exports = async function sqlTests() {
   const sm = await rpc('admin_summary', { p_pass: tok });
   check(sm.this && sm.last && sm.this.accounts >= 5 && 'players' in sm.this && 'crashes' in sm.last, 'the weekly summary compares this week with last week', sm);
   await expectError(rpc('admin_summary', { p_pass: mt }), /wrong admin password/, 'the summary is for the owner only');
+
+  {
+  // Club levels, feedback, admin alerts (v54)
+  const lvClub = await rpc('club_mine', { p_token: c2.token });
+  check(lvClub.club.level && lvClub.club.level.level >= 1 && 'next' in lvClub.club.level, 'my club shows its level', lvClub.club.level);
+  const lvCid = lvClub.club.id;
+  await q("insert into kf_club_week (week, club, account, gain) select 'W2000-0' || g, $1, (select id from kf_accounts where username = 'test_delta'), 100 from generate_series(1, 9) g on conflict do nothing", [lvCid]).catch(e => console.log('club_week insert', e.message));
+  const lv2 = (await rpc('club_mine', { p_token: c2.token })).club.level;
+  check(lv2.xp >= 900 && lv2.level >= 3, 'baking members raise the club level', lv2);
+  check((await rpc('club_list', { p_search: '' })).every(c => c.level >= 1), 'the club list shows levels');
+  await expectError(rpc('kf_club_xp', { p_club: lvCid }), /permission denied/, 'players cannot call the level helpers');
+  // feedback
+  const pidF = '44444444-4444-4444-4444-444444444444';
+  await expectError(rpc('kf_feedback_send', { p_id: pidF, p_token: null, p_kind: 'rant', p_body: 'hello there' }), /invalid kind/, 'feedback needs a known kind');
+  await expectError(rpc('kf_feedback_send', { p_id: pidF, p_token: null, p_kind: 'bug', p_body: 'hi' }), /invalid message/, 'feedback needs at least 5 characters');
+  check((await rpc('kf_feedback_send', { p_id: pidF, p_token: c2.token, p_kind: 'idea', p_body: 'Please add a dark chocolate building', p_ver: 54 }, '9.8.7.6')).ok, 'a player sends feedback');
+  for (let i = 0; i < 4; i++) await rpc('kf_feedback_send', { p_id: pidF, p_token: null, p_kind: 'bug', p_body: 'bug report ' + i }, '9.8.7.6');
+  await expectError(rpc('kf_feedback_send', { p_id: pidF, p_token: null, p_kind: 'bug', p_body: 'one too many' }, '9.8.7.6'), /too many requests/, 'feedback is limited to 5 a day per device');
+  await expectError(asAnon('select * from public.kf_feedback'), /permission denied/, 'players cannot read feedback');
+  const fb = await rpc('admin_feedback', { p_pass: tok, p_action: 'list' });
+  check(fb.length === 5 && fb.some(f => f.username === 'test_delta' && f.kind === 'idea'), 'the owner sees feedback with the username', fb.length);
+  check((await rpc('admin_feedback', { p_pass: tok, p_action: 'done', p_data: { id: fb[0].id } })).find(f => f.id === fb[0].id).status === 'done', 'the owner marks feedback done');
+  check((await rpc('admin_feedback', { p_pass: tok, p_action: 'delete', p_data: { id: fb[0].id } })).length === 4, 'the owner deletes feedback');
+  // admin alerts
+  await q('delete from kf_push_queue');
+  await rpc('kf_feedback_send', { p_id: pidF, p_token: null, p_kind: 'other', p_body: 'no one listens yet' }, '9.8.7.7');
+  check((await q("select count(*)::int n from kf_push_queue where target is not null")).rows[0].n === 0, 'no alert is queued when no admin device listens');
+  await expectError(rpc('admin_push', { p_pass: 'x', p_action: 'status', p_data: {} }), /wrong admin password/, 'alert settings need a sign-in');
+  const ap1 = await rpc('admin_push', { p_pass: tok, p_action: 'subscribe', p_data: { sub: { endpoint: 'https://push.example.com/owner', keys: { p256dh: 'x', auth: 'y' } }, lang: 'de' } });
+  check(ap1.on && ap1.devices === 1, 'the owner turns on alerts for a device');
+  await rpc('admin_mods', { p_pass: tok, p_action: 'add', p_data: { name: 'mod_bob', pass: 'mod-pass-456' } });
+  const mt2 = (await rpc('mod_login', { p_user: 'mod_bob', p_pass: 'mod-pass-456' }, '7.3.3.3')).token;
+  await rpc('admin_push', { p_pass: mt2, p_action: 'subscribe', p_data: { sub: { endpoint: 'https://push.example.com/mod', keys: { p256dh: 'x', auth: 'y' } } } });
+  await rpc('kf_feedback_send', { p_id: pidF, p_token: null, p_kind: 'bug', p_body: 'the button is broken' }, '9.8.7.8');
+  await rpc('kf_feedback_send', { p_id: pidF, p_token: null, p_kind: 'bug', p_body: 'and another one' }, '9.8.7.9');
+  check((await q("select count(*)::int n from kf_push_queue where kind = 'feedback'")).rows[0].n === 1, 'new feedback alerts the owner, at most once every 10 minutes');
+  const m3 = (await rpc('club_mine', { p_token: c2.token })).msgs; const other = await rpc('acc_signup', { p_user: 'test_rep', p_pass: 'secret123' }, '9.1.1.1');
+  await rpc('club_join', { p_token: other.token, p_club: lvCid });
+  await rpc('club_report', { p_token: other.token, p_msg: m3[m3.length - 1].id });
+  check((await q("select count(*)::int n from kf_push_queue where kind = 'report' and target = 'staff'")).rows[0].n === 1, 'a new report alerts the owner and moderators');
+  await rpc('kf_report_error', { p_msg: 'brand new crash', p_src: 'x.js:1:1', p_ver: 54 }, '9.2.2.2');
+  await rpc('kf_report_error', { p_msg: 'brand new crash', p_src: 'x.js:1:1', p_ver: 54 }, '9.2.2.2');
+  check((await q("select count(*)::int n from kf_push_queue where kind = 'crash'")).rows[0].n === 1, 'a new kind of crash alerts the owner once');
+  const sec = (await q('select secret from kf_push_cfg where k = 1')).rows[0].secret;
+  const taken = await rpc('push_take', { p_secret: sec });
+  const rep = taken.find(t => /report/i.test(t.t_en)), fbk = taken.find(t => /feedback/i.test(t.t_en));
+  check(rep && rep.subs.length === 2 && rep.url === 'admin.html', 'report alerts go to the owner and moderator devices and open admin.html', rep);
+  check(fbk && fbk.subs.length === 1 && fbk.subs[0].endpoint.endsWith('/owner') && fbk.subs[0].lang === 'de', 'feedback alerts go only to the owner');
+  check(!taken.some(t => t.subs.some(s2 => s2.endpoint.includes('/back') && /report|feedback|crash/i.test(t.t_en))), 'players never get admin alerts');
+  await rpc('push_gone', { p_secret: sec, p_endpoints: ['https://push.example.com/mod'] });
+  check((await q('select count(*)::int n from kf_admin_push')).rows[0].n === 1, 'dead admin devices are removed');
+  check((await rpc('admin_push', { p_pass: tok, p_action: 'unsubscribe', p_data: { endpoint: 'https://push.example.com/owner' } })).on === false, 'the owner turns alerts off');
+  }
 };

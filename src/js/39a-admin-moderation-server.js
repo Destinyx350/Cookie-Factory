@@ -156,6 +156,7 @@ async function admSrvLoad(){
   if(v46Ready) admBkCall('list');
   if(v51Ready) admInsLoad();
   if(v53Ready) admWeekLoad();
+  if(v54aReady){admFbCall('list');admAlertState();}
   admSrvRender();
 }
 function admBars(rows){
@@ -188,6 +189,7 @@ function admSrvRender(){
     h+=admCardH('🏛️ '+tt('Saisons','Seasons'),'<p class="small">'+tt('Speichert die Top 10 der Bestenliste als beendete Saison (alle sehen sie in der Bestenliste) und startet sie danach neu.','Saves the leaderboard’s top 10 as a finished season (everyone sees it in the leaderboard), then starts it fresh.')+'</p><form class="coderow" id="admSeasonF" novalidate><input class="namein" name="name" maxlength="40" placeholder="'+tt('Name, z. B. Saison ','Name, e.g. Season ')+(Se.length+1)+'"><button type="submit" class="btn warn'+(armS?' armed':'')+'">'+(armS?tt('Wirklich? Nochmal','Really? Again'):tt('Saison beenden','End season'))+'</button></form>'
       +(Se.length?'<div class="admlbl">'+Se.map(s=>'<div class="admlbr"><span class="rk">🏛️</span><span class="who"><b>'+escName(s.name)+'</b><small>'+(s.top||[]).slice(0,3).map((t,i)=>['🥇','🥈','🥉'][i]+' '+escName(t.name)+' '+fmt(+t.score||0)).join(' · ')+'</small><small>'+admDT(s.archived_at)+'</small></span></div>').join('')+'</div>':''));
     if(v51Ready) h+=admInsHtml();
+    if(v54aReady) h+=admFbHtml()+admAlertHtml(false);
     h+=admCardH('💾 '+tt('Backups','Backups'),admBkHtml());
     const Lg=admLog||[];
     h+=admCardH('📜 '+tt('Admin-Protokoll','Admin log'),'<p class="small">'+tt('Jede Admin-Aktion auf dem Server, die neuesten zuerst.','Every admin action on the server, newest first.')+'</p>'+(Lg.length?'<div class="admlog">'+Lg.map(l=>'<div><small>'+admDT(l.at)+'</small><b>'+escName(l.action)+'</b>'+(l.detail?'<span>'+escName(l.detail)+'</span>':'')+'</div>').join('')+'</div>':'<p class="small">–</p>'));

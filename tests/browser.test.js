@@ -7,7 +7,7 @@ const PHONE = { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch:
 
 module.exports = async function browserTests(url) {
   console.log('\nBrowser');
-  await pool.query("delete from kf_backups; delete from kf_accounts; delete from kf_clubs; delete from leaderboard; delete from lb_period; delete from kf_rate; delete from kf_admin_fails; delete from kf_reports; delete from kf_mail; delete from kf_news; delete from kf_events; delete from kf_errors; delete from kf_steps; delete from kf_days; delete from kf_bans; delete from kf_device_bans; delete from kf_appeals; delete from kf_mods; update kf_admin_auth set totp_on = false, totp_secret = null, totp_pending = null; update kf_config set v = '{\"on\":false,\"de\":\"\",\"en\":\"\"}' where k = 'maint'");
+  await pool.query("delete from kf_backups; delete from kf_accounts; delete from kf_clubs; delete from leaderboard; delete from lb_period; delete from kf_rate; delete from kf_admin_fails; delete from kf_reports; delete from kf_mail; delete from kf_news; delete from kf_events; delete from kf_errors; delete from kf_steps; delete from kf_days; delete from kf_bans; delete from kf_device_bans; delete from kf_appeals; delete from kf_mods; delete from kf_feedback; delete from kf_admin_push; delete from kf_push_queue; update kf_admin_auth set totp_on = false, totp_secret = null, totp_pending = null; update kf_config set v = '{\"on\":false,\"de\":\"\",\"en\":\"\"}' where k = 'maint'");
   const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
   const errors = [];
   async function device(name, ip, opts = {}, admin = false, page = '') {
@@ -297,6 +297,29 @@ module.exports = async function browserTests(url) {
   check(!(await a.isVisible('#adBtn')), 'the normal game shows no ads');
 
   await d.click('#setClose').catch(() => {});
+
+  // 5h. Privacy page, feedback, club levels, admin feedback and alerts (v54)
+  await settings(a, 'game');
+  check(await a.isVisible('#fbSetBtn') && (await a.getAttribute('#privSetBtn', 'href')) === 'privacy.html', 'Settings has "Send feedback" and the privacy link');
+  const pv = await a.context().newPage(); await pv.goto(url + 'privacy.html');
+  check(/In short/.test(await text(pv, '#en')) && /Kurz gesagt/.test(await text(pv, '#de')), 'the privacy page has English and German'); await pv.close();
+  await a.click('#fbSetBtn'); await a.waitForSelector('#fbF', { timeout: 5000 });
+  await a.click('#fbF label:nth-child(2)'); await a.fill('#fbF [name=body]', 'Please add more cookie skins'); await a.click('#fbF button[type=submit]');
+  await a.waitForTimeout(1500);
+  const fbr = (await pool.query("select kind, username from kf_feedback")).rows;
+  check(fbr.length === 1 && fbr[0].kind === 'idea' && fbr[0].username === 'alpha_ci' && !(await a.isVisible('#fbOv')), 'a player sends feedback from Settings');
+  await goals(a); await a.click('#clubBar'); await a.click('#clubBody [data-clt=mine]'); await a.waitForSelector('.clublv', { timeout: 8000 }).catch(() => {});
+  check(await a.isVisible('.clublv') && /Level \d/.test(await text(a, '.clublv')), 'the club page shows the club level');
+  await a.click('#clubBody [data-clt=list]'); await a.waitForTimeout(1200);
+  check(/Level \d/.test(await text(a, '#clubBody .lblist')), 'the club list shows levels');
+  await a.click('#clubClose');
+  await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
+  await d.waitForSelector('[data-fba^="done:"]', { timeout: 10000 }).catch(() => {});
+  check(/more cookie skins/.test(await text(d, '#admSrv')), 'the owner sees player feedback');
+  await d.click('[data-fba^="done:"]'); await d.waitForTimeout(1200);
+  check((await pool.query("select status from kf_feedback")).rows[0].status === 'done', 'the owner marks feedback done');
+  check(await d.isVisible('[data-alrt]') && /Alerts on your phone/.test(await text(d, '#admSrv')), 'the Server tab offers alerts on the phone');
+  await d.click('#setClose');
 
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {

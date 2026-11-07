@@ -44,8 +44,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=53;
+const NEWS_VER=54;
 const NEWS=[
+  {v:54,sum:['Neu: Club-Stufen mit Bonus für alle Mitglieder und ein Feedback-Knopf!','New: club levels with a bonus for every member, and a feedback button!'],items:[
+    ['new','Club-Stufen 1–10: Clubs sammeln XP, wenn Mitglieder in einer Woche mitbacken (100) und wenn sie Clubkriege gewinnen (500). Jede Stufe gibt allen Mitgliedern +1 % Produktion und +5 % auf Club-Preise.','Club levels 1–10: clubs earn XP when members bake in a week (100) and when they win club wars (500). Every level gives all members +1% production and +5% on club prizes.'],
+    ['new','Feedback senden: Unter Einstellungen → Spiel kannst du Fehler melden oder Ideen schicken.','Send feedback: report bugs or share ideas under Settings → Game.'],
+    ['new','Datenschutz-Info auf Deutsch und Englisch, ebenfalls unter Einstellungen → Spiel.','Privacy info in English and German, also under Settings → Game.']
+  ]},
   {v:53,sum:['Gesperrt? Jetzt kannst du Einspruch einlegen. Dazu mehr Moderation und Sicherheit.','Banned? You can now appeal. Plus more moderation and security.'],items:[
     ['new','Einspruch gegen eine Sperre: Gesperrte Spieler können direkt im Sperr-Hinweis einmal am Tag um eine Prüfung bitten und sehen die Antwort beim nächsten Anmelden.','Ban appeals: banned players can ask for a review right in the ban notice, once a day, and see the answer the next time they sign in.'],
     ['new','Moderatoren helfen jetzt mit: Sie kümmern sich um Meldungen im Club-Chat.','Moderators now help out: they take care of reports in club chat.'],

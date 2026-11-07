@@ -71,7 +71,7 @@ async function socialClaim(){
     lines+='<div class="rwline"><span class="rwmed">🎁</span><span><b>'+n+' '+(g.kind==='stars'?tt('Sternenkrümel','star crumbs'):tt('Edelsteine','gems'))+'</b><small>'+tt('von ','from ')+escName(String(g.from||'?'))+(g.note?' · „'+escName(String(g.note))+'“':'')+'</small></span></div>';
   });
   rw.forEach(w=>{
-    const pl=Math.min(3,Math.max(1,w.place|0)),p=CLUB_PRIZE[pl-1];
+    const pl=Math.min(3,Math.max(1,w.place|0)),p=v54Ready?clubPrizeLv(CLUB_PRIZE[pl-1]):CLUB_PRIZE[pl-1];
     S.w.mat.gem+=p.gems;addCk(Math.max(10000*p.h,C.kps0*3600*p.h));
     lines+='<div class="rwline"><span class="rwmed m'+pl+'">'+['🥇','🥈','🥉'][pl-1]+'</span><span><b>'+tt('Platz ','#')+pl+' · '+escName(String(w.club||''))+' · '+tt('Woche ','Week ')+String(w.week||'').split('-')[1]+'</b><small>'+clubPrizeTxt(p)+'</small></span></div>';
   });
@@ -95,6 +95,7 @@ function clubBarHtml(){
   return '<span class="ico clubico" aria-hidden="true">👥</span><span><small>'+sub+'</small><b>'+main+'</b></span><span class="go" aria-hidden="true">›</span>';
 }
 function clubRender(){
+  if(v54Ready) clubLvlSync();
   const bar=$id('clubBar');if(!bar) return;
   bar.hidden=!clubOn();
   if(bar.hidden) {if(!$id('clubOv').hidden) closeClub();return;}
@@ -129,8 +130,8 @@ function clubMineHtml(){
       +'<form class="clubcard clubform" id="clubNewF" novalidate><h4>'+tt('Eigenen Club gründen','Start your own club')+'</h4><div class="clubemo" role="radiogroup" aria-label="'+tt('Symbol','Icon')+'">'+CLUB_EMO.map((e,i)=>'<label><input type="radio" name="emoji" value="'+e+'"'+(i===0?' checked':'')+'><span>'+e+'</span></label>').join('')+'</div><input class="namein" name="cname" maxlength="24" placeholder="'+tt('Clubname (3–24 Zeichen)','Club name (3–24 characters)')+'" aria-label="'+tt('Clubname','Club name')+'"><input class="namein" name="cdescr" maxlength="140" placeholder="'+tt('Beschreibung (optional)','Description (optional)')+'" aria-label="'+tt('Beschreibung','Description')+'"><button type="submit" class="btn primary"'+(clubBusy?' disabled':'')+'>'+tt('Club gründen','Create club')+'</button></form>';
   }
   const c=clubData.club,own=clubData.role==='owner',D=clubData;
-  let h='<div class="clubhead"><span class="clubemoji" aria-hidden="true">'+escName(c.emoji)+'</span><span><b>'+escName(c.name)+(c.trophies?' <span class="trophy" title="'+tt('Clubkrieg-Trophäen','Club war trophies')+'">🏆 ×'+c.trophies+'</span>':'')+'</b><small>'+(c.descr?escName(c.descr):tt('Keine Beschreibung','No description'))+'</small><small>'+D.members.length+'/30 '+tt('Mitglieder','members')+' · '+(c.open?tt('offen','open'):tt('geschlossen','closed'))+'</small></span></div>';
-  h+='<div class="lbprize"><div class="lbends"><span>'+tt('Diese Woche: Platz ','This week: #')+(D.rank||'–')+' · +'+fmt(+D.week_gain||0)+'</span><b data-clleft>'+clubWeekLeft()+'</b></div><div class="lbprizes">'+CLUB_PRIZE.map((p,i)=>'<div class="lbpz"><span class="rwmed m'+(i+1)+'">'+['🥇','🥈','🥉'][i]+'</span><small>'+clubPrizeTxt(p)+'</small></div>').join('')+'</div><p class="small" style="margin:6px 0 0">'+tt('Gezählt werden die Kekse, die ihr diese Woche backt (beim Speichern ins Konto). Jedes Mitglied, das mitbackt, bekommt den Preis.','Counts the cookies you bake this week (when your game saves to your account). Every member who bakes gets the prize.')+'</p></div>';
+  let h='<div class="clubhead"><span class="clubemoji" aria-hidden="true">'+escName(c.emoji)+'</span><span><b>'+escName(c.name)+(c.trophies?' <span class="trophy" title="'+tt('Clubkrieg-Trophäen','Club war trophies')+'">🏆 ×'+c.trophies+'</span>':'')+'</b><small>'+(c.descr?escName(c.descr):tt('Keine Beschreibung','No description'))+'</small><small>'+D.members.length+'/30 '+tt('Mitglieder','members')+' · '+(c.open?tt('offen','open'):tt('geschlossen','closed'))+'</small></span></div>'+(v54Ready?clubLvlHtml(c):'');
+  h+='<div class="lbprize"><div class="lbends"><span>'+tt('Diese Woche: Platz ','This week: #')+(D.rank||'–')+' · +'+fmt(+D.week_gain||0)+'</span><b data-clleft>'+clubWeekLeft()+'</b></div><div class="lbprizes">'+CLUB_PRIZE.map((p,i)=>'<div class="lbpz"><span class="rwmed m'+(i+1)+'">'+['🥇','🥈','🥉'][i]+'</span><small>'+clubPrizeTxt(v54Ready?clubPrizeLv(p):p)+'</small></div>').join('')+'</div><p class="small" style="margin:6px 0 0">'+tt('Gezählt werden die Kekse, die ihr diese Woche backt (beim Speichern ins Konto). Jedes Mitglied, das mitbackt, bekommt den Preis.','Counts the cookies you bake this week (when your game saves to your account). Every member who bakes gets the prize.')+'</p></div>';
   if(v48Ready) h+=warHtml(D);
   h+='<h4 class="clubh">'+tt('Mitglieder','Members')+'</h4><div class="lblist">'+D.members.map((m,i)=>{
     const me=accMe&&m.username.toLowerCase()===accMe.username.toLowerCase();
@@ -150,7 +151,7 @@ function clubListHtml(){
   const mine=clubIn()?clubData.club.id:'';
   return h+'<div class="lblist">'+clubList.map((c,i)=>{
     const full=c.members>=30,can=!clubIn()&&c.open&&!full;
-    return '<div class="lbrow clubrow" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3&&+c.week_gain>0?' m'+(i+1):'')+'">'+(i<3&&+c.week_gain>0?['🥇','🥈','🥉'][i]:escName(c.emoji))+'</span><span class="nm"><b>'+escName(c.name)+(c.trophies?' 🏆'+c.trophies:'')+'</b><small>'+c.members+'/30 · +'+fmt(+c.week_gain||0)+tt(' diese Woche',' this week')+(c.descr?' · '+escName(c.descr):'')+'</small></span><span class="sc">'+(c.id===mine?'<span class="small">'+tt('Dein Club','Your club')+'</span>':can?'<button type="button" class="btn sm primary" data-cl="join:'+c.id+'"'+(clubBusy?' disabled':'')+'>'+tt('Beitreten','Join')+'</button>':'<span class="small">'+(full?tt('voll','full'):!c.open?tt('geschlossen','closed'):'')+'</span>')+'</span></div>';
+    return '<div class="lbrow clubrow" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3&&+c.week_gain>0?' m'+(i+1):'')+'">'+(i<3&&+c.week_gain>0?['🥇','🥈','🥉'][i]:escName(c.emoji))+'</span><span class="nm"><b>'+escName(c.name)+(c.trophies?' 🏆'+c.trophies:'')+'</b><small>'+(c.level?tt('Stufe ','Level ')+c.level+' · ':'')+c.members+'/30 · +'+fmt(+c.week_gain||0)+tt(' diese Woche',' this week')+(c.descr?' · '+escName(c.descr):'')+'</small></span><span class="sc">'+(c.id===mine?'<span class="small">'+tt('Dein Club','Your club')+'</span>':can?'<button type="button" class="btn sm primary" data-cl="join:'+c.id+'"'+(clubBusy?' disabled':'')+'>'+tt('Beitreten','Join')+'</button>':'<span class="small">'+(full?tt('voll','full'):!c.open?tt('geschlossen','closed'):'')+'</span>')+'</span></div>';
   }).join('')+'</div>';
 }
 function clubGiftHtml(){
