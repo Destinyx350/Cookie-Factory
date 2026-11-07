@@ -49,6 +49,16 @@ Run [`leaderboard-v2.sql`](leaderboard-v2.sql) once in the **SQL Editor** (clear
 - **Admin panel → Leaderboard** (needs the admin password): see every player, **Remove** them, **Ban** them (they can't rejoin until unbanned), **Reset game** (their own save is wiped the next time they open the game, with a notice), **Unban**, or **Clear the whole leaderboard**.
 - Saves live in each player's own browser, so a reset can only reach players who joined the leaderboard. It happens when their game next connects.
 
+## Online features, accounts, clubs and gifts (versions 42–44)
+
+Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.sql`. All are safe to run again.
+
+1. [`online-v3.sql`](online-v3.sql): admin codes, announcements, global events, the live counter and cloud transfer codes.
+2. [`accounts-v4.sql`](accounts-v4.sql): username + password accounts with a cloud save.
+3. [`clubs-v5.sql`](clubs-v5.sql): bakery clubs (up to 30 members, club chat, weekly prizes for the top 3 clubs) and gifts (daily limits: 50 gems, 5 star crumbs and 10 gifts sent; 60 gems and 6 star crumbs received).
+
+The admin panel's **Online** tab manages codes, announcements, events, accounts, clubs and chat messages.
+
 ## Anti-cheat
 
 - Saves changed outside the game (browser tools, edited files or text) are flagged and can't join.
