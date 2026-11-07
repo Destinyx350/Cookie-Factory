@@ -126,7 +126,7 @@ Older updates are listed in the game under **What's New**.
 
 ## 💻 Run it locally
 
-The game is a single `index.html` file with no build step. `manifest.webmanifest`, `sw.js` and the `icons` folder make it installable as an app. Download the files and open `index.html` in your browser, or serve the folder:
+Players get a single `index.html` file. It is built from the parts in `src/` with `node tools/build.js` (no other tools needed). `manifest.webmanifest`, `sw.js` and the `icons` folder make it installable as an app. Download the files and open `index.html` in your browser, or serve the folder:
 
 ```bash
 python3 -m http.server 8000
