@@ -37,6 +37,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🏆 **192 achievements** | Plus guided *First Steps* goals and detailed statistics. |
 | 📅 **Daily rewards** | A 7-day login streak and three daily tasks with a bonus chest. Coming back after 3+ days brings a welcome-back gift. |
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
+| 🎵 **Soundtrack and 3D** | 7 music tracks with real instruments that adapt to what you do, and a real 3D cookie with lighting that tilts toward your finger. Golden cookies and icons have a 3D look too. |
 | ☀️ **Living world** | Time of day and weather change while you play. Combos and boosts speed things up. |
 | 💾 **Named saves** | Progress saves automatically in 3 save slots. Every new game gets a name, which shows at the top of the screen. |
 | 🎁 **Secret codes** | Type a code under **Settings → Game** to get cookies, gems or a boost. Each code works once per save. |
@@ -81,6 +82,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🏆 **192 Erfolge**, Ziele und Statistiken
 - 📅 **Tägliche Belohnungen**: 7-Tage-Serie, drei Tagesaufgaben und ein Willkommensgeschenk nach 3+ Tagen Pause
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
+- 🎵 **Soundtrack und 3D**: 7 Musikstücke mit echten Instrumenten, die sich anpassen, und ein echter 3D-Keks mit Licht, der sich zum Finger neigt
 - 💾 **Spielstände mit Namen**: 3 Speicherplätze, jedes neue Spiel bekommt einen Namen
 - 🎁 **Geheime Codes** unter **Einstellungen → Spiel**: Kekse, Edelsteine oder ein Schub, einmal pro Spielstand
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
@@ -108,21 +110,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 54
-- **New:** Club levels 1–10. Clubs earn XP when members bake in a week and when they win club wars. Every level gives all members +1% production and +5% on club prizes.
-- **New:** Send feedback. Report bugs or share ideas under **Settings → Game**.
-- **New:** [Privacy info](https://destinyx350.github.io/Cookie-Factory/privacy.html) in English and German.
+### Version 55
+- **New:** A new soundtrack. 7 tracks with real instruments (electric piano, strings, brass, bells, upright bass, drums), reverb and echo: Morning Bakery, Factory Groove, Night Shift, Great Adventure, Showdown, Starry Ascension and Cookie Festival. The music gets fuller during combos and boosts, plays jazz at night and the Showdown in fights.
+- **New:** 3D graphics. The big cookie is a real 3D model with lighting, chocolate chips and a crispy edge that tilts toward your finger and bounces when you click, in every cookie design. Golden cookies, the background cookies and all icons have a 3D look too (turn it off under **Settings → Display**).
 
-Also new since version 53: ban appeals, moderators, two-step sign-in for the server tools, and optional ads on CrazyGames and GameDistribution.
+Also new since version 54: club levels, a feedback button and the [privacy info](https://destinyx350.github.io/Cookie-Factory/privacy.html).
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Club-Stufen 1–10. Clubs sammeln XP, wenn Mitglieder in einer Woche mitbacken und wenn sie Clubkriege gewinnen. Jede Stufe gibt allen Mitgliedern +1 % Produktion und +5 % auf Club-Preise.
-- **Neu:** Feedback senden. Fehler melden oder Ideen schicken unter **Einstellungen → Spiel**.
-- **Neu:** [Datenschutz-Info](https://destinyx350.github.io/Cookie-Factory/privacy.html) auf Deutsch und Englisch.
+- **Neu:** Ein neuer Soundtrack. 7 Stücke mit echten Instrumenten (E-Piano, Streicher, Blech, Glocken, Kontrabass, Schlagzeug), Hall und Echo: Morgenbäckerei, Fabrik-Groove, Nachtschicht, Großes Abenteuer, Showdown, Sternenaufstieg und Keks-Fest. Die Musik wird voller bei Combos und Boosts, spielt nachts Jazz und im Kampf den Showdown.
+- **Neu:** 3D-Grafik. Der große Keks ist ein echtes 3D-Modell mit Licht, Schokostücken und knusprigem Rand, das sich zum Finger neigt und beim Klicken hüpft, in jedem Keks-Design. Goldkekse, die Kekse im Hintergrund und alle Symbole haben ebenfalls einen 3D-Look (abschaltbar unter **Einstellungen → Anzeige**).
 
-Außerdem neu seit Version 53: Einsprüche gegen Sperren, Moderatoren, Zwei-Schritt-Anmeldung für die Server-Werkzeuge und freiwillige Werbung auf CrazyGames und GameDistribution.
+Außerdem neu seit Version 54: Club-Stufen, ein Feedback-Knopf und die [Datenschutz-Info](https://destinyx350.github.io/Cookie-Factory/privacy.html).
 
 </details>
 

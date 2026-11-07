@@ -86,4 +86,4 @@ b15:'<circle cx="24" cy="26" r="18" fill="none" stroke="#5aa0d8" stroke-width="3
   ART.r10=c('#c9a46a',dots('#2a1f3a',[[20,22,1.5],[28,18,1.5],[38,20,1.5],[44,28,1.5],[22,34,1.5],[32,30,1.5],[40,40,1.5],[28,44,1.5],[18,44,1.5],[46,44,1.5],[34,50,1.5]]));
   ART.r11='<circle cx="32" cy="42" r="18" fill="#d8a35b" stroke="rgba(0,0,0,.28)" stroke-width="2"/><ellipse cx="32" cy="32" rx="19" ry="5" fill="#c0392b"/><circle cx="32" cy="22" r="18" fill="#d8a35b" stroke="rgba(0,0,0,.28)" stroke-width="2"/>'+dots('#fbe3b0',[[26,18,1.8],[38,20,1.8],[32,26,1.8]]);
 })();
-const art=k=>'<svg viewBox="0 0 64 64" aria-hidden="true">'+(ART[k]||ART.cookie)+'</svg>';
+const art=k=>'<svg class="art" viewBox="0 0 64 64" aria-hidden="true">'+(ART[k]||ART.cookie)+'</svg>';

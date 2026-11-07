@@ -150,5 +150,5 @@ function updV34Txt(){
   set('shareT',tt('Teilen','Share'));
   set('shareP',tt('Kopiere diesen Text und schick ihn deinen Freunden.','Copy this text and send it to your friends.'));
   set('shareCopy',tt('Kopieren','Copy'));set('shareClose',tt('Schließen','Close'));
-  updApp();renderLb();updDev();updShopNav();updV42Txt();accRender();if(v44Ready) clubRender();if(typeof updV47Txt==='function'&&$id('saveMoreT')) updV47Txt();if(v48Ready) refNote();if(v49Ready){pushSynced=false;pushState();}if(v54Ready) updV54Txt();
+  updApp();renderLb();updDev();updShopNav();updV42Txt();accRender();if(v44Ready) clubRender();if(typeof updV47Txt==='function'&&$id('saveMoreT')) updV47Txt();if(v48Ready) refNote();if(v49Ready){pushSynced=false;pushState();}if(v54Ready) updV54Txt();if(v55Ready) updV55Txt();
 }

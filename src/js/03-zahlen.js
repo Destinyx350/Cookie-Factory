@@ -6,7 +6,7 @@ const SUF={
 function group(n){return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,LANG==='de'?'.':',');}
 const DEFOPT=()=>({num:'short',fs:1,acc:'orange',title:false,eco:false,ask:true,as:30,sn:{click:true,buy:true,gold:true,ach:true,other:true,ui:true},mus:1,trk:'auto',bgm:true,m24:1,ntf:'all',ntfT:5,ntfB:true,motion:'on',start:true,upc:true,shake:true});
 let numMode='short';
-const TRK_OK=['bake','market','stars','adv','fest'];
+const TRK_OK=['bake','market','night','adv','boss','stars','fest'];
 /* Zahlenformate einmal bauen und wiederverwenden: toLocaleString mit Optionen baut sonst jedes Mal ein neues. */
 const NFC={};
 function nf(d){const k=LANG+d;return NFC[k]||(NFC[k]=new Intl.NumberFormat(LOC[LANG],{maximumFractionDigits:d}));}

@@ -154,7 +154,7 @@ function clickBurst(x,y,crit){if(!fxOk()) return;fxCrumbs(x,y,crit?16:7,crit?1.4
 const startOv=document.getElementById('startOv');let startDone=false;
 function renderStart(){
   const r=awayRep,has=hadSave&&S.all>0;
-  document.getElementById('stLogo').innerHTML=cookieSVG(skinOf(),'stc');
+  document.getElementById('stLogo').innerHTML=(v55Ready&&g3dStartHtml())||cookieSVG(skinOf(),'stc');
   document.getElementById('stTitle').textContent=tt('Keksfabrik','Cookie Factory');
   document.getElementById('stSub').textContent=tt('Backe, baue und erobere das Keks-Universum!','Bake, build and conquer the cookie universe!');
   let c='';

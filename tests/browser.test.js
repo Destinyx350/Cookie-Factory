@@ -102,7 +102,7 @@ module.exports = async function browserTests(url) {
   check(!(await c.isVisible('#maintOv')), 'maintenance ends for players');
 
   // 5. Mail arrives in the game
-  await c.waitForTimeout(18000); await goals(c); await c.click('#clubBar');
+  await c.waitForTimeout(18000); await goals(c); if (!(await c.isVisible('#rwOv'))) await c.click('#clubBar');
   await c.waitForSelector('#rwOv:not([hidden])', { timeout: 10000 }).catch(() => {});
   check(/Welcome!/.test(await text(c, '#rwOv')), 'player gets the admin message as a popup');
 
@@ -320,6 +320,40 @@ module.exports = async function browserTests(url) {
   check((await pool.query("select status from kf_feedback")).rows[0].status === 'done', 'the owner marks feedback done');
   check(await d.isVisible('[data-alrt]') && /Alerts on your phone/.test(await text(d, '#admSrv')), 'the Server tab offers alerts on the phone');
   await d.click('#setClose');
+
+  // 5i. Soundtrack and 3D graphics (v55)
+  await settings(a, 'snd');
+  const trkTxt = await text(a, '#trkList');
+  check(['Morning Bakery', 'Factory Groove', 'Night Shift', 'Great Adventure', 'Showdown', 'Starry Ascension', 'Cookie Festival'].every(n => trkTxt.includes(n)), 'Settings lists the 7 new music tracks');
+  await a.click('#setClose');
+  {
+    const src = fs.readFileSync(path.join(ROOT, 'src/js', fs.readdirSync(path.join(ROOT, 'src/js')).find(f => f.startsWith('13-'))), 'utf8');
+    const eng = 'const mHz=m=>440*Math.pow(2,(m-69)/12);\n' + src.slice(src.indexOf('/*MUSIC-START*/'), src.indexOf('/*MUSIC-END*/'));
+    const mp = await browser.newPage(); await mp.setContent('<html><body></body></html>');
+    await mp.addScriptTag({ content: eng + '\nwindow.__m={TRK,mxGraph,mxPlayer};' });
+    const lv = await mp.evaluate(async () => {
+      const out = {};
+      for (const id of Object.keys(window.__m.TRK)) {
+        const C = new OfflineAudioContext(2, 44100 * 6, 44100), o = C.createGain(); o.connect(C.destination);
+        const P = window.__m.mxPlayer(window.__m.mxGraph(C, o)); P.start(id, .05); P.I = .8; while (P.t < 5.7) P.run(5.8);
+        const d = (await C.startRendering()).getChannelData(0); let pk = 0, ss = 0; for (const x of d) { pk = Math.max(pk, Math.abs(x)); ss += x * x; }
+        out[id] = { pk, rms: Math.sqrt(ss / d.length) };
+      }
+      return out;
+    });
+    await mp.close();
+    check(Object.keys(lv).length === 7 && Object.values(lv).every(v => v.rms > .01 && v.pk < .99), 'all 7 music tracks play, without silence or clipping', lv);
+  }
+  const has3d = await a.evaluate(() => !!document.querySelector('#cookie canvas.c3d'));
+  const flatOk = await a.evaluate(() => { const s = document.querySelector('#cookie svg'); return !!s && getComputedStyle(s).display !== 'none'; });
+  check(has3d || flatOk, 'the big cookie shows (3D with WebGL, flat without)', { has3d, flatOk });
+  await settings(a, 'disp');
+  check(await a.isVisible('#g3dChk'), 'Settings → Display has the 3D graphics switch');
+  await a.uncheck('#g3dChk'); await a.waitForTimeout(200);
+  check(await a.evaluate(() => !document.querySelector('#cookie canvas.c3d') && !document.documentElement.hasAttribute('data-g3d') && getComputedStyle(document.querySelector('#cookie svg')).display !== 'none'), 'turning 3D off brings back the flat cookie and icons');
+  await a.check('#g3dChk'); await a.waitForTimeout(200);
+  check(await a.evaluate(() => document.documentElement.hasAttribute('data-g3d')), 'turning 3D on again works');
+  await a.click('#setClose');
 
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {
