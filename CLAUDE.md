@@ -102,9 +102,16 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Admin tools: `admin_mod` (search, mail, mute, reports, rename, words, settings, stats, log, seasons). Changes made with any `admin_*` function are written to `kf_admin_log`. Client is the `V45` block (Moderation and Server tabs). Never reuse a function name from elsewhere in `index.html` (an `admSet` clash broke the value editor once).
 - `index.html` has a Content-Security-Policy meta tag. A new external host (fonts, API) must be added there.
 
+## Backups, tests and leaderboard accounts (version 46)
+
+- Server side is `docs/update-v7.sql`: `kf_backups` (JSON snapshots of every important table, no sessions), `kf_backup_make()` (internal), `kf_backup_tick()` (weekly automatic backup, also called by `kf_ping` now and then and by the keep-awake workflow), `admin_backup` (list, make, get, restore one account), `acc_lb_link` and `kf_accounts.lb_id` (one leaderboard entry per account), unique leaderboard names in `submit_score` (`name taken`).
+- Client: `lbAccSync()` in the `V46` block adopts the account's leaderboard spot after sign-in and after loading an account save (not while the "which bakery" question is open). Backups card in the admin Server tab.
+- **Tests:** `tests/` (`sql.test.js`, `browser.test.js`, `run.js`, `setup-db.sh`). GitHub runs them on every pull request (`.github/workflows/tests.yml`); only merge when they pass. Add tests for every new feature. Run locally with the env vars in `tests/README.md`. Tests use their own admin password and unlock the in-game panel by setting `sessionStorage['keksfabrik-admin']` to `ADM_HASH`.
+- `.github/workflows/keep-awake.yml` calls `kf_backup_tick` and `kf_live` every 2 days so the free Supabase project never pauses. GitHub turns scheduled workflows off after 60 days without commits; re-enable it in the Actions tab if that happens.
+
 ## Shipping changes
 
-- The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass. After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.
+- The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass (including the GitHub `Tests` check). After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.
 - Only merge Claude's own PRs from the session branch, never someone else's.
 
 ## Before pushing

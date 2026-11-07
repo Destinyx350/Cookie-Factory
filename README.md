@@ -49,9 +49,9 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter, server codes, and a transfer code to move your save to another device. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
-| 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
+| 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
 | 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
-| 🔒 **Protected admin panel** | The admin panel needs a password, and the online tools have a second password with a lockout after wrong tries. The admin can moderate reports, find players, mute, rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, and start new leaderboard seasons. |
+| 🔒 **Protected admin panel** | The admin panel needs a password, and the online tools have a second password with a lockout after wrong tries. The admin can moderate reports, find players, mute, rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, and download backups (made automatically every week). |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
 ### 🕹️ How to play
@@ -98,23 +98,17 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 45
-- **New:** Report unkind club chat messages with ⚑. The admin sees every report.
-- **New:** **Sign out other devices** under **Settings → Saving**. Changing your password signs out other devices too.
-- **New:** Messages and gifts from the admin arrive right in your game, and the leaderboard has a **hall of fame** for past seasons.
-- **Changed:** A word filter blocks rude words in usernames, club names, chat and leaderboard names.
-- **Changed:** Sending gifts needs an account that is a day old and has baked 1 million cookies, so fake accounts can't farm gifts.
-- **Changed:** Stronger protection: per-device limits, a stricter limit on score jumps, and a website security rule that only allows the game's own code.
+### Version 46
+- **New:** With an account, your leaderboard spot comes with you to every device. No more duplicate entries.
+- **Changed:** Each leaderboard name can only be used once.
+- **Changed:** The server makes an automatic backup every week, and the admin can download backups and restore a player's account.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Melde unfreundliche Nachrichten im Club-Chat mit ⚑. Der Admin sieht jede Meldung.
-- **Neu:** **Andere Geräte abmelden** unter **Einstellungen → Speichern**. Wenn du dein Passwort änderst, werden andere Geräte auch abgemeldet.
-- **Neu:** Nachrichten und Geschenke vom Admin kommen direkt in dein Spiel, und die Bestenliste hat eine **Ruhmeshalle** für frühere Saisons.
-- **Geändert:** Ein Wortfilter blockiert unfreundliche Wörter in Benutzernamen, Clubnamen, im Chat und in der Bestenliste.
-- **Geändert:** Geschenke senden geht ab einem Tag Kontoalter und 1 Million gebackenen Keksen, damit Fake-Konten keine Geschenke sammeln.
-- **Geändert:** Besserer Schutz: Limits pro Gerät, eine strengere Grenze für Punkte-Sprünge und eine Sicherheitsregel, die nur den Code des Spiels erlaubt.
+- **Neu:** Mit Konto nimmst du deinen Platz in der Bestenliste auf jedes Gerät mit. Kein doppelter Eintrag mehr.
+- **Geändert:** Namen in der Bestenliste gibt es jetzt nur einmal.
+- **Geändert:** Der Server macht jede Woche automatisch ein Backup, und der Admin kann Backups herunterladen und das Konto eines Spielers wiederherstellen.
 
 </details>
 
@@ -131,6 +125,8 @@ python3 -m http.server 8000
 ```
 
 Then open http://localhost:8000.
+
+Automatic tests run on every change; see [tests/README.md](tests/README.md).
 
 To switch on the leaderboard, follow [docs/LEADERBOARD.md](docs/LEADERBOARD.md).
 
