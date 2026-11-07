@@ -4283,7 +4283,7 @@ function customSkin(cd){
   return {id:'custom',custom:1,name:['Eigenes Design','My design'],c:D.c,stroke:D.stroke,speck:D.speck,chip:K.chip,chipS:K.chipS,hi:K.hi,noChips:!!K.none,heart:!!K.heart,glaze:G,top:T};
 }
 const skinOf=()=>S.opt.skin==='custom'?customSkin():(SKINS.find(s=>s.id===S.opt.skin)||SKINS[0]);
-function setSkin(){els.cookie.innerHTML=cookieSVG(skinOf(),'cg');if(v55Ready){G3D.sig='';g3dAttach();g3dSprites();}}
+function setSkin(){els.cookie.innerHTML=cookieSVG(skinOf(),'cg');if(v55Ready){G3D.sig='';g3dAttach();g3dSpritesLater();}}
 function starAvail(it){return !S.w.star.shop[it.id]&&S.w.star.n>=it.c&&(!it.need||Object.keys(S.w.star.shop).length>=it.need);}
 function buyStar(id){
   const it=STAR_ITEMS.find(x=>x.id===id),s=S.w.star;
@@ -10450,8 +10450,11 @@ const hexRgb=h=>{h=String(h||'#000').replace('#','');if(h.length===3) h=h.split(
 const mixC=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];
 const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
 /* Keks-Modell: Oberseite (gewölbt) und Unterseite treffen sich am runden Rand. Je Ecke: Position, Normale, Farbe, Glanz. */
+const G3D_MESH={};
 function g3dMesh(sk,seed){
   if(!sk||!sk.c) sk=SKINS[0];
+  const mk=JSON.stringify([sk.c,sk.chip,sk.chipS,sk.speck,seed||11]);if(G3D_MESH[mk]) return G3D_MESH[mk];
+  const keys=Object.keys(G3D_MESH);if(keys.length>4) delete G3D_MESH[keys[0]];
   const r=rng(seed||11),R=60,SG=160,T=.21,TB=.11,c0=hexRgb(sk.c[0]),c1=hexRgb(sk.c[1]),c2=hexRgb(sk.c[2]),chC=hexRgb(sk.chip),chS=hexRgb(sk.chipS||sk.chip),spk=hexRgb(sk.speck||sk.stroke);
   const ph=[0,0,0,0,0,0].map(()=>r()*6.28),er=th=>1+.022*Math.sin(5*th+ph[0])+.014*Math.sin(9*th+ph[1])+.008*Math.sin(17*th+ph[2]);
   /* natürliche Teig-Struktur: Rauschen in mehreren Größen, leicht gedreht, damit kein Raster entsteht */
@@ -10486,7 +10489,7 @@ function g3dMesh(sk,seed){
   /* Normalen aus den Dreiecken */
   for(let k=0;k<idx.length;k+=3){const [a,b,c]=[idx[k]*10,idx[k+1]*10,idx[k+2]*10];const ux=V[b]-V[a],uy=V[b+1]-V[a+1],uz=V[b+2]-V[a+2],vx=V[c]-V[a],vy=V[c+1]-V[a+1],vz=V[c+2]-V[a+2];const nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;[a,b,c].forEach(o=>{V[o+3]+=nx;V[o+4]+=ny;V[o+5]+=nz;});}
   for(let o=0;o<V.length;o+=10){const l=Math.hypot(V[o+3],V[o+4],V[o+5])||1;V[o+3]/=l;V[o+4]/=l;V[o+5]/=l;}
-  return{v:new Float32Array(V),i:new Uint16Array(idx)};
+  return(G3D_MESH[mk]={v:new Float32Array(V),i:new Uint16Array(idx)});
 }
 const G3D_VS='attribute vec3 p;attribute vec3 n;attribute vec3 c;attribute float g;uniform mat4 M;uniform mat4 P;varying vec3 vN;varying vec3 vC;varying vec3 vW;varying float vG;void main(){vec4 w=M*vec4(p,1.);vW=w.xyz;vN=mat3(M)*n;vC=c;vG=g;gl_Position=P*w;}';
 const G3D_FS='precision mediump float;varying vec3 vN;varying vec3 vC;varying vec3 vW;varying float vG;uniform float glow;'
@@ -10560,7 +10563,7 @@ function g3dFrame(ts){
 const G3D_SPR={gold:null,rain:null,rainSig:''};
 function g3dSprite(sk,size,rx,rz,glow){
   const cv=document.createElement('canvas');cv.width=cv.height=size;
-  try{const R=g3dInit(cv);if(!R) return null;g3dLoad(R,g3dMesh(sk,7));g3dDraw(R,size,size,rx,0,rz,glow);const out=document.createElement('canvas');out.width=out.height=size;out.getContext('2d').drawImage(cv,0,0);const ext=R.gl.getExtension('WEBGL_lose_context');if(ext) ext.loseContext();return out;}catch(e){return null;}
+  try{const R=g3dInit(cv);if(!R) return null;g3dLoad(R,g3dMesh(sk,11));g3dDraw(R,size,size,rx,0,rz,glow);const out=document.createElement('canvas');out.width=out.height=size;out.getContext('2d').drawImage(cv,0,0);const ext=R.gl.getExtension('WEBGL_lose_context');if(ext) ext.loseContext();return out;}catch(e){return null;}
 }
 function g3dSprites(){
   if(!g3dWanted()){if(G3D_SPR.rainOld){rain.sprite=G3D_SPR.rainOld;G3D_SPR.rainSig='';}return;}
@@ -10593,9 +10596,11 @@ function g3dGoldHtml(){return g3dWanted()&&G3D_SPR.gold?'<img class="gold3d" src
     +'<feMerge><feMergeNode in="shadow"/><feMergeNode in="body"/></feMerge></filter></defs></svg>';
   document.body.appendChild(d);
 })();
+let g3dSprT=0;
+function g3dSpritesLater(){clearTimeout(g3dSprT);g3dSprT=setTimeout(()=>{(window.requestIdleCallback||(f=>setTimeout(f,0)))(()=>g3dSprites(),{timeout:3000});},1200);}
 function g3dApply(){
   document.documentElement.toggleAttribute('data-g3d',g3dWanted());
-  g3dAttach();g3dSprites();
+  g3dAttach();g3dSpritesLater();
   const c=$id('g3dChk');if(c) c.checked=g3dWanted();
 }
 /* Schalter unter Einstellungen → Anzeige */

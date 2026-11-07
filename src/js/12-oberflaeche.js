@@ -488,7 +488,7 @@ function customSkin(cd){
   return {id:'custom',custom:1,name:['Eigenes Design','My design'],c:D.c,stroke:D.stroke,speck:D.speck,chip:K.chip,chipS:K.chipS,hi:K.hi,noChips:!!K.none,heart:!!K.heart,glaze:G,top:T};
 }
 const skinOf=()=>S.opt.skin==='custom'?customSkin():(SKINS.find(s=>s.id===S.opt.skin)||SKINS[0]);
-function setSkin(){els.cookie.innerHTML=cookieSVG(skinOf(),'cg');if(v55Ready){G3D.sig='';g3dAttach();g3dSprites();}}
+function setSkin(){els.cookie.innerHTML=cookieSVG(skinOf(),'cg');if(v55Ready){G3D.sig='';g3dAttach();g3dSpritesLater();}}
 function starAvail(it){return !S.w.star.shop[it.id]&&S.w.star.n>=it.c&&(!it.need||Object.keys(S.w.star.shop).length>=it.need);}
 function buyStar(id){
   const it=STAR_ITEMS.find(x=>x.id===id),s=S.w.star;

@@ -53,7 +53,11 @@ module.exports = async function browserTests(url) {
   const link = (await pool.query("select lb_id from kf_accounts where username = 'alpha_ci'")).rows[0].lb_id;
   check(!!link, 'joining the leaderboard links the spot to the account');
   await a.click('#lbClose');
-  await b.reload(); await b.locator('#startOv [data-lang=en]').click(); await b.click('#stGo'); await b.waitForTimeout(4500);
+  await b.reload(); await b.locator('#startOv [data-lang=en]').click(); await b.waitForTimeout(1500);
+  if (await b.isVisible('#accAskOv')) await b.click('#accYes');
+  await b.click('#stGo'); await b.waitForTimeout(2500);
+  if (await b.isVisible('#accAskOv')) await b.click('#accYes');
+  await b.waitForTimeout(2000);
   check((await pool.query('select count(*)::int n from leaderboard')).rows[0].n === 1, 'the second device uses the same leaderboard spot (no duplicate)');
   const bLb = await b.evaluate(() => { const out = {}; for (const k of Object.keys(localStorage)) { try { const o = JSON.parse(localStorage.getItem(k)); if (o && o.lb) out[k] = o.lb; } catch (e) {} } return out; });
   const cur = bLb[await b.evaluate(() => { const n = +(localStorage.getItem('keksfabrik-slot') || 1); return n === 1 ? 'keksfabrik-save-v1' : 'keksfabrik-save-v1-s' + n; })];
