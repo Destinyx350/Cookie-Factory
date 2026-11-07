@@ -2659,8 +2659,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=45;
+const NEWS_VER=46;
 const NEWS=[
+  {v:46,sum:['Dein Platz in der Bestenliste gehört jetzt zu deinem Konto – auf jedem Gerät.','Your leaderboard spot now belongs to your account – on every device.'],items:[
+    ['new','Mit Konto nimmst du deinen Platz in der Bestenliste auf jedes Gerät mit. Kein doppelter Eintrag mehr.','With an account your leaderboard spot comes with you to every device. No more duplicate entries.'],
+    ['change','Namen in der Bestenliste gibt es jetzt nur einmal.','Each leaderboard name can now only be used once.'],
+    ['change','Mehr Sicherheit für deinen Fortschritt: Der Server macht jede Woche automatisch ein Backup.','More safety for your progress: the server now makes an automatic backup every week.']
+  ]},
   {v:45,sum:['Mehr Sicherheit: Melde-Knopf im Club-Chat, Wortfilter und „Andere Geräte abmelden“.','More security: a report button in club chat, a word filter and “Sign out other devices”.'],items:[
     ['new','Melde unfreundliche Nachrichten im Club-Chat mit ⚑. Der Admin sieht jede Meldung.','Report unkind club chat messages with ⚑. The admin sees every report.'],
     ['new','Konto: „Andere Geräte abmelden“. Wenn du dein Passwort änderst, werden andere Geräte automatisch abgemeldet.','Account: “Sign out other devices”. Changing your password signs out other devices automatically.'],
@@ -8021,7 +8026,7 @@ async function lbRefresh(){
   if(!lbOn()||lbBusy) return;
   lbBusy=true;lbErr=false;renderLb();
   try{
-    lbNote='';try{await lbSubmit();}catch(x){const m=String(x&&x.message||'');if(/too fast|too high|not allowed/.test(m)) lbNote=m;}
+    lbNote='';try{await lbSubmit();}catch(x){const m=String(x&&x.message||'');if(/too fast|too high|not allowed|name taken/.test(m)) lbNote=m;}
     const top=await lbApi('leaderboard?select=name,score,updated_at&order=score.desc,updated_at.asc&limit=50');
     lbTop=Array.isArray(top)?top:[];
     const mine=S.lb.on&&!lbCheat();
@@ -8047,7 +8052,7 @@ function lbJoin(){
   if(!S.name){askName({text:tt('Unter diesem Namen erscheint deine Bäckerei in der Bestenliste.','Your bakery shows up on the leaderboard under this name.')},nm=>{S.name=nm;save();showName();lbJoin();});return;}
   S.lb.on=1;S.lb.t=0;if(!S.lb.id) S.lb.id=lbUUID();save();
   toast(tt('Du bist jetzt in der Bestenliste!','You joined the leaderboard!'),true);
-  lbRefresh();
+  lbRefresh();if(v46Ready&&accTok) setTimeout(()=>lbAccSync(true),2500);
 }
 async function lbLeave(){
   S.lb.on=0;S.lb.ls=0;S.lb.pb=null;save();lbRank=0;lbPerRank={W:0,M:0};
@@ -8131,7 +8136,7 @@ function renderLb(){
     const r=k?lbPerRank[k]:lbRank,v=k?'+'+fmt(lbGain(k)):fmt(lbScore());
     me+='<div class="row"><span><span class="sub" style="display:block">'+escName(S.name||'')+'</span><span class="big">'+(r?tt('Platz ','#')+fmt(r):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+(k?(k==='W'?tt('Diese Woche gebacken','Baked this week'):tt('Diesen Monat gebacken','Baked this month')):tt('Kekse gebacken','Cookies baked'))+'</span><b>'+v+'</b></span></div>';
   }
-  if(lbNote) me+='<p class="lbnote">'+(/not allowed/.test(lbNote)?tt('Dein Bäckerei-Name ist in der Bestenliste nicht erlaubt. Gib deiner Bäckerei unter Einstellungen einen anderen Namen.','Your bakery name isn’t allowed on the leaderboard. Give your bakery a different name in Settings.'):/too high/.test(lbNote)?tt('Dein Punktestand ist für einen neuen Eintrag zu hoch. Melde dich beim Besitzer des Spiels.','Your score is too high for a new entry. Please contact the game’s owner.'):tt('Dein neuer Punktestand wurde nicht gespeichert, weil er schneller gewachsen ist, als das Spiel es erlaubt. Später versucht es das Spiel nochmal.','Your new score wasn’t saved because it grew faster than the game allows. The game will try again later.'))+'</p>';
+  if(lbNote) me+='<p class="lbnote">'+(/name taken/.test(lbNote)?tt('Diesen Bäckerei-Namen hat schon jemand anderes in der Bestenliste. Gib deiner Bäckerei unter Einstellungen einen anderen Namen – oder melde dich mit deinem Konto an, wenn das dein Platz ist.','Someone else already has this bakery name on the leaderboard. Give your bakery another name in Settings – or sign in to your account if that spot is yours.'):/not allowed/.test(lbNote)?tt('Dein Bäckerei-Name ist in der Bestenliste nicht erlaubt. Gib deiner Bäckerei unter Einstellungen einen anderen Namen.','Your bakery name isn’t allowed on the leaderboard. Give your bakery a different name in Settings.'):/too high/.test(lbNote)?tt('Dein Punktestand ist für einen neuen Eintrag zu hoch. Melde dich beim Besitzer des Spiels.','Your score is too high for a new entry. Please contact the game’s owner.'):tt('Dein neuer Punktestand wurde nicht gespeichert, weil er schneller gewachsen ist, als das Spiel es erlaubt. Später versucht es das Spiel nochmal.','Your new score wasn’t saved because it grew faster than the game allows. The game will try again later.'))+'</p>';
   me+='</div>';
   const rows=k?lbPer[k]:lbTop,myRank=k?lbPerRank[k]:lbRank;
   let list;
@@ -8369,7 +8374,7 @@ function accApplySave(t){
   const s=sanitize(o);if(!s.name) s.name=S.name;
   if(s.tamp) setTimeout(tampWarn,400);
   S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;
-  applyLang();rebuildAll();save();slotSig='';return true;
+  applyLang();rebuildAll();save();slotSig='';if(v46Ready) setTimeout(()=>lbAccSync(true),300);return true;
 }
 async function accRefresh(){
   if(!lbOn()){accRender();return;}
@@ -8437,6 +8442,7 @@ function accRender(){
   }
   set$('accT',tt('Konto','Account'));
   if(v44Ready) clubAccChanged();
+  if(v46Ready) lbAccSync(false);
 }
 function set$(id,t){const e=$id(id);if(e&&e.textContent!==t) e.textContent=t;}
 $id('accBox').addEventListener('change',e=>{if(e.target.id==='accShow') $id('accBox').querySelectorAll('input[name=pass]').forEach(i=>{i.type=e.target.checked?'text':'password';});});
@@ -8950,6 +8956,7 @@ async function admSrvLoad(){
   if(!admPass) return;
   try{const [s,c,se,l]=await Promise.all([admMod('stats'),admMod('settings'),admMod('seasons'),admMod('log')]);admStats=s;admCfg=c||{};admSeasons=se||[];admLog=l||[];admSrvErr='';}
   catch(x){admSrvErr=admErrTxt(x);}
+  if(v46Ready) admBkCall('list');
   admSrvRender();
 }
 function admBars(rows){
@@ -8980,6 +8987,7 @@ function admSrvRender(){
     const Se=admSeasons||[],armS=admSrvArm.k==='season'&&Date.now()-admSrvArm.t<5000;
     h+=admCardH('🏛️ '+tt('Saisons','Seasons'),'<p class="small">'+tt('Speichert die Top 10 der Bestenliste als beendete Saison (alle sehen sie in der Bestenliste) und startet sie danach neu.','Saves the leaderboard’s top 10 as a finished season (everyone sees it in the leaderboard), then starts it fresh.')+'</p><form class="coderow" id="admSeasonF" novalidate><input class="namein" name="name" maxlength="40" placeholder="'+tt('Name, z. B. Saison ','Name, e.g. Season ')+(Se.length+1)+'"><button type="submit" class="btn warn'+(armS?' armed':'')+'">'+(armS?tt('Wirklich? Nochmal','Really? Again'):tt('Saison beenden','End season'))+'</button></form>'
       +(Se.length?'<div class="admlbl">'+Se.map(s=>'<div class="admlbr"><span class="rk">🏛️</span><span class="who"><b>'+escName(s.name)+'</b><small>'+(s.top||[]).slice(0,3).map((t,i)=>['🥇','🥈','🥉'][i]+' '+escName(t.name)+' '+fmt(+t.score||0)).join(' · ')+'</small><small>'+admDT(s.archived_at)+'</small></span></div>').join('')+'</div>':''));
+    h+=admCardH('💾 '+tt('Backups','Backups'),admBkHtml());
     const Lg=admLog||[];
     h+=admCardH('📜 '+tt('Admin-Protokoll','Admin log'),'<p class="small">'+tt('Jede Admin-Aktion auf dem Server, die neuesten zuerst.','Every admin action on the server, newest first.')+'</p>'+(Lg.length?'<div class="admlog">'+Lg.map(l=>'<div><small>'+admDT(l.at)+'</small><b>'+escName(l.action)+'</b>'+(l.detail?'<span>'+escName(l.detail)+'</span>':'')+'</div>').join('')+'</div>':'<p class="small">–</p>'));
     h+=admCardH('🔐 '+tt('Server-Sitzung','Server session'),'<p class="small">'+tt('Du bist für 12 Stunden angemeldet.','You’re signed in for 12 hours.')+'</p><div class="btns"><button type="button" class="btn sm" data-sva="logout">'+tt('Server-Werkzeuge sperren','Lock server tools')+'</button></div>');
@@ -9056,6 +9064,66 @@ function lbSeasonsHtml(){
   return '<details class="fold lbhof"><summary>🏛️ '+tt('Ruhmeshalle: frühere Saisons','Hall of fame: past seasons')+'</summary>'+lbSeasons.map(s=>'<p class="lbprev"><b>'+escName(s.name)+'</b>: '+(s.top||[]).slice(0,3).map((t,i)=>['🥇','🥈','🥉'][i]+' '+escName(t.name)).join(' · ')+'</p>').join('')+'</details>';
 }
 v45Ready=true;admModRender();admSrvRender();
+
+/* ======================= V46: Backups und Bestenlisten-Platz im Konto ======================= */
+var v46Ready=false;
+/* Bestenliste: Der Platz gehört zum Konto und kommt auf jedes Gerät mit. */
+var lbAccWho='';
+async function lbAccSync(force){
+  if(!lbOn()||!accTok||!accMe){lbAccWho='';return;}
+  if(!force&&lbAccWho===accMe.username) return;
+  lbAccWho=accMe.username;
+  if(!$id('accAskOv').hidden){lbAccWho='';setTimeout(()=>lbAccSync(false),2500);return;}
+  if(lbCheat()) return;
+  const mine=S.lb.on&&S.lb.id?S.lb.id:null;
+  let r=null;try{r=await lbApi('rpc/acc_lb_link',{p_token:accTok,p_lb:mine});}catch(x){return;}
+  if(!r||!r.lb_id||(r.lb_id===S.lb.id&&S.lb.on)) return;
+  const old=S.lb.on&&S.lb.id&&S.lb.id!==r.lb_id?S.lb.id:null;
+  if(old&&!r.other_taken){try{await lbApi('rpc/leave_leaderboard',{p_id:old});}catch(x){}}
+  S.lb.id=r.lb_id;S.lb.on=1;S.lb.ban=0;S.lb.ls=+r.score||0;S.lb.t=r.updated_at?Date.parse(r.updated_at)||0:0;S.lb.pb=null;
+  save();lbRank=0;lbPerRank={W:0,M:0};lbLast=0;lbRefresh();
+  toast(tt('Dein Platz in der Bestenliste kommt jetzt aus deinem Konto.','Your leaderboard spot now comes from your account.'),true);
+}
+
+/* Admin: Backups */
+var admBk=null,admBkErr='',admBkArm={k:'',t:0},admBkBusy=false;
+async function admBkCall(action,data){
+  if(!admPass||admBkBusy) return null;
+  admBkBusy=true;admBkErr='';admSrvRender();let r=null;
+  try{r=await lbApi('rpc/admin_backup',{p_pass:admPass,p_action:action,p_data:data||null});if(r&&r.backups) admBk=r.backups;}
+  catch(x){admBkErr=lbMissing(x)?tt('Backups brauchen zuerst docs/update-v7.sql in Supabase.','Backups need docs/update-v7.sql in Supabase first.'):/not in this backup/.test(String(x.message))?tt('Diesen Spieler gibt es in diesem Backup nicht.','That player isn’t in this backup.'):admErrTxt(x);r=null;}
+  admBkBusy=false;admBkArm={k:'',t:0};admSrvRender();return r;
+}
+function admBkHtml(){
+  const B=admBk||[],kb=n=>n>1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
+  const armR=admBkArm.k==='restore'&&Date.now()-admBkArm.t<5000;
+  return '<p class="small">'+tt('Einmal pro Woche macht der Server automatisch ein Backup von Konten, Spielständen, Clubs, Bestenliste und Codes. Die letzten 6 automatischen und 6 eigenen bleiben. Lade ab und zu eins herunter, dann hast du auch eine Kopie außerhalb von Supabase.','Once a week the server automatically backs up accounts, saves, clubs, the leaderboard and codes. The last 6 automatic and 6 manual ones are kept. Download one now and then so you also have a copy outside Supabase.')+'</p>'
+    +'<div class="btns"><button type="button" class="btn sm primary" data-bka="make"'+(admBkBusy?' disabled':'')+'>'+(admBkBusy?tt('Moment …','One moment …'):tt('Jetzt Backup machen','Back up now'))+'</button></div>'
+    +(B.length?'<div class="admlbl">'+B.map(b=>'<div class="admlbr"><span class="rk">'+(b.kind==='auto'?'🗓️':'💾')+'</span><span class="who"><b>'+admDT(b.at)+' · '+(b.kind==='auto'?tt('automatisch','automatic'):tt('von dir','manual'))+'</b><small>'+kb(+b.size||0)+' · '+(b.counts&&b.counts.kf_accounts!=null?b.counts.kf_accounts+tt(' Konten',' accounts')+' · ':'')+(b.counts&&b.counts.leaderboard!=null?b.counts.leaderboard+tt(' in der Bestenliste',' on the leaderboard'):'')+'</small></span><span class="btns"><button type="button" class="btn sm" data-bka="get:'+b.id+'">'+tt('Herunterladen','Download')+'</button></span></div>').join('')+'</div>'
+      +'<details class="fold"><summary>'+tt('Konto eines Spielers wiederherstellen','Restore a player’s account')+'</summary><p class="small">'+tt('Setzt den Spielstand des Kontos auf den Stand im Backup zurück. Ein gelöschtes Konto kommt mit seinem alten Passwort zurück.','Puts the account’s save back to how it was in the backup. A deleted account comes back with its old password.')+'</p><form class="admform" id="admBkRF" novalidate><label class="small">Backup<select class="namein" name="id">'+B.map(b=>'<option value="'+b.id+'">'+admDT(b.at)+'</option>').join('')+'</select></label><label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="user" maxlength="16" autocapitalize="off" spellcheck="false"></label><button type="submit" class="btn warn'+(armR?' armed':'')+'">'+(armR?tt('Wirklich? Nochmal','Really? Again'):tt('Wiederherstellen','Restore'))+'</button></form></details>'
+      :(admBk?'<p class="small">'+tt('Noch kein Backup.','No backup yet.')+'</p>':''))
+    +(admBkErr?'<p class="nameerr">'+admBkErr+'</p>':'');
+}
+els.admin.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-bka]');if(!b) return;
+  const [a,id]=b.dataset.bka.split(':');
+  if(a==='make'){const r=await admBkCall('make');if(r) toast(tt('Backup gespeichert.','Backup saved.'));return;}
+  if(a==='get'){
+    const r=await admBkCall('get',{id});if(!r) return;
+    const blob=new Blob([JSON.stringify(r)],{type:'application/json'}),url=URL.createObjectURL(blob),el=document.createElement('a');
+    el.href=url;el.download='keksfabrik-backup-'+String(r.at||'').slice(0,10)+'-'+r.id+'.json';document.body.appendChild(el);el.click();el.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+    toast(tt('Backup heruntergeladen. Bewahre die Datei sicher auf: Sie enthält alle Spielstände.','Backup downloaded. Keep the file safe: it contains every save.'),true);admBkCall('list');
+  }
+});
+els.admin.addEventListener('submit',async e=>{
+  const f=e.target;if(f.getAttribute('id')!=='admBkRF') return;
+  e.preventDefault();const d=Object.fromEntries(new FormData(f).entries());
+  if(!/^[A-Za-z0-9_]{3,16}$/.test(String(d.user||'').trim())){admBkErr=tt('Gib den Benutzernamen des Kontos ein.','Enter the account username.');admSrvRender();return;}
+  if(!(admBkArm.k==='restore'&&Date.now()-admBkArm.t<5000)){admBkArm={k:'restore',t:Date.now()};admSrvRender();return;}
+  const r=await admBkCall('restore_account',{id:d.id,user:String(d.user).trim()});
+  if(r&&r.restored) toast(tt('Konto wiederhergestellt. Der Spieler lädt es beim nächsten Anmelden.','Account restored. The player gets it the next time they sign in.'),true);
+});
+v46Ready=true;
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};

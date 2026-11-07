@@ -1,0 +1,50 @@
+name: Tests
+
+# Runs the whole test suite (database rules + the real game in Chromium) on every pull request
+# and on every push to main. A pull request is only merged when this is green.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: localhost
+      PGPORT: "5432"
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: kfci
+      TEST_ADMIN_PASS: ci-only-test-password
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check that the game script parses
+        run: |
+          node -e "const s=require('fs').readFileSync('index.html','utf8');const re=/<script(?![^>]*src)[^>]*>([\s\S]*?)<\/script>/g;let m;while((m=re.exec(s))) new Function(m[1]);console.log('index.html script parses');"
+      - name: Build the test database
+        run: bash tests/setup-db.sh
+      - name: Install test tools
+        working-directory: tests
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Run tests
+        working-directory: tests
+        run: node run.js
