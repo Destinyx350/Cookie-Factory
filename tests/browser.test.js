@@ -7,8 +7,8 @@ const PHONE = { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch:
 
 module.exports = async function browserTests(url) {
   console.log('\nBrowser');
-  await pool.query("delete from kf_backups; delete from kf_accounts; delete from kf_clubs; delete from leaderboard; delete from lb_period; delete from kf_rate; delete from kf_admin_fails; delete from kf_reports; delete from kf_mail; delete from kf_news; delete from kf_events; update kf_config set v = '{\"on\":false,\"de\":\"\",\"en\":\"\"}' where k = 'maint'");
-  const browser = await chromium.launch();
+  await pool.query("delete from kf_backups; delete from kf_accounts; delete from kf_clubs; delete from leaderboard; delete from lb_period; delete from kf_rate; delete from kf_admin_fails; delete from kf_reports; delete from kf_mail; delete from kf_news; delete from kf_events; delete from kf_errors; delete from kf_steps; delete from kf_days; update kf_config set v = '{\"on\":false,\"de\":\"\",\"en\":\"\"}' where k = 'maint'");
+  const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
   const errors = [];
   async function device(name, ip, opts = {}, admin = false) {
     const ctx = await browser.newContext(Object.assign({ viewport: { width: 1280, height: 820 }, extraHTTPHeaders: { 'x-test-ip': ip }, acceptDownloads: true }, opts));
@@ -160,6 +160,54 @@ module.exports = async function browserTests(url) {
   await settings(a, 'disp');
   check(await a.isVisible('#pushBtn') && /Push/.test(await text(a, '#pushT')), 'push notification switch shows in Settings → Display');
   await a.click('#setClose');
+
+  // 5e. Crash reports, player journey, chat reactions and pin, comeback gift, portal version (v51)
+  await a.waitForTimeout(16000);
+  check((await pool.query("select count(*)::int n from kf_steps where step = 'open'")).rows[0].n >= 3, 'journey: every new player counts as "opened the game"');
+  check((await pool.query("select count(*)::int n from kf_steps where step in ('acc', 'club')")).rows[0].n >= 2, 'journey: account and club steps are counted');
+  await c.evaluate(() => setTimeout(() => { throw new Error('ci crash test'); }, 0)); await c.waitForTimeout(2000);
+  for (let i = errors.length - 1; i >= 0; i--) if (/ci crash test/.test(errors[i])) errors.splice(i, 1);
+  check((await pool.query("select count(*)::int n from kf_errors where msg like '%ci crash test%'")).rows[0].n === 1, 'a crash in the game is reported to the server');
+  await c.evaluate(() => { const b = document.getElementById('errBox'); if (b) b.remove(); });
+  await a.click('#clubBar'); await a.click('#clubBody [data-clt=mine]'); await a.waitForSelector('[data-cr=wave]', { timeout: 8000 });
+  await a.click('[data-cr=wave]'); await a.waitForTimeout(1000);
+  check((await pool.query("select count(*)::int n from kf_club_msgs where body = '👋'")).rows[0].n === 1, 'chat: the 👋 button waves to the club');
+  await c.click('#clubBar'); await c.click('#clubBody [data-clt=mine]'); await c.waitForSelector('[data-cr^="pick:"]', { timeout: 8000 });
+  await c.locator('[data-cr^="pick:"]').last().click(); await c.locator('.cpick button').first().click(); await c.waitForTimeout(1000);
+  check((await pool.query('select count(*)::int n from kf_club_reacts')).rows[0].n === 1, 'chat: a member reacts to a message');
+  check(await c.isVisible('.cre.mine'), 'chat: your own reaction is highlighted');
+  check(!(await c.isVisible('[data-cr^="pin:"]')), 'chat: only the leader sees the pin button');
+  await a.click('[data-cl=refresh]'); await a.waitForSelector('[data-cr^="pin:"]', { timeout: 8000 });
+  await a.locator('[data-cr^="pin:"]').last().click(); await a.waitForSelector('.cpin', { timeout: 8000 }).catch(() => {});
+  check(await a.isVisible('.cpin') && /👋/.test(await text(a, '.cpin')), 'chat: the leader pins a message');
+  await a.click('[data-cr=unpin]'); await a.waitForTimeout(1000);
+  check(!(await a.isVisible('.cpin')), 'chat: the leader unpins it again');
+  await a.click('#clubClose'); await c.click('#clubClose');
+  await d.evaluate(() => document.querySelector('[data-sva=reload]').click()); await d.waitForSelector('[data-ina^="done:"]', { state: 'attached', timeout: 10000 }).catch(() => {});
+  check(/ci crash test/.test(await text(d, '#admSrv')), 'admin sees the crash report');
+  check(/Player journey/.test(await text(d, '#admSrv')) && await d.evaluate(() => !!document.querySelector('#admSrv .admfun')), 'admin sees the player journey');
+  await d.evaluate(() => document.querySelector('[data-ina^="done:"]').click()); await d.waitForTimeout(1200);
+  check((await pool.query('select count(*)::int n from kf_errors')).rows[0].n === 0, 'admin marks a crash as fixed');
+  // Comeback gift: play, close, come back 4 days later
+  const g = await device('Comeback Bakery', '10.0.0.6');
+  await g.waitForTimeout(1500); const gctx = g.context(); await g.close();
+  const g2 = await gctx.newPage(); g2.on('pageerror', x => errors.push('comeback: ' + x.message));
+  await g2.clock.install({ time: new Date(Date.now() + 4 * 86400000) });
+  await g2.goto(url); await g2.addStyleTag({ content: '#introOv{display:none!important}' });
+  if (await g2.isVisible('#stGo')) await g2.click('#stGo');
+  await g2.waitForSelector('#awayOv:not([hidden])', { timeout: 8000 }).catch(() => {});
+  check(/Welcome-back gift/.test(await text(g2, '#awayBody')), 'players coming back after 3+ days get a welcome-back gift');
+  await gctx.close();
+  // Portal version
+  require('child_process').execFileSync(process.execPath, [path.join(ROOT, 'tools/portal.js')]);
+  const pctx = await browser.newContext({ viewport: { width: 1280, height: 820 } });
+  await pctx.route(LB + '/**', handle); await pctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+  const pp = await pctx.newPage(); pp.on('pageerror', x => errors.push('portal: ' + x.message));
+  await pp.goto(url + 'dist/portal/'); await pp.waitForTimeout(2500);
+  check(await pp.evaluate(() => window.KF_PORTAL === 1 && !document.querySelector('link[rel=manifest]')), 'portal version: built with the portal flag and no app manifest');
+  check(await pp.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length === 0), 'portal version: no offline service worker');
+  check(await pp.evaluate(() => document.getElementById('appT').parentElement.hidden), 'portal version: the app install section is hidden');
+  await pctx.close();
 
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {

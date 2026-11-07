@@ -1,0 +1,28 @@
+name: Portal package
+
+# Builds the zip for game portals (itch.io, CrazyGames, GameDistribution, Newgrounds) on every push to main.
+# Download "cookie-factory-portal" from the workflow run's Artifacts section: that zip is the upload file. Steps and store texts: docs/PORTALS.md
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  portal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build the portal version
+        run: node tools/portal.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cookie-factory-portal
+          path: dist/portal/
+          retention-days: 90

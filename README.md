@@ -35,7 +35,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🧑‍🍳 **Helpers** | Helpers buy buildings, harvest, fight or trade, and level up with experience. |
 | 🌍 **World** | Adventure, stores, a lucky wheel, titles, a pass and a collection to complete. |
 | 🏆 **192 achievements** | Plus guided *First Steps* goals and detailed statistics. |
-| 📅 **Daily rewards** | A 7-day login streak and three daily tasks with a bonus chest. |
+| 📅 **Daily rewards** | A 7-day login streak and three daily tasks with a bonus chest. Coming back after 3+ days brings a welcome-back gift. |
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
 | ☀️ **Living world** | Time of day and weather change while you play. Combos and boosts speed things up. |
 | 💾 **Named saves** | Progress saves automatically in 3 save slots. Every new game gets a name, which shows at the top of the screen. |
@@ -44,18 +44,18 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
 | 📐 **Fits every device** | A clean, modern design with separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. Options for high contrast, less motion and bigger text. |
 | 👤 **Accounts** | Create an account with a username and password (no email needed). Your bakery is saved to it automatically, so you can keep playing on any device. Sign out other devices at any time. |
-| 👥 **Bakery clubs** | Start or join a club of up to 30 bakers, chat with your club, and bake together for weekly prizes for the top 3 clubs. |
+| 👥 **Bakery clubs** | Start or join a club of up to 30 bakers, chat with your club (with reactions, a 👋 button and a pinned message), and bake together for weekly prizes for the top 3 clubs. |
 | 🎁 **Gifts** | Send gems or star crumbs to friends with an account (daily limits keep it fair). |
 | 🤝 **Friends and profiles** | Add friends, see who's online, and tap any name to see that player's profile. |
 | ⚔️ **Club wars** | Every weekend your club faces a club of similar strength. Winners collect trophies and gems. |
 | 💌 **Invites** | Share your invite link; when a friend starts playing through it, you both get a bonus. |
 | 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter, server codes, and a transfer code to move your save to another device. |
-| 🔔 **Push notifications** | Get notified about gifts, friend requests, club prizes and events, even when the game is closed. |
+| 🔔 **Push notifications** | Get notified about gifts, friend requests, club prizes and events, even when the game is closed, and get a reminder after 3 days away. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. Shared links show a preview card. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
 | 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
-| 🔒 **Protected admin panel** | The admin panel needs a password, and the online tools have a second password with a lockout after wrong tries. The admin can moderate reports, find players, mute, rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, and download backups (made automatically every week). |
+| 🔒 **Protected admin panel** | The admin panel needs a password, and the online tools have a second password with a lockout after wrong tries. The admin can moderate reports, find players, mute, rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and see how far new players get (day 2 and day 7 return rates). |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
 ### 🕹️ How to play
@@ -78,7 +78,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🧑‍🍳 **Helfer**, die kaufen, ernten, kämpfen oder handeln und dabei aufsteigen
 - 🌍 **Welt** mit Abenteuer, Läden, Glücksrad, Titeln, Pass und Sammlung
 - 🏆 **192 Erfolge**, Ziele und Statistiken
-- 📅 **Tägliche Belohnungen**: 7-Tage-Serie und drei Tagesaufgaben
+- 📅 **Tägliche Belohnungen**: 7-Tage-Serie, drei Tagesaufgaben und ein Willkommensgeschenk nach 3+ Tagen Pause
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
 - 💾 **Spielstände mit Namen**: 3 Speicherplätze, jedes neue Spiel bekommt einen Namen
 - 🎁 **Geheime Codes** unter **Einstellungen → Spiel**: Kekse, Edelsteine oder ein Schub, einmal pro Spielstand
@@ -86,18 +86,18 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
 - 📐 **Passt auf jedes Gerät**: klares, modernes Design mit eigenen Layouts für Handy (hochkant und quer), Tablet und Computer; dazu hoher Kontrast, weniger Bewegung und größere Schrift
 - 👤 **Konten**: Benutzername und Passwort (ohne E-Mail), deine Bäckerei auf jedem Gerät
-- 👥 **Bäckerei-Clubs** mit bis zu 30 Mitgliedern, Club-Chat und Wochenpreisen für die Top 3
+- 👥 **Bäckerei-Clubs** mit bis zu 30 Mitgliedern, Club-Chat mit Reaktionen und angehefteter Nachricht, und Wochenpreisen für die Top 3
 - 🎁 **Geschenke**: Edelsteine oder Sternenkrümel an Freunde mit Konto schicken
 - 🤝 **Freunde und Profile**: sieh, wer online ist, und tippe auf Namen für das Profil
 - ⚔️ **Clubkriege** jedes Wochenende mit Trophäen und Edelsteinen
 - 💌 **Einladungen**: Wer über deinen Link anfängt, bringt euch beiden einen Bonus
 - 🌍 **Online-Funktionen**: globale Events, Ankündigungen, Live-Zähler, Server-Codes und ein Transfer-Code fürs andere Gerät
-- 🔔 **Push-Benachrichtigungen** für Geschenke, Freundschaftsanfragen, Club-Preise und Events
+- 🔔 **Push-Benachrichtigungen** für Geschenke, Freundschaftsanfragen, Club-Preise, Events und eine Erinnerung nach 3 Tagen Pause
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit; Wochen- und Monatspreise für die Top 3, Updates jede Minute
 - 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, und die Bestenliste lehnt zu schnell wachsende Punkte ab; dazu Wortfilter, Melde-Knopf im Club-Chat und Limits pro Gerät
-- 🔒 **Admin-Panel mit Passwort** und eigenem Server-Passwort für die Online-Werkzeuge: Meldungen, Spielersuche, Stummschalten, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll und Saisons
+- 🔒 **Admin-Panel mit Passwort** und eigenem Server-Passwort für die Online-Werkzeuge: Meldungen, Spielersuche, Stummschalten, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte und Spieler-Weg
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
 **[▶ Jetzt spielen](https://destinyx350.github.io/Cookie-Factory/)**
@@ -106,17 +106,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 50
-- **Changed:** Push notifications get their key from the server, which makes them simpler and safer to set up. If it says "being set up" the first time, try again a minute later.
-
-Also new since version 49: three late-game buildings (Constellation Bakery, Quantum Patisserie, Cookie Singularity), 17 achievements and push notifications under **Settings → Display**.
+### Version 51
+- **New:** Welcome-back gift. Come back after 3 or more days and get up to 50 gems plus 30 minutes of cookies. With push notifications on, the game reminds you.
+- **New:** Club chat reactions (👍 ❤️ 😂 🎉 🍪), a 👋 wave button, and the club leader can pin a message to the top.
+- **Changed:** Errors in the game are reported automatically and anonymously, so they get fixed faster.
+- **Changed:** The game can also run on game sites like itch.io.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Geändert:** Push-Benachrichtigungen holen ihren Schlüssel vom Server; das macht die Einrichtung einfacher und sicherer. Wenn es beim ersten Mal „wird eingerichtet" heißt, versuch es eine Minute später nochmal.
-
-Außerdem neu seit Version 49: drei Gebäude fürs späte Spiel (Sternbild-Bäckerei, Quanten-Konditorei, Keks-Singularität), 17 Erfolge und Push-Benachrichtigungen unter **Einstellungen → Anzeige**.
+- **Neu:** Willkommensgeschenk. Wer nach 3 oder mehr Tagen zurückkommt, bekommt bis zu 50 Edelsteine und 30 Minuten Kekse. Mit Push-Benachrichtigungen erinnert dich das Spiel daran.
+- **Neu:** Reaktionen im Club-Chat (👍 ❤️ 😂 🎉 🍪), ein 👋-Knopf zum Winken, und der Club-Chef kann eine Nachricht oben anheften.
+- **Geändert:** Fehler im Spiel werden automatisch und anonym gemeldet, damit sie schneller behoben werden.
+- **Geändert:** Das Spiel läuft jetzt auch auf Spieleseiten wie itch.io.
 
 </details>
 
@@ -133,6 +135,8 @@ python3 -m http.server 8000
 ```
 
 Then open http://localhost:8000.
+
+For game portals (itch.io, CrazyGames, …) `node tools/portal.js` builds an upload folder in `dist/portal/`. GitHub also builds it as a download after every update; see [docs/PORTALS.md](docs/PORTALS.md) for the steps and store texts.
 
 Automatic tests run on every change; see [tests/README.md](tests/README.md).
 

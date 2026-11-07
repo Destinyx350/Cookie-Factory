@@ -103,7 +103,7 @@ function updApp(){
 }
 $id('installBtn').addEventListener('click',doInstall);
 $id('appState').addEventListener('click',e=>{if(e.target.closest('#appInstall')) doInstall();});
-if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
+if(!window.KF_PORTAL&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
 }
 

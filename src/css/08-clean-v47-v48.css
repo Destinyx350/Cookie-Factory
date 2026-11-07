@@ -168,3 +168,30 @@
 
 /* Telefon: Reiterleiste ruhiger */
 :root[data-device="phone"][data-look] .tabs{border-top:1px solid var(--edge);box-shadow:0 -8px 24px rgba(0,0,0,.25)}
+/* V51: Chat-Reaktionen, angeheftete Nachricht, Winken; Admin-Spielerweg und Absturzberichte */
+.creact{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.cre{border:1px solid var(--edge);background:transparent;color:inherit;border-radius:999px;padding:1px 7px;font:inherit;font-size:12px;line-height:1.5;cursor:pointer;min-height:24px}
+.cre b{font-weight:600;font-size:11px}
+.cre.mine{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,transparent)}
+.cre.add{opacity:.55}
+.cre.add:hover,.cre.add:focus-visible{opacity:1}
+.cpick{display:flex;gap:4px;margin-top:4px;padding:4px;border:1px solid var(--edge);border-radius:999px;background:var(--panel);width:max-content;max-width:100%;box-shadow:var(--soft)}
+.cpick button{border:0;background:transparent;font-size:18px;line-height:1;padding:4px 6px;border-radius:999px;cursor:pointer}
+.cpick button:hover,.cpick button:focus-visible{background:var(--panel-2)}
+.cpin{display:flex;gap:8px;align-items:flex-start;margin:0 0 8px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:var(--r-md,12px);background:color-mix(in srgb,var(--accent) 10%,var(--panel-2))}
+.cpin>span:nth-child(2){flex:1;min-width:0;overflow-wrap:anywhere}
+.cpin small{display:block;color:var(--muted);font-size:11px}
+.crx{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 4px}
+#clubPostF .wave{flex:0 0 auto;padding-inline:12px}
+.admfun{display:grid;gap:5px;margin:10px 0}
+.admfun div{display:grid;grid-template-columns:minmax(0,10em) 1fr auto;gap:8px;align-items:center;font-size:13px}
+.admfun i{display:block;height:10px;border-radius:999px;background:var(--panel-2);position:relative;overflow:hidden}
+.admfun i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--accent);border-radius:inherit}
+.admfun b{font-weight:600;white-space:nowrap}
+.admfun small{color:var(--muted);font-weight:400}
+.admerrs{display:grid;gap:6px;margin:8px 0}
+.admerrs details{text-align:left}
+.admerrs summary{display:list-item;text-align:left;overflow-wrap:anywhere;cursor:pointer}
+.admerrs summary small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.admerrs pre{white-space:pre-wrap;font:11px/1.4 ui-monospace,monospace;max-height:180px;overflow:auto;background:rgba(0,0,0,.18);padding:8px;border-radius:8px}
+:root[data-device="phone"] .admfun div{grid-template-columns:minmax(0,8em) 1fr auto}

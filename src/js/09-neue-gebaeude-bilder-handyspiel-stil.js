@@ -44,8 +44,15 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=50;
+const NEWS_VER=51;
 const NEWS=[
+  {v:51,sum:['Neu: Willkommensgeschenk, Reaktionen und angeheftete Nachrichten im Club-Chat!','New: a welcome-back gift, plus reactions and pinned messages in club chat!'],items:[
+    ['new','Willkommensgeschenk: Wer nach 3 oder mehr Tagen zurückkommt, bekommt Edelsteine (bis zu 50) und 30 Minuten Kekse geschenkt.','Welcome-back gift: come back after 3 or more days and get up to 50 gems and 30 minutes of cookies.'],
+    ['new','Club-Chat: Reagiere mit 👍 ❤️ 😂 🎉 🍪 auf Nachrichten, wink deinem Club mit 👋 zu, und der Club-Chef kann eine Nachricht oben anheften.','Club chat: react to messages with 👍 ❤️ 😂 🎉 🍪, wave to your club with 👋, and the club leader can pin a message to the top.'],
+    ['new','Mit Push-Benachrichtigungen erinnert dich das Spiel nach 3 Tagen Pause an dein Geschenk.','With push notifications on, the game reminds you about your gift after 3 days away.'],
+    ['change','Fehler im Spiel werden jetzt automatisch und anonym gemeldet, damit sie schneller behoben werden.','Errors in the game are now reported automatically and anonymously, so they get fixed faster.'],
+    ['change','Das Spiel kann jetzt auch auf Spieleseiten wie itch.io laufen.','The game can now also run on game sites like itch.io.']
+  ]},
   {v:50,sum:['Push-Benachrichtigungen sind jetzt einfacher und sicherer eingerichtet.','Push notifications are now simpler and safer to set up.'],items:[
     ['change','Push-Benachrichtigungen holen ihren Schlüssel jetzt vom Server. Wenn es beim ersten Mal „wird eingerichtet“ heißt, versuch es eine Minute später nochmal.','Push notifications now get their key from the server. If it says “being set up” the first time, try again a minute later.']
   ]},

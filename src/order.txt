@@ -52,6 +52,7 @@ src/js/40-v46-backups-und-bestenlisten-platz-im-ko.js
 src/js/41-v47-aufgeraeumte-einstellungen.js
 src/js/42-v48-profile-freunde-clubkriege-einladung.js
 src/js/43-v49-push-benachrichtigungen.js
+src/js/43b-v51-absturz-weg-chat.js
 src/js/44-v40-admin-bestenliste-verwalten.js
 src/js/45-v40-shop-navigation-welt-uebergaenge.js
 src/js/46-v39-geraet-layout.js

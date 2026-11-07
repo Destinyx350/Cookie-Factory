@@ -180,4 +180,38 @@ module.exports = async function sqlTests() {
   check(bc.length === 1 && bc[0].subs.length >= 1, 'a new global event notifies every device');
   await rpc('push_gone', { p_secret: 'test-secret', p_endpoints: [sub.endpoint] });
   check((await q('select count(*)::int n from kf_push_subs')).rows[0].n === 0, 'dead devices are removed');
+
+  // Crash reports, player journey, comeback reminders, chat extras (v51)
+  await rpc('kf_report_error', { p_msg: 'TypeError: x is undefined', p_stack: 'at foo (index.html:1:2)', p_src: 'index.html:1', p_ver: 51, p_ua: 'Test' }, '6.6.6.1');
+  await rpc('kf_report_error', { p_msg: 'TypeError: x is undefined', p_stack: '', p_src: 'index.html:1', p_ver: 51, p_ua: 'Test' }, '6.6.6.1');
+  const errs = await rpc('admin_insights', { p_pass: tok, p_action: 'errors' });
+  check(errs.length === 1 && errs[0].count === 2 && /foo/.test(errs[0].stack), 'crash reports are grouped and counted', errs);
+  await expectError(asAnon('select * from public.kf_errors'), /permission denied/, 'players cannot read crash reports');
+  check((await rpc('admin_insights', { p_pass: tok, p_action: 'error_done', p_data: { fp: errs[0].fp } })).length === 0, 'admin marks a crash as fixed');
+  const pid = '33333333-3333-3333-3333-333333333333';
+  await rpc('kf_ping', { p_id: pid, p_baked: 10 });
+  for (const st of ['open', 'build1', 'build1', 'nonsense']) await rpc('kf_track', { p_id: pid, p_step: st });
+  check((await q('select count(*)::int n from kf_steps where id = $1', [pid])).rows[0].n === 2, 'journey steps are stored once and only known steps');
+  await q("update kf_presence set first_seen = now() - interval '9 days' where id = $1", [pid]);
+  await q("insert into kf_days (id, day) values ($1, current_date - 1) on conflict do nothing", [pid]);
+  const j = await rpc('admin_insights', { p_pass: tok, p_action: 'journey' });
+  check(j.steps.open >= 1 && j.cohort >= 1 && j.back1 >= 1 && j.back7 >= 1 && j.daily.length === 14, 'admin sees the player journey and who came back', j);
+  await q("update kf_accounts set save_at = now() - interval '5 days', last_login = now() - interval '5 days', reminded_at = null where username = 'test_beta'");
+  await rpc('push_subscribe', { p_token: b.token, p_sub: { endpoint: 'https://push.example.com/back', keys: { p256dh: 'x', auth: 'y' } } });
+  await q('delete from kf_push_queue');
+  check((await rpc('kf_reminders', {})).sent >= 1, 'players away for 3+ days get a comeback reminder');
+  check((await rpc('kf_reminders', {})).sent === 0, 'only one reminder per absence');
+  check((await q("select count(*)::int n from kf_push_queue where t_en like '%misses you%'")).rows[0].n >= 1, 'the reminder is queued as a push');
+  // chat: reactions and pin
+  const own = await rpc('club_mine', { p_token: c2.token });
+  const posted = await rpc('club_post', { p_token: c2.token, p_body: 'hello war club' });
+  const mid2 = posted.msgs[posted.msgs.length - 1].id;
+  const r1 = await rpc('club_react', { p_token: c2.token, p_msg: mid2, p_emoji: '🎉' });
+  check(r1.msgs.find(m => m.id === mid2).reacts[0].n === 1 && r1.msgs.find(m => m.id === mid2).reacts[0].mine, 'react to a chat message');
+  const r2 = await rpc('club_react', { p_token: c2.token, p_msg: mid2, p_emoji: '🎉' });
+  check(r2.msgs.find(m => m.id === mid2).reacts.length === 0, 'tapping the same reaction again removes it');
+  await expectError(rpc('club_react', { p_token: c2.token, p_msg: mid2, p_emoji: '💩' }), /invalid emoji/, 'only the 5 reaction emojis are allowed');
+  check((await rpc('club_pin', { p_token: c2.token, p_msg: mid2 })).pinned.body === 'hello war club', 'the club leader pins a message');
+  check((await rpc('club_pin', { p_token: c2.token, p_msg: null })).pinned === null, 'and can unpin it');
+  check(!!own.club, 'club page still loads');
 };

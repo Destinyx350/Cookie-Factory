@@ -22,4 +22,6 @@ PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres bash tests/setup-db.sh
 cd tests && PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres node run.js
 ```
 
+If your PostgreSQL listens on another port, also set `PGPORT` (the tests otherwise try 5433). If Playwright can't find its browser, point `PW_CHROMIUM` at a Chromium binary.
+
 `node run.js sql` or `node run.js browser` runs only one part. The test database uses its own test admin password, never the real one.
