@@ -82,6 +82,13 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Client is the `V43` block. The session token lives in `localStorage['keksfabrik-session']`, never in the save. Account saves use the sealed save text. Auto-save every 5 minutes and on `pagehide` (keepalive).
 - Never name a form field `id`: `form.id` then returns that field instead of the form's id (use `getAttribute('id')`).
 
+## Clubs and gifts (version 44)
+
+- Server side is `docs/clubs-v5.sql` (needs `leaderboard-v2.sql` and `accounts-v4.sql`): `kf_clubs`, `kf_club_members` (one club per account, max 30, an `after delete` trigger hands the club to the longest member or removes an empty club), `kf_club_msgs` (1 per 3 s, last 200 kept), `kf_club_week` (weekly gain per account and club), `kf_club_rewards` (top 3 clubs, recorded lazily by `club_close_weeks()`), `kf_gifts`.
+- Club gain is counted in `acc_save` (it replaces the v4 version): only cookies above the account's highest saved total (`kf_accounts.club_hw`) count, capped at 10^(12 × hours since the last save, max 1 h). Admin-used or flagged saves send 0.
+- Gift limits: a sender 50 gems, 5 star crumbs and 10 gifts per UTC day; a receiver 60 gems and 6 star crumbs. The client takes the gift from the sender's save after `gift_send` succeeds, and gifting is blocked when `lbCheat()`.
+- Client is the `V44` block. `social_claim` (every 2 minutes and when the club dialog opens) hands out gifts and club prizes once; prizes are in `CLUB_PRIZE`. Admin tools: `admin_clubs` (list, delete a club, delete a chat message), shown in the admin Online tab.
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass. After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

@@ -44,6 +44,8 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
 | 📐 **Fits every device** | Separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. |
 | 👤 **Accounts** | Create an account with a username and password (no email needed). Your bakery is saved to it automatically, so you can keep playing on any device. |
+| 👥 **Bakery clubs** | Start or join a club of up to 30 bakers, chat with your club, and bake together for weekly prizes for the top 3 clubs. |
+| 🎁 **Gifts** | Send gems or star crumbs to friends with an account (daily limits keep it fair). |
 | 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter, server codes, and a transfer code to move your save to another device. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
@@ -80,6 +82,8 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
 - 📐 **Passt auf jedes Gerät**: eigene Layouts für Handy (hochkant und quer), Tablet und Computer
 - 👤 **Konten**: Benutzername und Passwort (ohne E-Mail), deine Bäckerei auf jedem Gerät
+- 👥 **Bäckerei-Clubs** mit bis zu 30 Mitgliedern, Club-Chat und Wochenpreisen für die Top 3
+- 🎁 **Geschenke**: Edelsteine oder Sternenkrümel an Freunde mit Konto schicken
 - 🌍 **Online-Funktionen**: globale Events, Ankündigungen, Live-Zähler, Server-Codes und ein Transfer-Code fürs andere Gerät
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
@@ -94,17 +98,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 43
-- **New:** Accounts! Under **Settings → Saving**, create an account with a username and password (no email needed). Your bakery is saved to your account automatically.
-- **New:** Sign in on another device to keep playing the same bakery. If both have a save, you choose which one to keep.
-- **New:** Change your password or delete your account at any time.
+### Version 44
+- **New:** Bakery clubs! Open the **Goals** tab and tap **Bakery clubs** to start a club or join one. Up to 30 members, with a club chat.
+- **New:** Weekly club prizes: the 3 clubs that bake the most cookies in a week win gems and cookies for every member who helped.
+- **New:** Gifts: send gems or star crumbs to other players. They get them the next time they play.
+- Clubs and gifts need an account (**Settings → Saving**).
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Konten! Unter **Einstellungen → Speichern** erstellst du ein Konto mit Benutzername und Passwort (keine E-Mail nötig). Deine Bäckerei wird automatisch im Konto gespeichert.
-- **Neu:** Melde dich auf einem anderen Gerät an und spiel dieselbe Bäckerei weiter. Gibt es zwei Spielstände, entscheidest du, welcher bleibt.
-- **Neu:** Passwort ändern oder Konto löschen – jederzeit.
+- **Neu:** Bäckerei-Clubs! Öffne den Tab **Ziele** und tippe auf **Bäckerei-Clubs**, um einen Club zu gründen oder einem beizutreten. Bis zu 30 Mitglieder, mit Club-Chat.
+- **Neu:** Wöchentliche Club-Preise: Die 3 Clubs, die in einer Woche die meisten Kekse backen, gewinnen Edelsteine und Kekse für jedes Mitglied, das mitgebacken hat.
+- **Neu:** Geschenke: Schicke anderen Spielern Edelsteine oder Sternenkrümel. Sie bekommen sie beim nächsten Spielen.
+- Clubs und Geschenke brauchen ein Konto (**Einstellungen → Speichern**).
 
 </details>
 
