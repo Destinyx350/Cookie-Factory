@@ -3,20 +3,26 @@
 var ADM_TOK='keksfabrik-admtok';
 try{const o=JSON.parse(sessionStorage.getItem(ADM_TOK)||'null');if(o&&o.t&&o.e>Date.now()+60000&&admOK) admPass=o.t;}catch(x){}
 function admSrvDrop(){admPass='';try{sessionStorage.removeItem(ADM_TOK);}catch(x){}}
-var admSrvBusy=false;
+var admSrvBusy=false,admNeedCode=false,admPwHold='';
 async function admSrvLogin(pw,where){
   if(admSrvBusy) return;
+  /* Zwei-Schritt-Anmeldung: Im zweiten Schritt ist die Eingabe der 6-stellige Code. */
+  let code=null;if(admNeedCode){code=String(pw).replace(/\s/g,'');pw=admPwHold;}
   const fail=m=>{if(where==='lb'){admLbErr=m;admLbRender();}else if(where==='on'){admOnErr=m;admOnRender();}else{admModErr=m;admModRender();admSrvRender();}};
   admSrvBusy=true;let r=null;
-  try{r=await lbApi('rpc/admin_login',{p_pass:pw});}
+  try{r=await lbApi('rpc/admin_login',code?{p_pass:pw,p_code:code}:{p_pass:pw});}
   catch(x){admSrvBusy=false;if(lbMissing(x)){admPass=pw;admSrvAfter();return;}fail(tt('Keine Verbindung. Versuch es gleich nochmal.','No connection. Try again in a moment.'));return;}
   admSrvBusy=false;
-  if(!r||r.error){fail(r&&r.error==='locked'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):r&&r.error==='not set up'?tt('Das Server-Passwort ist noch nicht eingerichtet.','The server password isn’t set up yet.'):tt('Falsches Server-Passwort.','Wrong server password.'));return;}
+  if(r&&r.error==='code needed'){admNeedCode=true;admPwHold=pw;admSrvRerender();setTimeout(()=>{const i=els.admin.querySelector('.admpane:not([hidden]) [name=spw]');if(i) i.focus();},50);return;}
+  if(r&&r.error==='locked'){admNeedCode=false;admPwHold='';}
+  if(!r||r.error){fail(r&&r.error==='wrong code'?tt('Falscher Code. Nimm den aktuellen Code aus deiner Authenticator-App.','Wrong code. Use the current code from your authenticator app.'):r&&r.error==='locked'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):r&&r.error==='not set up'?tt('Das Server-Passwort ist noch nicht eingerichtet.','The server password isn’t set up yet.'):tt('Falsches Server-Passwort.','Wrong server password.'));return;}
+  admNeedCode=false;admPwHold='';
   admPass=r.token;try{sessionStorage.setItem(ADM_TOK,JSON.stringify({t:r.token,e:Date.parse(r.expires_at)||Date.now()+11*3600e3}));}catch(x){}
   toast(tt('Server-Werkzeuge entsperrt.','Server tools unlocked.'));admSrvAfter();
 }
-function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');}
-const admSrvForm=(id,note)=>'<form class="coderow" id="'+id+'" novalidate><input type="password" class="namein" name="spw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button></form><p class="small" style="margin-top:6px">'+(note||tt('Die Server-Werkzeuge haben ein eigenes Passwort. Nach 5 falschen Versuchen sind sie 15 Minuten gesperrt.','The server tools have their own password. After 5 wrong tries they lock for 15 minutes.'))+'</p>';
+function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();}
+function admSrvRerender(){admLbRender();admOnRender();admModRender();admSrvRender();}
+const admSrvForm=(id,note)=>(admNeedCode?'<form class="coderow" id="'+id+'" novalidate><input type="text" class="namein" name="spw" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="'+tt('6-stelliger Code','6-digit code')+'" aria-label="'+tt('Code aus der Authenticator-App','Code from your authenticator app')+'"><button type="submit" class="btn primary">'+tt('Bestätigen','Confirm')+'</button><button type="button" class="btn" data-sva="codeback">'+tt('Zurück','Back')+'</button></form><p class="small" style="margin-top:6px">'+tt('Zwei-Schritt-Anmeldung ist an. Gib den Code aus deiner Authenticator-App ein.','Two-step sign-in is on. Enter the code from your authenticator app.')+'</p>':'<form class="coderow" id="'+id+'" novalidate><input type="password" class="namein" name="spw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button></form>')+'<p class="small" style="margin-top:6px">'+(note||tt('Die Server-Werkzeuge haben ein eigenes Passwort. Nach 5 falschen Versuchen sind sie 15 Minuten gesperrt.','The server tools have their own password. After 5 wrong tries they lock for 15 minutes.'))+'</p>';
 els.admin.addEventListener('submit',e=>{
   const id=e.target.getAttribute('id');if(!['admModPwF','admSrvPwF'].includes(id)) return;
   e.preventDefault();const v=e.target.querySelector('[name=spw]').value;if(v) admSrvLogin(v,'mod');
@@ -90,6 +96,7 @@ function admModRender(){
     h+=admCardH('🔇 '+tt('Stummgeschaltet','Muted players')+' <small class="muted">('+Mu.length+')</small>','<form class="admform" id="admMuteF" novalidate><label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="user" maxlength="16" autocapitalize="off" spellcheck="false"></label><label class="small">'+tt('Stunden','Hours')+'<input class="namein" name="hours" type="number" min="1" max="8760" value="24"></label><input class="namein" name="reason" maxlength="120" placeholder="'+tt('Grund (optional)','Reason (optional)')+'"><button type="submit" class="btn primary">'+tt('Stummschalten','Mute')+'</button></form><p class="small" style="margin-top:6px">'+tt('Stumme Spieler können nicht im Club-Chat schreiben und nichts verschenken. Sie spielen sonst normal weiter.','Muted players can’t write in club chat or send gifts. Otherwise they play normally.')+'</p>'
       +(Mu.length?'<div class="admlbl">'+Mu.map(m=>'<div class="admlbr"><span class="rk">🔇</span><span class="who"><b>'+escName(m.username)+'</b><small>'+tt('bis ','until ')+admDT(m.until)+(m.reason?' · '+escName(m.reason):'')+'</small></span><span class="btns"><button type="button" class="btn sm" data-mda="unmute:'+escName(m.username)+'">'+tt('Stumm aus','Unmute')+'</button></span></div>').join('')+'</div>':''));
     if(v52Ready) h+=admBanHtml();
+    if(v53Ready) h+=admTeamHtml();
     /* Wörter */
     const W=admWords||[];
     h+=admCardH('🚫 '+tt('Gesperrte Wörter','Blocked words')+' <small class="muted">('+W.length+')</small>','<p class="small">'+tt('Gilt für Benutzernamen, Clubnamen, Club-Chat, Geschenk-Notizen und Namen in der Bestenliste. Auch Tricks wie 0 statt o oder @ statt a werden erkannt.','Applies to usernames, club names, club chat, gift notes and leaderboard names. Tricks like 0 for o or @ for a are caught too.')+'</p><form class="coderow" id="admWordF" novalidate><input class="namein" name="word" maxlength="30" autocomplete="off" placeholder="'+tt('Neues Wort','New word')+'"><button type="submit" class="btn primary">'+tt('Hinzufügen','Add')+'</button></form>'
@@ -120,7 +127,7 @@ els.admin.addEventListener('submit',e=>{
 els.admin.addEventListener('click',e=>{
   const b=e.target.closest('[data-mda]');if(!b) return;
   const parts=b.dataset.mda.split(':'),a=parts[0];
-  if(a==='reload'){admModLoad();if(v52Ready) admBanCall('list');return;}
+  if(a==='reload'){admModLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();return;}
   if(a==='repdel'||a==='repok'){admModDo('report_done',{id:parts[1],delete:a==='repdel'},a==='repdel'?tt('Nachricht gelöscht.','Message deleted.'):tt('Erledigt.','Done.'),r=>{admReports=r||[];});return;}
   if(a==='mute24'){admModDo('mute',{user:parts[1],hours:24,reason:tt('Meldung','Report')},tt('24 Stunden stummgeschaltet.','Muted for 24 hours.'),r=>{admMutes=r||[];if(admFindQ) admMod('search',{q:admFindQ}).then(x=>{admFind=x;admModRender();}).catch(()=>{});});return;}
   if(a==='unmute'){admModDo('unmute',{user:parts[1]},tt('Stummschaltung aufgehoben.','Unmuted.'),r=>{admMutes=r||[];if(admFindQ) admMod('search',{q:admFindQ}).then(x=>{admFind=x;admModRender();}).catch(()=>{});});return;}
@@ -148,6 +155,7 @@ async function admSrvLoad(){
   catch(x){admSrvErr=admErrTxt(x);}
   if(v46Ready) admBkCall('list');
   if(v51Ready) admInsLoad();
+  if(v53Ready) admWeekLoad();
   admSrvRender();
 }
 function admBars(rows){
@@ -164,6 +172,7 @@ function admSrvRender(){
     if(admSrvErr) h+='<p class="nameerr">'+admSrvErr+'</p>';
     const St=admStats||{},L=St.live||{},C=admCfg||{},F=Object.assign({chat:true,gifts:true,clubs:true,lb:true},C.feat||{}),Mt=Object.assign({on:false,de:'',en:''},C.maint||{}),mv=+C.min_ver||0;
     const tile=(l,v)=>'<span><small>'+l+'</small><b>'+(v==null?'–':typeof v==='number'?fmt(v):escName(String(v)))+'</b></span>';
+    if(v53Ready) h+=admWeekHtml();
     h+=admCardH('📊 '+tt('Statistik','Statistics'),'<div class="admstats">'+tile(tt('Jetzt online','Online now'),L.online)+tile(tt('Heute','Today'),L.today)+tile(tt('Spieler','Players'),L.players)+tile(tt('Konten','Accounts'),St.accounts)+tile(tt('Aktiv (7 Tage)','Active (7 days)'),St.active7)+tile(tt('Clubs','Clubs'),St.clubs)+tile(tt('Chat (24 Std)','Chat (24 h)'),St.msgs24)+tile(tt('Offene Meldungen','Open reports'),St.reports_open)+tile(tt('In der Bestenliste','On the leaderboard'),St.lb_entries)+tile(tt('Stumm','Muted'),St.mutes)+'</div>'
       +'<h5 class="admh5">'+tt('Neue Konten pro Tag (14 Tage)','New accounts per day (14 days)')+'</h5>'+admBars(St.new14)
       +'<h5 class="admh5">'+tt('Geschenke pro Tag (14 Tage)','Gifts per day (14 days)')+'</h5>'+admBars(St.gifts14)
@@ -182,6 +191,7 @@ function admSrvRender(){
     h+=admCardH('💾 '+tt('Backups','Backups'),admBkHtml());
     const Lg=admLog||[];
     h+=admCardH('📜 '+tt('Admin-Protokoll','Admin log'),'<p class="small">'+tt('Jede Admin-Aktion auf dem Server, die neuesten zuerst.','Every admin action on the server, newest first.')+'</p>'+(Lg.length?'<div class="admlog">'+Lg.map(l=>'<div><small>'+admDT(l.at)+'</small><b>'+escName(l.action)+'</b>'+(l.detail?'<span>'+escName(l.detail)+'</span>':'')+'</div>').join('')+'</div>':'<p class="small">–</p>'));
+    if(v53Ready) h+=adm2faHtml();
     h+=admCardH('🔐 '+tt('Server-Sitzung','Server session'),'<p class="small">'+tt('Du bist für 12 Stunden angemeldet.','You’re signed in for 12 hours.')+'</p><div class="btns"><button type="button" class="btn sm" data-sva="logout">'+tt('Server-Werkzeuge sperren','Lock server tools')+'</button></div>');
   }
   if(box._h!==h){const open=[...box.querySelectorAll('details')].map(d=>d.open);box._h=h;box.innerHTML=h;box.querySelectorAll('details').forEach((d,i)=>{if(open[i]) d.open=true;});}
@@ -208,6 +218,7 @@ els.admin.addEventListener('submit',e=>{
 els.admin.addEventListener('click',e=>{
   const b=e.target.closest('[data-sva]');if(!b) return;
   const [a,v]=b.dataset.sva.split(':');
+  if(a==='codeback'){admNeedCode=false;admPwHold='';admSrvRerender();return;}
   if(a==='reload'){admSrvLoad();return;}
   if(a==='minver'){admCfgSet('min_ver',+v||0,+v?tt('Update wird jetzt verlangt.','Update is now required.'):tt('Ausgeschaltet.','Turned off.'));return;}
   if(a==='logout'){const t=admPass;admSrvDrop();lbApi('rpc/admin_logout',{p_pass:t}).catch(()=>{});admModRender();admSrvRender();admLbRender();admOnRender();admAccRender();admClubRender();toast(tt('Server-Werkzeuge gesperrt.','Server tools locked.'));}

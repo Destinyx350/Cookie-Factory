@@ -33,7 +33,7 @@ async function handle(route) {
   const ip = req.headers()['x-test-ip'] || '127.0.0.1';
   try {
     if (p.startsWith('rpc/')) {
-      const fn = p.slice(4); if (!/^[a-z_]+$/.test(fn)) return send(400, { message: 'bad fn' });
+      const fn = p.slice(4); if (!/^[a-z0-9_]+$/.test(fn)) return send(400, { message: 'bad fn' });
       const exists = (await pool.query("select 1 from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname = 'public' and proname = $1", [fn])).rowCount;
       if (!exists) return send(404, { code: 'PGRST202', message: 'Could not find the function public.' + fn + ' in the schema cache' });
       const v = await rpc(fn, JSON.parse(req.postData() || '{}'), ip);

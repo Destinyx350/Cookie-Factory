@@ -105,7 +105,7 @@ $id('accBox').addEventListener('submit',async e=>{
         await accUpload(false);if(v48Ready) refClaim();accMsg=tt('Konto erstellt! Deine Bäckerei ist jetzt in deinem Konto gespeichert.','Account created! Your bakery is now saved in your account.');accMsgOk=true;toast(accMsg,true);
       }else{
         const r=await lbApi('rpc/acc_login',{p_user:user,p_pass:pass});accV4=true;
-        if(r&&r.error){accMsg=r.error==='banned'?banTxt(r):r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
+        if(r&&r.error){if(r.error==='banned') banShow(r,user);accMsg=r.error==='banned'?banTxt(r):r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
         else{
           accTok=r.token;lsSet(ACC_KEY,accTok);accMe=r;accBusy=false;
           if(r.has_save){accAsked=true;accAsk(tt('Willkommen zurück, ','Welcome back, ')+r.username+'!','<p>'+tt('In deinem Konto liegt eine Bäckerei mit ','Your account has a bakery with ')+'<b>'+fmt(r.save_baked||0)+tt(' Keksen',' cookies')+'</b>.</p><p class="small">'+tt('Auf diesem Gerät: ','On this device: ')+fmt(S.all)+tt(' Kekse',' cookies')+'</p>',tt('Konto-Bäckerei laden','Load account bakery'),tt('Dieses Gerät ins Konto','Use this device’s bakery'),()=>accDownload(),()=>accUpload(true));}

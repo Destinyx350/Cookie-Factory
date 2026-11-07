@@ -80,7 +80,7 @@ els.admin.addEventListener('click',e=>{
   buildAdmin();toast(tt('Admin-Panel gesperrt.','Admin panel locked.'));
 });
 function buildAdmin(){
-  if(!admOK){XV=null;els.admin.innerHTML=admLockHTML();return;}
+  if(!admOK){XV=null;if(typeof modTok!=='undefined'&&modTok){modPanel();return;}els.admin.innerHTML=admLockHTML()+(typeof modLockHtml==='function'?modLockHtml():'');return;}
   XV=admXV();
   const P={};
   P.quick=admCard(tt('Kekse','Cookies'),'<div class="btns">'+[1e6,1e9,1e12,1e15,1e18,1e21,1e24].map(v=>admBtn('add:'+v,'+'+fmt(v))).join('')+admBtn('mul10',tr('adm_x10'))+admBtn('mul1000','×1000')+admBtn('zero',tt('Auf 0','Set to 0'))+'</div>')
@@ -130,7 +130,7 @@ function admShow(){
   els.admin.querySelectorAll('#admSeg [data-ap]').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.ap===admTab?'true':'false'));
   const grp=ADM_ONLINE.includes(admTab)?'online':'game',sg=document.getElementById('admSeg');if(sg) sg.dataset.grp=q?'':grp;
   els.admin.querySelectorAll('#admGrp [data-ag]').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.ag===grp?'true':'false'));
-  const no=document.getElementById('admNone');if(no) no.hidden=n>0;
+  const no=document.getElementById('admNone');if(no) no.hidden=!q||n>0;
 }
 els.admin.addEventListener('input',e=>{if(e.target.id==='admQ') admShow();});
 /* Admin in zwei Gruppen: Spiel und Online */

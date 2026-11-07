@@ -44,8 +44,14 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=52;
+const NEWS_VER=53;
 const NEWS=[
+  {v:53,sum:['Gesperrt? Jetzt kannst du Einspruch einlegen. Dazu mehr Moderation und Sicherheit.','Banned? You can now appeal. Plus more moderation and security.'],items:[
+    ['new','Einspruch gegen eine Sperre: Gesperrte Spieler können direkt im Sperr-Hinweis einmal am Tag um eine Prüfung bitten und sehen die Antwort beim nächsten Anmelden.','Ban appeals: banned players can ask for a review right in the ban notice, once a day, and see the answer the next time they sign in.'],
+    ['new','Moderatoren helfen jetzt mit: Sie kümmern sich um Meldungen im Club-Chat.','Moderators now help out: they take care of reports in club chat.'],
+    ['change','Mehr Sicherheit für die Server-Werkzeuge mit Zwei-Schritt-Anmeldung.','More security for the server tools with two-step sign-in.'],
+    ['change','Auf CrazyGames und GameDistribution kannst du freiwillig eine Werbung ansehen und bekommst 20 Minuten Produktion. Auf der eigenen Seite gibt es keine Werbung.','On CrazyGames and GameDistribution you can choose to watch an ad for 20 minutes of production. The game’s own site has no ads.']
+  ]},
   {v:52,sum:['Schneller laden und mehr Schutz vor Regelbrechern.','Faster loading and better protection from rule-breakers.'],items:[
     ['change','Das Spiel ist rund 10 % kleiner und lädt schneller: Die Admin-Werkzeuge stecken nicht mehr im Spiel, und der Admin-Tab ist weg.','The game is about 10% smaller and loads faster: the admin tools are no longer inside the game, and the Admin tab is gone.'],
     ['new','Wer gegen die Regeln verstößt, kann jetzt gesperrt werden. Gesperrte Spieler sehen den Grund und wie lange die Sperre dauert.','Players who break the rules can now be banned. Banned players see the reason and how long the ban lasts.']

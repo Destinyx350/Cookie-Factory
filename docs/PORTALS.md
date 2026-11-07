@@ -6,8 +6,23 @@ Each one wants a zip with `index.html` at the top level. The game builds that zi
 ## 1. Get the zip
 
 **Easiest:** open the repository on GitHub → **Actions** → **Portal package** → the newest green run →
-download **cookie-factory-portal** under *Artifacts*. That download is the zip to upload (it holds `index.html` and `icons/`).
-It is rebuilt after every update to `main`.
+download the zip you need under *Artifacts*. Each download is the zip to upload (it holds `index.html` and `icons/`).
+They are rebuilt after every update to `main`.
+
+| Zip | For | Ads |
+| --- | --- | --- |
+| **cookie-factory-portal** | itch.io, Newgrounds, Poki form, any other site | none |
+| **cookie-factory-crazygames** | CrazyGames | optional rewarded ads through the CrazyGames SDK |
+| **cookie-factory-gamedistribution** | GameDistribution | optional rewarded ads through the GameDistribution SDK |
+
+**Ads are always optional.** The ad versions show a small **🎬 Watch an ad: +20 min** button under the cookie counter.
+Players who press it watch one ad and get 20 minutes of production (then the button waits 5 minutes). Nothing else
+shows ads, sound is paused while an ad plays, and your own site never has ads.
+
+**GameDistribution needs your game ID:** upload the game there once, copy the 32-character *Game ID* from their
+dashboard, then on GitHub open **Settings → Secrets and variables → Actions → Variables → New repository variable**,
+name it `GD_GAME_ID` and paste the ID. The next build puts it in the zip (or run the *Portal package* workflow by hand
+under Actions → Run workflow). Upload that new zip as an update.
 
 **Or on your computer:**
 
@@ -15,7 +30,15 @@ It is rebuilt after every update to `main`.
 node tools/portal.js
 ```
 
-Then zip the *contents* of `dist/portal/` (not the folder itself).
+Then zip the *contents* of `dist/portal/` (not the folder itself). For the ad versions:
+
+```bash
+node tools/portal.js --sdk crazygames
+```
+
+```bash
+node tools/portal.js --sdk gamedistribution --gd-id YOUR_GAME_ID
+```
 
 ### What is different in the portal version
 
@@ -30,8 +53,8 @@ Then zip the *contents* of `dist/portal/` (not the folder itself).
 | Portal | Where | Notes |
 | --- | --- | --- |
 | **itch.io** | itch.io → *Upload new project* | Kind of project: **HTML**. Upload the zip, tick **This file will be played in the browser**. Viewport 1280 × 800, tick **Mobile friendly** and **Fullscreen button**. Pricing: *No payments* or *Donations*. |
-| **CrazyGames** | developer.crazygames.com | Upload as HTML5 game. They test it first; their full release needs their SDK later (ads), which the game does not have yet. |
-| **GameDistribution** | gamedistribution.com/developers | Upload as HTML5. They also ask for their SDK before a game earns money. |
+| **CrazyGames** | developer.crazygames.com | Upload **cookie-factory-crazygames** as an HTML5 game. They test it first. |
+| **GameDistribution** | gamedistribution.com/developers | Upload **cookie-factory-gamedistribution** as HTML5 (with your game ID, see above). |
 | **Newgrounds** | newgrounds.com/projects/games | *HTML5 / zip*. Size 1280 × 800, allow fullscreen. |
 | **Poki** | developers.poki.com | Poki picks games by hand and needs their SDK. Send the itch.io link with the form. |
 

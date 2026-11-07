@@ -64,6 +64,7 @@ Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.
 8. [`push-v9.sql`](push-v9.sql): push notifications (also needs the edge function, see [PUSH.md](PUSH.md)).
 9. [`insights-v10.sql`](insights-v10.sql): crash reports and the player journey (admin **Server** tab), push reminders for players away 3+ days, and club chat reactions and pinned messages.
 10. [`admin-v11.sql`](admin-v11.sql): account bans (sign-in and every online feature blocked, with the reason shown; optionally the player's devices too).
+11. [`staff-v12.sql`](staff-v12.sql): moderator logins, ban appeals, two-step sign-in for the server password, and the weekly summary.
 
 The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password. Since version 52 the admin panel is only in `admin.html` (https://destinyx350.github.io/Cookie-Factory/admin.html), not in the game players get.
 
@@ -78,3 +79,11 @@ The admin panel's **Online**, **Moderation** and **Server** tabs manage everythi
 In Supabase, open **Table Editor → leaderboard**, find the row, and delete it.
 
 The game runs in the browser, so a determined cheater could still send a made-up score. If that happens, delete the row as above.
+
+## Two-step sign-in and moderators (version 53)
+
+- **Two-step sign-in:** in admin.html open **Online → Server → 📱 Two-step sign-in → Set up**, add the key to an authenticator app (Google Authenticator, Microsoft Authenticator, 2FAS …) and type the code it shows. From then on the server password also asks for the 6-digit code.
+- **Lost your phone?** Run this in the Supabase SQL Editor to turn it off, then set it up again:
+  `update public.kf_admin_auth set totp_on = false, totp_secret = null;`
+- **Moderators:** add them in **Online → Moderation → 👮 Moderators** and give them the name and password in person. They open admin.html, go to Settings → Admin and use **Moderator? Sign in here**. They don't need (and shouldn't get) the admin panel password.
+

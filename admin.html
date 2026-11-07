@@ -1659,6 +1659,26 @@ html{-webkit-tap-highlight-color:transparent}
 #banOv .mbig{font-size:54px;line-height:1;margin:4px 0 8px}
 #admBanF .chk{display:flex;align-items:center;gap:8px}
 
+/* V53: Moderator-Panel, Einsprüche, Wochenbericht, Zwei-Schritt-Anmeldung, Werbe-Knopf (nur Portale) */
+.modlock{margin-top:12px}
+.modbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.admlbr.appeal .namein{margin-top:6px;width:100%}
+.admweek{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;margin-top:8px}
+.admweek span{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2)}
+.admweek small{color:var(--muted);font-size:11px}
+.admweek b{font-size:18px}
+.admweek i{font-style:normal;font-size:11px;color:var(--muted)}
+.admweek .good i{color:var(--good,#5bd17a)}
+.admweek .bad i{color:var(--bad,#ff7b6b)}
+.adm2fa{padding-left:18px;display:grid;gap:8px}
+.admkey{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+.admkey code{font:600 14px/1.4 ui-monospace,monospace;letter-spacing:.06em;padding:6px 8px;border-radius:8px;background:rgba(0,0,0,.2);overflow-wrap:anywhere}
+.banap{margin:6px 0;font-size:14px}
+.banfold{text-align:left;margin:8px 0}
+#banApF{display:grid;gap:6px;margin-top:6px}
+.adbtn{display:block;margin:6px auto 0;border:1px solid var(--edge);background:var(--panel-2);color:inherit;border-radius:999px;padding:6px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.adbtn:disabled{opacity:.55;cursor:default}
+
 </style>
 
 <div class="wrap">
@@ -2905,8 +2925,14 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=52;
+const NEWS_VER=53;
 const NEWS=[
+  {v:53,sum:['Gesperrt? Jetzt kannst du Einspruch einlegen. Dazu mehr Moderation und Sicherheit.','Banned? You can now appeal. Plus more moderation and security.'],items:[
+    ['new','Einspruch gegen eine Sperre: Gesperrte Spieler können direkt im Sperr-Hinweis einmal am Tag um eine Prüfung bitten und sehen die Antwort beim nächsten Anmelden.','Ban appeals: banned players can ask for a review right in the ban notice, once a day, and see the answer the next time they sign in.'],
+    ['new','Moderatoren helfen jetzt mit: Sie kümmern sich um Meldungen im Club-Chat.','Moderators now help out: they take care of reports in club chat.'],
+    ['change','Mehr Sicherheit für die Server-Werkzeuge mit Zwei-Schritt-Anmeldung.','More security for the server tools with two-step sign-in.'],
+    ['change','Auf CrazyGames und GameDistribution kannst du freiwillig eine Werbung ansehen und bekommst 20 Minuten Produktion. Auf der eigenen Seite gibt es keine Werbung.','On CrazyGames and GameDistribution you can choose to watch an ad for 20 minutes of production. The game’s own site has no ads.']
+  ]},
   {v:52,sum:['Schneller laden und mehr Schutz vor Regelbrechern.','Faster loading and better protection from rule-breakers.'],items:[
     ['change','Das Spiel ist rund 10 % kleiner und lädt schneller: Die Admin-Werkzeuge stecken nicht mehr im Spiel, und der Admin-Tab ist weg.','The game is about 10% smaller and loads faster: the admin tools are no longer inside the game, and the Admin tab is gone.'],
     ['new','Wer gegen die Regeln verstößt, kann jetzt gesperrt werden. Gesperrte Spieler sehen den Grund und wie lange die Sperre dauert.','Players who break the rules can now be banned. Banned players see the reason and how long the ban lasts.']
@@ -5478,7 +5504,7 @@ const gestured=()=>!navigator.userActivation||navigator.userActivation.hasBeenAc
 function getCtx(){
   if(!actx){if(!gestured()) return null;const AC=window.AudioContext||window.webkitAudioContext;if(!AC) return null;try{actx=new AC({latencyHint:'playback'});}catch(e){try{actx=new AC();}catch(e2){return null;}}}
   if(!AU) initAU();
-  if(actx.state==='suspended'&&!(document.hidden&&S.opt.bgm)) actx.resume().catch(()=>{});
+  if(actx.state==='suspended'&&!(document.hidden&&S.opt.bgm)&&!adMute) actx.resume().catch(()=>{});
   return actx;
 }
 function irBuf(sec,decay){const r=actx.sampleRate,n=Math.floor(r*sec),b=actx.createBuffer(2,n,r);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n,decay);}return b;}
@@ -5615,7 +5641,7 @@ function musTick(){
   while(M.t<now+ahead&&n<64){const sw=T.swing&&M.step%2?T.swing*sd*2:0;playStep(T,M.step,M.t+sw);M.t+=sd;M.step++;n++;}
 }
 addEventListener('pointerdown',()=>{getCtx();},{passive:true});
-document.addEventListener('visibilitychange',()=>{if(!actx) return;if(document.hidden&&S.opt.bgm) actx.suspend().catch(()=>{});else if(!document.hidden) actx.resume().catch(()=>{});});
+document.addEventListener('visibilitychange',()=>{if(!actx) return;if(document.hidden&&S.opt.bgm) actx.suspend().catch(()=>{});else if(!document.hidden&&!adMute) actx.resume().catch(()=>{});});
 /* Töne für alle Knöpfe, Tabs, Schalter und Fenster */
 document.addEventListener('click',e=>{
   const el=e.target.closest('button,[role="tab"],summary,input[type="checkbox"],.chip,a');
@@ -7611,7 +7637,7 @@ els.admin.addEventListener('click',e=>{
   buildAdmin();toast(tt('Admin-Panel gesperrt.','Admin panel locked.'));
 });
 function buildAdmin(){
-  if(!admOK){XV=null;els.admin.innerHTML=admLockHTML();return;}
+  if(!admOK){XV=null;if(typeof modTok!=='undefined'&&modTok){modPanel();return;}els.admin.innerHTML=admLockHTML()+(typeof modLockHtml==='function'?modLockHtml():'');return;}
   XV=admXV();
   const P={};
   P.quick=admCard(tt('Kekse','Cookies'),'<div class="btns">'+[1e6,1e9,1e12,1e15,1e18,1e21,1e24].map(v=>admBtn('add:'+v,'+'+fmt(v))).join('')+admBtn('mul10',tr('adm_x10'))+admBtn('mul1000','×1000')+admBtn('zero',tt('Auf 0','Set to 0'))+'</div>')
@@ -7661,7 +7687,7 @@ function admShow(){
   els.admin.querySelectorAll('#admSeg [data-ap]').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.ap===admTab?'true':'false'));
   const grp=ADM_ONLINE.includes(admTab)?'online':'game',sg=document.getElementById('admSeg');if(sg) sg.dataset.grp=q?'':grp;
   els.admin.querySelectorAll('#admGrp [data-ag]').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.ag===grp?'true':'false'));
-  const no=document.getElementById('admNone');if(no) no.hidden=n>0;
+  const no=document.getElementById('admNone');if(no) no.hidden=!q||n>0;
 }
 els.admin.addEventListener('input',e=>{if(e.target.id==='admQ') admShow();});
 /* Admin in zwei Gruppen: Spiel und Online */
@@ -8770,7 +8796,7 @@ $id('accBox').addEventListener('submit',async e=>{
         await accUpload(false);if(v48Ready) refClaim();accMsg=tt('Konto erstellt! Deine Bäckerei ist jetzt in deinem Konto gespeichert.','Account created! Your bakery is now saved in your account.');accMsgOk=true;toast(accMsg,true);
       }else{
         const r=await lbApi('rpc/acc_login',{p_user:user,p_pass:pass});accV4=true;
-        if(r&&r.error){accMsg=r.error==='banned'?banTxt(r):r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
+        if(r&&r.error){if(r.error==='banned') banShow(r,user);accMsg=r.error==='banned'?banTxt(r):r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
         else{
           accTok=r.token;lsSet(ACC_KEY,accTok);accMe=r;accBusy=false;
           if(r.has_save){accAsked=true;accAsk(tt('Willkommen zurück, ','Welcome back, ')+r.username+'!','<p>'+tt('In deinem Konto liegt eine Bäckerei mit ','Your account has a bakery with ')+'<b>'+fmt(r.save_baked||0)+tt(' Keksen',' cookies')+'</b>.</p><p class="small">'+tt('Auf diesem Gerät: ','On this device: ')+fmt(S.all)+tt(' Kekse',' cookies')+'</p>',tt('Konto-Bäckerei laden','Load account bakery'),tt('Dieses Gerät ins Konto','Use this device’s bakery'),()=>accDownload(),()=>accUpload(true));}
@@ -9161,20 +9187,26 @@ v45Ready=true;
 var ADM_TOK='keksfabrik-admtok';
 try{const o=JSON.parse(sessionStorage.getItem(ADM_TOK)||'null');if(o&&o.t&&o.e>Date.now()+60000&&admOK) admPass=o.t;}catch(x){}
 function admSrvDrop(){admPass='';try{sessionStorage.removeItem(ADM_TOK);}catch(x){}}
-var admSrvBusy=false;
+var admSrvBusy=false,admNeedCode=false,admPwHold='';
 async function admSrvLogin(pw,where){
   if(admSrvBusy) return;
+  /* Zwei-Schritt-Anmeldung: Im zweiten Schritt ist die Eingabe der 6-stellige Code. */
+  let code=null;if(admNeedCode){code=String(pw).replace(/\s/g,'');pw=admPwHold;}
   const fail=m=>{if(where==='lb'){admLbErr=m;admLbRender();}else if(where==='on'){admOnErr=m;admOnRender();}else{admModErr=m;admModRender();admSrvRender();}};
   admSrvBusy=true;let r=null;
-  try{r=await lbApi('rpc/admin_login',{p_pass:pw});}
+  try{r=await lbApi('rpc/admin_login',code?{p_pass:pw,p_code:code}:{p_pass:pw});}
   catch(x){admSrvBusy=false;if(lbMissing(x)){admPass=pw;admSrvAfter();return;}fail(tt('Keine Verbindung. Versuch es gleich nochmal.','No connection. Try again in a moment.'));return;}
   admSrvBusy=false;
-  if(!r||r.error){fail(r&&r.error==='locked'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):r&&r.error==='not set up'?tt('Das Server-Passwort ist noch nicht eingerichtet.','The server password isn’t set up yet.'):tt('Falsches Server-Passwort.','Wrong server password.'));return;}
+  if(r&&r.error==='code needed'){admNeedCode=true;admPwHold=pw;admSrvRerender();setTimeout(()=>{const i=els.admin.querySelector('.admpane:not([hidden]) [name=spw]');if(i) i.focus();},50);return;}
+  if(r&&r.error==='locked'){admNeedCode=false;admPwHold='';}
+  if(!r||r.error){fail(r&&r.error==='wrong code'?tt('Falscher Code. Nimm den aktuellen Code aus deiner Authenticator-App.','Wrong code. Use the current code from your authenticator app.'):r&&r.error==='locked'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):r&&r.error==='not set up'?tt('Das Server-Passwort ist noch nicht eingerichtet.','The server password isn’t set up yet.'):tt('Falsches Server-Passwort.','Wrong server password.'));return;}
+  admNeedCode=false;admPwHold='';
   admPass=r.token;try{sessionStorage.setItem(ADM_TOK,JSON.stringify({t:r.token,e:Date.parse(r.expires_at)||Date.now()+11*3600e3}));}catch(x){}
   toast(tt('Server-Werkzeuge entsperrt.','Server tools unlocked.'));admSrvAfter();
 }
-function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');}
-const admSrvForm=(id,note)=>'<form class="coderow" id="'+id+'" novalidate><input type="password" class="namein" name="spw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button></form><p class="small" style="margin-top:6px">'+(note||tt('Die Server-Werkzeuge haben ein eigenes Passwort. Nach 5 falschen Versuchen sind sie 15 Minuten gesperrt.','The server tools have their own password. After 5 wrong tries they lock for 15 minutes.'))+'</p>';
+function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();}
+function admSrvRerender(){admLbRender();admOnRender();admModRender();admSrvRender();}
+const admSrvForm=(id,note)=>(admNeedCode?'<form class="coderow" id="'+id+'" novalidate><input type="text" class="namein" name="spw" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="'+tt('6-stelliger Code','6-digit code')+'" aria-label="'+tt('Code aus der Authenticator-App','Code from your authenticator app')+'"><button type="submit" class="btn primary">'+tt('Bestätigen','Confirm')+'</button><button type="button" class="btn" data-sva="codeback">'+tt('Zurück','Back')+'</button></form><p class="small" style="margin-top:6px">'+tt('Zwei-Schritt-Anmeldung ist an. Gib den Code aus deiner Authenticator-App ein.','Two-step sign-in is on. Enter the code from your authenticator app.')+'</p>':'<form class="coderow" id="'+id+'" novalidate><input type="password" class="namein" name="spw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button></form>')+'<p class="small" style="margin-top:6px">'+(note||tt('Die Server-Werkzeuge haben ein eigenes Passwort. Nach 5 falschen Versuchen sind sie 15 Minuten gesperrt.','The server tools have their own password. After 5 wrong tries they lock for 15 minutes.'))+'</p>';
 els.admin.addEventListener('submit',e=>{
   const id=e.target.getAttribute('id');if(!['admModPwF','admSrvPwF'].includes(id)) return;
   e.preventDefault();const v=e.target.querySelector('[name=spw]').value;if(v) admSrvLogin(v,'mod');
@@ -9248,6 +9280,7 @@ function admModRender(){
     h+=admCardH('🔇 '+tt('Stummgeschaltet','Muted players')+' <small class="muted">('+Mu.length+')</small>','<form class="admform" id="admMuteF" novalidate><label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="user" maxlength="16" autocapitalize="off" spellcheck="false"></label><label class="small">'+tt('Stunden','Hours')+'<input class="namein" name="hours" type="number" min="1" max="8760" value="24"></label><input class="namein" name="reason" maxlength="120" placeholder="'+tt('Grund (optional)','Reason (optional)')+'"><button type="submit" class="btn primary">'+tt('Stummschalten','Mute')+'</button></form><p class="small" style="margin-top:6px">'+tt('Stumme Spieler können nicht im Club-Chat schreiben und nichts verschenken. Sie spielen sonst normal weiter.','Muted players can’t write in club chat or send gifts. Otherwise they play normally.')+'</p>'
       +(Mu.length?'<div class="admlbl">'+Mu.map(m=>'<div class="admlbr"><span class="rk">🔇</span><span class="who"><b>'+escName(m.username)+'</b><small>'+tt('bis ','until ')+admDT(m.until)+(m.reason?' · '+escName(m.reason):'')+'</small></span><span class="btns"><button type="button" class="btn sm" data-mda="unmute:'+escName(m.username)+'">'+tt('Stumm aus','Unmute')+'</button></span></div>').join('')+'</div>':''));
     if(v52Ready) h+=admBanHtml();
+    if(v53Ready) h+=admTeamHtml();
     /* Wörter */
     const W=admWords||[];
     h+=admCardH('🚫 '+tt('Gesperrte Wörter','Blocked words')+' <small class="muted">('+W.length+')</small>','<p class="small">'+tt('Gilt für Benutzernamen, Clubnamen, Club-Chat, Geschenk-Notizen und Namen in der Bestenliste. Auch Tricks wie 0 statt o oder @ statt a werden erkannt.','Applies to usernames, club names, club chat, gift notes and leaderboard names. Tricks like 0 for o or @ for a are caught too.')+'</p><form class="coderow" id="admWordF" novalidate><input class="namein" name="word" maxlength="30" autocomplete="off" placeholder="'+tt('Neues Wort','New word')+'"><button type="submit" class="btn primary">'+tt('Hinzufügen','Add')+'</button></form>'
@@ -9278,7 +9311,7 @@ els.admin.addEventListener('submit',e=>{
 els.admin.addEventListener('click',e=>{
   const b=e.target.closest('[data-mda]');if(!b) return;
   const parts=b.dataset.mda.split(':'),a=parts[0];
-  if(a==='reload'){admModLoad();if(v52Ready) admBanCall('list');return;}
+  if(a==='reload'){admModLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();return;}
   if(a==='repdel'||a==='repok'){admModDo('report_done',{id:parts[1],delete:a==='repdel'},a==='repdel'?tt('Nachricht gelöscht.','Message deleted.'):tt('Erledigt.','Done.'),r=>{admReports=r||[];});return;}
   if(a==='mute24'){admModDo('mute',{user:parts[1],hours:24,reason:tt('Meldung','Report')},tt('24 Stunden stummgeschaltet.','Muted for 24 hours.'),r=>{admMutes=r||[];if(admFindQ) admMod('search',{q:admFindQ}).then(x=>{admFind=x;admModRender();}).catch(()=>{});});return;}
   if(a==='unmute'){admModDo('unmute',{user:parts[1]},tt('Stummschaltung aufgehoben.','Unmuted.'),r=>{admMutes=r||[];if(admFindQ) admMod('search',{q:admFindQ}).then(x=>{admFind=x;admModRender();}).catch(()=>{});});return;}
@@ -9306,6 +9339,7 @@ async function admSrvLoad(){
   catch(x){admSrvErr=admErrTxt(x);}
   if(v46Ready) admBkCall('list');
   if(v51Ready) admInsLoad();
+  if(v53Ready) admWeekLoad();
   admSrvRender();
 }
 function admBars(rows){
@@ -9322,6 +9356,7 @@ function admSrvRender(){
     if(admSrvErr) h+='<p class="nameerr">'+admSrvErr+'</p>';
     const St=admStats||{},L=St.live||{},C=admCfg||{},F=Object.assign({chat:true,gifts:true,clubs:true,lb:true},C.feat||{}),Mt=Object.assign({on:false,de:'',en:''},C.maint||{}),mv=+C.min_ver||0;
     const tile=(l,v)=>'<span><small>'+l+'</small><b>'+(v==null?'–':typeof v==='number'?fmt(v):escName(String(v)))+'</b></span>';
+    if(v53Ready) h+=admWeekHtml();
     h+=admCardH('📊 '+tt('Statistik','Statistics'),'<div class="admstats">'+tile(tt('Jetzt online','Online now'),L.online)+tile(tt('Heute','Today'),L.today)+tile(tt('Spieler','Players'),L.players)+tile(tt('Konten','Accounts'),St.accounts)+tile(tt('Aktiv (7 Tage)','Active (7 days)'),St.active7)+tile(tt('Clubs','Clubs'),St.clubs)+tile(tt('Chat (24 Std)','Chat (24 h)'),St.msgs24)+tile(tt('Offene Meldungen','Open reports'),St.reports_open)+tile(tt('In der Bestenliste','On the leaderboard'),St.lb_entries)+tile(tt('Stumm','Muted'),St.mutes)+'</div>'
       +'<h5 class="admh5">'+tt('Neue Konten pro Tag (14 Tage)','New accounts per day (14 days)')+'</h5>'+admBars(St.new14)
       +'<h5 class="admh5">'+tt('Geschenke pro Tag (14 Tage)','Gifts per day (14 days)')+'</h5>'+admBars(St.gifts14)
@@ -9340,6 +9375,7 @@ function admSrvRender(){
     h+=admCardH('💾 '+tt('Backups','Backups'),admBkHtml());
     const Lg=admLog||[];
     h+=admCardH('📜 '+tt('Admin-Protokoll','Admin log'),'<p class="small">'+tt('Jede Admin-Aktion auf dem Server, die neuesten zuerst.','Every admin action on the server, newest first.')+'</p>'+(Lg.length?'<div class="admlog">'+Lg.map(l=>'<div><small>'+admDT(l.at)+'</small><b>'+escName(l.action)+'</b>'+(l.detail?'<span>'+escName(l.detail)+'</span>':'')+'</div>').join('')+'</div>':'<p class="small">–</p>'));
+    if(v53Ready) h+=adm2faHtml();
     h+=admCardH('🔐 '+tt('Server-Sitzung','Server session'),'<p class="small">'+tt('Du bist für 12 Stunden angemeldet.','You’re signed in for 12 hours.')+'</p><div class="btns"><button type="button" class="btn sm" data-sva="logout">'+tt('Server-Werkzeuge sperren','Lock server tools')+'</button></div>');
   }
   if(box._h!==h){const open=[...box.querySelectorAll('details')].map(d=>d.open);box._h=h;box.innerHTML=h;box.querySelectorAll('details').forEach((d,i)=>{if(open[i]) d.open=true;});}
@@ -9366,6 +9402,7 @@ els.admin.addEventListener('submit',e=>{
 els.admin.addEventListener('click',e=>{
   const b=e.target.closest('[data-sva]');if(!b) return;
   const [a,v]=b.dataset.sva.split(':');
+  if(a==='codeback'){admNeedCode=false;admPwHold='';admSrvRerender();return;}
   if(a==='reload'){admSrvLoad();return;}
   if(a==='minver'){admCfgSet('min_ver',+v||0,+v?tt('Update wird jetzt verlangt.','Update is now required.'):tt('Ausgeschaltet.','Turned off.'));return;}
   if(a==='logout'){const t=admPass;admSrvDrop();lbApi('rpc/admin_logout',{p_pass:t}).catch(()=>{});admModRender();admSrvRender();admLbRender();admOnRender();admAccRender();admClubRender();toast(tt('Server-Werkzeuge gesperrt.','Server tools locked.'));}
@@ -9768,14 +9805,45 @@ function banTxt(b){
     +(b&&b.reason?' '+tt('Grund: ','Reason: ')+escName(String(b.reason)):'');
 }
 function banSeen(m){
-  const b=banParse(m);
+  const b=banParse(m),user=accMe&&accMe.username||'';
   if(accTok){accUnset();accMsg=banTxt(b);accMsgOk=false;accRender();}
   clubData=null;clubRender();
   if(banShown) return;banShown=true;
+  banShow(b,user);
+}
+/* V53: Der Hinweis enthält jetzt einen Einspruch. Gesperrte Spieler können sich nicht anmelden,
+   deshalb bestätigen sie den Einspruch mit Benutzername und Passwort. */
+function banAppealHtml(b){
+  const a=b&&b.appeal;
+  if(a&&a.status==='open') return '<p class="banap">⏳ '+tt('Dein Einspruch wird geprüft. Versuch später nochmal, dich anzumelden, um die Antwort zu sehen.','Your appeal is being reviewed. Try signing in again later to see the answer.')+'</p>';
+  let h=a&&a.status==='rejected'?'<p class="banap">❌ '+tt('Dein Einspruch wurde abgelehnt.','Your appeal was rejected.')+(a.answer?' „'+escName(a.answer)+'“':'')+'</p>':'';
+  return h+'<details class="fold banfold"><summary>'+tt('Einspruch einlegen','Appeal this ban')+'</summary><form class="accform" id="banApF" novalidate>'
+    +'<input class="namein" name="user" maxlength="16" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="'+tt('Benutzername','Username')+'" value="'+escName(b&&b.username||'')+'">'
+    +'<input class="namein" name="pass" type="password" maxlength="72" autocomplete="current-password" placeholder="'+tt('Passwort','Password')+'">'
+    +'<textarea class="namein" name="body" maxlength="500" rows="3" placeholder="'+tt('Warum sollte die Sperre aufgehoben werden?','Why should the ban be lifted?')+'"></textarea>'
+    +'<button type="submit" class="btn primary">'+tt('Einspruch senden','Send appeal')+'</button><p class="nameerr" id="banApErr" aria-live="polite"></p></form>'
+    +'<p class="small">'+tt('Ein Einspruch pro Tag. Der Admin liest ihn und antwortet.','One appeal per day. The admin reads it and answers.')+'</p></details>';
+}
+function banShow(b,user){
+  b=Object.assign({},b||{});if(!b.username&&user) b.username=user;
+  const old=$id('banOv');if(old) old.remove();
   const ov=document.createElement('div');ov.className='overlay';ov.id='banOv';
-  ov.innerHTML='<div class="dlg namedlg" role="alertdialog" aria-modal="true" aria-labelledby="banT"><div class="mbig" aria-hidden="true">⛔</div><h2 id="banT">'+tt('Konto gesperrt','Account banned')+'</h2><p>'+banTxt(b)+'</p><p class="small">'+tt('Online-Funktionen wie Konto, Clubs, Geschenke und Bestenliste sind gesperrt. Dein Spiel auf diesem Gerät bleibt.','Online features like your account, clubs, gifts and the leaderboard are blocked. Your game on this device stays.')+'</p><div class="btns" style="justify-content:center"><button type="button" class="btn primary" id="banOk">OK</button></div></div>';
+  ov.innerHTML='<div class="dlg namedlg" role="alertdialog" aria-modal="true" aria-labelledby="banT"><div class="mbig" aria-hidden="true">⛔</div><h2 id="banT">'+tt('Konto gesperrt','Account banned')+'</h2><p>'+banTxt(b)+'</p><p class="small">'+tt('Online-Funktionen wie Konto, Clubs, Geschenke und Bestenliste sind gesperrt. Dein Spiel auf diesem Gerät bleibt.','Online features like your account, clubs, gifts and the leaderboard are blocked. Your game on this device stays.')+'</p><div id="banAp">'+banAppealHtml(b)+'</div><div class="btns" style="justify-content:center"><button type="button" class="btn primary" id="banOk">OK</button></div></div>';
   document.body.appendChild(ov);const ok=ov.querySelector('#banOk');ok.focus();
   ok.addEventListener('click',()=>ov.remove());
+  ov.addEventListener('submit',async e=>{
+    e.preventDefault();const f=e.target;if(f.getAttribute('id')!=='banApF') return;
+    const d=Object.fromEntries(new FormData(f).entries()),err=$id('banApErr'),body=String(d.body||'').trim();
+    if(!body){err.textContent=tt('Schreib kurz, warum.','Write a few words why.');return;}
+    const btn=f.querySelector('[type=submit]');btn.disabled=true;err.textContent='';
+    try{
+      const r=await lbApi('rpc/ban_appeal',{p_user:String(d.user||'').trim(),p_pass:String(d.pass||''),p_body:body});
+      $id('banAp').innerHTML=banAppealHtml(Object.assign({},b,{appeal:r}));toast(tt('Einspruch gesendet.','Appeal sent.'));
+    }catch(x){
+      const m=String(x.message||'');btn.disabled=false;
+      err.textContent=/wrong username or password/.test(m)?tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.'):/too many tries/.test(m)?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):/appeal already open/.test(m)?tt('Du hast schon einen offenen Einspruch.','You already have an open appeal.'):/one appeal per day/.test(m)?tt('Nur ein Einspruch pro Tag. Versuch es morgen nochmal.','Only one appeal per day. Try again tomorrow.'):/not banned/.test(m)?tt('Dieses Konto ist nicht (mehr) gesperrt. Melde dich einfach an.','This account isn’t banned (any more). Just sign in.'):lbMissing(x)?tt('Einsprüche gehen erst nach dem nächsten Server-Update.','Appeals work after the next server update.'):tt('Keine Verbindung. Versuch es gleich nochmal.','No connection. Try again in a moment.');
+    }
+  });
 }
 
 /* Nur in admin.html (nicht im Spiel für Spieler). */
@@ -9819,6 +9887,237 @@ els.admin.addEventListener('click',e=>{
 els.admin.addEventListener('click',e=>{const b=e.target.closest('#admSeg [data-ap="mod"]');if(b) setTimeout(()=>{if(admPass&&!admBans) admBanCall('list');},0);});
 v52Ready=true;
 if(admPass) admBanCall('list');
+
+/* Nur in admin.html (nicht im Spiel für Spieler). */
+/* ======================= V53: Moderatoren, Einsprüche, Zwei-Schritt-Anmeldung, Wochenbericht ======================= */
+var v53Ready=false;
+const MOD_TOK='keksfabrik-modtok';
+var modTok=null;
+try{const o=JSON.parse(sessionStorage.getItem(MOD_TOK)||'null');if(o&&o.t&&o.e>Date.now()+60000) modTok=o;}catch(x){}
+let modData={reports:null,mutes:null,find:null,q:''},modErr='',modBusy=false;
+const modCall=(action,data)=>lbApi('rpc/mod_tools',{p_pass:modTok.t,p_action:action,p_data:data||null});
+
+/* ---------- Moderator: Anmeldung auf dem Sperrbildschirm ---------- */
+function modLockHtml(){
+  if(!lbOn()) return '';
+  return '<details class="fold modlock"><summary>👮 '+tt('Moderator? Hier anmelden','Moderator? Sign in here')+'</summary><form class="admform" id="modLoginF" novalidate>'
+    +'<label class="small">'+tt('Name','Name')+'<input class="namein" name="mname" maxlength="16" autocomplete="username" autocapitalize="off" spellcheck="false"></label>'
+    +'<label class="small">'+tt('Passwort','Password')+'<input class="namein" name="mpass" type="password" maxlength="72" autocomplete="current-password"></label>'
+    +'<button type="submit" class="btn primary">'+tt('Anmelden','Sign in')+'</button></form><p class="nameerr" id="modLoginErr" aria-live="polite"></p>'
+    +'<p class="small">'+tt('Moderatoren sehen nur Meldungen, Stummschaltungen und die Spielersuche.','Moderators only see reports, mutes and player search.')+'</p></details>';
+}
+async function modLogin(user,pass){
+  const err=$id('modLoginErr');if(err) err.textContent='';
+  let r=null;
+  try{r=await lbApi('rpc/mod_login',{p_user:user,p_pass:pass});}
+  catch(x){if(err) err.textContent=lbMissing(x)?tt('Dafür braucht der Server zuerst docs/staff-v12.sql.','This needs docs/staff-v12.sql on the server first.'):tt('Keine Verbindung.','No connection.');return;}
+  if(!r||r.error){if(err) err.textContent=r&&r.error==='locked'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Name oder Passwort stimmt nicht.','Wrong name or password.');return;}
+  modTok={t:r.token,e:Date.parse(r.expires_at)||Date.now()+11*3600e3,name:r.name};
+  try{sessionStorage.setItem(MOD_TOK,JSON.stringify(modTok));}catch(x){}
+  toast(tt('Als Moderator angemeldet.','Signed in as moderator.'));buildAdmin();
+}
+function modOut(){
+  const t=modTok&&modTok.t;modTok=null;modData={reports:null,mutes:null,find:null,q:''};
+  try{sessionStorage.removeItem(MOD_TOK);}catch(x){}
+  if(t) lbApi('rpc/admin_logout',{p_pass:t}).catch(()=>{});
+  buildAdmin();
+}
+
+/* ---------- Moderator: eigenes, kleines Panel ---------- */
+function modPanel(){
+  els.admin.innerHTML='<div class="admlockbar modbar"><span>👮 '+tt('Moderator: ','Moderator: ')+'<b>'+escName(modTok.name||'')+'</b></span><button type="button" class="btn sm" id="modOutBtn">'+tt('Abmelden','Sign out')+'</button></div><div id="modBox" class="admlb"></div>';
+  modRender();modLoad();
+}
+async function modLoad(){
+  if(!modTok||modBusy) return;
+  modBusy=true;
+  try{const [r,m]=await Promise.all([modCall('reports'),modCall('mutes')]);modData.reports=r||[];modData.mutes=m||[];modErr='';}
+  catch(x){if(/wrong admin password/.test(String(x.message))){modBusy=false;toast(tt('Deine Moderator-Sitzung ist abgelaufen.','Your moderator session has ended.'));modOut();return;}modErr=admErrTxt(x);}
+  modBusy=false;modRender();
+}
+async function modDo(action,data,okTxt,after){
+  modErr='';
+  try{const r=await modCall(action,data);if(okTxt) toast(okTxt);if(after) after(r);}
+  catch(x){modErr=/player not found/.test(String(x.message))?tt('Diesen Benutzernamen gibt es nicht.','No account with that username.'):admErrTxt(x);}
+  modRender();
+}
+function modRender(){
+  const box=$id('modBox');if(!box) return;
+  const R=modData.reports||[],open=R.filter(r=>r.status==='open'),M=modData.mutes||[],F=modData.find;
+  let h=modErr?'<p class="nameerr">'+modErr+'</p>':'';
+  h+=admCardH('🚩 '+tt('Meldungen','Reports')+' <small class="muted">('+(modData.reports?open.length+' '+tt('offen','open'):'…')+')</small>',
+    (modData.reports?(open.length?'<div class="admlbl">'+open.map(r=>'<div class="admlbr"><span class="rk">🚩</span><span class="who"><b>'+escName(r.reported)+' · '+escName(r.club)+'</b><small>„'+escName(r.body)+'“</small><small>'+tt('Gemeldet von ','Reported by ')+escName(r.reporter)+' · '+admDT(r.created_at)+'</small></span><span class="btns">'+(r.msg_exists?'<button type="button" class="btn sm warn" data-moda="del:'+r.id+'">'+tt('Löschen','Delete')+'</button>':'')+'<button type="button" class="btn sm" data-moda="ok:'+r.id+'">'+tt('Erledigt','Done')+'</button><button type="button" class="btn sm" data-moda="mute:'+escName(r.reported)+'">'+tt('24 Std stumm','Mute 24 h')+'</button></span></div>').join('')+'</div>':'<p class="small">'+tt('Keine offenen Meldungen. 🎉','No open reports. 🎉')+'</p>'):'<p class="small">'+tt('Lädt …','Loading …')+'</p>')
+    +'<div class="btns" style="margin-top:8px"><button type="button" class="btn sm" data-moda="reload">'+tt('Aktualisieren','Refresh')+'</button></div>');
+  let f='<form class="coderow" id="modFindF" novalidate><input class="namein" name="q" maxlength="24" autocomplete="off" value="'+escName(modData.q)+'" placeholder="'+tt('Benutzername','Username')+'"><button type="submit" class="btn primary">'+tt('Suchen','Search')+'</button></form>';
+  if(F) f+=F.length?'<div class="admlbl">'+F.map(a=>'<div class="admlbr"><span class="rk">'+(a.banned?'⛔':a.muted?'🔇':'👤')+'</span><span class="who"><b>'+escName(a.username)+'</b><small>'+(a.club?'👥 '+escName(a.club)+' · ':'')+'🚩 '+a.reports+' · '+tt('Zuletzt: ','Last seen: ')+admDT(a.last_seen)+(a.muted?' · '+tt('stumm bis ','muted until ')+admDT(a.muted):'')+'</small></span><span class="btns">'+(a.muted?'<button type="button" class="btn sm" data-moda="unmute:'+escName(a.username)+'">'+tt('Stumm aus','Unmute')+'</button>':'<button type="button" class="btn sm" data-moda="mute:'+escName(a.username)+'">'+tt('24 Std stumm','Mute 24 h')+'</button>')+'</span></div>').join('')+'</div>':'<p class="small">'+tt('Nichts gefunden.','Nothing found.')+'</p>';
+  h+=admCardH('🔎 '+tt('Spieler suchen','Find a player'),f);
+  h+=admCardH('🔇 '+tt('Stummschalten','Mute')+' <small class="muted">('+M.length+')</small>','<form class="admform" id="modMuteF" novalidate><label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="user" maxlength="16" autocapitalize="off" spellcheck="false"></label><label class="small">'+tt('Stunden (höchstens 168)','Hours (at most 168)')+'<input class="namein" name="hours" type="number" min="1" max="168" value="24"></label><input class="namein" name="reason" maxlength="120" placeholder="'+tt('Grund (optional)','Reason (optional)')+'" style="grid-column:1/-1"><button type="submit" class="btn primary">'+tt('Stummschalten','Mute')+'</button></form>'
+    +(M.length?'<div class="admlbl" style="margin-top:8px">'+M.map(m=>'<div class="admlbr"><span class="rk">🔇</span><span class="who"><b>'+escName(m.username)+'</b><small>'+tt('bis ','until ')+admDT(m.until)+(m.reason?' · '+escName(m.reason):'')+'</small></span><span class="btns"><button type="button" class="btn sm" data-moda="unmute:'+escName(m.username)+'">'+tt('Stumm aus','Unmute')+'</button></span></div>').join('')+'</div>':'')
+    +'<p class="small" style="margin-top:6px">'+tt('Stumme Spieler können nicht im Club-Chat schreiben und keine Geschenke senden. Alles, was du tust, steht mit deinem Namen im Admin-Protokoll.','Muted players can’t write in club chat or send gifts. Everything you do is in the admin log with your name.')+'</p>');
+  if(box._h!==h){box._h=h;box.innerHTML=h;}
+}
+els.admin.addEventListener('submit',e=>{
+  const f=e.target,id=f.getAttribute('id');if(!['modLoginF','modFindF','modMuteF'].includes(id)) return;
+  e.preventDefault();const d=Object.fromEntries(new FormData(f).entries());
+  if(id==='modLoginF'){const u=String(d.mname||'').trim(),p=String(d.mpass||'');if(u&&p) modLogin(u,p);return;}
+  if(id==='modFindF'){modData.q=String(d.q||'').trim();if(modData.q.length<2) return;modDo('search',{q:modData.q},null,r=>{modData.find=r||[];});return;}
+  if(id==='modMuteF'){const u=String(d.user||'').trim();if(!/^[A-Za-z0-9_]{3,16}$/.test(u)){modErr=tt('Gib den Benutzernamen des Kontos ein.','Enter the account username.');modRender();return;}
+    modDo('mute',{user:u,hours:Math.min(168,Math.max(1,+d.hours||24)),reason:String(d.reason||'').trim()},tt('Stummgeschaltet.','Muted.'),r=>{modData.mutes=r||[];const nf=$id('modMuteF');if(nf) nf.reset();});}
+});
+els.admin.addEventListener('click',e=>{
+  if(e.target.closest('#modOutBtn')){modOut();return;}
+  const b=e.target.closest('[data-moda]');if(!b) return;
+  const [a,v]=b.dataset.moda.split(':');
+  const refind=()=>{if(modData.q) modCall('search',{q:modData.q}).then(x=>{modData.find=x||[];modRender();}).catch(()=>{});};
+  if(a==='reload'){modLoad();return;}
+  if(a==='del'||a==='ok'){modDo('report_done',{id:v,delete:a==='del'},a==='del'?tt('Nachricht gelöscht.','Message deleted.'):tt('Erledigt.','Done.'),r=>{modData.reports=r||[];});return;}
+  if(a==='mute'){modDo('mute',{user:v,hours:24,reason:tt('Meldung','Report')},tt('24 Stunden stummgeschaltet.','Muted for 24 hours.'),r=>{modData.mutes=r||[];refind();});return;}
+  if(a==='unmute'){modDo('unmute',{user:v},tt('Stummschaltung aufgehoben.','Unmuted.'),r=>{modData.mutes=r||[];refind();});}
+});
+setInterval(()=>{if(modTok&&!admOK&&!els.setOv.hidden&&setSub==='admin'&&!document.hidden) modLoad();},60000);
+
+/* ---------- Besitzer: Moderatoren und Einsprüche (Moderation-Tab) ---------- */
+var admMods=null,admAppeals=null,admTeamErr='',admTeamArm={k:'',t:0};
+async function admTeamLoad(){
+  if(!admPass) return;
+  try{const [m,a]=await Promise.all([lbApi('rpc/admin_mods',{p_pass:admPass,p_action:'list'}),lbApi('rpc/admin_appeals',{p_pass:admPass,p_action:'list'})]);admMods=m||[];admAppeals=a||[];admTeamErr='';}
+  catch(x){admTeamErr=lbMissing(x)?tt('Moderatoren und Einsprüche brauchen zuerst docs/staff-v12.sql.','Moderators and appeals need docs/staff-v12.sql first.'):admErrTxt(x);}
+  admModRender();
+}
+async function admTeamDo(fn,action,data,okTxt){
+  admTeamErr='';
+  try{const r=await lbApi('rpc/'+fn,{p_pass:admPass,p_action:action,p_data:data||null});if(fn==='admin_mods') admMods=r||[];else admAppeals=r||[];if(okTxt) toast(okTxt);}
+  catch(x){const m=String(x.message||'');admTeamErr=/invalid password/.test(m)?tt('Das Passwort braucht 8–72 Zeichen.','The password needs 8–72 characters.'):/invalid name/.test(m)?tt('Name: 3–16 Buchstaben, Zahlen oder _.','Name: 3–16 letters, numbers or _.'):/name taken/.test(m)?tt('Diesen Namen gibt es schon.','That name is already taken.'):admErrTxt(x);}
+  admTeamArm={k:'',t:0};admModRender();
+}
+function admTeamHtml(){
+  const M=admMods||[],A=admAppeals||[],openA=A.filter(a=>a.status==='open'),arm=k=>admTeamArm.k===k&&Date.now()-admTeamArm.t<5000;
+  let h=admCardH('📨 '+tt('Einsprüche gegen Sperren','Ban appeals')+' <small class="muted">('+(admAppeals?openA.length+' '+tt('offen','open'):'…')+')</small>',
+    '<p class="small">'+tt('Gesperrte Spieler können einmal am Tag um eine Prüfung bitten. Annehmen hebt die Sperre auf. Deine Antwort sehen sie beim nächsten Anmeldeversuch.','Banned players can ask for a review once a day. Accepting lifts the ban. They see your answer the next time they try to sign in.')+'</p>'
+    +(openA.length?'<div class="admlbl">'+openA.map(a=>'<div class="admlbr appeal"><span class="rk">📨</span><span class="who"><b>'+escName(a.username)+'</b><small>„'+escName(a.body)+'“</small><small>'+admDT(a.created_at)+(a.ban?' · ⛔ '+(a.ban.reason?escName(a.ban.reason):tt('ohne Grund','no reason'))+' · '+(a.ban.until?tt('bis ','until ')+admDT(a.ban.until):tt('für immer','forever')):'')+'</small><input class="namein" data-apans="'+a.id+'" maxlength="300" placeholder="'+tt('Antwort an den Spieler (optional)','Answer to the player (optional)')+'"></span><span class="btns"><button type="button" class="btn sm primary" data-apa="yes:'+a.id+'">'+tt('Annehmen','Accept')+'</button><button type="button" class="btn sm warn" data-apa="no:'+a.id+'">'+tt('Ablehnen','Reject')+'</button></span></div>').join('')+'</div>':'<p class="small">'+(admAppeals?tt('Keine offenen Einsprüche.','No open appeals.'):tt('Lädt …','Loading …'))+'</p>')
+    +(A.length>openA.length?'<details class="fold"><summary>'+tt('Beantwortet','Answered')+' ('+(A.length-openA.length)+')</summary><div class="admlbl">'+A.filter(a=>a.status!=='open').map(a=>'<div class="admlbr done"><span class="rk">'+(a.status==='accepted'?'✅':'❌')+'</span><span class="who"><b>'+escName(a.username)+'</b><small>„'+escName(a.body)+'“</small>'+(a.answer?'<small>↳ '+escName(a.answer)+'</small>':'')+'<small>'+admDT(a.answered_at)+'</small></span></div>').join('')+'</div></details>':''));
+  h+=admCardH('👮 '+tt('Moderatoren','Moderators')+' <small class="muted">('+M.length+')</small>',
+    '<p class="small">'+tt('Moderatoren melden sich in admin.html unter „Moderator? Hier anmelden“ an. Sie sehen nur Meldungen, Stummschaltungen (höchstens 7 Tage) und die Spielersuche – keine Sperren, Geschenke, Einstellungen oder Spiel-Werkzeuge. Alles steht mit ihrem Namen im Admin-Protokoll.','Moderators sign in on admin.html under “Moderator? Sign in here”. They only see reports, mutes (at most 7 days) and player search – no bans, gifts, settings or game tools. Everything they do is in the admin log with their name.')+'</p>'
+    +'<form class="admform" id="admModAddF" novalidate><label class="small">'+tt('Name','Name')+'<input class="namein" name="name" maxlength="16" autocapitalize="off" spellcheck="false"></label><label class="small">'+tt('Passwort (8+ Zeichen)','Password (8+ characters)')+'<input class="namein" name="pass" type="text" maxlength="72" autocomplete="new-password" spellcheck="false"></label><button type="submit" class="btn primary">'+tt('Moderator hinzufügen','Add moderator')+'</button></form>'
+    +(M.length?'<div class="admlbl" style="margin-top:8px">'+M.map(m=>'<div class="admlbr"><span class="rk">👮</span><span class="who"><b>'+escName(m.name)+'</b><small>'+tt('Zuletzt angemeldet: ','Last sign-in: ')+admDT(m.last_login)+' · '+m.actions+' '+tt('Aktionen (30 Tage)','actions (30 days)')+'</small></span><span class="btns"><button type="button" class="btn sm" data-mma="pw:'+escName(m.name)+'">'+tt('Neues Passwort','New password')+'</button><button type="button" class="btn sm warn'+(arm('rm:'+m.name)?' armed':'')+'" data-mma="rm:'+escName(m.name)+'">'+(arm('rm:'+m.name)?tt('Sicher?','Sure?'):tt('Entfernen','Remove'))+'</button></span></div>').join('')+'</div>':'')
+    +(admTeamErr?'<p class="nameerr">'+admTeamErr+'</p>':''));
+  return h;
+}
+els.admin.addEventListener('submit',e=>{
+  const f=e.target;if(f.getAttribute('id')!=='admModAddF') return;
+  e.preventDefault();const d=Object.fromEntries(new FormData(f).entries());
+  admTeamDo('admin_mods','add',{name:String(d.name||'').trim(),pass:String(d.pass||'')},tt('Moderator hinzugefügt. Gib ihm Name und Passwort persönlich.','Moderator added. Give them the name and password in person.')).then(()=>{if(!admTeamErr){const nf=$id('admModAddF');if(nf) nf.reset();}});
+});
+els.admin.addEventListener('click',e=>{
+  const b=e.target.closest('[data-mma],[data-apa]');if(!b) return;
+  if(b.dataset.apa){const [a,id]=b.dataset.apa.split(':');const ans=els.admin.querySelector('[data-apans="'+id+'"]');
+    admTeamDo('admin_appeals','answer',{id:+id,accept:a==='yes',answer:ans?ans.value.trim():''},a==='yes'?tt('Einspruch angenommen, Sperre aufgehoben.','Appeal accepted, ban lifted.'):tt('Einspruch abgelehnt.','Appeal rejected.')).then(()=>{if(a==='yes'&&v52Ready) admBanCall('list');});return;}
+  const [a,nm]=b.dataset.mma.split(':');
+  if(a==='pw'){const p=window.prompt(tt('Neues Passwort für ','New password for ')+nm+tt(' (8+ Zeichen):',' (8+ characters):'));if(p) admTeamDo('admin_mods','password',{name:nm,pass:p},tt('Passwort geändert. Der Moderator wurde abgemeldet.','Password changed. The moderator was signed out.'));return;}
+  if(a==='rm'){if(!(admTeamArm.k==='rm:'+nm&&Date.now()-admTeamArm.t<5000)){admTeamArm={k:'rm:'+nm,t:Date.now()};admModRender();return;}admTeamDo('admin_mods','remove',{name:nm},tt('Moderator entfernt.','Moderator removed.'));}
+});
+
+/* ---------- Besitzer: Wochenbericht und Zwei-Schritt-Anmeldung (Server-Tab) ---------- */
+var admWeek=null,adm2fa=null,adm2faSetup=null,adm2faErr='';
+async function admWeekLoad(){
+  if(!admPass) return;
+  try{const [w,f]=await Promise.all([lbApi('rpc/admin_summary',{p_pass:admPass}),lbApi('rpc/admin_2fa',{p_pass:admPass,p_action:'status'})]);admWeek=w;adm2fa=f;}
+  catch(x){admWeek=null;adm2fa=null;if(lbMissing(x)) adm2faErr=tt('Wochenbericht und Zwei-Schritt-Anmeldung brauchen zuerst docs/staff-v12.sql.','The weekly summary and two-step sign-in need docs/staff-v12.sql first.');}
+  admSrvRender();
+}
+const WEEK_KEYS=[['players','🍪','Spieler','Players'],['new_players','🌱','Neue Spieler','New players'],['returning','🔁','Kamen wieder','Came back'],['accounts','👤','Neue Konten','New accounts'],['clubs','👥','Neue Clubs','New clubs'],['chat','💬','Chat-Nachrichten','Chat messages'],['gifts','🎁','Geschenke','Gifts'],['reports','🚩','Meldungen','Reports'],['crashes','🐞','Fehlerarten','Crash types'],['bans','⛔','Sperren','Bans']];
+function admWeekHtml(){
+  if(!admWeek) return adm2faErr?admCardH('📅 '+tt('Diese Woche','This week'),'<p class="small">'+adm2faErr+'</p>'):'';
+  const T=admWeek.this||{},L=admWeek.last||{},bad=['reports','crashes','bans'];
+  return admCardH('📅 '+tt('Diese Woche (letzte 7 Tage)','This week (last 7 days)'),'<p class="small">'+tt('Im Vergleich zu den 7 Tagen davor.','Compared with the 7 days before.')+'</p><div class="admweek">'+WEEK_KEYS.map(([k,ic,de,en])=>{
+    const a=+T[k]||0,b=+L[k]||0,d=a-b,up=d>0,cls=d===0?'':(up!==bad.includes(k)?'good':'bad');
+    return '<span class="'+cls+'"><small>'+ic+' '+tt(de,en)+'</small><b>'+fmt(a)+'</b><i>'+(d===0?'±0':(up?'▲ +':'▼ ')+fmt(d))+(b?' ('+(up?'+':'')+Math.round(d/b*100)+'%)':'')+'</i></span>';
+  }).join('')+'</div>');
+}
+function adm2faHtml(){
+  if(!adm2fa) return '';
+  let b='';
+  if(adm2fa.on) b='<p class="small">✅ '+tt('An. Beim Anmelden mit dem Server-Passwort fragt der Server zusätzlich nach dem 6-stelligen Code aus deiner Authenticator-App.','On. Signing in with the server password also asks for the 6-digit code from your authenticator app.')+'</p><form class="coderow" id="adm2faOffF" novalidate><input class="namein" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="'+tt('Code zum Ausschalten','Code to turn it off')+'"><button type="submit" class="btn warn">'+tt('Ausschalten','Turn off')+'</button></form>';
+  else if(adm2faSetup) b='<ol class="small adm2fa"><li>'+tt('Öffne eine Authenticator-App (z. B. Google Authenticator, Microsoft Authenticator, 2FAS).','Open an authenticator app (for example Google Authenticator, Microsoft Authenticator or 2FAS).')+'</li><li>'+tt('Füge ein Konto hinzu: „Schlüssel eingeben“ und diesen Schlüssel eintragen – oder auf dem Handy den Link antippen.','Add an account: choose “Enter a setup key” and type this key – or tap the link on your phone.')+'<div class="admkey"><code id="adm2faKey">'+adm2faSetup.secret.replace(/(.{4})/g,'$1 ').trim()+'</code><button type="button" class="btn sm" data-tfa="copy">'+tt('Kopieren','Copy')+'</button><a class="btn sm" href="'+escName(adm2faSetup.uri)+'">'+tt('In App öffnen','Open in app')+'</a></div></li><li>'+tt('Gib den Code ein, den die App jetzt zeigt:','Enter the code the app shows now:')+'<form class="coderow" id="adm2faOnF" novalidate><input class="namein" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="123456"><button type="submit" class="btn primary">'+tt('Einschalten','Turn on')+'</button></form></li></ol><p class="small">'+tt('Wenn du das Handy verlierst, kannst du es in Supabase ausschalten (siehe docs/LEADERBOARD.md).','If you lose your phone, you can turn it off in Supabase (see docs/LEADERBOARD.md).')+'</p>';
+  else b='<p class="small">'+tt('Aus. Schalte es ein, dann reicht ein gestohlenes Server-Passwort allein nicht mehr: Man braucht auch den Code von deinem Handy.','Off. Turn it on so a stolen server password alone isn’t enough: the code from your phone is needed too.')+'</p><div class="btns"><button type="button" class="btn primary" data-tfa="setup">'+tt('Einrichten','Set up')+'</button></div>';
+  return admCardH('📱 '+tt('Zwei-Schritt-Anmeldung','Two-step sign-in'),b+(adm2faErr?'<p class="nameerr">'+adm2faErr+'</p>':''));
+}
+async function adm2faDo(action,data,okTxt){
+  adm2faErr='';
+  try{const r=await lbApi('rpc/admin_2fa',{p_pass:admPass,p_action:action,p_data:data||null});if(action==='setup') adm2faSetup=r;else{adm2fa=r;adm2faSetup=null;}if(okTxt) toast(okTxt,true);}
+  catch(x){adm2faErr=/wrong code/.test(String(x.message))?tt('Falscher Code. Nimm den aktuellen Code aus der App.','Wrong code. Use the current code from the app.'):admErrTxt(x);}
+  admSrvRender();
+}
+els.admin.addEventListener('click',e=>{
+  const b=e.target.closest('[data-tfa]');if(!b) return;
+  if(b.dataset.tfa==='setup') adm2faDo('setup');
+  if(b.dataset.tfa==='copy'&&adm2faSetup){try{navigator.clipboard.writeText(adm2faSetup.secret);toast(tt('Schlüssel kopiert.','Key copied.'));}catch(x){}}
+});
+els.admin.addEventListener('submit',e=>{
+  const f=e.target,id=f.getAttribute('id');if(id!=='adm2faOnF'&&id!=='adm2faOffF') return;
+  e.preventDefault();const c=String(new FormData(f).get('code')||'').replace(/\s/g,'');if(!/^\d{6}$/.test(c)){adm2faErr=tt('Der Code hat 6 Ziffern.','The code has 6 digits.');admSrvRender();return;}
+  if(id==='adm2faOnF') adm2faDo('confirm',{code:c},tt('Zwei-Schritt-Anmeldung ist an. Ab jetzt fragt die Anmeldung nach dem Code.','Two-step sign-in is on. From now on, signing in asks for the code.'));
+  else adm2faDo('disable',{code:c},tt('Zwei-Schritt-Anmeldung ist aus.','Two-step sign-in is off.'));
+});
+
+v53Ready=true;
+if(modTok&&!admOK) buildAdmin();
+if(admPass){admTeamLoad();admWeekLoad();}
+
+/* ======================= V53: Freiwillige Werbung, nur in Portal-Versionen ======================= */
+/* Nur die Zip-Dateien für CrazyGames und GameDistribution laden deren SDK (tools/portal.js --sdk …).
+   Auf der eigenen Seite und in der normalen Portal-Version gibt es keine Werbung. */
+const AD_SDK=window.KF_PORTAL==='crazygames'||window.KF_PORTAL==='gamedistribution'?window.KF_PORTAL:'';
+const AD_MIN=20,AD_CD=300000,AD_KEY='keksfabrik-adt';
+var adMute=false;
+let adReady=false,adBusy=false,adNext=0,adGdOk=false;
+try{adNext=+localStorage.getItem(AD_KEY)||0;}catch(x){}
+function adSound(off){adMute=off;try{if(typeof actx!=='undefined'&&actx){if(off) actx.suspend().catch(()=>{});else if(!document.hidden) actx.resume().catch(()=>{});}}catch(x){}}
+function adReward(){
+  const g=Math.max(1000,C.kps0*60*AD_MIN);addCk(g);
+  adNext=Date.now()+AD_CD;try{localStorage.setItem(AD_KEY,String(adNext));}catch(x){}
+  toast(tt('🎬 Danke! +','🎬 Thanks! +')+fmt(g)+tt(' Kekse',' cookies'),true);snd('claim');render();adRender();
+}
+function adRender(){
+  if(!AD_SDK) return;
+  let b=$id('adBtn');
+  if(!b){const gb=$id('gevBar');if(!gb) return;b=document.createElement('button');b.type='button';b.id='adBtn';b.className='adbtn';gb.insertAdjacentElement('afterend',b);b.addEventListener('click',adShow);}
+  const wait=Math.max(0,adNext-Date.now());b.hidden=!adReady;b.disabled=adBusy||wait>0;
+  const t=adBusy?tt('Werbung läuft …','Ad playing …'):wait>0?'🎬 '+Math.ceil(wait/60000)+' min':'🎬 '+tt('Werbung ansehen: +','Watch an ad: +')+AD_MIN+' min';
+  if(b.textContent!==t) b.textContent=t;
+  b.title=tt('Freiwillig: Sieh dir eine kurze Werbung an und bekomm '+AD_MIN+' Minuten Produktion.','Optional: watch a short ad and get '+AD_MIN+' minutes of production.');
+}
+function adDone(ok){adBusy=false;adSound(false);if(ok) adReward();else{toast(tt('Gerade gibt es keine Werbung. Versuch es später nochmal.','No ad available right now. Try again later.'));adRender();}}
+function adShow(){
+  if(adBusy||!adReady||Date.now()<adNext) return;
+  adBusy=true;adRender();
+  try{
+    if(AD_SDK==='crazygames'){
+      window.CrazyGames.SDK.ad.requestAd('rewarded',{adStarted:()=>adSound(true),adFinished:()=>adDone(true),adError:()=>adDone(false)});
+    }else{
+      adGdOk=false;
+      window.gdsdk.showAd('rewarded').then(()=>adDone(adGdOk)).catch(()=>adDone(false));
+    }
+  }catch(x){adDone(false);}
+}
+/* GameDistribution meldet sich über GD_OPTIONS.onEvent (in tools/portal.js gesetzt). */
+window.__kfGdEvent=e=>{
+  const n=e&&e.name;
+  if(n==='SDK_READY'){adReady=true;try{window.gdsdk.preloadAd('rewarded').catch(()=>{});}catch(x){}adRender();}
+  else if(n==='SDK_GAME_PAUSE') adSound(true);
+  else if(n==='SDK_GAME_START') adSound(false);
+  else if(n==='SDK_REWARDED_WATCH_COMPLETE') adGdOk=true;
+};
+async function adInit(){
+  if(AD_SDK==='crazygames'){
+    for(let i=0;i<20&&!(window.CrazyGames&&window.CrazyGames.SDK);i++) await new Promise(r=>setTimeout(r,500));
+    if(!(window.CrazyGames&&window.CrazyGames.SDK)) return;
+    try{await window.CrazyGames.SDK.init();}catch(x){}
+    try{window.CrazyGames.SDK.game.loadingStop();}catch(x){}
+    adReady=true;adRender();
+  }else if(AD_SDK==='gamedistribution'&&window.__kfGdReady){window.__kfGdEvent({name:'SDK_READY'});}
+}
+if(AD_SDK){adInit();setInterval(adRender,15000);}
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};
