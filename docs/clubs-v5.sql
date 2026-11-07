@@ -311,8 +311,8 @@ begin
     'gifts_today', (select count(*) from kf_gifts where created_at > now() - interval '1 day'));
 end $$;
 
-revoke all on function public.club_close_weeks() from public;
-revoke all on function public.club_member_gone() from public;
+revoke all on function public.club_close_weeks() from public, anon, authenticated;
+revoke all on function public.club_member_gone() from public, anon, authenticated;
 revoke all on function public.club_list(text) from public;
 revoke all on function public.club_mine(text) from public;
 revoke all on function public.club_create(text, text, text, text) from public;

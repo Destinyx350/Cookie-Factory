@@ -63,6 +63,7 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - The server admin password is stored as `sha256(salt || password)` in `lb_admin`. The insert line with salt and hash is given to the owner in chat only; never commit it.
 - Prizes are defined in `LB_PRIZE` in `index.html`. Admin moderation actions must not set `S.adm`.
 - Test SQL changes in a local PostgreSQL first (role `anon`), then give the owner one paste-ready file.
+- Supabase grants `anon` execute on every new function by default, so internal helpers must be revoked `from public, anon, authenticated` (not just `from public`). Test with `alter default privileges in schema public grant execute on functions to anon, authenticated` set on the local DB. `docs/lock-internal-functions.sql` fixes existing projects.
 
 ## Orders balance (version 41)
 

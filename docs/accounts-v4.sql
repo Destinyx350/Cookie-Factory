@@ -167,8 +167,8 @@ begin
                  from (select * from kf_accounts order by last_login desc nulls last limit 100) x), '[]'::json));
 end $$;
 
-revoke all on function public.acc_from_token(text) from public;
-revoke all on function public.acc_new_session(uuid) from public;
+revoke all on function public.acc_from_token(text) from public, anon, authenticated;
+revoke all on function public.acc_new_session(uuid) from public, anon, authenticated;
 revoke all on function public.acc_signup(text, text, uuid) from public;
 revoke all on function public.acc_login(text, text) from public;
 revoke all on function public.acc_logout(text) from public;
