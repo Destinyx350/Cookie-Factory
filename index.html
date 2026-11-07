@@ -1653,6 +1653,11 @@ html{-webkit-tap-highlight-color:transparent}
 .admerrs pre{white-space:pre-wrap;font:11px/1.4 ui-monospace,monospace;max-height:180px;overflow:auto;background:rgba(0,0,0,.18);padding:8px;border-radius:8px}
 :root[data-device="phone"] .admfun div{grid-template-columns:minmax(0,8em) 1fr auto}
 
+/* V52: Hinweis bei gesperrtem Konto */
+#banOv .dlg{text-align:center}
+#banOv .mbig{font-size:54px;line-height:1;margin:4px 0 8px}
+#admBanF .chk{display:flex;align-items:center;gap:8px}
+
 </style>
 
 <div class="wrap">
@@ -1854,7 +1859,7 @@ html{-webkit-tap-highlight-color:transparent}
 </div>
 <div class="overlay" id="setOv" hidden><div class="dlg wide" role="dialog" aria-modal="true" aria-labelledby="setT"><div class="dhead"><h2 id="setT" data-i18n="settings"></h2><button type="button" class="btn sm" id="setClose" data-i18n="news_close"></button></div>
 <input type="search" id="setQ" class="setq" autocomplete="off">
-<div class="seg setseg" id="setSeg"><button type="button" data-sp="disp" aria-pressed="true"></button><button type="button" data-sp="snd" aria-pressed="false"></button><button type="button" data-sp="game" aria-pressed="false"></button><button type="button" data-sp="save" aria-pressed="false"></button><button type="button" data-sp="admin" aria-pressed="false" data-i18n="tab_admin"></button></div>
+<div class="seg setseg" id="setSeg"><button type="button" data-sp="disp" aria-pressed="true"></button><button type="button" data-sp="snd" aria-pressed="false"></button><button type="button" data-sp="game" aria-pressed="false"></button><button type="button" data-sp="save" aria-pressed="false"></button></div>
 <p class="small" id="setNone" hidden></p>
 <div class="spane" data-spane="opt">
         <div class="optsec" data-sc="disp">
@@ -1996,9 +2001,7 @@ html{-webkit-tap-highlight-color:transparent}
           <div class="btns"><button type="button" class="btn" id="resetBtn"></button></div>
         </div>
 </div>
-<div class="spane" data-spane="admin" hidden>
-        <div id="admin"></div>
-</div>
+
 </div></div>
 <div class="overlay" id="newsOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="newsT"><div class="dhead"><h2 id="newsT" data-i18n="news_title"></h2><button type="button" class="btn sm" id="newsClose" data-i18n="news_close"></button></div><div id="newsBody"></div></div></div>
 <div class="overlay" id="nameOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="nameT"><h2 id="nameT"></h2><p id="nameP"></p><form id="nameForm" novalidate><input type="text" id="nameIn" class="namein" maxlength="20" autocomplete="off" spellcheck="false"><p class="nameerr" id="nameErr" aria-live="polite"></p><div class="btns"><button type="submit" class="btn primary" id="nameOk"></button><button type="button" class="btn" id="nameCancel"></button></div></form></div></div>
@@ -2044,6 +2047,8 @@ html{-webkit-tap-highlight-color:transparent}
 })();
 (function(){
 'use strict';
+/* Admin-Haken: Nur admin.html trägt hier Funktionen ein. Im Spiel für Spieler bleibt das leer. */
+const ADMH={on:false};
 
 /* ======================= Sprache ======================= */
 const slotKey=n=>n===1?'keksfabrik-save-v1':'keksfabrik-save-v1-s'+n;
@@ -2896,8 +2901,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=51;
+const NEWS_VER=52;
 const NEWS=[
+  {v:52,sum:['Schneller laden und mehr Schutz vor Regelbrechern.','Faster loading and better protection from rule-breakers.'],items:[
+    ['change','Das Spiel ist rund 10 % kleiner und lädt schneller: Die Admin-Werkzeuge stecken nicht mehr im Spiel, und der Admin-Tab ist weg.','The game is about 10% smaller and loads faster: the admin tools are no longer inside the game, and the Admin tab is gone.'],
+    ['new','Wer gegen die Regeln verstößt, kann jetzt gesperrt werden. Gesperrte Spieler sehen den Grund und wie lange die Sperre dauert.','Players who break the rules can now be banned. Banned players see the reason and how long the ban lasts.']
+  ]},
   {v:51,sum:['Neu: Willkommensgeschenk, Reaktionen und angeheftete Nachrichten im Club-Chat!','New: a welcome-back gift, plus reactions and pinned messages in club chat!'],items:[
     ['new','Willkommensgeschenk: Wer nach 3 oder mehr Tagen zurückkommt, bekommt Edelsteine (bis zu 50) und 30 Minuten Kekse geschenkt.','Welcome-back gift: come back after 3 or more days and get up to 50 gems and 30 minutes of cookies.'],
     ['new','Club-Chat: Reagiere mit 👍 ❤️ 😂 🎉 🍪 auf Nachrichten, wink deinem Club mit 👋 zu, und der Club-Chef kann eine Nachricht oben anheften.','Club chat: react to messages with 👍 ❤️ 😂 🎉 🍪, wave to your club with 👋, and the club leader can pin a message to the top.'],
@@ -5024,7 +5033,7 @@ function showSetPane(id){
   document.querySelectorAll('#setSeg button').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.sp===setSub?'true':'false'));
   document.querySelectorAll('#setOv details.savemore').forEach(d=>{if(q&&!d.hidden) d.open=true;});
   const no=document.getElementById('setNone');no.hidden=!q||n>0;no.textContent=tt('Nichts gefunden.','Nothing found.');
-  if(adm) fillAdmin();
+  if(adm&&ADMH.fill) ADMH.fill();
 }
 setQ.addEventListener('input',()=>{updOptTxt();showSetPane();});
 setQ.addEventListener('keydown',e=>{if(e.key==='Escape'&&setQ.value){e.stopPropagation();e.preventDefault();setQ.value='';showSetPane();}});
@@ -7192,7 +7201,7 @@ function armed(btn,armedKey,restore,action){
 function rebuildAll(){
   showName();
   checkDay(true);rebSig='';workSig='';
-  upSig='';upSeen=null;treeSig='';lootSig='';lastDraw=null;recalc();ensureOrders();ensureWorld();refreshAch();fillAdmin();setSkin();render();
+  upSig='';upSeen=null;treeSig='';lootSig='';lastDraw=null;recalc();ensureOrders();ensureWorld();refreshAch();if(ADMH.fill) ADMH.fill();setSkin();render();
 }
 armed(els.ascBtn,'asc_confirm',()=>updAsc(),()=>{doAscend();});
 function doAscend(){
@@ -7516,290 +7525,6 @@ function egClick(e){
 }
 ['egRank','egCos','egPar','evoBox','artSec','autoSec'].forEach(id=>document.getElementById(id).addEventListener('click',egClick));
 
-/* ======================= Admin-Panel ======================= */
-function numStr(x){return Number(Number(x).toPrecision(10)).toString();}
-function parseNum(s){
-  s=String(s).trim().replace(/\s/g,'').replace(',','.');
-  if(s==='') return null;
-  const n=Number(s);
-  return isFinite(n)&&n>=0?n:null;
-}
-const RES=[['cookies','adm_cookies'],['all','kv_all'],['run','this_run'],['chips','adm_chips'],['asc','kv_ascs'],['clicks','adm_clicks'],['gold','adm_gold_n']];
-const MUL=[['prod','adm_m_prod'],['click','adm_m_click'],['cost','adm_m_cost'],['speed','adm_m_speed'],['gold','adm_m_gold'],['goldPow','adm_m_goldpow'],['growth','adm_m_growth']];
-const frow=(f,label)=>'<label class="frow"><span>'+label+'</span><input type="text" inputmode="decimal" autocomplete="off" data-f="'+f+'"></label>';
-function chkList(g,list){
-  return '<div class="chklist">'+list.map(o=>'<label class="chk"><input type="checkbox" data-u="'+g+':'+o.id+'"><span>'+tx(o.name)+'</span></label>').join('')+'</div>';
-}
-function unlockSec(g,titleKey,list){
-  return '<details class="adm"><summary>'+tr('adm_unlock')+': '+tr(titleKey)+'</summary><div class="adm-body"><div class="btns"><button type="button" class="btn sm" data-act="all:'+g+'">'+tr('adm_all_on')+'</button><button type="button" class="btn sm" data-act="none:'+g+'">'+tr('adm_all_off')+'</button></div>'+chkList(g,list)+'</div></details>';
-}
-const ADM_TABS=[['lb','Bestenliste','Leaderboard'],['online','Online','Online'],['mod','Moderation','Moderation'],['srv','Server','Server'],['quick','Schnell','Quick'],['val','Werte','Values'],['bld','Gebäude','Buildings'],['unl','Freischalten','Unlock'],['world','Welt & Held','World & hero'],['end','Endgame','Endgame'],['tool','Werkzeuge','Tools']];
-let admTab='quick',admPass='';
-const ADM_ONLINE=['lb','online','mod','srv'];
-function admXV(){
-  const X={};
-  MATS.forEach(m=>{X['mat_'+m.id]=[()=>S.w.mat[m.id],v=>{S.w.mat[m.id]=Math.floor(v);},m.n];});
-  Object.assign(X,{
-    star:[()=>S.w.star.n,v=>{S.w.star.n=Math.floor(v);S.w.star.all=Math.max(S.w.star.all,S.w.star.n);lootSig='';},['Sternenkrümel','Star crumbs']],
-    pages:[()=>S.reb.pages,v=>{S.reb.pages=Math.floor(v);rebSig='';},['Rezeptseiten','Recipe pages']],
-    rebn:[()=>S.reb.n,v=>{S.reb.n=Math.floor(v);rebSig='';},['Wiedergeburten','Rebirths']],
-    hlvl:[()=>S.hero.lvl,v=>{S.hero.lvl=Math.max(1,Math.min(999,Math.floor(v)));},['Helden-Stufe','Hero level']],
-    sta:[()=>S.hero.sta,v=>{S.hero.sta=Math.max(0,Math.min(staMax(),Math.floor(v)));},['Ausdauer','Stamina']],
-    shards:[()=>S.eg.cos.sh,v=>{S.eg.cos.sh=Math.floor(v);},['Kosmos-Splitter','Cosmic shards']],
-    cosn:[()=>S.eg.cos.n,v=>{S.eg.cos.n=Math.floor(v);},['Kosmische Aufstiege','Cosmic ascensions']],
-    plvl:[()=>S.eg.par.lvl,v=>{S.eg.par.lvl=Math.floor(v);PARK.forEach(k=>{S.eg.par.pts[k[0]]=0;});},['Paragon-Stufe','Paragon level']],
-    frag:[()=>S.eg.art.frag,v=>{S.eg.art.frag=Math.floor(v);},['Artefakt-Splitter','Artifact shards']],
-    ascT:[()=>S.eg.ascT,v=>{S.eg.ascT=Math.floor(v);},['Aufstiege gesamt (für Rang)','Total ascensions (for rank)']],
-    rebT:[()=>S.eg.rebT,v=>{S.eg.rebT=Math.floor(v);},['Wiedergeburten gesamt (für Rang)','Total rebirths (for rank)']],
-    spins:[()=>S.wheel.n,v=>{S.wheel.n=Math.floor(v);},['Glücksrad-Drehungen','Wheel spins']],
-    ac:[()=>S.admin.ac||0,v=>{S.admin.ac=Math.min(1000,Math.floor(v));},['Auto-Klicks pro Sekunde','Auto clicks per second']]
-  });
-  return X;
-}
-let XV=null;
-const ab=(act,label,cls)=>'<button type="button" class="btn sm'+(cls?' '+cls:'')+'" data-act="'+act+'">'+label+'</button>';
-const admCard=(title,body,extra)=>'<div class="admcard admitem" data-k="'+String(title+' '+(extra||'')).toLowerCase().replace(/"/g,'')+'"><h4>'+title+'</h4>'+body+'</div>';
-const xrow=k=>frow('x:'+k,tx(XV[k][2]));
-/* Admin-Sperre: Nur ein gesalzener, langsamer Hash des Passworts steht im Code, nie das Passwort selbst. */
-var ADM_KEY='keksfabrik-admin',ADM_SALT='cc41055918420ef4b5d51c8663244fd5',ADM_ITER=150000,ADM_HASH='0ab689e6cbc41b35531f987ad3a12e4754fa413f15809c0575630143077df3e9';
-var admOK=false,admFails=0,admWait=0;
-try{admOK=sessionStorage.getItem(ADM_KEY)===ADM_HASH||localStorage.getItem(ADM_KEY)===ADM_HASH;}catch(e){}
-async function admHash(pw){
-  const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);
-  const salt=Uint8Array.from(ADM_SALT.match(/../g),x=>parseInt(x,16));
-  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt,iterations:ADM_ITER},key,256);
-  return Array.from(new Uint8Array(bits),b=>b.toString(16).padStart(2,'0')).join('');
-}
-function admLockHTML(){
-  return '<form class="admlock" id="admLockF" novalidate><span class="lockico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></span><h2>'+tt('Admin-Panel ist gesperrt','Admin panel is locked')+'</h2><p class="small">'+tt('Gib das Admin-Passwort ein, um es zu öffnen.','Enter the admin password to open it.')+'</p>'
-    +'<input type="password" class="namein" id="admPw" autocomplete="current-password" aria-label="'+tt('Admin-Passwort','Admin password')+'" placeholder="'+tt('Passwort','Password')+'">'
-    +'<label class="chk"><input type="checkbox" id="admRem"><span>'+tt('Auf diesem Gerät entsperrt lassen','Keep unlocked on this device')+'</span></label>'
-    +'<button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button><p class="nameerr" id="admPwErr" aria-live="polite"></p></form>';
-}
-els.admin.addEventListener('submit',async e=>{
-  if(e.target.id!=='admLockF') return;
-  e.preventDefault();
-  const inp=document.getElementById('admPw'),err=document.getElementById('admPwErr'),rem=document.getElementById('admRem').checked;
-  const wait=Math.ceil((admWait-Date.now())/1000);
-  if(wait>0){err.textContent=tt('Zu viele Versuche. Warte noch '+wait+' s.','Too many tries. Wait '+wait+' s.');return;}
-  if(!window.crypto||!crypto.subtle){err.textContent=tt('Entsperren geht nur auf einer sicheren Seite (https).','Unlocking only works on a secure page (https).');return;}
-  let ok=false;try{ok=(await admHash(inp.value))===ADM_HASH;}catch(x){}
-  if(!ok){
-    admFails++;if(admFails>=5){admFails=0;admWait=Date.now()+30000;}
-    err.textContent=tt('Falsches Passwort.','Wrong password.');inp.value='';inp.focus();return;
-  }
-  admOK=true;admFails=0;if(typeof maintRender==='function') setTimeout(maintRender,0);
-  try{(rem?localStorage:sessionStorage).setItem(ADM_KEY,ADM_HASH);}catch(x){}
-  buildAdmin();toast(tt('Admin-Panel entsperrt.','Admin panel unlocked.'));
-});
-els.admin.addEventListener('click',e=>{
-  if(!e.target.closest('#admLockBtn')) return;
-  admOK=false;admPass='';try{sessionStorage.removeItem(ADM_KEY);localStorage.removeItem(ADM_KEY);}catch(x){}
-  buildAdmin();toast(tt('Admin-Panel gesperrt.','Admin panel locked.'));
-});
-function buildAdmin(){
-  if(!admOK){XV=null;els.admin.innerHTML=admLockHTML();return;}
-  XV=admXV();
-  const P={};
-  P.quick=admCard(tt('Kekse','Cookies'),'<div class="btns">'+[1e6,1e9,1e12,1e15,1e18,1e21,1e24].map(v=>ab('add:'+v,'+'+fmt(v))).join('')+ab('mul10',tr('adm_x10'))+ab('mul1000','×1000')+ab('zero',tt('Auf 0','Set to 0'))+'</div>')
-    +admCard(tt('Zeitsprung','Time warp'),'<div class="btns">'+[[60,'1 min'],[600,'10 min'],[3600,'1 h'],[28800,'8 h'],[86400,tt('1 Tag','1 day')],[604800,tt('7 Tage','7 days')]].map(w=>ab('warp:'+w[0],w[1])).join('')+'</div><p class="small" style="margin-top:6px">'+tt('Gibt die Kekse, die du in dieser Zeit backen würdest.','Gives the cookies you would bake in that time.')+'</p>')
-    +admCard(tt('Spieltempo','Game speed'),'<div class="seg" data-aseg="speed">'+[1,2,5,10,100].map(v=>'<button type="button" data-act="speed:'+v+'" data-v="'+v+'">×'+v+'</button>').join('')+'</div><p class="small" style="margin-top:6px">'+tt('Alles läuft schneller: Produktion, Timer und Welt.','Everything runs faster: production, timers and world.')+'</p>',tt('tempo speed geschwindigkeit','speed'))
-    +admCard(tt('Auto-Klicker','Auto clicker'),'<div class="seg" data-aseg="ac">'+[0,10,50,200].map(v=>'<button type="button" data-act="ac:'+v+'" data-v="'+v+'">'+(v?v+'/s':tt('Aus','Off'))+'</button>').join('')+'</div>')
-    +admCard(tr('adm_gold'),'<div class="btns">'+ab('gold:spawn',tr('adm_spawn'),'primary')+ab('gold:frenzy',tr('adm_fr'))+ab('gold:lucky',tr('adm_lu'))+ab('gold:click',tr('adm_ck'))+ab('gold:build',tt('Gebäude-Rausch','Building rush'))+ab('gold:rain',tt('Keks-Regen','Cookie rain'))+ab('gold:gift',tt('Geschenk','Gift'))+ab('gold:clear',tr('adm_clear'))+'</div>')
-    +admCard(tt('Alles auf einmal','Everything at once'),'<div class="btns">'+ab('maxall',tt('Alles maximieren','Max everything'),'primary')+ab('all:up',tt('Alle Upgrades','All upgrades'))+ab('all:tree',tt('Ganzer Baum','Whole tree'))+ab('items:max',tr('adm_items_max'))+ab('work:max',tt('Helfer Stufe 10','Helpers level 10'))+ab('w:timers',tt('Alle Timer beenden','Finish all timers'))+'</div><p class="small" style="margin-top:6px">'+tt('„Alles maximieren“: alle Upgrades, der ganze Baum, alle Gegenstände Stufe 5, alle Helfer Stufe 10.','“Max everything”: all upgrades, the whole tree, all items level 5, all helpers level 10.')+'</p>');
-  P.val=admCard(tr('adm_res'),RES.map(r=>frow('r:'+r[0],tr(r[1]))).join(''))
-    +admCard(tt('Materialien & Währungen','Materials & currencies'),Object.keys(XV).filter(k=>k.startsWith('mat_')||['star','pages','rebn','shards','frag','spins'].includes(k)).map(xrow).join(''))
-    +admCard(tt('Held, Endgame & Rang','Hero, endgame & rank'),['hlvl','sta','cosn','plvl','ascT','rebT','ac'].map(xrow).join(''))
-    +admCard(tr('adm_mult'),MUL.map(m=>frow('m:'+m[0],tr(m[1]))).join('')+'<div class="btns" style="margin-top:8px">'+ab('mulset:1',tt('Alle ×1','All ×1'))+ab('mulset:10',tt('Alle ×10','All ×10'))+ab('mulset:1000',tt('Alle ×1000','All ×1000'))+'</div>');
-  P.bld=admCard(tt('Alle Gebäude','All buildings'),'<div class="btns">'+ab('bset:0',tt('Alle auf 0','All to 0'))+ab('badd:10','+10')+ab('badd:100','+100')+ab('bset:500',tt('Alle auf 500','All to 500'))+ab('bset:1000',tt('Alle auf 1000','All to 1000'))+ab('evo:all',tt('Alle entwickeln','Evolve all'),'primary')+ab('evo:none',tt('Evolution entfernen','Remove evolution'))+'</div>')
-    +B.map((b,i)=>'<div class="admcard admitem bcard" data-k="'+tx(b.name).toLowerCase()+'"><h4><span>'+tx(b.name)+(S.eg&&S.eg.evo[i]?' ★':'')+'</span>'+ab('rb:'+i,tr('adm_default'))+'</h4><div class="bgrid"><label><span>'+tr('adm_owned')+'</span><input type="text" inputmode="decimal" autocomplete="off" data-f="b:'+i+':own"></label><label><span>'+tr('adm_price')+'</span><input type="text" inputmode="decimal" autocomplete="off" data-f="b:'+i+':cost"></label><label><span>'+tr('adm_cps')+'</span><input type="text" inputmode="decimal" autocomplete="off" data-f="b:'+i+':cps"></label></div></div>').join('');
-  P.unl=[['up','adm_u_up',UP],['ach','adm_u_ach',A],['tree','adm_u_tree',TREE]].map(([g,k,l])=>unlockSec(g,k,l).replace('<details class="adm">','<details class="adm admitem" data-k="'+tr(k).toLowerCase()+'">')).join('')
-    +admCard(tt('Titel & Abzeichen','Titles & badges'),'<div class="btns">'+ab('ttl:all',tt('Alle Titel','All titles'))+ab('ttl:badges',tt('Alle Abzeichen Gold','All badges gold'))+ab('ttl:none',tt('Titel & Abzeichen zurücksetzen','Reset titles & badges'))+'</div>')
-    +admCard(tt('Platin-Erfolge','Platinum achievements'),'<div class="btns">'+ab('plat:all',tt('Alle freischalten','Unlock all'))+ab('plat:none',tt('Alle entfernen','Remove all'))+'</div>');
-  P.world=admCard(tt('Spielwelt','World'),'<div class="btns">'+[['mana','Mana füllen','Fill mana'],['mon','Monster rufen','Call monster'],['timers','Alle Timer beenden','Finish all timers'],['mat','+20 Materialien','+20 materials'],['event','Ereignis starten','Start event'],['egg','+1 Ei','+1 egg'],['star','+3 Sternenkrümel','+3 star crumbs'],['chal','Aktive Challenge schaffen','Finish active challenge'],['reset','Spielwelt zurücksetzen','Reset world']].map(x=>ab('w:'+x[0],tt(x[1],x[2]))).join('')+'</div>')
-    +admCard(tt('Held','Hero'),'<div class="btns">'+ab('hero:lvl',tt('+10 Stufen','+10 levels'))+ab('hero:sta',tt('Ausdauer voll','Full stamina'))+ab('hero:myth',tt('Mythische Ausrüstung','Mythic gear'),'primary')+ab('hero:clear',tt('Abenteuer abbrechen','Cancel adventure'))+'</div>')
-    +admCard(tt('Helfer','Helpers'),'<div class="btns">'+ab('work:all',tt('Alle anstellen','Hire all'))+ab('work:none',tt('Alle entlassen','Fire all'))+ab('work:max',tt('Alle auf Stufe 10','All to level 10'))+'</div>')
-    +admCard(tt('Ziele & Glücksrad','Goals & wheel'),'<div class="btns">'+ab('day:done',tt('Tagesaufgaben erfüllen','Complete daily tasks'))+ab('day:next',tt('Nächster Tag','Next day'))+ab('wheel:free',tt('Gratis-Drehung zurück','Free spin again'))+ab('wheel:all',tt('Alle Drehungen zurück','All spins again'))+'</div>')
-    +admCard(tr('adm_orders'),frow('o:rep',tr('adm_ord_rep'))+frow('o:done',tr('adm_ord_done'))+'<div class="btns">'+ab('orders:done',tr('adm_ord_finish'))+ab('orders:new',tr('adm_ord_new'))+'</div>')
-    +admCard(tr('adm_items'),'<div class="btns" style="margin-bottom:10px">'+ab('boosts:ready',tr('adm_boosts_ready'))+ab('box:free',tr('adm_free_box'))+ab('items:max',tr('adm_items_max'))+ab('items:none',tr('adm_items_none'))+'</div><details class="fold"><summary class="wt">'+tt('Einzelne Gegenstände','Single items')+'</summary>'+ITEMS.map(it=>frow('i:'+it.id,tx(it.name)+(it.rar==='mythic'?' ✦':''))).join('')+'</details>',ITEMS.map(it=>tx(it.name)).join(' '));
-  P.end=admCard(tt('Kosmischer Aufstieg','Cosmic ascension'),'<div class="btns">'+ab('cos:1','+1 '+tt('Splitter','shard'))+ab('cos:10','+10 '+tt('Splitter','shards'))+ab('cos:shop',tt('Alle Kräfte','All powers'),'primary')+ab('cos:reset',tt('Kräfte zurücksetzen','Reset powers'))+ab('cos:req',tt('Bedingung erfüllen','Meet requirement'))+'</div>')
-    +admCard(tt('Paragon','Paragon'),'<div class="btns">'+ab('par:1','+1 '+tt('Stufe','level'))+ab('par:10','+10')+ab('par:100','+100')+ab('par:unl',tt('Freischalten','Unlock'),'primary')+ab('par:reset',tt('Stufen auf 0','Levels to 0'))+'</div>')
-    +admCard(tt('Artefakte','Artifacts'),'<div class="btns">'+ab('frag:10','+10 '+tt('Splitter','shards'))+ab('frag:100','+100')+ab('art:myth',tt('Mythisches Artefakt','Mythic artifact'),'primary')+ab('art:sock',tt('Alle Sockel füllen','Fill all sockets'))+ab('art:clear',tt('Alle löschen','Delete all'))+'</div>')
-    +admCard(tt('Gebäude-Evolution','Building evolution'),'<div class="btns">'+ab('evo:all',tt('Alle entwickeln','Evolve all'),'primary')+ab('evo:none',tt('Alle zurück','Remove all'))+'</div>')
-    +admCard(tt('Prestige-Rang','Prestige rank'),'<div class="btns">'+ab('rank:10','+10 '+tt('Punkte','points'))+ab('rank:100','+100')+ab('rank:1000','+1000')+ab('rank:0',tt('Auf 0','To 0'))+'</div>')
-    +admCard(tt('Automatik & Mythisch','Automation & mythic'),'<div class="btns">'+ab('auto:unl',tt('Automatik freischalten','Unlock automation'))+ab('myth:items',tt('Mythische Gegenstände Stufe 5','Mythic items level 5'),'primary')+'</div>');
-  P.tool=admCard(tt('Fehler-Scanner','Error scanner'),'<p class="small">'+tt('Sucht kaputte Zahlen im Spielstand und repariert sie.','Looks for broken numbers in the save and repairs them.')+'</p><div class="btns" style="margin-top:6px">'+ab('scan',tt('Jetzt prüfen','Check now'),'primary')+'</div><p class="small" id="admScan" style="margin-top:6px"></p>',tt('bug fehler nan','bug error nan'))
-    +admCard(tt('Speichern','Saving'),'<div class="btns">'+ab('savenow',tt('Jetzt speichern','Save now'))+ab('backup',tt('Backup anlegen','Create backup'))+'</div>')
-    +admCard(tt('Spielstand-Daten','Save data'),'<div class="btns">'+ab('json',tt('Daten anzeigen','Show data'))+'</div><textarea id="admJson" readonly hidden></textarea><p class="small" id="admJsonN"></p>',tt('json export','json export'))
-    +admCard(tr('adm_reset'),'<div class="btns">'+ab('reset:admin',tr('adm_reset_btn'))+'</div>');
-  P.lb='<div id="admLb" class="admlb"></div>';P.online='<div id="admOn" class="admlb"></div><div id="admAcc" class="admlb" style="margin-top:10px"></div><div id="admClub" class="admlb" style="margin-top:10px"></div>';P.mod='<div id="admMod" class="admlb"></div>';P.srv='<div id="admSrv" class="admlb"></div>';
-  let h='<div class="admlockbar"><button type="button" class="btn sm" id="admLockBtn">'+tt('Admin sperren','Lock admin')+'</button></div><div class="admhead"><div class="admstats">'+[['ck',tt('Kekse','Cookies')],['kps',tt('pro Sek.','per sec')],['clk',tt('pro Klick','per click')],['chips',tt('Chips','Chips')],['spd',tt('Tempo','Speed')]].map(([k,l])=>'<span><small>'+l+'</small><b data-al="'+k+'"></b></span>').join('')+'</div>'
-    +'<input type="search" class="setq" id="admQ" autocomplete="off" placeholder="'+tt('Admin durchsuchen …','Search admin …')+'"><div class="seg admgrp" id="admGrp" role="group"><button type="button" data-ag="game">'+tt('Spiel','Game')+'</button><button type="button" data-ag="online">'+tt('Online','Online')+'</button></div><div class="seg admseg" id="admSeg">'+ADM_TABS.map(t=>'<button type="button" data-ap="'+t[0]+'" data-g="'+(ADM_ONLINE.includes(t[0])?'online':'game')+'" aria-pressed="'+(t[0]===admTab)+'">'+tt(t[1],t[2])+'</button>').join('')+'</div></div>'
-    +ADM_TABS.map(t=>'<div class="admpane" data-ap="'+t[0]+'">'+P[t[0]]+'</div>').join('')+'<p class="small" id="admNone" hidden>'+tt('Nichts gefunden.','Nothing found.')+'</p>';
-  els.admin.innerHTML=h;
-  admShow();
-  fillAdmin();
-  admLbRender();admOnRender();admAccRender();if(v45Ready){admModRender();admSrvRender();}
-}
-function admShow(){
-  const q=(document.getElementById('admQ')||{value:''}).value.trim().toLowerCase();let n=0;
-  els.admin.querySelectorAll('.admpane').forEach(p=>{p.hidden=!q&&p.dataset.ap!==admTab;});
-  els.admin.querySelectorAll('.admitem').forEach(it=>{const show=!q||(it.dataset.k+' '+it.textContent).toLowerCase().includes(q);it.hidden=!show;if(show&&(q||it.closest('.admpane').dataset.ap===admTab)) n++;});
-  els.admin.querySelectorAll('#admSeg [data-ap]').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.ap===admTab?'true':'false'));
-  const grp=ADM_ONLINE.includes(admTab)?'online':'game',sg=document.getElementById('admSeg');if(sg) sg.dataset.grp=q?'':grp;
-  els.admin.querySelectorAll('#admGrp [data-ag]').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.ag===grp?'true':'false'));
-  const no=document.getElementById('admNone');if(no) no.hidden=n>0;
-}
-els.admin.addEventListener('input',e=>{if(e.target.id==='admQ') admShow();});
-/* Admin in zwei Gruppen: Spiel und Online */
-els.admin.addEventListener('click',e=>{const g=e.target.closest('#admGrp [data-ag]');if(!g) return;const cur=ADM_ONLINE.includes(admTab)?'online':'game';if(g.dataset.ag===cur) return;const first=els.admin.querySelector('#admSeg [data-g="'+g.dataset.ag+'"]');if(first) first.click();});
-els.admin.addEventListener('click',e=>{const b=e.target.closest('#admSeg [data-ap]');if(!b) return;admTab=b.dataset.ap;const q=document.getElementById('admQ');if(q) q.value='';admShow();},true);
-function admScanFix(){
-  let n=0;const walk=(o,d)=>{if(!o||typeof o!=='object'||d>8) return;for(const k in o){const v=o[k];if(typeof v==='number'&&!isFinite(v)){o[k]=0;n++;}else if(v&&typeof v==='object') walk(v,d+1);}};
-  walk(S,0);return n;
-}
-function admAct2(p){
-  const E=S.eg;
-  switch(p[0]){
-    case 'mul1000':{const v=S.cookies*999;addCookies(v);toast(tr('toast_added',{n:fmt(v)}));return true;}
-    case 'zero':S.cookies=0;return true;
-    case 'speed':S.admin.speed=+p[1];toast(tt('Spieltempo ×','Game speed ×')+p[1]);return true;
-    case 'ac':S.admin.ac=+p[1];return true;
-    case 'mulset':['prod','click','gold','goldPow'].forEach(k=>{S.admin[k]=+p[1];});return true;
-    case 'maxall':UP.forEach(u=>{S.up[u.id]=1;});TREE.forEach(n=>{S.tree[n.id]=1;});{const spent=TREE.reduce((s,n)=>s+(S.tree[n.id]?n.cost:0),0);if(spent>S.chips) S.chips=spent;}ITEMS.forEach(it=>{S.items[it.id]=5;});WORKERS.forEach(x=>{S.work.hired[x.id]=1;S.work.on[x.id]=1;if(!S.work.face[x.id]) S.work.face[x.id]=genFace();S.work.lvl[x.id]=10;S.work.xp[x.id]=0;});upSig='';treeSig='';lootSig='';workSig='';toast(tt('Alles maximiert.','Everything maxed.'));return true;
-    case 'bset':B.forEach((b,i)=>{S.b[i]=+p[1];});return true;
-    case 'badd':B.forEach((b,i)=>{S.b[i]+=+p[1];});return true;
-    case 'evo':B.forEach((b,i)=>{if(p[1]==='all') E.evo[i]=1;else delete E.evo[i];});egLast=0;buildAdmin();return true;
-    case 'ttl':if(p[1]==='all') TITLES.forEach(x=>{S.ttl.got[x.id]=1;});else if(p[1]==='badges') BADGES.forEach(b=>{S.ttl.b[b.id]=3;});else{S.ttl={cur:'lehrling',got:{lehrling:1},b:{},init:1};}return true;
-    case 'plat':A.forEach(a=>{if(a.plat){if(p[1]==='all') S.ach[a.id]=1;else delete S.ach[a.id];}});return true;
-    case 'hero':{const H=S.hero;if(p[1]==='lvl'){H.lvl=Math.min(999,H.lvl+10);}else if(p[1]==='sta'){H.sta=staMax();H.staT=Date.now();}else if(p[1]==='clear'){H.run=null;}else if(p[1]==='myth'){['w','a','t'].forEach(s=>{const it=newItem(Math.max(3,towerPw(H.tower.best+5)*3),true);it.s=s;it.r=4;const old=H.gear[s];H.gear[s]=it;if(old&&H.bag.length<20) H.bag.push(old);S.book.gear[s+tierIdx(it.p)]=1;});toast(tt('Mythische Ausrüstung angelegt.','Mythic gear equipped.'),true);}return true;}
-    case 'wheel':S.wheel.d=dayKey(Date.now());S.wheel.free=0;if(p[1]==='all') S.wheel.ext=0;S.wheel.pend=-1;return true;
-    case 'cos':if(p[1]==='shop') COSN.forEach(n=>{E.cos.shop[n.id]=1;});else if(p[1]==='reset') E.cos.shop={};else if(p[1]==='req'){S.reb.n=Math.max(3,S.reb.n);S.reb.pages=Math.max(10,S.reb.pages);rebSig='';}else E.cos.sh+=+p[1];egLast=0;return true;
-    case 'par':{const P=E.par;if(p[1]==='unl'){P.on=1;if(S.all<1e27){S.all=1e27;}P.last=S.all;}else if(p[1]==='reset'){P.lvl=0;P.xp=0;PARK.forEach(k=>{P.pts[k[0]]=0;});}else{P.on=1;P.lvl+=+p[1];}egLast=0;return true;}
-    case 'frag':E.art.frag+=+p[1];egLast=0;return true;
-    case 'art':if(p[1]==='myth') forgeArt(false,4);else if(p[1]==='sock') E.art.list.forEach(a=>{a.g=a.g.map(()=>1);});else if(p[1]==='clear'){E.art.list=[];E.art.eq=[];}egLast=0;return true;
-    case 'rank':if(p[1]==='0'){E.ascT=0;E.rebT=0;}else E.ascT+=+p[1];return true;
-    case 'auto':E.ascT=Math.max(3,E.ascT);egLast=0;return true;
-    case 'myth':ITEMS.forEach(it=>{if(it.rar==='mythic') S.items[it.id]=5;});lootSig='';return true;
-    case 'scan':{const n=admScanFix();const el=document.getElementById('admScan');if(el) el.textContent=n?tt(n+' kaputte Werte repariert.',n+' broken values repaired.'):tt('Alles in Ordnung – keine kaputten Werte gefunden.','All good – no broken values found.');save();return true;}
-    case 'savenow':save();toast(tr('toast_saved'));return true;
-    case 'backup':pushBackup();toast(tt('Backup angelegt.','Backup created.'));return true;
-    case 'json':{const t=document.getElementById('admJson'),s=JSON.stringify(S);t.hidden=false;t.value=JSON.stringify(S,null,1);document.getElementById('admJsonN').textContent=tt('Größe: ','Size: ')+Math.round(s.length/1024)+' KB';return true;}
-  }
-  return false;
-}
-
-function fillAdmin(){
-  if(!admOK||!els.admin.firstChild) return;
-  const act=document.activeElement;
-  els.admin.querySelectorAll('input[data-f]').forEach(inp=>{
-    if(inp===act) return;
-    const [g,a,b]=inp.dataset.f.split(':');
-    let v;
-    if(g==='x') v=XV&&XV[a]?XV[a][0]():0;
-    else if(g==='r') v=S[a];
-    else if(g==='m') v=S.admin[a];
-    else if(g==='i') v=S.items[a]||0;
-    else if(g==='o') v=S.orders[a];
-    else if(b==='own') v=S.b[+a];
-    else if(b==='cost') v=baseCost(+a);
-    else v=baseCps(+a);
-    inp.value=numStr(g==='r'&&a!=='cookies'||b==='own'?Math.floor(v):v);
-  });
-  els.admin.querySelectorAll('input[data-u]').forEach(inp=>{
-    const [g,id]=inp.dataset.u.split(':');
-    inp.checked=!!(g==='up'?S.up[id]:g==='ach'?S.ach[id]:S.tree[id]);
-  });
-  const AL={ck:fmt(S.cookies),kps:fmtRate(C.kps),clk:fmtRate(C.click),chips:fmt(S.chips),spd:'×'+S.admin.speed+(S.admin.ac?' · '+S.admin.ac+'/s':'')};
-  els.admin.querySelectorAll('[data-al]').forEach(n=>{const v=AL[n.dataset.al];if(n.textContent!==v) n.textContent=v;});
-  els.admin.querySelectorAll('[data-aseg]').forEach(sg=>{const cur=String(sg.dataset.aseg==='speed'?S.admin.speed:(S.admin.ac||0));sg.querySelectorAll('[data-v]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===cur?'true':'false'));});
-}
-function admSet(f,v){
-  S.adm=1;
-  const [g,a,b]=f.split(':');
-  if(g==='x'){if(XV&&XV[a]) XV[a][1](v);}
-  else if(g==='r'){
-    S[a]=(a==='cookies'||a==='all'||a==='run')?v:Math.floor(v);
-    if(a==='chips'||a==='asc') treeSig='';
-    if(a==='chips'){const spent=TREE.reduce((s,n)=>s+(S.tree[n.id]?n.cost:0),0);if(spent>S.chips) S.tree={};}
-  }else if(g==='m'){
-    S.admin[a]=a==='growth'?Math.min(3,Math.max(1.001,v)):Math.min(1e9,Math.max(1e-4,v));
-  }else if(g==='o'){
-    S.orders[a]=Math.floor(Math.min(1e9,Math.max(0,v)));
-  }else if(g==='i'){
-    if(v>=1) S.items[a]=Math.min(99,Math.floor(v));else delete S.items[a];
-  }else{
-    const i=+a;
-    if(b==='own') S.b[i]=Math.floor(v);
-    else{
-      const e=S.admin.b[i]||(S.admin.b[i]={});
-      if(v>0) e[b]=v;else delete e[b];
-      if(!e.cost&&!e.cps) delete S.admin.b[i];
-    }
-  }
-  recalc();render();fillAdmin();
-}
-function toggleUnlock(g,id,on){
-  S.adm=1;
-  const map=g==='up'?S.up:g==='ach'?S.ach:S.tree;
-  if(on) map[id]=1;else delete map[id];
-  if(g==='tree'){const spent=TREE.reduce((s,n)=>s+(S.tree[n.id]?n.cost:0),0);if(spent>S.chips) S.chips=spent;treeSig='';}
-  upSig='';recalc();refreshAch();render();
-}
-function addCookies(v){S.cookies+=v;S.run+=v;S.all+=v;}
-function admAct(act){
-  const p=act.split(':');
-  if(!['savenow','backup','json','scan'].includes(p[0])) S.adm=1;
-  if(admAct2(p)){recalc();refreshAch();render();fillAdmin();save();return;}
-  if(p[0]==='add'){const v=+p[1];addCookies(v);toast(tr('toast_added',{n:fmt(v)}));}
-  else if(p[0]==='mul10'){const v=S.cookies*9;addCookies(v);toast(tr('toast_added',{n:fmt(v)}));}
-  else if(p[0]==='warp'){const v=C.kps*(+p[1]);addCookies(v);toast(tr('toast_warp',{n:fmt(v)}));}
-  else if(p[0]==='gold'){
-    if(p[1]==='spawn') spawnGolden();
-    else if(p[1]==='clear'){S.buffs=[];recalc();}
-    else applyGold(p[1]);
-  }else if(p[0]==='all'||p[0]==='none'){
-    const on=p[0]==='all',g=p[1],list=g==='up'?UP:g==='ach'?A:TREE;
-    const map=g==='up'?S.up:g==='ach'?S.ach:S.tree;
-    list.forEach(o=>{if(on) map[o.id]=1;else delete map[o.id];});
-    if(g==='tree'){const spent=TREE.reduce((s,n)=>s+(S.tree[n.id]?n.cost:0),0);if(spent>S.chips) S.chips=spent;treeSig='';}
-    upSig='';
-  }else if(p[0]==='w'){
-    const w=S.w;
-    if(p[1]==='mana') w.mana=maxMana();
-    else if(p[1]==='mon'){if(w.mon.st==='idle') spawnMon();}
-    else if(p[1]==='timers'){const n=Date.now();w.exp.slots.forEach(s=>{if(s) s.end=n-1;});if(w.lab.cur) w.lab.cur.end=n-1;if(w.pet.egg) w.pet.egg.end=n-1;w.gar.plots.forEach(pl=>{if(pl){pl.at=n-(plantGrow(plantDef(pl))+5)*1000;}});}
-    else if(p[1]==='mat') MATS.forEach(m=>addMat(m.id,20));
-    else if(p[1]==='event') startEvent();
-    else if(p[1]==='egg') w.pet.eggs++;
-    else if(p[1]==='star') giveStar(3,'');
-    else if(p[1]==='chal'){if(w.chal.act) S.run=Math.max(S.run,CHALS.find(c=>c.id===w.chal.act).goal);}
-    else if(p[1]==='reset'){S.w=freshWorld();seedMarket();}
-  }else if(p[0]==='day'){
-    if(p[1]==='done') S.day.q.forEach(q=>{q.base=qDef(q).v()-q.goal;});
-    else{const D=S.day;D.date='';D.last=dayKey(Date.now()-864e5);D.lc='';checkDay(false);}
-  }else if(p[0]==='work'){
-    WORKERS.forEach(x=>{if(p[1]==='all'||p[1]==='max'){S.work.hired[x.id]=1;S.work.on[x.id]=1;if(!S.work.face[x.id]) S.work.face[x.id]=genFace();if(p[1]==='max'){S.work.lvl[x.id]=10;S.work.xp[x.id]=0;}}else{delete S.work.hired[x.id];delete S.work.on[x.id];delete S.work.lvl[x.id];}});workSig='';recalc();
-  }else if(p[0]==='orders'){
-    if(p[1]==='done') S.orders.slots.forEach((s,i)=>{if(s&&s.st==='active') completeOrder(i);});
-    else{S.orders.slots=[null,null,null];S.orders.cd=0;ensureOrders();}
-  }else if(p[0]==='boosts'){S.boostCd={};
-  }else if(p[0]==='box'){rollItem();
-  }else if(p[0]==='items'){ITEMS.forEach(it=>{if(p[1]==='max') S.items[it.id]=5;else delete S.items[it.id];});lootSig='';
-  }else if(p[0]==='rb'){delete S.admin.b[+p[1]];}
-  else if(p[0]==='reset'){S.admin=defAdmin();toast(tr('toast_adm_reset'));}
-  recalc();refreshAch();render();fillAdmin();
-}
-els.admin.addEventListener('change',e=>{
-  const inp=e.target;
-  if(inp.dataset.f){const v=parseNum(inp.value);if(v!==null) admSet(inp.dataset.f,v);else fillAdmin();inp.blur();}
-  else if(inp.dataset.u){const [g,id]=inp.dataset.u.split(':');toggleUnlock(g,id,inp.checked);}
-});
-els.admin.addEventListener('click',e=>{
-  const b=e.target.closest('[data-act]');if(!b) return;
-  admAct(b.dataset.act);
-});
-
 /* ======================= Optionen ======================= */
 els.fx.checked=S.opt.fx;
 els.fx.addEventListener('change',()=>{S.opt.fx=els.fx.checked;});
@@ -7837,7 +7562,7 @@ function applyLang(){
   els.resetBtn.textContent=tr('wipe');
   showName();updV34Txt();
   upSig='';treeSig='';
-  rebuildAch();buildAdmin();buildNews();setSkin();showSaveNote();render();
+  rebuildAch();if(ADMH.build) ADMH.build();buildNews();setSkin();showSaveNote();render();
 }
 document.querySelectorAll('.langseg').forEach(g=>g.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b) return;
@@ -7866,7 +7591,7 @@ function render(){
   els.stage.classList.toggle('frenzy',S.buffs.some(f=>f.id==='frenzy'));
   els.stage.classList.toggle('clickfrenzy',S.buffs.some(f=>f.id==='clickfrenzy'));
   updTabs();updTut();updBuild();updUp();updInf();updQol();updAsc();updReb();updGoals();updAdv();updFr();updHints();updUndo();updOpts();updCombo();updSlots();updFact();updDesign();updNtf();safe(updAscSub,'ascsub');safe(updEG,'eg-ui');safe(updCur,'cur');safe(updCQ,'cq');updLoot();updOrders();updWorld();
-  if(!els.setOv.hidden&&setSub==='admin'&&Date.now()-lastAdmFill>600){lastAdmFill=Date.now();fillAdmin();}
+  if(!els.setOv.hidden&&setSub==='admin'&&Date.now()-lastAdmFill>600){lastAdmFill=Date.now();if(ADMH.fill) ADMH.fill();}
   els.newsBadge.hidden=S.opt.news>=NEWS_VER;els.newsBtn.classList.toggle('fresh',S.opt.news<NEWS_VER);
 }
 let last=Date.now();
@@ -8275,7 +8000,7 @@ function lbUUID(){
 async function lbApi(path,body){
   const r=await fetch(LB_URL.replace(/\/+$/,'')+'/rest/v1/'+path,{method:body?'POST':'GET',headers:{apikey:LB_KEY,Authorization:'Bearer '+LB_KEY,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
   const t=await r.text();
-  if(!r.ok){let m='HTTP '+r.status;try{const j=JSON.parse(t);m=j.message||m;if(j.code) m+=' ['+j.code+']';}catch(x){}const e=new Error(m);e.status=r.status;throw e;}
+  if(!r.ok){let m='HTTP '+r.status;try{const j=JSON.parse(t);m=j.message||m;if(j.code) m+=' ['+j.code+']';}catch(x){}if(/^banned: /.test(m)) setTimeout(()=>banSeen(m),0);const e=new Error(m);e.status=r.status;throw e;}
   return t?JSON.parse(t):null;
 }
 const lbMissing=x=>x&&(x.status===404||/PGRST20[25]|does not exist|schema cache/.test(String(x.message||'')));
@@ -8584,69 +8309,6 @@ setInterval(kfPing,60000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){kfPing();kfLoadEvents();}});
 if(lbOn()){setTimeout(kfLoadEvents,1500);setTimeout(kfPing,2500);setTimeout(kfLoadNews,6000);}
 
-/* ======================= V42: Admin – Online ======================= */
-let admOnData=null,admOnErr='',admOnBusy=false,admOnArm={k:'',t:0};
-function admOnRender(){
-  const box=$id('admOn');if(!box) return;
-  const card=(t,b)=>'<div class="admcard"><h4>'+t+'</h4>'+b+'</div>';
-  if(!lbOn()){box.innerHTML=card(tt('Online','Online'),'<p class="small">'+tt('Online-Funktionen sind nicht eingerichtet.','Online features aren’t set up.')+'</p>');return;}
-  let h='';
-  if(!admPass){
-    h+=card(tt('Online-Werkzeuge','Online tools'),'<form class="coderow" id="admOnPwF" novalidate><input type="password" class="namein" id="admOnPw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Laden','Load')+'</button></form>');
-    if(admOnErr) h+='<p class="nameerr">'+admOnErr+'</p>';
-    if(box._h!==h){box._h=h;box.innerHTML=h;}return;
-  }
-  if(admOnErr) h+='<p class="nameerr">'+admOnErr+'</p>';
-  const D=admOnData||{},L=D.live||{};
-  const arm=k=>admOnArm.k===k&&Date.now()-admOnArm.t<5000;
-  const dt=v=>v?new Date(v).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'∞';
-  h+=card('🌍 '+tt('Live','Live'),'<div class="admstats">'+[[tt('Jetzt online','Online now'),L.online],[tt('Heute','Today'),L.today],[tt('Spieler','Players'),L.players],[tt('Kekse weltweit','Cookies worldwide'),L.total!=null?fmt(L.total):'']].map(([l,v])=>'<span><small>'+l+'</small><b>'+(v==null?'–':typeof v==='number'?fmt(v):v)+'</b></span>').join('')+'</div><div class="btns" style="margin-top:8px"><button type="button" class="btn sm primary" data-ona="list">'+(admOnBusy?tt('Lädt …','Loading …'):tt('Aktualisieren','Refresh'))+'</button></div>');
-  h+=card('📢 '+tt('Ankündigung','Announcement'),'<form class="admform" id="admNewsF" novalidate><input class="namein" name="title" maxlength="80" placeholder="'+tt('Titel, z. B. Doppelte Kekse am Wochenende!','Title, e.g. Double cookies this weekend!')+'" style="grid-column:1/-1"><textarea class="namein" name="body" maxlength="600" rows="3" placeholder="'+tt('Nachricht (optional)','Message (optional)')+'" style="grid-column:1/-1"></textarea><label class="small">'+tt('Sichtbar für Tage','Visible for days')+'<input class="namein" name="days" type="number" min="0" step="1" value="3"></label><button type="submit" class="btn primary">'+tt('Veröffentlichen','Post')+'</button></form>'
-    +((D.news||[]).length?'<div class="admlbl">'+D.news.map(n=>'<div class="admlbr"><span class="rk">📢</span><span class="who"><b>'+escName(n.title)+'</b><small>'+(n.until&&Date.parse(n.until)<Date.now()?tt('abgelaufen','expired'):tt('bis ','until ')+dt(n.until))+'</small></span><span class="btns"><button type="button" class="btn sm'+(arm('news_del:'+n.id)?' armed':'')+'" data-ona="news_del:'+n.id+'">'+(arm('news_del:'+n.id)?tt('Sicher?','Sure?'):tt('Löschen','Delete'))+'</button></span></div>').join('')+'</div>':''));
-  h+=card('⚡ '+tt('Globales Event','Global event'),'<form class="admform" id="admEvF" novalidate><label class="small">'+tt('Art','Type')+'<select class="namein" name="kind">'+Object.keys(EVK).map(k=>'<option value="'+k+'">'+EVI[k]+' '+tx(EVK[k])+'</option>').join('')+'</select></label><label class="small">'+tt('Stärke','Strength')+'<select class="namein" name="mult">'+[1.5,2,3,5,10].map(m=>'<option value="'+m+'"'+(m===2?' selected':'')+'>×'+m+'</option>').join('')+'</select></label><label class="small">'+tt('Dauer in Stunden','Hours')+'<input class="namein" name="hours" type="number" min="1" step="1" value="24"></label><label class="small">'+tt('Start in Stunden (0 = jetzt)','Start in hours (0 = now)')+'<input class="namein" name="start_hours" type="number" min="0" step="1" value="0"></label><label class="small">'+tt('Jede Woche wiederholen (Wochen)','Repeat weekly (weeks)')+'<select class="namein" name="repeat_weeks">'+[0,1,2,3,4,8,12].map(w=>'<option value="'+w+'">'+(w?w+'×':tt('Nicht wiederholen','Don’t repeat'))+'</option>').join('')+'</select></label><input class="namein" name="title" maxlength="60" placeholder="'+tt('Name, z. B. Kekswochenende','Name, e.g. Cookie weekend')+'"><button type="submit" class="btn primary" style="grid-column:1/-1">'+tt('Event planen','Schedule event')+'</button></form>'
-    +((D.events||[]).length?'<div class="admlbl">'+D.events.map(e=>{const live=Date.parse(e.ends_at)>Date.now(),soon=Date.parse(e.starts_at)>Date.now();return '<div class="admlbr"><span class="rk">'+EVI[e.kind]+'</span><span class="who"><b>×'+e.mult+' '+tx(EVK[e.kind])+(e.title?' · '+escName(e.title):'')+'</b><small>'+(soon?'🗓️ '+tt('startet ','starts ')+dt(e.starts_at)+' · '+tt('bis ','until ')+dt(e.ends_at):live?tt('läuft bis ','running until ')+dt(e.ends_at):tt('beendet ','ended ')+dt(e.ends_at))+'</small></span><span class="btns">'+(live?'<button type="button" class="btn sm'+(arm('event_end:'+e.id)?' armed':'')+'" data-ona="event_end:'+e.id+'">'+(arm('event_end:'+e.id)?tt('Sicher?','Sure?'):soon?tt('Absagen','Cancel'):tt('Beenden','End now'))+'</button>':'')+'</span></div>';}).join('')+'</div>':''));
-  h+=card('🎁 '+tt('Codes','Codes'),'<form class="admform" id="admCodeF" novalidate><input class="namein" name="code" maxlength="24" placeholder="'+tt('CODE (Buchstaben/Zahlen)','CODE (letters/numbers)')+'" style="text-transform:uppercase"><input class="namein" name="label" maxlength="40" placeholder="'+tt('Name, z. B. Freunde-Geschenk','Name, e.g. Friends gift')+'"><label class="small">'+tt('Edelsteine','Gems')+'<input class="namein" name="gems" type="number" min="0" value="50"></label><label class="small">'+tt('Sternenkrümel','Star crumbs')+'<input class="namein" name="stars" type="number" min="0" value="0"></label><label class="small">'+tt('Minuten Produktion','Minutes of production')+'<input class="namein" name="minutes" type="number" min="0" value="30"></label><label class="small">'+tt('Max. Einlösungen (leer = unbegrenzt)','Max uses (empty = unlimited)')+'<input class="namein" name="max_uses" type="number" min="1"></label><label class="small">'+tt('Gültig für Tage (leer = immer)','Valid for days (empty = forever)')+'<input class="namein" name="days" type="number" min="1"></label><button type="submit" class="btn primary">'+tt('Code erstellen','Create code')+'</button></form>'
-    +((D.codes||[]).length?'<div class="admlbl">'+D.codes.map(c=>'<div class="admlbr"><span class="rk">🎁</span><span class="who"><b>'+escName(c.code)+(c.label?' · '+escName(c.label):'')+'</b><small>'+[c.gems?c.gems+' '+matName('gem'):'',c.stars?c.stars+' ⭐':'',c.minutes?c.minutes+' min':''].filter(Boolean).join(' + ')+' · '+tt('eingelöst ','used ')+c.uses+(c.max_uses?' / '+c.max_uses:'')+' · '+(c.expires_at?(Date.parse(c.expires_at)<Date.now()?tt('abgelaufen','expired'):tt('bis ','until ')+dt(c.expires_at)):tt('ohne Ablauf','no expiry'))+'</small></span><span class="btns"><button type="button" class="btn sm'+(arm('code_del:'+c.code)?' armed':'')+'" data-ona="code_del:'+escName(c.code)+'">'+(arm('code_del:'+c.code)?tt('Sicher?','Sure?'):tt('Löschen','Delete'))+'</button></span></div>').join('')+'</div>':''));
-  h+=card('🎟️ '+tt('Viele Einmal-Codes','Bulk one-time codes'),'<p class="small">'+tt('Erstellt bis zu 100 Codes, die jeweils nur einmal gehen – z. B. für ein Gewinnspiel.','Creates up to 100 codes that each work once – e.g. for a giveaway.')+'</p><form class="admform" id="admBulkF" novalidate><label class="small">'+tt('Anfang (optional)','Prefix (optional)')+'<input class="namein" name="prefix" maxlength="10" style="text-transform:uppercase" placeholder="GIFT"></label><label class="small">'+tt('Anzahl','How many')+'<input class="namein" name="count" type="number" min="1" max="100" value="10"></label><input class="namein" name="label" maxlength="40" placeholder="'+tt('Name, z. B. Gewinnspiel','Name, e.g. Giveaway')+'"><label class="small">'+tt('Edelsteine','Gems')+'<input class="namein" name="gems" type="number" min="0" value="25"></label><label class="small">'+tt('Sternenkrümel','Star crumbs')+'<input class="namein" name="stars" type="number" min="0" value="0"></label><label class="small">'+tt('Minuten Produktion','Minutes of production')+'<input class="namein" name="minutes" type="number" min="0" value="0"></label><label class="small">'+tt('Gültig für Tage (leer = immer)','Valid for days (empty = forever)')+'<input class="namein" name="days" type="number" min="1"></label><button type="submit" class="btn primary">'+tt('Codes erstellen','Create codes')+'</button></form>'
-    +((admOnBulk||[]).length?'<div class="bulkcodes"><textarea class="namein" readonly rows="'+Math.min(8,admOnBulk.length)+'">'+admOnBulk.join('\n')+'</textarea><button type="button" class="btn sm primary" id="admBulkCopy">'+tt('Alle kopieren','Copy all')+'</button></div>':''));
-  if(box._h!==h){box._h=h;box.innerHTML=h;}
-}
-var admOnBulk=[];
-els.admin.addEventListener('click',async e=>{if(!e.target.closest('#admBulkCopy')) return;const t=admOnBulk.join('\n');try{await navigator.clipboard.writeText(t);toast(tt('Codes kopiert!','Codes copied!'));}catch(x){toast(tt('Markiere die Liste und kopiere sie.','Select the list and copy it.'));}});
-async function admOnCall(action,data){
-  admOnBusy=true;admOnErr='';admOnRender();
-  try{
-    admOnData=await lbApi('rpc/admin_online',{p_pass:admPass,p_action:action,p_data:data||null});kfV3=true;if(action==='code_bulk') admOnBulk=(admOnData&&admOnData.bulk)||[];
-    if(action!=='list') toast({code_add:tt('Code gespeichert.','Code saved.'),code_del:tt('Code gelöscht.','Code deleted.'),news_add:tt('Ankündigung veröffentlicht.','Announcement posted.'),news_del:tt('Ankündigung gelöscht.','Announcement deleted.'),event_add:tt('Event geplant!','Event scheduled!'),code_bulk:tt('Codes erstellt.','Codes created.'),event_end:tt('Event beendet.','Event ended.')}[action]||'OK');
-    if(/^event/.test(action)) kfLoadEvents();
-  }catch(x){
-    const m=String(x&&x.message||'');
-    if(/wrong admin password/.test(m)){admSrvDrop();admOnErr=tt('Server-Sitzung abgelaufen. Bitte entsperre neu.','Server session ended. Please unlock again.');}
-    else if(lbMissing(x)) admOnErr=tt('Die Datenbank kennt diese Funktionen noch nicht. Führe zuerst docs/online-v3.sql in Supabase aus.','The database doesn’t have these features yet. Run docs/online-v3.sql in Supabase first.');
-    else if(/check constraint|kf_codes_code_check/.test(m)) admOnErr=tt('Ungültige Eingabe. Codes: 3–24 Buchstaben oder Zahlen.','Invalid input. Codes: 3–24 letters or numbers.');
-    else admOnErr=tt('Hat nicht geklappt: ','Didn’t work: ')+escName(m);
-  }
-  admOnBusy=false;admOnArm={k:'',t:0};admOnRender();
-}
-els.admin.addEventListener('submit',e=>{
-  const f=e.target;if(!['admOnPwF','admNewsF','admEvF','admCodeF','admBulkF'].includes(f.id)) return;
-  e.preventDefault();
-  if(f.id==='admOnPwF'){const v=$id('admOnPw').value;if(!v) return;admSrvLogin(v,'on');return;}
-  const d=Object.fromEntries(new FormData(f).entries());
-  if(f.id==='admNewsF'){if(!d.title||!d.title.trim()){admOnErr=tt('Bitte gib einen Titel ein.','Please enter a title.');admOnRender();return;}admOnCall('news_add',d);}
-  else if(f.id==='admEvF') admOnCall('event_add',d);
-  else if(f.id==='admBulkF') admOnCall('code_bulk',d);
-  else{if(!/^[A-Za-z0-9]{3,24}$/.test((d.code||'').replace(/[\s-]/g,''))){admOnErr=tt('Codes: 3–24 Buchstaben oder Zahlen.','Codes: 3–24 letters or numbers.');admOnRender();return;}admOnCall('code_add',d);}
-});
-els.admin.addEventListener('click',e=>{
-  const b=e.target.closest('[data-ona]');if(!b) return;
-  const k=b.dataset.ona,[a,...rest]=k.split(':'),v=rest.join(':');
-  if(a==='list'){admOnCall('list');return;}
-  if(admOnArm.k!==k||Date.now()-admOnArm.t>5000){admOnArm={k,t:Date.now()};admOnRender();return;}
-  admOnCall(a,a==='code_del'?{code:v}:{id:v});
-});
-els.admin.addEventListener('click',e=>{const b=e.target.closest('#admSeg [data-ap="online"]');if(b) setTimeout(()=>{admOnRender();if(admPass&&!admOnData&&!admOnBusy) admOnCall('list');},0);});
-
 /* ======================= V43: Konten (Benutzername + Passwort) ======================= */
 const ACC_KEY='keksfabrik-session',ACC_SYNC='keksfabrik-acc-sync';
 let accTok=lsGet(ACC_KEY)||'',accMe=null,accV4=null,accMode='login',accBusy=false,accMsg='',accMsgOk=false,accArm={k:'',t:0},accAsked=false;
@@ -8754,7 +8416,7 @@ $id('accBox').addEventListener('submit',async e=>{
         await accUpload(false);if(v48Ready) refClaim();accMsg=tt('Konto erstellt! Deine Bäckerei ist jetzt in deinem Konto gespeichert.','Account created! Your bakery is now saved in your account.');accMsgOk=true;toast(accMsg,true);
       }else{
         const r=await lbApi('rpc/acc_login',{p_user:user,p_pass:pass});accV4=true;
-        if(r&&r.error){accMsg=r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
+        if(r&&r.error){accMsg=r.error==='banned'?banTxt(r):r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
         else{
           accTok=r.token;lsSet(ACC_KEY,accTok);accMe=r;accBusy=false;
           if(r.has_save){accAsked=true;accAsk(tt('Willkommen zurück, ','Welcome back, ')+r.username+'!','<p>'+tt('In deinem Konto liegt eine Bäckerei mit ','Your account has a bakery with ')+'<b>'+fmt(r.save_baked||0)+tt(' Keksen',' cookies')+'</b>.</p><p class="small">'+tt('Auf diesem Gerät: ','On this device: ')+fmt(S.all)+tt(' Kekse',' cookies')+'</p>',tt('Konto-Bäckerei laden','Load account bakery'),tt('Dieses Gerät ins Konto','Use this device’s bakery'),()=>accDownload(),()=>accUpload(true));}
@@ -8791,31 +8453,6 @@ window.addEventListener('pagehide',()=>{
 });
 if(lbOn()) setTimeout(accRefresh,2000);
 
-/* Admin: Konten */
-let admAccData=null,admAccErr='',admAccArm={k:'',t:0};
-function admAccRender(){
-  const box=$id('admAcc');if(!box||!admPass) {if(box) box.innerHTML='';return;}
-  const D=admAccData,arm=k=>admAccArm.k===k&&Date.now()-admAccArm.t<5000;
-  let b='<p class="small">'+tt('Spieler mit Konto: ','Players with an account: ')+(D?D.count:'–')+'</p>';
-  if(D&&D.accounts.length){
-    b+='<form class="admform" id="admAccPwF" novalidate><label class="small">'+tt('Konto','Account')+'<select class="namein" name="acc">'+D.accounts.map(a=>'<option value="'+a.id+'">'+escName(a.username)+'</option>').join('')+'</select></label><label class="small">'+tt('Neues Passwort','New password')+'<input class="namein" name="pw" minlength="6" maxlength="72"></label><button type="submit" class="btn primary">'+tt('Passwort setzen','Set password')+'</button></form>';
-    b+='<div class="admlbl">'+D.accounts.map(a=>'<div class="admlbr"><span class="rk">👤</span><span class="who"><b>'+escName(a.username)+'</b><small>'+fmt(+a.save_baked||0)+tt(' Kekse',' cookies')+' · '+tt('zuletzt ','last ')+(a.last_login?new Date(a.last_login).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'–')+'</small></span><span class="btns"><button type="button" class="btn sm warn'+(arm('del:'+a.id)?' armed':'')+'" data-acca="del:'+a.id+'">'+(arm('del:'+a.id)?tt('Sicher?','Sure?'):tt('Löschen','Delete'))+'</button></span></div>').join('')+'</div>';
-  }
-  if(admAccErr) b+='<p class="nameerr">'+admAccErr+'</p>';
-  const h='<div class="admcard"><h4>👤 '+tt('Konten','Accounts')+'</h4>'+b+'</div>';
-  if(box._h!==h){box._h=h;box.innerHTML=h;}
-}
-async function admAccCall(action,id,pw){
-  admAccErr='';
-  try{admAccData=await lbApi('rpc/admin_accounts',{p_pass:admPass,p_action:action,p_id:id||null,p_new:pw||null});if(action==='set_password') toast(tt('Neues Passwort gesetzt. Sag es dem Spieler.','New password set. Tell the player.'));if(action==='delete') toast(tt('Konto gelöscht.','Account deleted.'));}
-  catch(x){const m=String(x.message||'');admAccErr=lbMissing(x)?tt('Konten sind noch nicht eingerichtet (docs/accounts-v4.sql).','Accounts aren’t set up yet (docs/accounts-v4.sql).'):/invalid password/.test(m)?tt('Das Passwort braucht 6–72 Zeichen.','The password needs 6–72 characters.'):tt('Hat nicht geklappt: ','Didn’t work: ')+escName(m);}
-  admAccArm={k:'',t:0};admAccRender();
-}
-els.admin.addEventListener('submit',e=>{if(e.target.getAttribute('id')!=='admAccPwF') return;e.preventDefault();const d=Object.fromEntries(new FormData(e.target).entries());admAccCall('set_password',d.acc,d.pw);});
-els.admin.addEventListener('click',e=>{
-  const b=e.target.closest('[data-acca]');if(b){const [a,id]=b.dataset.acca.split(':');if(admAccArm.k!==b.dataset.acca||Date.now()-admAccArm.t>5000){admAccArm={k:b.dataset.acca,t:Date.now()};admAccRender();return;}admAccCall('delete',id);return;}
-  if(e.target.closest('#admSeg [data-ap="online"]')||e.target.closest('[data-ona="list"]')) setTimeout(()=>{if(admPass) admAccCall('list');},50);
-});
 
 /* ======================= V44: Bäckerei-Clubs und Geschenke ======================= */
 var v44Ready=false;
@@ -8842,7 +8479,7 @@ function clubErrTxt(x){
     [/invalid (amount|gift)/,'Ungültige Menge.','Invalid amount.'],[/blocked word/,'Das enthält ein Wort, das nicht erlaubt ist.','That contains a word that isn’t allowed.'],[/muted/,'Du bist gerade stummgeschaltet.','You’re muted right now.'],
     [/chat is off/,'Der Club-Chat ist gerade ausgeschaltet.','Club chat is turned off right now.'],[/gifts are off/,'Geschenke sind gerade ausgeschaltet.','Gifts are turned off right now.'],[/clubs are off/,'Clubs sind gerade ausgeschaltet.','Clubs are turned off right now.'],
     [/too many requests/,'Zu viele Versuche von diesem Gerät. Versuch es später nochmal.','Too many tries from this device. Try again later.'],[/account too new/,'Geschenke gehen erst, wenn dein Konto einen Tag alt ist.','Gifts unlock once your account is a day old.'],
-    [/play more first/,'Back zuerst mindestens 1 Million Kekse, dann kannst du Geschenke senden.','Bake at least 1 million cookies first, then you can send gifts.'],[/cannot report yourself/,'Eigene Nachrichten kannst du nicht melden.','You can’t report your own message.'],[/message not found/,'Diese Nachricht gibt es nicht mehr.','That message is gone.'],[/busy/,'Gerade viel los. Versuch es in einer Minute nochmal.','Busy right now. Try again in a minute.']];
+    [/play more first/,'Back zuerst mindestens 1 Million Kekse, dann kannst du Geschenke senden.','Bake at least 1 million cookies first, then you can send gifts.'],[/cannot report yourself/,'Eigene Nachrichten kannst du nicht melden.','You can’t report your own message.'],[/message not found/,'Diese Nachricht gibt es nicht mehr.','That message is gone.'],[/^banned/,'Dein Konto ist gesperrt.','Your account is banned.'],[/busy/,'Gerade viel los. Versuch es in einer Minute nochmal.','Busy right now. Try again in a minute.']];
   for(const [r,de,en] of T) if(r.test(m)) return tt(de,en);
   return tt('Keine Verbindung. Versuch es gleich nochmal.','No connection. Try again in a moment.');
 }
@@ -9069,253 +8706,12 @@ function clubAccChanged(){
   clubRender();
 }
 
-/* Admin: Clubs */
-let admClubData=null,admClubErr='',admClubArm={k:'',t:0};
-function admClubRender(){
-  const box=$id('admClub');if(!box||!admPass){if(box) box.innerHTML='';return;}
-  const D=admClubData,arm=k=>admClubArm.k===k&&Date.now()-admClubArm.t<5000,dt=s=>new Date(s).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-  let b='<p class="small">'+tt('Clubs: ','Clubs: ')+(D?D.clubs.length:'–')+' · '+tt('Geschenke (24 Std): ','Gifts (24 h): ')+(D?D.gifts_today:'–')+'</p>';
-  if(D&&D.clubs.length) b+='<div class="admlbl">'+D.clubs.map(c=>'<div class="admlbr"><span class="rk">'+escName(c.emoji)+'</span><span class="who"><b>'+escName(c.name)+'</b><small>'+c.members+tt(' Mitglieder',' members')+'</small></span><span class="btns"><button type="button" class="btn sm warn'+(arm('delete_club:'+c.id)?' armed':'')+'" data-clba="delete_club:'+c.id+'">'+(arm('delete_club:'+c.id)?tt('Sicher?','Sure?'):tt('Löschen','Delete'))+'</button></span></div>').join('')+'</div>';
-  if(D&&D.msgs.length) b+='<h4 style="margin:12px 0 0">💬 '+tt('Neueste Chat-Nachrichten','Latest chat messages')+'</h4><div class="admlbl">'+D.msgs.map(m=>'<div class="admlbr"><span class="rk">💬</span><span class="who"><b>'+escName(m.username)+' · '+escName(m.club)+'</b><small>'+escName(m.body)+' · '+dt(m.created_at)+'</small></span><span class="btns"><button type="button" class="btn sm warn" data-clba="delete_msg:'+m.id+'">'+tt('Löschen','Delete')+'</button></span></div>').join('')+'</div>';
-  if(admClubErr) b+='<p class="nameerr">'+admClubErr+'</p>';
-  const h='<div class="admcard"><h4>👥 '+tt('Clubs & Geschenke','Clubs & gifts')+'</h4>'+b+'</div>';
-  if(box._h!==h){box._h=h;box.innerHTML=h;}
-}
-async function admClubCall(action,id){
-  admClubErr='';
-  try{admClubData=await lbApi('rpc/admin_clubs',{p_pass:admPass,p_action:action,p_id:id||null});if(action==='delete_club') toast(tt('Club gelöscht.','Club deleted.'));if(action==='delete_msg') toast(tt('Nachricht gelöscht.','Message deleted.'));}
-  catch(x){admClubErr=lbMissing(x)?tt('Clubs sind noch nicht eingerichtet (docs/clubs-v5.sql).','Clubs aren’t set up yet (docs/clubs-v5.sql).'):tt('Hat nicht geklappt: ','Didn’t work: ')+escName(String(x.message||''));}
-  admClubArm={k:'',t:0};admClubRender();
-}
-els.admin.addEventListener('click',e=>{
-  const b=e.target.closest('[data-clba]');
-  if(b){const [a,id]=b.dataset.clba.split(':');if(a==='delete_club'&&(admClubArm.k!==b.dataset.clba||Date.now()-admClubArm.t>5000)){admClubArm={k:b.dataset.clba,t:Date.now()};admClubRender();return;}admClubCall(a,id);return;}
-  if(e.target.closest('#admSeg [data-ap="online"]')||e.target.closest('[data-ona="list"]')) setTimeout(()=>{if(admPass) admClubCall('list');},80);
-});
 clubRender();
 if(lbOn()) setTimeout(()=>{if(clubV5===null) clubLoadList();},2500);
 v44Ready=true;
 
 /* ======================= V45: Sicherheit, Moderation und Server-Werkzeuge ======================= */
 var v45Ready=false;
-/* Server-Admin: eigenes Passwort, der Server gibt dafür ein Sitzungs-Token (12 Std). Nur das Token liegt im Tab-Speicher. */
-var ADM_TOK='keksfabrik-admtok';
-try{const o=JSON.parse(sessionStorage.getItem(ADM_TOK)||'null');if(o&&o.t&&o.e>Date.now()+60000&&admOK) admPass=o.t;}catch(x){}
-function admSrvDrop(){admPass='';try{sessionStorage.removeItem(ADM_TOK);}catch(x){}}
-var admSrvBusy=false;
-async function admSrvLogin(pw,where){
-  if(admSrvBusy) return;
-  const fail=m=>{if(where==='lb'){admLbErr=m;admLbRender();}else if(where==='on'){admOnErr=m;admOnRender();}else{admModErr=m;admModRender();admSrvRender();}};
-  admSrvBusy=true;let r=null;
-  try{r=await lbApi('rpc/admin_login',{p_pass:pw});}
-  catch(x){admSrvBusy=false;if(lbMissing(x)){admPass=pw;admSrvAfter();return;}fail(tt('Keine Verbindung. Versuch es gleich nochmal.','No connection. Try again in a moment.'));return;}
-  admSrvBusy=false;
-  if(!r||r.error){fail(r&&r.error==='locked'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):r&&r.error==='not set up'?tt('Das Server-Passwort ist noch nicht eingerichtet.','The server password isn’t set up yet.'):tt('Falsches Server-Passwort.','Wrong server password.'));return;}
-  admPass=r.token;try{sessionStorage.setItem(ADM_TOK,JSON.stringify({t:r.token,e:Date.parse(r.expires_at)||Date.now()+11*3600e3}));}catch(x){}
-  toast(tt('Server-Werkzeuge entsperrt.','Server tools unlocked.'));admSrvAfter();
-}
-function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();}
-const admSrvForm=(id,note)=>'<form class="coderow" id="'+id+'" novalidate><input type="password" class="namein" name="spw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button></form><p class="small" style="margin-top:6px">'+(note||tt('Die Server-Werkzeuge haben ein eigenes Passwort. Nach 5 falschen Versuchen sind sie 15 Minuten gesperrt.','The server tools have their own password. After 5 wrong tries they lock for 15 minutes.'))+'</p>';
-els.admin.addEventListener('submit',e=>{
-  const id=e.target.getAttribute('id');if(!['admModPwF','admSrvPwF'].includes(id)) return;
-  e.preventDefault();const v=e.target.querySelector('[name=spw]').value;if(v) admSrvLogin(v,'mod');
-});
-els.admin.addEventListener('click',e=>{if(e.target.closest('#admLockBtn')&&admPass){const t=admPass;admSrvDrop();lbApi('rpc/admin_logout',{p_pass:t}).catch(()=>{});}},true);
-
-/* Gemeinsame Bausteine */
-const admDT=v=>v?new Date(v).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'–';
-const admCardH=(t,b)=>'<div class="admcard"><h4>'+t+'</h4>'+b+'</div>';
-function admErrTxt(x){
-  const m=String(x&&x.message||'');
-  if(/wrong admin password/.test(m)){admSrvDrop();return tt('Deine Server-Sitzung ist abgelaufen. Bitte entsperre sie neu.','Your server session ended. Please unlock again.');}
-  if(lbMissing(x)) return tt('Die Datenbank kennt das noch nicht. Führe zuerst docs/security-v6.sql in Supabase aus.','The database doesn’t have this yet. Run docs/security-v6.sql in Supabase first.');
-  const T=[[/player not found/,'Diesen Spieler gibt es nicht.','No player with that name.'],[/invalid club name/,'Clubname: 3–24 Buchstaben, Zahlen, Leerzeichen, - oder _.','Club name: 3–24 letters, numbers, spaces, - or _.'],[/invalid username/,'Benutzername: 3–16 Buchstaben, Zahlen oder _.','Username: 3–16 letters, numbers or _.'],[/username taken/,'Diesen Benutzernamen gibt es schon.','That username is taken.'],[/invalid name/,'Name: 2–20 Zeichen, ohne < und >.','Name: 2–20 characters, no < or >.'],[/invalid word/,'Wörter: 2–30 Buchstaben.','Words: 2–30 letters.'],[/title missing/,'Bitte gib einen Titel ein.','Please enter a title.'],[/check constraint/,'Ungültige Eingabe.','Invalid input.']];
-  for(const [r,de,en] of T) if(r.test(m)) return tt(de,en);
-  return tt('Hat nicht geklappt: ','Didn’t work: ')+escName(m);
-}
-
-/* ---------- Admin: Moderation ---------- */
-var admModErr='',admModBusy=false,admReports=null,admMutes=null,admWords=null,admFind=null,admFindQ='',admMailTo={kind:'player',to:'',club:'',name:''},admModArm={k:'',t:0};
-const admModArmed=k=>admModArm.k===k&&Date.now()-admModArm.t<5000;
-async function admMod(action,data){return lbApi('rpc/admin_mod',{p_pass:admPass,p_action:action,p_data:data||null});}
-async function admModLoad(){
-  if(!admPass||admModBusy) return;
-  admModBusy=true;
-  try{const [r,m,w]=await Promise.all([admMod('reports'),admMod('mutes'),admMod('words')]);admReports=r||[];admMutes=m||[];admWords=w||[];admModErr='';}
-  catch(x){admModErr=admErrTxt(x);}
-  admModBusy=false;admModRender();
-}
-async function admModDo(action,data,okTxt,after){
-  admModErr='';
-  try{const r=await admMod(action,data);if(okTxt) toast(okTxt);if(after) after(r);}
-  catch(x){admModErr=admErrTxt(x);}
-  admModArm={k:'',t:0};admModRender();
-}
-function admModRender(){
-  const box=$id('admMod');if(!box) return;
-  let h='';
-  if(!lbOn()) h=admCardH(tt('Moderation','Moderation'),'<p class="small">'+tt('Online-Funktionen sind nicht eingerichtet.','Online features aren’t set up.')+'</p>');
-  else if(!admPass) h=admCardH('🔐 '+tt('Server-Werkzeuge','Server tools'),admSrvForm('admModPwF'))+(admModErr?'<p class="nameerr">'+admModErr+'</p>':'');
-  else{
-    if(admModErr) h+='<p class="nameerr">'+admModErr+'</p>';
-    const R=admReports||[],open=R.filter(r=>r.status==='open');
-    const repRow=r=>'<div class="admlbr'+(r.status==='open'?'':' done')+'"><span class="rk">'+(r.status==='open'?'🚩':'✓')+'</span><span class="who"><b>'+escName(r.reported)+' · '+escName(r.club)+'</b><small>„'+escName(r.body)+'“</small><small>'+tt('Gemeldet von ','Reported by ')+escName(r.reporter)+' · '+admDT(r.created_at)+(r.msg_exists?'':' · '+tt('Nachricht schon gelöscht','message already deleted'))+'</small></span><span class="btns">'+(r.status==='open'?(r.msg_exists?'<button type="button" class="btn sm warn" data-mda="repdel:'+r.id+'">'+tt('Nachricht löschen','Delete message')+'</button>':'')+'<button type="button" class="btn sm" data-mda="repok:'+r.id+'">'+tt('Erledigt','Done')+'</button><button type="button" class="btn sm" data-mda="mute24:'+escName(r.reported)+'">'+tt('24 Std stumm','Mute 24 h')+'</button>':'')+'</span></div>';
-    h+=admCardH('🚩 '+tt('Meldungen','Reports')+' <small class="muted">('+(admReports?open.length+' '+tt('offen','open'):'…')+')</small>',
-      (admReports?(open.length?'<div class="admlbl">'+open.map(repRow).join('')+'</div>':'<p class="small">'+tt('Keine offenen Meldungen. 🎉','No open reports. 🎉')+'</p>')
-        +(R.length>open.length?'<details class="fold"><summary>'+tt('Erledigte Meldungen','Handled reports')+' ('+(R.length-open.length)+')</summary><div class="admlbl">'+R.filter(r=>r.status!=='open').map(repRow).join('')+'</div></details>':''):'<p class="small">'+tt('Lädt …','Loading …')+'</p>')
-      +'<div class="btns" style="margin-top:8px"><button type="button" class="btn sm" data-mda="reload">'+tt('Aktualisieren','Refresh')+'</button></div>');
-    /* Spielersuche */
-    let f='<form class="coderow" id="admFindF" novalidate><input class="namein" name="q" maxlength="24" autocomplete="off" value="'+escName(admFindQ)+'" placeholder="'+tt('Name von Spieler, Bäckerei oder Club','Player, bakery or club name')+'"><button type="submit" class="btn primary">'+tt('Suchen','Search')+'</button></form>';
-    if(admFind){
-      const A=admFind.accounts||[],Sc=admFind.scores||[],Cl=admFind.clubs||[];
-      if(!A.length&&!Sc.length&&!Cl.length) f+='<p class="small">'+tt('Nichts gefunden.','Nothing found.')+'</p>';
-      if(A.length) f+='<h5 class="admh5">👤 '+tt('Konten','Accounts')+'</h5><div class="admlbl">'+A.map(a=>{
-        const on=a.online&&Date.now()-Date.parse(a.online)<180000;
-        return '<div class="admlbr"><span class="rk">'+(on?'🟢':'👤')+'</span><span class="who"><b>'+escName(a.username)+(a.muted?' · 🔇':'')+'</b><small>'+fmt(+a.save_baked||0)+tt(' Kekse',' cookies')+' · '+(a.club?'👥 '+escName(a.club)+' · ':'')+tt('dabei seit ','joined ')+new Date(a.created_at).toLocaleDateString(LOC[LANG])+'</small><small>'+tt('Zuletzt: ','Last seen: ')+admDT(a.online||a.save_at||a.last_login)+' · 🎁 '+a.gifts_sent+' '+tt('gesendet','sent')+' / '+a.gifts_got+' '+tt('bekommen','got')+' (30 '+tt('Tage','days')+') · 🚩 '+a.reports+(a.muted?' · '+tt('stumm bis ','muted until ')+admDT(a.muted):'')+'</small></span><span class="btns"><button type="button" class="btn sm primary" data-mda="mailto:'+escName(a.username)+'">'+tt('Senden','Send')+'</button>'+(a.muted?'<button type="button" class="btn sm" data-mda="unmute:'+escName(a.username)+'">'+tt('Stumm aus','Unmute')+'</button>':'<button type="button" class="btn sm" data-mda="mute24:'+escName(a.username)+'">'+tt('24 Std stumm','Mute 24 h')+'</button>')+'<button type="button" class="btn sm" data-mda="ren:account:'+a.id+':'+escName(a.username)+'">'+tt('Umbenennen','Rename')+'</button></span></div>';}).join('')+'</div>';
-      if(Sc.length) f+='<h5 class="admh5">🏆 '+tt('Bestenliste','Leaderboard')+'</h5><div class="admlbl">'+Sc.map(s=>'<div class="admlbr"><span class="rk">'+(s.banned?'⛔':'🏆')+'</span><span class="who"><b>'+escName(s.name)+'</b><small>'+fmt(+s.score||0)+tt(' Kekse',' cookies')+' · '+admDT(s.updated_at)+'</small></span><span class="btns"><button type="button" class="btn sm" data-mda="ren:score:'+s.id+':'+escName(s.name)+'">'+tt('Umbenennen','Rename')+'</button><button type="button" class="btn sm warn'+(admModArmed('ban:'+s.id)?' armed':'')+'" data-mda="ban:'+s.id+'">'+(admModArmed('ban:'+s.id)?tt('Sicher?','Sure?'):tt('Sperren','Ban'))+'</button></span></div>').join('')+'</div>';
-      if(Cl.length) f+='<h5 class="admh5">👥 '+tt('Clubs','Clubs')+'</h5><div class="admlbl">'+Cl.map(c=>'<div class="admlbr"><span class="rk">'+escName(c.emoji)+'</span><span class="who"><b>'+escName(c.name)+'</b><small>'+c.members+tt(' Mitglieder',' members')+'</small></span><span class="btns"><button type="button" class="btn sm primary" data-mda="mailclub:'+c.id+':'+escName(c.name)+'">'+tt('Nachricht','Message')+'</button><button type="button" class="btn sm" data-mda="ren:club:'+c.id+':'+escName(c.name)+'">'+tt('Umbenennen','Rename')+'</button></span></div>').join('')+'</div>';
-    }
-    h+=admCardH('🔎 '+tt('Spieler suchen','Find a player'),f);
-    /* Senden */
-    const M=admMailTo;
-    h+=admCardH('✉️ '+tt('Nachricht oder Geschenk senden','Send a message or gift'),'<form class="admform" id="admMailF" novalidate>'
-      +'<label class="small">'+tt('An','To')+'<select class="namein" name="kind"><option value="player"'+(M.kind==='player'?' selected':'')+'>'+tt('Einen Spieler','One player')+'</option>'+(M.club?'<option value="club" selected>👥 '+escName(M.name)+'</option>':'')+'</select></label>'
-      +'<label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="to" maxlength="16" value="'+escName(M.to)+'" autocapitalize="off" spellcheck="false"></label>'
-      +'<input class="namein" name="title" maxlength="80" placeholder="'+tt('Titel, z. B. Danke fürs Spielen!','Title, e.g. Thanks for playing!')+'" style="grid-column:1/-1"><textarea class="namein" name="body" maxlength="600" rows="2" placeholder="'+tt('Nachricht (optional)','Message (optional)')+'" style="grid-column:1/-1"></textarea>'
-      +'<label class="small">'+tt('Edelsteine','Gems')+'<input class="namein" name="gems" type="number" min="0" max="100000" value="0"></label><label class="small">'+tt('Sternenkrümel','Star crumbs')+'<input class="namein" name="stars" type="number" min="0" max="1000" value="0"></label><label class="small">'+tt('Minuten Produktion','Minutes of production')+'<input class="namein" name="minutes" type="number" min="0" max="10080" value="0"></label>'
-      +'<button type="submit" class="btn primary">'+tt('Senden','Send')+'</button></form><p class="small" style="margin-top:6px">'+tt('Geht an Spieler mit Konto. Sie bekommen es beim nächsten Spielen als Nachricht. An einen Club: jedes Mitglied bekommt es, und es erscheint im Club-Chat.','Goes to players with an account. They get it as a message the next time they play. To a club: every member gets it, and it appears in the club chat.')+'</p>');
-    /* Stumm */
-    const Mu=admMutes||[];
-    h+=admCardH('🔇 '+tt('Stummgeschaltet','Muted players')+' <small class="muted">('+Mu.length+')</small>','<form class="admform" id="admMuteF" novalidate><label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="user" maxlength="16" autocapitalize="off" spellcheck="false"></label><label class="small">'+tt('Stunden','Hours')+'<input class="namein" name="hours" type="number" min="1" max="8760" value="24"></label><input class="namein" name="reason" maxlength="120" placeholder="'+tt('Grund (optional)','Reason (optional)')+'"><button type="submit" class="btn primary">'+tt('Stummschalten','Mute')+'</button></form><p class="small" style="margin-top:6px">'+tt('Stumme Spieler können nicht im Club-Chat schreiben und nichts verschenken. Sie spielen sonst normal weiter.','Muted players can’t write in club chat or send gifts. Otherwise they play normally.')+'</p>'
-      +(Mu.length?'<div class="admlbl">'+Mu.map(m=>'<div class="admlbr"><span class="rk">🔇</span><span class="who"><b>'+escName(m.username)+'</b><small>'+tt('bis ','until ')+admDT(m.until)+(m.reason?' · '+escName(m.reason):'')+'</small></span><span class="btns"><button type="button" class="btn sm" data-mda="unmute:'+escName(m.username)+'">'+tt('Stumm aus','Unmute')+'</button></span></div>').join('')+'</div>':''));
-    /* Wörter */
-    const W=admWords||[];
-    h+=admCardH('🚫 '+tt('Gesperrte Wörter','Blocked words')+' <small class="muted">('+W.length+')</small>','<p class="small">'+tt('Gilt für Benutzernamen, Clubnamen, Club-Chat, Geschenk-Notizen und Namen in der Bestenliste. Auch Tricks wie 0 statt o oder @ statt a werden erkannt.','Applies to usernames, club names, club chat, gift notes and leaderboard names. Tricks like 0 for o or @ for a are caught too.')+'</p><form class="coderow" id="admWordF" novalidate><input class="namein" name="word" maxlength="30" autocomplete="off" placeholder="'+tt('Neues Wort','New word')+'"><button type="submit" class="btn primary">'+tt('Hinzufügen','Add')+'</button></form>'
-      +'<details class="fold"><summary>'+tt('Liste zeigen','Show the list')+'</summary><div class="wordchips">'+W.map(w=>'<span class="wchip">'+escName(w)+'<button type="button" aria-label="'+tt('Entfernen','Remove')+'" data-mda="wdel:'+escName(w)+'">×</button></span>').join('')+'</div></details>');
-  }
-  if(box._h!==h){
-    const keep={},open=[...box.querySelectorAll('details')].map(d=>d.open);
-    box.querySelectorAll('input,textarea,select').forEach(i=>{if(i.name&&i.closest('form')) keep[i.closest('form').getAttribute('id')+'|'+i.name]=i.value;});
-    box._h=h;box.innerHTML=h;
-    box.querySelectorAll('input,textarea,select').forEach(i=>{const k=i.closest('form')&&i.closest('form').getAttribute('id')+'|'+i.name;if(k&&keep[k]!=null&&!(i.closest('#admMailF')&&(i.name==='to'||i.name==='kind'))) i.value=keep[k];});
-    box.querySelectorAll('details').forEach((d,i)=>{if(open[i]) d.open=true;});
-  }
-}
-els.admin.addEventListener('submit',e=>{
-  const f=e.target,id=f.getAttribute('id');if(!['admFindF','admMailF','admMuteF','admWordF'].includes(id)) return;
-  e.preventDefault();const d=Object.fromEntries(new FormData(f).entries());
-  if(id==='admFindF'){admFindQ=String(d.q||'').trim();if(!admFindQ) return;admMod('search',{q:admFindQ}).then(r=>{admFind=r;admModErr='';admModRender();}).catch(x=>{admModErr=admErrTxt(x);admModRender();});return;}
-  if(id==='admMailF'){
-    if(!String(d.title||'').trim()){admModErr=tt('Bitte gib einen Titel ein.','Please enter a title.');admModRender();return;}
-    const club=d.kind==='club'?admMailTo.club:'';
-    if(!club&&!/^[A-Za-z0-9_]{3,16}$/.test(String(d.to||'').trim())){admModErr=tt('Gib den Benutzernamen des Kontos ein.','Enter the account username.');admModRender();return;}
-    admModDo('mail',{to:String(d.to||'').trim(),club,title:d.title.trim(),body:String(d.body||'').trim(),gems:d.gems,stars:d.stars,minutes:d.minutes},null,r=>{toast(tt('Gesendet an ','Sent to ')+(r&&r.sent||0)+tt(' Spieler.',' player(s).'));const nf=$id('admMailF');if(nf) nf.reset();admMailTo={kind:'player',to:'',club:'',name:''};});
-    return;
-  }
-  if(id==='admMuteF'){admModDo('mute',{user:String(d.user||'').trim(),hours:d.hours,reason:String(d.reason||'').trim()},tt('Stummgeschaltet.','Muted.'),r=>{admMutes=r||[];const nf=$id('admMuteF');if(nf) nf.reset();});return;}
-  if(id==='admWordF'){admModDo('word_add',{word:d.word},tt('Wort gesperrt.','Word blocked.'),r=>{admWords=r||[];const nf=$id('admWordF');if(nf) nf.reset();});}
-});
-els.admin.addEventListener('click',e=>{
-  const b=e.target.closest('[data-mda]');if(!b) return;
-  const parts=b.dataset.mda.split(':'),a=parts[0];
-  if(a==='reload'){admModLoad();return;}
-  if(a==='repdel'||a==='repok'){admModDo('report_done',{id:parts[1],delete:a==='repdel'},a==='repdel'?tt('Nachricht gelöscht.','Message deleted.'):tt('Erledigt.','Done.'),r=>{admReports=r||[];});return;}
-  if(a==='mute24'){admModDo('mute',{user:parts[1],hours:24,reason:tt('Meldung','Report')},tt('24 Stunden stummgeschaltet.','Muted for 24 hours.'),r=>{admMutes=r||[];if(admFindQ) admMod('search',{q:admFindQ}).then(x=>{admFind=x;admModRender();}).catch(()=>{});});return;}
-  if(a==='unmute'){admModDo('unmute',{user:parts[1]},tt('Stummschaltung aufgehoben.','Unmuted.'),r=>{admMutes=r||[];if(admFindQ) admMod('search',{q:admFindQ}).then(x=>{admFind=x;admModRender();}).catch(()=>{});});return;}
-  if(a==='wdel'){admModDo('word_del',{word:parts[1]},null,r=>{admWords=r||[];});return;}
-  if(a==='mailto'){admMailTo={kind:'player',to:parts[1],club:'',name:''};admModRender();const f=$id('admMailF');if(f){f.scrollIntoView({block:'center',behavior:'smooth'});f.querySelector('[name=title]').focus();}return;}
-  if(a==='mailclub'){admMailTo={kind:'club',to:'',club:parts[1],name:parts.slice(2).join(':')};admModRender();const f=$id('admMailF');if(f){f.scrollIntoView({block:'center',behavior:'smooth'});f.querySelector('[name=title]').focus();}return;}
-  if(a==='ren'){
-    const kind=parts[1],id=parts[2],old=parts.slice(3).join(':');
-    const nm=window.prompt(tt('Neuer Name für ','New name for ')+old+':',old);if(!nm||nm.trim()===old) return;
-    admModDo('rename',{kind,id,name:nm.trim()},tt('Umbenannt.','Renamed.'),()=>{admMod('search',{q:admFindQ}).then(x=>{admFind=x;admModRender();}).catch(()=>{});if(kind==='score'){lbLast=0;}});
-    if(kind==='account') toast(tt('Sag dem Spieler seinen neuen Benutzernamen fürs Anmelden.','Tell the player their new username for signing in.'));
-    return;
-  }
-  if(a==='ban'){
-    if(!admModArmed(b.dataset.mda)){admModArm={k:b.dataset.mda,t:Date.now()};admModRender();return;}
-    admModArm={k:'',t:0};lbApi('rpc/admin_lb',{p_pass:admPass,p_action:'ban',p_id:parts[1]}).then(()=>{toast(tt('Spieler gesperrt.','Player banned.'));return admMod('search',{q:admFindQ});}).then(x=>{admFind=x;admModRender();}).catch(x=>{admModErr=admErrTxt(x);admModRender();});
-  }
-});
-
-/* ---------- Admin: Server (Statistik, Schalter, Wartung, Update, Saisons, Protokoll) ---------- */
-var admStats=null,admCfg=null,admSeasons=null,admLog=null,admSrvErr='',admSrvArm={k:'',t:0};
-async function admSrvLoad(){
-  if(!admPass) return;
-  try{const [s,c,se,l]=await Promise.all([admMod('stats'),admMod('settings'),admMod('seasons'),admMod('log')]);admStats=s;admCfg=c||{};admSeasons=se||[];admLog=l||[];admSrvErr='';}
-  catch(x){admSrvErr=admErrTxt(x);}
-  if(v46Ready) admBkCall('list');
-  if(v51Ready) admInsLoad();
-  admSrvRender();
-}
-function admBars(rows){
-  if(!rows||!rows.length) return '';
-  const mx=Math.max(1,...rows.map(r=>+r.n||0));
-  return '<div class="admbars" role="img" aria-label="'+rows.map(r=>r.day+': '+r.n).join(', ')+'">'+rows.map(r=>'<span title="'+new Date(r.day+'T00:00:00').toLocaleDateString(LOC[LANG],{day:'2-digit',month:'2-digit'})+': '+r.n+'"><i style="height:'+Math.max(4,Math.round((+r.n||0)/mx*100))+'%"></i><small>'+(+r.n||'')+'</small></span>').join('')+'</div>';
-}
-function admSrvRender(){
-  const box=$id('admSrv');if(!box) return;
-  let h='';
-  if(!lbOn()) h=admCardH(tt('Server','Server'),'<p class="small">'+tt('Online-Funktionen sind nicht eingerichtet.','Online features aren’t set up.')+'</p>');
-  else if(!admPass) h=admCardH('🔐 '+tt('Server-Werkzeuge','Server tools'),admSrvForm('admSrvPwF'))+(admModErr?'<p class="nameerr">'+admModErr+'</p>':'');
-  else{
-    if(admSrvErr) h+='<p class="nameerr">'+admSrvErr+'</p>';
-    const St=admStats||{},L=St.live||{},C=admCfg||{},F=Object.assign({chat:true,gifts:true,clubs:true,lb:true},C.feat||{}),Mt=Object.assign({on:false,de:'',en:''},C.maint||{}),mv=+C.min_ver||0;
-    const tile=(l,v)=>'<span><small>'+l+'</small><b>'+(v==null?'–':typeof v==='number'?fmt(v):escName(String(v)))+'</b></span>';
-    h+=admCardH('📊 '+tt('Statistik','Statistics'),'<div class="admstats">'+tile(tt('Jetzt online','Online now'),L.online)+tile(tt('Heute','Today'),L.today)+tile(tt('Spieler','Players'),L.players)+tile(tt('Konten','Accounts'),St.accounts)+tile(tt('Aktiv (7 Tage)','Active (7 days)'),St.active7)+tile(tt('Clubs','Clubs'),St.clubs)+tile(tt('Chat (24 Std)','Chat (24 h)'),St.msgs24)+tile(tt('Offene Meldungen','Open reports'),St.reports_open)+tile(tt('In der Bestenliste','On the leaderboard'),St.lb_entries)+tile(tt('Stumm','Muted'),St.mutes)+'</div>'
-      +'<h5 class="admh5">'+tt('Neue Konten pro Tag (14 Tage)','New accounts per day (14 days)')+'</h5>'+admBars(St.new14)
-      +'<h5 class="admh5">'+tt('Geschenke pro Tag (14 Tage)','Gifts per day (14 days)')+'</h5>'+admBars(St.gifts14)
-      +'<div class="admtwo"><div><h5 class="admh5">'+tt('Top-Clubs diese Woche','Top clubs this week')+'</h5>'+((St.top_clubs||[]).length?'<ol class="admol">'+St.top_clubs.map(c=>'<li>'+escName(c.emoji)+' '+escName(c.name)+' <small>+'+fmt(+c.gain||0)+'</small></li>').join('')+'</ol>':'<p class="small">–</p>')+'</div>'
-      +'<div><h5 class="admh5">'+tt('Meistgenutzte Codes','Most used codes')+'</h5>'+((St.top_codes||[]).length?'<ol class="admol">'+St.top_codes.map(c=>'<li>'+escName(c.code)+(c.label?' · '+escName(c.label):'')+' <small>'+c.uses+'×</small></li>').join('')+'</ol>':'<p class="small">–</p>')+'</div></div>'
-      +'<p class="small">'+(St.ip_seen===false?tt('Hinweis: Die Limits pro Gerät sind gerade nicht aktiv, weil der Server keine Geräte-Adresse sieht. Die allgemeinen Limits gelten weiter.','Note: per-device limits are off right now because the server can’t see device addresses. The general limits still apply.'):St.ip_seen?tt('Limits pro Gerät sind aktiv.','Per-device limits are active.'):'')+'</p>'
-      +'<div class="btns"><button type="button" class="btn sm primary" data-sva="reload">'+tt('Aktualisieren','Refresh')+'</button></div>');
-    const sw=(k,ic,l)=>'<label class="admsw"><input type="checkbox" data-feat="'+k+'"'+(F[k]!==false?' checked':'')+'><span class="tog" aria-hidden="true"></span><span>'+ic+' '+l+'</span></label>';
-    h+=admCardH('🎚️ '+tt('Funktionen an/aus','Feature switches'),'<p class="small">'+tt('Wirkt bei allen Spielern innerhalb einer Minute, ganz ohne Update.','Takes effect for every player within a minute, no update needed.')+'</p><div class="admsws">'+sw('chat','💬',tt('Club-Chat','Club chat'))+sw('gifts','🎁',tt('Geschenke','Gifts'))+sw('clubs','👥',tt('Clubs','Clubs'))+sw('lb','🏆',tt('Bestenliste','Leaderboard'))+'</div>');
-    h+=admCardH('🛠️ '+tt('Wartungsmodus','Maintenance mode'),'<p class="small">'+tt('Zeigt allen Spielern „Wir aktualisieren gerade“ und pausiert das Spiel. Du selbst kannst weiterspielen, solange das Admin-Panel entsperrt ist.','Shows every player “We’re updating, back soon” and pauses the game. You can keep playing while the admin panel is unlocked.')+'</p><form class="admform" id="admMaintF" novalidate><input class="namein" name="de" maxlength="200" value="'+escName(Mt.de||'')+'" placeholder="Nachricht (Deutsch)" style="grid-column:1/-1"><input class="namein" name="en" maxlength="200" value="'+escName(Mt.en||'')+'" placeholder="Message (English)" style="grid-column:1/-1"><button type="submit" class="btn '+(Mt.on?'':'primary')+'" name="go" value="'+(Mt.on?'off':'on')+'">'+(Mt.on?tt('Wartung beenden','End maintenance'):tt('Wartung starten','Start maintenance'))+'</button></form>'+(Mt.on?'<p class="nameerr">'+tt('Wartung läuft gerade.','Maintenance is on right now.')+'</p>':''));
-    h+=admCardH('⬆️ '+tt('Update erzwingen','Force update'),'<p class="small">'+tt('Spieler mit einer älteren Version müssen zuerst neu laden. Aktuelle Version: ','Players on an older version must reload first. Current version: ')+NEWS_VER+'. '+(mv?tt('Gerade nötig: Version ','Required right now: version ')+mv:tt('Gerade aus.','Off right now.'))+'</p><div class="btns"><button type="button" class="btn sm primary" data-sva="minver:'+NEWS_VER+'">'+tt('Version ','Require version ')+NEWS_VER+tt(' verlangen','')+'</button>'+(mv?'<button type="button" class="btn sm" data-sva="minver:0">'+tt('Ausschalten','Turn off')+'</button>':'')+'</div>');
-    const Se=admSeasons||[],armS=admSrvArm.k==='season'&&Date.now()-admSrvArm.t<5000;
-    h+=admCardH('🏛️ '+tt('Saisons','Seasons'),'<p class="small">'+tt('Speichert die Top 10 der Bestenliste als beendete Saison (alle sehen sie in der Bestenliste) und startet sie danach neu.','Saves the leaderboard’s top 10 as a finished season (everyone sees it in the leaderboard), then starts it fresh.')+'</p><form class="coderow" id="admSeasonF" novalidate><input class="namein" name="name" maxlength="40" placeholder="'+tt('Name, z. B. Saison ','Name, e.g. Season ')+(Se.length+1)+'"><button type="submit" class="btn warn'+(armS?' armed':'')+'">'+(armS?tt('Wirklich? Nochmal','Really? Again'):tt('Saison beenden','End season'))+'</button></form>'
-      +(Se.length?'<div class="admlbl">'+Se.map(s=>'<div class="admlbr"><span class="rk">🏛️</span><span class="who"><b>'+escName(s.name)+'</b><small>'+(s.top||[]).slice(0,3).map((t,i)=>['🥇','🥈','🥉'][i]+' '+escName(t.name)+' '+fmt(+t.score||0)).join(' · ')+'</small><small>'+admDT(s.archived_at)+'</small></span></div>').join('')+'</div>':''));
-    if(v51Ready) h+=admInsHtml();
-    h+=admCardH('💾 '+tt('Backups','Backups'),admBkHtml());
-    const Lg=admLog||[];
-    h+=admCardH('📜 '+tt('Admin-Protokoll','Admin log'),'<p class="small">'+tt('Jede Admin-Aktion auf dem Server, die neuesten zuerst.','Every admin action on the server, newest first.')+'</p>'+(Lg.length?'<div class="admlog">'+Lg.map(l=>'<div><small>'+admDT(l.at)+'</small><b>'+escName(l.action)+'</b>'+(l.detail?'<span>'+escName(l.detail)+'</span>':'')+'</div>').join('')+'</div>':'<p class="small">–</p>'));
-    h+=admCardH('🔐 '+tt('Server-Sitzung','Server session'),'<p class="small">'+tt('Du bist für 12 Stunden angemeldet.','You’re signed in for 12 hours.')+'</p><div class="btns"><button type="button" class="btn sm" data-sva="logout">'+tt('Server-Werkzeuge sperren','Lock server tools')+'</button></div>');
-  }
-  if(box._h!==h){const open=[...box.querySelectorAll('details')].map(d=>d.open);box._h=h;box.innerHTML=h;box.querySelectorAll('details').forEach((d,i)=>{if(open[i]) d.open=true;});}
-}
-async function admCfgSet(k,v,okTxt){
-  try{admCfg=await admMod('set',{k,v});admSrvErr='';if(okTxt) toast(okTxt);cfgApply(admCfg);}
-  catch(x){admSrvErr=admErrTxt(x);}
-  admSrvArm={k:'',t:0};admSrvRender();
-}
-els.admin.addEventListener('change',e=>{
-  const c=e.target.closest('[data-feat]');if(!c) return;
-  const F=Object.assign({chat:true,gifts:true,clubs:true,lb:true},(admCfg||{}).feat||{});F[c.dataset.feat]=c.checked;
-  admCfgSet('feat',F,c.checked?tt('Eingeschaltet.','Turned on.'):tt('Ausgeschaltet.','Turned off.'));
-});
-els.admin.addEventListener('submit',e=>{
-  const f=e.target,id=f.getAttribute('id');if(!['admMaintF','admSeasonF'].includes(id)) return;
-  e.preventDefault();const d=Object.fromEntries(new FormData(f).entries());
-  if(id==='admMaintF'){const on=(e.submitter&&e.submitter.value||f.querySelector('[name=go]').value)==='on';admCfgSet('maint',{on,de:String(d.de||'').trim(),en:String(d.en||'').trim()},on?tt('Wartung gestartet.','Maintenance started.'):tt('Wartung beendet.','Maintenance ended.'));return;}
-  if(id==='admSeasonF'){
-    if(!(admSrvArm.k==='season'&&Date.now()-admSrvArm.t<5000)){admSrvArm={k:'season',t:Date.now()};admSrvRender();return;}
-    admSrvArm={k:'',t:0};admMod('season_end',{name:String(d.name||'').trim()}).then(r=>{admSeasons=r||[];toast(tt('Saison beendet. Die Bestenliste startet neu.','Season ended. The leaderboard starts fresh.'));lbLast=0;lbSeasons=null;lbSeasonsAt=0;lbRefresh();admSrvLoad();}).catch(x=>{admSrvErr=admErrTxt(x);admSrvRender();});
-  }
-});
-els.admin.addEventListener('click',e=>{
-  const b=e.target.closest('[data-sva]');if(!b) return;
-  const [a,v]=b.dataset.sva.split(':');
-  if(a==='reload'){admSrvLoad();return;}
-  if(a==='minver'){admCfgSet('min_ver',+v||0,+v?tt('Update wird jetzt verlangt.','Update is now required.'):tt('Ausgeschaltet.','Turned off.'));return;}
-  if(a==='logout'){const t=admPass;admSrvDrop();lbApi('rpc/admin_logout',{p_pass:t}).catch(()=>{});admModRender();admSrvRender();admLbRender();admOnRender();admAccRender();admClubRender();toast(tt('Server-Werkzeuge gesperrt.','Server tools locked.'));}
-});
-els.admin.addEventListener('click',e=>{
-  const b=e.target.closest('#admSeg [data-ap]');if(!b) return;
-  if(b.dataset.ap==='mod') setTimeout(()=>{admModRender();if(admPass&&!admReports) admModLoad();},0);
-  if(b.dataset.ap==='srv') setTimeout(()=>{admSrvRender();if(admPass) admSrvLoad();},0);
-});
-
 /* ---------- Spieler: Schalter, Wartung, Update-Pflicht ---------- */
 var kfCfg={feat:{chat:true,gifts:true,clubs:true,lb:true},maint:{on:false},min_ver:0};
 function featOn(k){return !kfCfg||!kfCfg.feat||kfCfg.feat[k]!==false;}
@@ -9328,16 +8724,15 @@ function cfgApply(c){
 }
 function maintRender(){
   const ov=$id('maintOv');if(!ov) return;
-  const need=kfCfg.min_ver>NEWS_VER,mt=kfCfg.maint&&kfCfg.maint.on&&!admOK;
+  const need=kfCfg.min_ver>NEWS_VER,mt=kfCfg.maint&&kfCfg.maint.on&&!ADMH.on;
   ov.hidden=!(need||mt);if(ov.hidden) return;
   const m=mt?String((LANG==='de'?kfCfg.maint.de:kfCfg.maint.en)||kfCfg.maint.de||kfCfg.maint.en||''):'';
   const h=need?'<div class="mbig" aria-hidden="true">⬆️</div><h2 id="maintT">'+tt('Update nötig','Update needed')+'</h2><p>'+tt('Es gibt eine neue Version der Keksfabrik. Lade neu, um weiterzuspielen. Dein Fortschritt bleibt.','There’s a new version of Cookie Factory. Reload to keep playing. Your progress stays.')+'</p><div class="btns" style="justify-content:center"><button type="button" class="btn primary" id="maintGo">'+tt('Jetzt aktualisieren','Update now')+'</button></div>'
-    :'<div class="mbig" aria-hidden="true">🛠️</div><h2 id="maintT">'+tt('Wir backen gerade an einem Update','We’re baking an update')+'</h2><p>'+(m?escName(m):tt('Die Keksfabrik ist gleich wieder da. Bitte versuch es in ein paar Minuten nochmal.','Cookie Factory will be back soon. Please try again in a few minutes.'))+'</p><p class="small">'+tt('Dein Fortschritt ist gespeichert.','Your progress is saved.')+'</p><div class="btns" style="justify-content:center"><button type="button" class="btn sm" id="maintAdm">'+tt('Admin','Admin')+'</button></div>';
+    :'<div class="mbig" aria-hidden="true">🛠️</div><h2 id="maintT">'+tt('Wir backen gerade an einem Update','We’re baking an update')+'</h2><p>'+(m?escName(m):tt('Die Keksfabrik ist gleich wieder da. Bitte versuch es in ein paar Minuten nochmal.','Cookie Factory will be back soon. Please try again in a few minutes.'))+'</p><p class="small">'+tt('Dein Fortschritt ist gespeichert.','Your progress is saved.')+'</p>'+(ADMH.build?'<div class="btns" style="justify-content:center"><button type="button" class="btn sm" id="maintAdm">'+tt('Admin','Admin')+'</button></div>':'');
   const d=$id('maintBody');if(d._h!==h){d._h=h;d.innerHTML=h;}
 }
 $id('maintOv').addEventListener('click',e=>{
   if(e.target.closest('#maintGo')){save();location.reload();return;}
-  if(e.target.closest('#maintAdm')){$id('maintOv').hidden=true;closeStart(()=>{openSettings();showSetPane('admin');});setTimeout(()=>{const t=setInterval(()=>{if(admOK||els.setOv.hidden){clearInterval(t);maintRender();}},1000);},500);}
 });
 window.addEventListener('keydown',e=>{if(!$id('maintOv').hidden&&e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();}},true);
 
@@ -9353,7 +8748,7 @@ function lbSeasonsHtml(){
   if(!lbSeasons||!lbSeasons.length) return '';
   return '<details class="fold lbhof"><summary>🏛️ '+tt('Ruhmeshalle: frühere Saisons','Hall of fame: past seasons')+'</summary>'+lbSeasons.map(s=>'<p class="lbprev"><b>'+escName(s.name)+'</b>: '+(s.top||[]).slice(0,3).map((t,i)=>['🥇','🥈','🥉'][i]+' '+escName(t.name)).join(' · ')+'</p>').join('')+'</details>';
 }
-v45Ready=true;admModRender();admSrvRender();
+v45Ready=true;
 
 /* ======================= V46: Backups und Bestenlisten-Platz im Konto ======================= */
 var v46Ready=false;
@@ -9375,44 +8770,6 @@ async function lbAccSync(force){
   toast(tt('Dein Platz in der Bestenliste kommt jetzt aus deinem Konto.','Your leaderboard spot now comes from your account.'),true);
 }
 
-/* Admin: Backups */
-var admBk=null,admBkErr='',admBkArm={k:'',t:0},admBkBusy=false;
-async function admBkCall(action,data){
-  if(!admPass||admBkBusy) return null;
-  admBkBusy=true;admBkErr='';admSrvRender();let r=null;
-  try{r=await lbApi('rpc/admin_backup',{p_pass:admPass,p_action:action,p_data:data||null});if(r&&r.backups) admBk=r.backups;}
-  catch(x){admBkErr=lbMissing(x)?tt('Backups brauchen zuerst docs/update-v7.sql in Supabase.','Backups need docs/update-v7.sql in Supabase first.'):/not in this backup/.test(String(x.message))?tt('Diesen Spieler gibt es in diesem Backup nicht.','That player isn’t in this backup.'):admErrTxt(x);r=null;}
-  admBkBusy=false;admBkArm={k:'',t:0};admSrvRender();return r;
-}
-function admBkHtml(){
-  const B=admBk||[],kb=n=>n>1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
-  const armR=admBkArm.k==='restore'&&Date.now()-admBkArm.t<5000;
-  return '<p class="small">'+tt('Einmal pro Woche macht der Server automatisch ein Backup von Konten, Spielständen, Clubs, Bestenliste und Codes. Die letzten 6 automatischen und 6 eigenen bleiben. Lade ab und zu eins herunter, dann hast du auch eine Kopie außerhalb von Supabase.','Once a week the server automatically backs up accounts, saves, clubs, the leaderboard and codes. The last 6 automatic and 6 manual ones are kept. Download one now and then so you also have a copy outside Supabase.')+'</p>'
-    +'<div class="btns"><button type="button" class="btn sm primary" data-bka="make"'+(admBkBusy?' disabled':'')+'>'+(admBkBusy?tt('Moment …','One moment …'):tt('Jetzt Backup machen','Back up now'))+'</button></div>'
-    +(B.length?'<div class="admlbl">'+B.map(b=>'<div class="admlbr"><span class="rk">'+(b.kind==='auto'?'🗓️':'💾')+'</span><span class="who"><b>'+admDT(b.at)+' · '+(b.kind==='auto'?tt('automatisch','automatic'):tt('von dir','manual'))+'</b><small>'+kb(+b.size||0)+' · '+(b.counts&&b.counts.kf_accounts!=null?b.counts.kf_accounts+tt(' Konten',' accounts')+' · ':'')+(b.counts&&b.counts.leaderboard!=null?b.counts.leaderboard+tt(' in der Bestenliste',' on the leaderboard'):'')+'</small></span><span class="btns"><button type="button" class="btn sm" data-bka="get:'+b.id+'">'+tt('Herunterladen','Download')+'</button></span></div>').join('')+'</div>'
-      +'<details class="fold"><summary>'+tt('Konto eines Spielers wiederherstellen','Restore a player’s account')+'</summary><p class="small">'+tt('Setzt den Spielstand des Kontos auf den Stand im Backup zurück. Ein gelöschtes Konto kommt mit seinem alten Passwort zurück.','Puts the account’s save back to how it was in the backup. A deleted account comes back with its old password.')+'</p><form class="admform" id="admBkRF" novalidate><label class="small">Backup<select class="namein" name="id">'+B.map(b=>'<option value="'+b.id+'">'+admDT(b.at)+'</option>').join('')+'</select></label><label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="user" maxlength="16" autocapitalize="off" spellcheck="false"></label><button type="submit" class="btn warn'+(armR?' armed':'')+'">'+(armR?tt('Wirklich? Nochmal','Really? Again'):tt('Wiederherstellen','Restore'))+'</button></form></details>'
-      :(admBk?'<p class="small">'+tt('Noch kein Backup.','No backup yet.')+'</p>':''))
-    +(admBkErr?'<p class="nameerr">'+admBkErr+'</p>':'');
-}
-els.admin.addEventListener('click',async e=>{
-  const b=e.target.closest('[data-bka]');if(!b) return;
-  const [a,id]=b.dataset.bka.split(':');
-  if(a==='make'){const r=await admBkCall('make');if(r) toast(tt('Backup gespeichert.','Backup saved.'));return;}
-  if(a==='get'){
-    const r=await admBkCall('get',{id});if(!r) return;
-    const blob=new Blob([JSON.stringify(r)],{type:'application/json'}),url=URL.createObjectURL(blob),el=document.createElement('a');
-    el.href=url;el.download='keksfabrik-backup-'+String(r.at||'').slice(0,10)+'-'+r.id+'.json';document.body.appendChild(el);el.click();el.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
-    toast(tt('Backup heruntergeladen. Bewahre die Datei sicher auf: Sie enthält alle Spielstände.','Backup downloaded. Keep the file safe: it contains every save.'),true);admBkCall('list');
-  }
-});
-els.admin.addEventListener('submit',async e=>{
-  const f=e.target;if(f.getAttribute('id')!=='admBkRF') return;
-  e.preventDefault();const d=Object.fromEntries(new FormData(f).entries());
-  if(!/^[A-Za-z0-9_]{3,16}$/.test(String(d.user||'').trim())){admBkErr=tt('Gib den Benutzernamen des Kontos ein.','Enter the account username.');admSrvRender();return;}
-  if(!(admBkArm.k==='restore'&&Date.now()-admBkArm.t<5000)){admBkArm={k:'restore',t:Date.now()};admSrvRender();return;}
-  const r=await admBkCall('restore_account',{id:d.id,user:String(d.user).trim()});
-  if(r&&r.restored) toast(tt('Konto wiederhergestellt. Der Spieler lädt es beim nächsten Anmelden.','Account restored. The player gets it the next time they sign in.'),true);
-});
 v46Ready=true;
 
 /* ======================= V47: Aufgeräumte Einstellungen ======================= */
@@ -9684,46 +9041,6 @@ $id('clubOv').addEventListener('click',async e=>{
   if(a==='wave'){await clubCall('club_post',{p_body:'👋'});return;}
 });
 
-/* ---------- Admin: Absturzberichte und Spieler-Weg (Server-Tab) ---------- */
-var admErrs=null,admJour=null,admInsErr='',admInsArm=0;
-async function admIns(action,data){return lbApi('rpc/admin_insights',{p_pass:admPass,p_action:action,p_data:data||null});}
-async function admInsLoad(){
-  if(!admPass) return;
-  try{const [e,j]=await Promise.all([admIns('errors'),admIns('journey')]);admErrs=e||[];admJour=j||{};admInsErr='';}
-  catch(x){admInsErr=lbMissing(x)?tt('Dafür braucht der Server zuerst docs/insights-v10.sql.','This needs docs/insights-v10.sql on the server first.'):admErrTxt(x);}
-  admSrvRender();
-}
-const STEP_TXT={open:['Spiel geöffnet','Opened the game'],click50:['50 Klicks','50 clicks'],build1:['Erstes Gebäude','First building'],up1:['Erstes Upgrade','First upgrade'],
-  tut5:['5 Tipps gelesen','5 tips done'],tutdone:['Erste Schritte fertig','First steps done'],bld25:['25 Gebäude','25 buildings'],world:['Welt freigeschaltet','World unlocked'],
-  asc1:['Erster Aufstieg','First ascension'],acc:['Konto erstellt','Made an account'],club:['In einem Club','Joined a club'],lb:['In der Bestenliste','On the leaderboard'],push:['Push an','Push on'],comeback:['Kam nach 3+ Tagen zurück','Came back after 3+ days']};
-function admInsHtml(){
-  const pct=(a,b)=>b?Math.round(a/b*100)+'%':'–';
-  let h='';
-  if(admInsErr) return admCardH('🧭 '+tt('Spieler-Weg','Player journey'),'<p class="nameerr">'+admInsErr+'</p>');
-  const J=admJour||{},St=J.steps||{},base=Math.max(+J.new30||0,+St.open||0);
-  h+=admCardH('🧭 '+tt('Spieler-Weg (neue Spieler, 30 Tage)','Player journey (new players, 30 days)'),
-    '<p class="small">'+tt('Wie weit neue Spieler kommen. Anonym: gezählt wird nur, welcher Schritt einmal erreicht wurde.','How far new players get. Anonymous: only which steps were reached once is counted.')+'</p>'
-    +'<div class="admstats"><span><small>'+tt('Neue Spieler','New players')+'</small><b>'+fmt(+J.new30||0)+'</b></span><span><small>'+tt('Am 2. Tag zurück','Back on day 2')+'</small><b>'+pct(+J.back1||0,+J.cohort||0)+'</b></span><span><small>'+tt('Nach 7 Tagen zurück','Back after 7 days')+'</small><b>'+pct(+J.back7||0,+J.cohort7||0)+'</b></span></div>'
-    +'<div class="admfun">'+Object.keys(STEP_TXT).map(k=>{const n=+St[k]||0,w=base?Math.round(n/base*100):0;return '<div><span>'+tt(STEP_TXT[k][0],STEP_TXT[k][1])+'</span><i style="--w:'+Math.min(100,w)+'%"></i><b>'+n+' <small>'+(base?w+'%':'')+'</small></b></div>';}).join('')+'</div>'
-    +'<h5 class="admh5">'+tt('Spieler pro Tag (14 Tage)','Players per day (14 days)')+'</h5>'+admBars(J.daily));
-  const E=admErrs||[],arm=Date.now()-admInsArm<5000;
-  h+=admCardH('🐞 '+tt('Absturzberichte','Crash reports'),
-    '<p class="small">'+tt('Fehler, die bei Spielern passiert sind. Gleiche Fehler werden zusammengezählt. Es wird kein Spielstand und kein Name mitgeschickt.','Errors that happened for players. The same error is counted together. No save and no name are sent.')+'</p>'
-    +(E.length?'<div class="admerrs">'+E.map(x=>'<details class="fold"><summary><b>'+escName(x.msg)+'</b><small>'+x.count+'× · v'+x.ver+' · '+admDT(x.last_at)+'</small></summary>'+(x.src?'<p class="small">'+escName(x.src)+'</p>':'')+(x.stack?'<pre>'+escName(x.stack)+'</pre>':'')+(x.ua?'<p class="small">'+escName(x.ua)+'</p>':'')+'<div class="btns"><button type="button" class="btn sm" data-ina="done:'+escName(x.fp)+'">'+tt('Behoben','Mark fixed')+'</button></div></details>').join('')+'</div>'
-      +'<div class="btns"><button type="button" class="btn sm warn'+(arm?' armed':'')+'" data-ina="clear">'+(arm?tt('Wirklich alle löschen?','Really clear all?'):tt('Liste leeren','Clear list'))+'</button></div>'
-      :'<p class="small">'+(admErrs?tt('Keine Fehler gemeldet. 🎉','No errors reported. 🎉'):tt('Lädt …','Loading …'))+'</p>'));
-  return h;
-}
-els.admin.addEventListener('click',async e=>{
-  const b=e.target.closest('[data-ina]');if(!b) return;
-  const [a,fp]=b.dataset.ina.split(':');
-  try{
-    if(a==='done'){admErrs=await admIns('error_done',{fp});toast(tt('Als behoben markiert.','Marked as fixed.'));}
-    if(a==='clear'){if(Date.now()-admInsArm>=5000){admInsArm=Date.now();admSrvRender();return;}admInsArm=0;admErrs=await admIns('errors_clear');toast(tt('Liste geleert.','List cleared.'));}
-  }catch(x){admInsErr=admErrTxt(x);}
-  admSrvRender();
-});
-
 /* ---------- Spieleportale (itch.io, CrazyGames …): keine App-Installation, kein Offline-Speicher ---------- */
 if(window.KF_PORTAL){const a=$id('appT');if(a&&a.parentElement) a.parentElement.hidden=true;}
 
@@ -9731,54 +9048,25 @@ setInterval(stepCheck,15000);
 setTimeout(()=>{stepCheck();errFlush();},4000);
 v51Ready=true;
 
-/* ======================= V40: Admin – Bestenliste verwalten ======================= */
-let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};
-function admLbRender(){
-  const box=$id('admLb');if(!box) return;
-  let h='<div class="admcard"><h4>'+tt('Bestenliste verwalten','Manage the leaderboard')+'</h4><p class="small">'+tt('Entferne Spieler, sperre Schummler oder setze ihr Spiel zurück. Das Zurücksetzen passiert beim nächsten Start ihres Spiels; ihr Spielstand liegt nur auf ihrem Gerät.','Remove players, ban cheaters or reset their game. A reset happens the next time their game starts; their save only lives on their own device.')+'</p>';
-  if(!lbOn()){box.innerHTML=h+'<p class="small">'+tt('Die Bestenliste ist nicht eingerichtet.','The leaderboard isn’t set up.')+'</p></div>';return;}
-  if(!admPass){
-    h+='<form class="coderow" id="admLbPwF" novalidate><input type="password" class="namein" id="admLbPw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Laden','Load')+'</button></form><p class="small" style="margin-top:6px">'+tt('Die Server-Werkzeuge haben ein eigenes Passwort. Nach 5 falschen Versuchen sind sie 15 Minuten gesperrt.','The server tools have their own password. After 5 wrong tries they lock for 15 minutes.')+'</p>';
-  }else{
-    h+='<div class="btns" style="margin-top:8px"><button type="button" class="btn sm primary" data-lba="list">'+(admLbBusy?tt('Lädt …','Loading …'):tt('Aktualisieren','Refresh'))+'</button><button type="button" class="btn sm'+(admLbArm.k==='clear:'&&Date.now()-admLbArm.t<5000?' armed':'')+'" data-lba="clear:">'+(admLbArm.k==='clear:'&&Date.now()-admLbArm.t<5000?tt('Wirklich alle entfernen? Nochmal klicken','Really remove everyone? Click again'):tt('Ganze Bestenliste leeren','Clear the whole leaderboard'))+'</button></div>';
-  }
-  if(admLbErr) h+='<p class="nameerr">'+admLbErr+'</p>';
-  h+='</div>';
-  if(admPass&&admLbData){
-    const E=admLbData.entries||[],B=admLbData.banned||[];
-    const btn=(a,id,label,cls)=>{const k=a+':'+id,arm=admLbArm.k===k&&Date.now()-admLbArm.t<5000;return '<button type="button" class="btn sm'+(cls?' '+cls:'')+(arm?' armed':'')+'" data-lba="'+k+'">'+(arm?tt('Sicher?','Sure?'):label)+'</button>';};
-    h+='<div class="admcard"><h4>'+tt('Spieler','Players')+' <small class="muted">('+E.length+')</small></h4>'+(E.length?'<div class="admlbl">'+E.map((r,i)=>'<div class="admlbr"><span class="rk">'+(i+1)+'</span><span class="who"><b>'+escName(r.name)+'</b><small>'+fmt(+r.score||0)+' '+tt('Kekse','cookies')+' · '+new Date(r.updated_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</small></span><span class="btns">'+btn('remove',r.id,tt('Entfernen','Remove'))+btn('ban',r.id,tt('Sperren','Ban'))+btn('reset',r.id,tt('Spiel zurücksetzen','Reset game'),'warn')+'</span></div>').join('')+'</div>':'<p class="small">'+tt('Niemand in der Bestenliste.','Nobody on the leaderboard.')+'</p>')+'</div>';
-    h+='<div class="admcard"><h4>'+tt('Gesperrt','Banned')+' <small class="muted">('+B.length+')</small></h4>'+(B.length?'<div class="admlbl">'+B.map(r=>'<div class="admlbr"><span class="rk">⛔</span><span class="who"><b>'+escName(r.name||tt('(ohne Namen)','(no name)'))+'</b><small>'+new Date(r.created_at).toLocaleDateString(LOC[LANG])+'</small></span><span class="btns">'+btn('unban',r.id,tt('Entsperren','Unban'))+'</span></div>').join('')+'</div>':'<p class="small">'+tt('Niemand gesperrt.','Nobody banned.')+'</p>')+(admLbData.resets?'<p class="small" style="margin-top:6px">'+tt('Wartende Zurücksetzungen: ','Resets waiting to happen: ')+admLbData.resets+'</p>':'')+'</div>';
-  }
-  if(box._h!==h){box._h=h;box.innerHTML=h;}
+/* ======================= V52: Gesperrte Konten ======================= */
+/* Der Server meldet eine Sperre als 'banned: {"until":…,"reason":…}'. Dann zeigen wir den Grund und melden das Konto ab. */
+let banShown=false;
+function banParse(m){try{const j=/\{[\s\S]*\}/.exec(String(m));return j?JSON.parse(j[0])||{}:{};}catch(x){return {};}}
+function banTxt(b){
+  const until=b&&b.until?new Date(b.until).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+  return (until?tt('Dein Konto ist gesperrt bis ','Your account is banned until ')+until+'.':tt('Dein Konto ist dauerhaft gesperrt.','Your account is banned permanently.'))
+    +(b&&b.reason?' '+tt('Grund: ','Reason: ')+escName(String(b.reason)):'');
 }
-async function admLbCall(action,id){
-  admLbBusy=true;admLbErr='';admLbRender();
-  try{
-    if(action!=='list') await lbApi('rpc/admin_lb',{p_pass:admPass,p_action:action,p_id:id||null});
-    admLbData=await lbApi('rpc/admin_lb',{p_pass:admPass,p_action:'list'});
-    if(action!=='list') toast({remove:tt('Spieler entfernt.','Player removed.'),ban:tt('Spieler gesperrt.','Player banned.'),unban:tt('Spieler entsperrt.','Player unbanned.'),reset:tt('Zurücksetzen angefordert. Es passiert beim nächsten Start des Spielers.','Reset requested. It happens the next time the player opens the game.'),clear:tt('Bestenliste geleert.','Leaderboard cleared.')}[action]||'OK');
-    if(action!=='list'){lbLast=0;lbRefresh();}
-  }catch(x){
-    const m=String(x&&x.message||'');
-    if(/wrong admin password/.test(m)){admSrvDrop();admLbErr=tt('Server-Sitzung abgelaufen. Bitte entsperre neu.','Server session ended. Please unlock again.');}
-    else if(lbMissing(x)) admLbErr=tt('Die Datenbank kennt diese Funktion noch nicht. Führe zuerst docs/leaderboard-v2.sql in Supabase aus.','The database doesn’t have this yet. Run docs/leaderboard-v2.sql in Supabase first.');
-    else admLbErr=tt('Hat nicht geklappt: ','Didn’t work: ')+escName(m);
-  }
-  admLbBusy=false;admLbArm={k:'',t:0};admLbRender();
+function banSeen(m){
+  const b=banParse(m);
+  if(accTok){accUnset();accMsg=banTxt(b);accMsgOk=false;accRender();}
+  clubData=null;clubRender();
+  if(banShown) return;banShown=true;
+  const ov=document.createElement('div');ov.className='overlay';ov.id='banOv';
+  ov.innerHTML='<div class="dlg namedlg" role="alertdialog" aria-modal="true" aria-labelledby="banT"><div class="mbig" aria-hidden="true">⛔</div><h2 id="banT">'+tt('Konto gesperrt','Account banned')+'</h2><p>'+banTxt(b)+'</p><p class="small">'+tt('Online-Funktionen wie Konto, Clubs, Geschenke und Bestenliste sind gesperrt. Dein Spiel auf diesem Gerät bleibt.','Online features like your account, clubs, gifts and the leaderboard are blocked. Your game on this device stays.')+'</p><div class="btns" style="justify-content:center"><button type="button" class="btn primary" id="banOk">OK</button></div></div>';
+  document.body.appendChild(ov);const ok=ov.querySelector('#banOk');ok.focus();
+  ok.addEventListener('click',()=>ov.remove());
 }
-els.admin.addEventListener('submit',e=>{
-  if(e.target.id!=='admLbPwF') return;
-  e.preventDefault();const v=$id('admLbPw').value;if(!v) return;admSrvLogin(v,'lb');
-});
-els.admin.addEventListener('click',e=>{
-  const b=e.target.closest('[data-lba]');if(!b) return;
-  const [a,id]=b.dataset.lba.split(':');
-  if(a==='list'){admLbCall('list');return;}
-  if(a!=='remove'&&a!=='unban'&&(admLbArm.k!==b.dataset.lba||Date.now()-admLbArm.t>5000)){admLbArm={k:b.dataset.lba,t:Date.now()};admLbRender();return;}
-  admLbCall(a,id||null);
-});
-els.admin.addEventListener('click',e=>{const b=e.target.closest('#admSeg [data-ap="lb"]');if(b) setTimeout(()=>{admLbRender();if(admPass&&!admLbData&&!admLbBusy) admLbCall('list');},0);});
 
 /* ======================= V40: Shop-Navigation & Welt-Übergänge ======================= */
 const SHOPK=[['starShop','⭐','Sterne','Stars'],['artSec','⚒️','Schmiede','Forge'],['cardSec','🃏','Karten','Cards'],['boostList','⚡','Boosts','Boosts'],['boostListW','🌍','Welt','World'],['boxBtn','🎁','Keksbox','Cookie box'],['itemGrid','🎒','Gegenstände','Items'],['skinRow','🍪','Designs','Designs']];

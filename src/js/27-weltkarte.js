@@ -110,7 +110,7 @@ function armed(btn,armedKey,restore,action){
 function rebuildAll(){
   showName();
   checkDay(true);rebSig='';workSig='';
-  upSig='';upSeen=null;treeSig='';lootSig='';lastDraw=null;recalc();ensureOrders();ensureWorld();refreshAch();fillAdmin();setSkin();render();
+  upSig='';upSeen=null;treeSig='';lootSig='';lastDraw=null;recalc();ensureOrders();ensureWorld();refreshAch();if(ADMH.fill) ADMH.fill();setSkin();render();
 }
 armed(els.ascBtn,'asc_confirm',()=>updAsc(),()=>{doAscend();});
 function doAscend(){

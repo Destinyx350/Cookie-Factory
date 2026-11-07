@@ -1303,7 +1303,7 @@ function showSetPane(id){
   document.querySelectorAll('#setSeg button').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.sp===setSub?'true':'false'));
   document.querySelectorAll('#setOv details.savemore').forEach(d=>{if(q&&!d.hidden) d.open=true;});
   const no=document.getElementById('setNone');no.hidden=!q||n>0;no.textContent=tt('Nichts gefunden.','Nothing found.');
-  if(adm) fillAdmin();
+  if(adm&&ADMH.fill) ADMH.fill();
 }
 setQ.addEventListener('input',()=>{updOptTxt();showSetPane();});
 setQ.addEventListener('keydown',e=>{if(e.key==='Escape'&&setQ.value){e.stopPropagation();e.preventDefault();setQ.value='';showSetPane();}});

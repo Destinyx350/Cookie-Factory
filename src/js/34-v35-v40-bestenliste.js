@@ -15,7 +15,7 @@ function lbUUID(){
 async function lbApi(path,body){
   const r=await fetch(LB_URL.replace(/\/+$/,'')+'/rest/v1/'+path,{method:body?'POST':'GET',headers:{apikey:LB_KEY,Authorization:'Bearer '+LB_KEY,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
   const t=await r.text();
-  if(!r.ok){let m='HTTP '+r.status;try{const j=JSON.parse(t);m=j.message||m;if(j.code) m+=' ['+j.code+']';}catch(x){}const e=new Error(m);e.status=r.status;throw e;}
+  if(!r.ok){let m='HTTP '+r.status;try{const j=JSON.parse(t);m=j.message||m;if(j.code) m+=' ['+j.code+']';}catch(x){}if(/^banned: /.test(m)) setTimeout(()=>banSeen(m),0);const e=new Error(m);e.status=r.status;throw e;}
   return t?JSON.parse(t):null;
 }
 const lbMissing=x=>x&&(x.status===404||/PGRST20[25]|does not exist|schema cache/.test(String(x.message||'')));

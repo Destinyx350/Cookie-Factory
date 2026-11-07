@@ -9,7 +9,7 @@
 const fs = require('fs'), path = require('path');
 const { build, ROOT } = require('./build.js');
 
-let html = build();
+let html = build().player;
 const swap = (a, b) => { if (!html.includes(a)) throw new Error('portal build: text not found: ' + a); html = html.replace(a, b); };
 swap('<link rel="manifest" href="manifest.webmanifest">\n', '');
 swap('<body>\n', '<body>\n<script>window.KF_PORTAL=1;</script>\n');

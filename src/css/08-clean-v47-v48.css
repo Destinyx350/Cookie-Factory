@@ -195,3 +195,8 @@
 .admerrs summary small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 .admerrs pre{white-space:pre-wrap;font:11px/1.4 ui-monospace,monospace;max-height:180px;overflow:auto;background:rgba(0,0,0,.18);padding:8px;border-radius:8px}
 :root[data-device="phone"] .admfun div{grid-template-columns:minmax(0,8em) 1fr auto}
+
+/* V52: Hinweis bei gesperrtem Konto */
+#banOv .dlg{text-align:center}
+#banOv .mbig{font-size:54px;line-height:1;margin:4px 0 8px}
+#admBanF .chk{display:flex;align-items:center;gap:8px}

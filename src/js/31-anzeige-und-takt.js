@@ -19,7 +19,7 @@ function render(){
   els.stage.classList.toggle('frenzy',S.buffs.some(f=>f.id==='frenzy'));
   els.stage.classList.toggle('clickfrenzy',S.buffs.some(f=>f.id==='clickfrenzy'));
   updTabs();updTut();updBuild();updUp();updInf();updQol();updAsc();updReb();updGoals();updAdv();updFr();updHints();updUndo();updOpts();updCombo();updSlots();updFact();updDesign();updNtf();safe(updAscSub,'ascsub');safe(updEG,'eg-ui');safe(updCur,'cur');safe(updCQ,'cq');updLoot();updOrders();updWorld();
-  if(!els.setOv.hidden&&setSub==='admin'&&Date.now()-lastAdmFill>600){lastAdmFill=Date.now();fillAdmin();}
+  if(!els.setOv.hidden&&setSub==='admin'&&Date.now()-lastAdmFill>600){lastAdmFill=Date.now();if(ADMH.fill) ADMH.fill();}
   els.newsBadge.hidden=S.opt.news>=NEWS_VER;els.newsBtn.classList.toggle('fresh',S.opt.news<NEWS_VER);
 }
 let last=Date.now();

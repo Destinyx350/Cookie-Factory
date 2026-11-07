@@ -35,7 +35,7 @@ function applyLang(){
   els.resetBtn.textContent=tr('wipe');
   showName();updV34Txt();
   upSig='';treeSig='';
-  rebuildAch();buildAdmin();buildNews();setSkin();showSaveNote();render();
+  rebuildAch();if(ADMH.build) ADMH.build();buildNews();setSkin();showSaveNote();render();
 }
 document.querySelectorAll('.langseg').forEach(g=>g.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b) return;

@@ -214,4 +214,33 @@ module.exports = async function sqlTests() {
   check((await rpc('club_pin', { p_token: c2.token, p_msg: mid2 })).pinned.body === 'hello war club', 'the club leader pins a message');
   check((await rpc('club_pin', { p_token: c2.token, p_msg: null })).pinned === null, 'and can unpin it');
   check(!!own.club, 'club page still loads');
+
+  // Account bans (v52)
+  const e1 = await rpc('acc_signup', { p_user: 'test_eps', p_pass: 'secret123' }, '5.5.5.5');
+  const elb = '55555555-5555-5555-5555-555555555555';
+  await q("insert into leaderboard (id, name, score, updated_at) values ($1, 'Eps Bakery', 100, now())", [elb]);
+  await q("update kf_accounts set lb_id = $1 where username = 'test_eps'", [elb]);
+  await expectError(asAnon('select * from public.kf_bans'), /permission denied/, 'players cannot read the ban list');
+  await expectError(rpc('kf_unban', { p_acc: e1.token ? '00000000-0000-0000-0000-000000000000' : null }), /permission denied/, 'players cannot unban themselves');
+  await expectError(rpc('admin_bans', { p_pass: 'wrong', p_action: 'list' }), /wrong admin password/, 'ban tools need the admin session');
+  const bl = await rpc('admin_bans', { p_pass: tok, p_action: 'ban', p_data: { user: 'test_eps', hours: 0, reason: 'cheating', device: true } });
+  check(bl.length === 1 && bl[0].username === 'test_eps' && bl[0].until === null && bl[0].devices === 1, 'admin bans an account forever, with its device', bl);
+  await expectError(rpc('acc_me', { p_token: e1.token }), /banned: .*cheating/, 'a banned player is stopped with the reason');
+  await expectError(rpc('club_list', { p_search: '' }).then(() => rpc('club_create', { p_token: e1.token, p_name: 'Ban Club', p_emoji: '🍪', p_descr: '' })), /banned/, 'a banned player cannot use clubs');
+  const bl2 = await rpc('acc_login', { p_user: 'test_eps', p_pass: 'secret123' }, '5.5.5.9');
+  check(bl2.error === 'banned' && bl2.reason === 'cheating' && !bl2.token, 'a banned player cannot sign in', bl2);
+  await expectError(rpc('acc_signup', { p_user: 'test_eps2', p_pass: 'secret123' }, '5.5.5.5'), /banned/, 'a blocked device cannot make a new account');
+  check((await rpc('acc_signup', { p_user: 'test_zeta', p_pass: 'secret123' }, '6.6.6.6')).token, 'other devices still can');
+  check((await q('select count(*)::int n from lb_banned where id = $1', [elb])).rows[0].n === 1, 'the ban also bans the leaderboard spot');
+  check((await q("select count(*)::int n from kf_admin_log where action = 'ban account'")).rows[0].n === 1, 'the ban is in the admin log');
+  check((await rpc('admin_bans', { p_pass: tok, p_action: 'unban', p_data: { user: 'test_eps' } })).length === 0, 'admin unbans the account');
+  check((await rpc('acc_me', { p_token: e1.token })).username === 'test_eps', 'an unbanned player can play online again');
+  check((await q('select count(*)::int n from lb_banned where id = $1', [elb])).rows[0].n === 0, 'unbanning frees the leaderboard spot');
+  check((await rpc('acc_signup', { p_user: 'test_eps3', p_pass: 'secret123' }, '5.5.5.5')).token, 'unbanning frees the device');
+  await rpc('admin_bans', { p_pass: tok, p_action: 'ban', p_data: { user: 'test_eps', hours: 0.0003, reason: 'cool down' } });
+  await expectError(rpc('acc_me', { p_token: e1.token }), /banned/, 'a timed ban works');
+  await new Promise(r => setTimeout(r, 1500));
+  check((await rpc('acc_me', { p_token: e1.token })).username === 'test_eps', 'a timed ban ends by itself');
+  check((await rpc('admin_bans', { p_pass: tok, p_action: 'list' })).length === 0, 'ended bans leave the list');
+  await expectError(rpc('admin_bans', { p_pass: tok, p_action: 'ban', p_data: { user: 'nobody_here' } }), /player not found/, 'banning an unknown name fails');
 };
