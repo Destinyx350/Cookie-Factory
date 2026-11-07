@@ -42,7 +42,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🎁 **Secret codes** | Type a code under **Settings → Game** to get cookies, gems or a boost. Each code works once per save. |
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
-| 📐 **Fits every device** | Separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. |
+| 📐 **Fits every device** | A clean, modern design with separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. Options for high contrast, less motion and bigger text. |
 | 👤 **Accounts** | Create an account with a username and password (no email needed). Your bakery is saved to it automatically, so you can keep playing on any device. Sign out other devices at any time. |
 | 👥 **Bakery clubs** | Start or join a club of up to 30 bakers, chat with your club, and bake together for weekly prizes for the top 3 clubs. |
 | 🎁 **Gifts** | Send gems or star crumbs to friends with an account (daily limits keep it fair). |
@@ -80,7 +80,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🎁 **Geheime Codes** unter **Einstellungen → Spiel**: Kekse, Edelsteine oder ein Schub, einmal pro Spielstand
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
-- 📐 **Passt auf jedes Gerät**: eigene Layouts für Handy (hochkant und quer), Tablet und Computer
+- 📐 **Passt auf jedes Gerät**: klares, modernes Design mit eigenen Layouts für Handy (hochkant und quer), Tablet und Computer; dazu hoher Kontrast, weniger Bewegung und größere Schrift
 - 👤 **Konten**: Benutzername und Passwort (ohne E-Mail), deine Bäckerei auf jedem Gerät
 - 👥 **Bäckerei-Clubs** mit bis zu 30 Mitgliedern, Club-Chat und Wochenpreisen für die Top 3
 - 🎁 **Geschenke**: Edelsteine oder Sternenkrümel an Freunde mit Konto schicken
@@ -98,17 +98,23 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 46
-- **New:** With an account, your leaderboard spot comes with you to every device. No more duplicate entries.
-- **Changed:** Each leaderboard name can only be used once.
-- **Changed:** The server makes an automatic backup every week, and the admin can download backups and restore a player's account.
+### Version 47
+- **Changed:** A clean new look: flat surfaces, fine edges and much less clutter.
+- **Changed:** The header shows only what you need. Language, help and sharing moved to **Settings**.
+- **Changed:** Saving is simpler: your account comes first, everything else is under **More options**.
+- **Changed:** At most 3 hints show at once; the rest are behind **+**.
+- **New:** **High contrast** option under **Settings → Display**.
+- **Changed:** Faster, especially on older phones (about a third less work per second).
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Mit Konto nimmst du deinen Platz in der Bestenliste auf jedes Gerät mit. Kein doppelter Eintrag mehr.
-- **Geändert:** Namen in der Bestenliste gibt es jetzt nur einmal.
-- **Geändert:** Der Server macht jede Woche automatisch ein Backup, und der Admin kann Backups herunterladen und das Konto eines Spielers wiederherstellen.
+- **Geändert:** Neues, klares Design: flache Flächen, feine Kanten und viel weniger Gedränge.
+- **Geändert:** Die Kopfzeile zeigt nur noch das Nötigste. Sprache, Hilfe und Teilen sind jetzt in den **Einstellungen**.
+- **Geändert:** Speichern ist einfacher: Das Konto steht oben, alles andere unter **Weitere Möglichkeiten**.
+- **Geändert:** Höchstens 3 Hinweise auf einmal, der Rest hinter **+**.
+- **Neu:** **Hoher Kontrast** unter **Einstellungen → Anzeige**.
+- **Geändert:** Schneller, besonders auf älteren Handys (etwa ein Drittel weniger Arbeit pro Sekunde).
 
 </details>
 

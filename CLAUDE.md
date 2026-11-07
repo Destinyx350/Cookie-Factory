@@ -109,6 +109,16 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - **Tests:** `tests/` (`sql.test.js`, `browser.test.js`, `run.js`, `setup-db.sh`). GitHub runs them on every pull request (`.github/workflows/tests.yml`); only merge when they pass. Add tests for every new feature. Run locally with the env vars in `tests/README.md`. Tests use their own admin password and unlock the in-game panel by setting `sessionStorage['keksfabrik-admin']` to `ADM_HASH`.
 - `.github/workflows/keep-awake.yml` calls `kf_backup_tick` and `kf_live` every 2 days so the free Supabase project never pauses. GitHub turns scheduled workflows off after 60 days without commits; re-enable it in the Actions tab if that happens.
 
+## Clean design (version 47)
+
+- The `V47` CSS block at the end of the main stylesheet makes the look flat: it sets the old 3D tokens (`--sh`, `--hi`, `--btnd`, `--goldd`, `--grnd`) to transparent and the gradient pairs (`--btn1/2`, `--gold1/2`, `--grn1/2`) to single colors, then uses `--edge`, `--edge-2`, `--soft` and `--r-lg/md/sm`. New UI should use these tokens: 1px edges, soft shadows, no hard "0 3px 0" bevel shadows.
+- Rounded display font (Fredoka) only for headings and big numbers; controls use the body font.
+- Header: language, save time and help are hidden there (they live in Settings; `#helpSetBtn`, `#shareSetBtn`). On phones the header is one row and the bakery name replaces the brand title.
+- Saving settings: account first, then "Save now", the rest is moved into `details.savemore` at startup (`V47` script block). Settings search opens it on a match.
+- Admin tabs are grouped (`#admGrp`, `ADM_ONLINE`). A test or link that opens an online tab must pick the "Online" group first.
+- `updHints()` shows at most 3 hints plus a "+N" button. `S.opt.hc` sets `data-hc` for high contrast.
+- Speed: number formats are cached (`nf()`); don't call `toLocaleString` with options in hot paths. The background cookie canvas draws at 30 fps, only while visible, and measures its size with a `ResizeObserver`.
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass (including the GitHub `Tests` check). After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

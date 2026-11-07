@@ -77,7 +77,7 @@ module.exports = async function browserTests(url) {
 
   // 4. Admin: server sign-in, reports, mail, switches, maintenance, backups
   const d = await device('Admin Bakery', '10.0.0.9', {}, true);
-  await settings(d, 'admin'); await d.click('#admSeg [data-ap="mod"]');
+  await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="mod"]');
   await d.fill('#admModPwF [name=spw]', 'wrong-pass'); await d.click('#admModPwF button[type=submit]'); await d.waitForTimeout(1500);
   check(/Wrong server password/.test(await text(d, '#admMod')), 'wrong server password is refused');
   await d.fill('#admModPwF [name=spw]', ADMIN_PASS); await d.click('#admModPwF button[type=submit]');
@@ -105,6 +105,23 @@ module.exports = async function browserTests(url) {
   await c.waitForTimeout(18000); await goals(c); await c.click('#clubBar');
   await c.waitForSelector('#rwOv:not([hidden])', { timeout: 10000 }).catch(() => {});
   check(/Welcome!/.test(await text(c, '#rwOv')), 'player gets the admin message as a popup');
+
+  // 5b. Clean layout (v47): settings order, admin groups, accessibility
+  await settings(b, 'save');
+  const order = await b.evaluate(() => [...document.querySelectorAll('#setOv .optsec[data-sc="save"]:not([hidden])')].map(x => x.querySelector('#accBox') ? 'account' : x.querySelector('#saveBtn') ? 'save' : x.classList.contains('savemore') ? 'more' : 'other').slice(0, 3).join(','));
+  check(order === 'account,save,more', 'saving page shows the account first and tucks the rest under "More options"', order);
+  await b.fill('#setQ', 'transfer'); await b.waitForTimeout(200);
+  check(await b.evaluate(() => document.querySelector('#setOv details.savemore').open), 'searching settings opens "More options" when it matches');
+  await b.fill('#setQ', ''); await b.click('#setSeg [data-sp=disp]'); await b.check('#hcChk');
+  check(await b.evaluate(() => document.documentElement.dataset.hc === '1'), 'high contrast can be switched on');
+  await b.uncheck('#hcChk'); await b.click('#setClose');
+  check(await b.evaluate(() => document.querySelector('.top').getBoundingClientRect().height < 70), 'phone header fits in one row');
+  if (!(await d.isVisible('#setOv'))) await d.click('#setBtn');
+  await d.click('#setSeg [data-sp=admin]');
+  check(await d.evaluate(() => [...document.querySelectorAll('#admSeg [data-ap]')].filter(x => x.offsetParent).length <= 7), 'admin shows only one group of tabs at a time');
+  await d.click('#admGrp [data-ag=game]'); await d.waitForTimeout(200);
+  check(await d.evaluate(() => !document.querySelector('#admSeg [data-ap="mod"]').offsetParent && !!document.querySelector('#admSeg [data-ap="quick"]').offsetParent), 'admin "Game" group hides the online tabs');
+  await d.click('#setClose');
 
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {
