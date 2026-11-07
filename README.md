@@ -106,17 +106,17 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 49
-- **New:** Three late-game buildings after the Big Bang Oven: Constellation Bakery, Quantum Patisserie and Cookie Singularity, each with 8 upgrades.
-- **New:** 17 achievements, including **Complete Factory** and goals up to 10 decillion cookies.
-- **New:** Push notifications under **Settings → Display**: gifts, friend requests, club prizes, admin messages and events, even when the game is closed.
+### Version 50
+- **Changed:** Push notifications get their key from the server, which makes them simpler and safer to set up. If it says "being set up" the first time, try again a minute later.
+
+Also new since version 49: three late-game buildings (Constellation Bakery, Quantum Patisserie, Cookie Singularity), 17 achievements and push notifications under **Settings → Display**.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Drei Gebäude fürs späte Spiel nach dem Urknall-Ofen: Sternbild-Bäckerei, Quanten-Konditorei und Keks-Singularität, jeweils mit 8 Upgrades.
-- **Neu:** 17 Erfolge, darunter **Komplette Fabrik** und Ziele bis 10 Quintilliarden Kekse.
-- **Neu:** Push-Benachrichtigungen unter **Einstellungen → Anzeige**: Geschenke, Freundschaftsanfragen, Club-Preise, Admin-Nachrichten und Events, auch wenn das Spiel geschlossen ist.
+- **Geändert:** Push-Benachrichtigungen holen ihren Schlüssel vom Server; das macht die Einrichtung einfacher und sicherer. Wenn es beim ersten Mal „wird eingerichtet" heißt, versuch es eine Minute später nochmal.
+
+Außerdem neu seit Version 49: drei Gebäude fürs späte Spiel (Sternbild-Bäckerei, Quanten-Konditorei, Keks-Singularität), 17 Erfolge und Push-Benachrichtigungen unter **Einstellungen → Anzeige**.
 
 </details>
 

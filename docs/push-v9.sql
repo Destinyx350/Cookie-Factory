@@ -1,7 +1,7 @@
 -- Keksfabrik / Cookie Factory push notifications, part 9 (game version 49)
 -- Needs parts 1–8 first. Safe to run again.
--- After running it: deploy the edge function in supabase/functions/kf-push (see docs/PUSH.md) and run the
--- one-line kf_push_cfg setup the owner received privately (it holds the shared secret, never commit it).
+-- Also deploy the edge function in supabase/functions/kf-push (see docs/PUSH.md). No secrets to copy: the database
+-- makes its own shared secret, and the function makes its own push keys on first run and keeps them in kf_push_cfg.
 
 -- pg_net lets the database wake the edge function right away (Supabase has it; plain PostgreSQL may not).
 do $$ begin
@@ -27,11 +27,22 @@ create table if not exists public.kf_push_queue (
 );
 create index if not exists kf_push_queue_open on public.kf_push_queue (id) where sent_at is null;
 create table if not exists public.kf_push_cfg (k int primary key default 1 check (k = 1), url text not null, secret text not null);
+alter table public.kf_push_cfg add column if not exists vapid_pub text;
+alter table public.kf_push_cfg add column if not exists vapid_priv text;
+insert into public.kf_push_cfg (k, url, secret)
+values (1, 'https://nmmlemtljjvfurlrvuvm.supabase.co/functions/v1/kf-push', encode(extensions.gen_random_bytes(24), 'hex'))
+on conflict (k) do nothing;
 
 alter table public.kf_push_subs  enable row level security;
 alter table public.kf_push_queue enable row level security;
 alter table public.kf_push_cfg   enable row level security;
 revoke all on public.kf_push_subs, public.kf_push_queue, public.kf_push_cfg from anon, authenticated;
+-- Only the edge function (Supabase's service role) may read the push keys.
+do $$ begin
+  if exists (select 1 from pg_roles where rolname = 'service_role') then
+    grant select, update on public.kf_push_cfg to service_role;
+  end if;
+end $$;
 
 -- Players: turn push on or off for one device (browser).
 create or replace function public.push_subscribe(p_token text, p_sub json, p_lang text default 'en')
@@ -44,6 +55,22 @@ begin
   on conflict (endpoint) do update set account = excluded.account, p256dh = excluded.p256dh, auth = excluded.auth, lang = excluded.lang;
   delete from kf_push_subs where account = a and endpoint not in (select endpoint from kf_push_subs where account = a order by created_at desc limit 5);
   return json_build_object('ok', true);
+end $$;
+
+-- The public push key for the game (the edge function makes the key pair on its first run).
+create or replace function public.push_pubkey()
+returns text language plpgsql security definer set search_path = public, extensions as $$
+declare c record;
+begin
+  select * into c from kf_push_cfg where k = 1;
+  if c.vapid_pub is null and to_regproc('net.http_post') is not null then
+    begin
+      execute 'select net.http_post(url := $1, headers := $2, body := $3)'
+        using c.url, jsonb_build_object('Content-Type', 'application/json', 'x-kf-secret', c.secret), '{}'::jsonb;
+    exception when others then null;
+    end;
+  end if;
+  return c.vapid_pub;
 end $$;
 
 create or replace function public.push_unsubscribe(p_endpoint text)
@@ -159,9 +186,11 @@ revoke all on function public.kf_push_on_club_prize() from public, anon, authent
 revoke all on function public.kf_push_on_event() from public, anon, authenticated;
 revoke all on function public.push_subscribe(text, json, text) from public;
 revoke all on function public.push_unsubscribe(text) from public;
+revoke all on function public.push_pubkey() from public;
 revoke all on function public.push_take(text) from public;
 revoke all on function public.push_gone(text, text[]) from public;
 grant execute on function public.push_subscribe(text, json, text) to anon;
 grant execute on function public.push_unsubscribe(text) to anon;
+grant execute on function public.push_pubkey() to anon;
 grant execute on function public.push_take(text) to anon;
 grant execute on function public.push_gone(text, text[]) to anon;
