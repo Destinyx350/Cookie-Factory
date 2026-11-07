@@ -1625,6 +1625,34 @@ html{-webkit-tap-highlight-color:transparent}
 
 /* Telefon: Reiterleiste ruhiger */
 :root[data-device="phone"][data-look] .tabs{border-top:1px solid var(--edge);box-shadow:0 -8px 24px rgba(0,0,0,.25)}
+/* V51: Chat-Reaktionen, angeheftete Nachricht, Winken; Admin-Spielerweg und Absturzberichte */
+.creact{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.cre{border:1px solid var(--edge);background:transparent;color:inherit;border-radius:999px;padding:1px 7px;font:inherit;font-size:12px;line-height:1.5;cursor:pointer;min-height:24px}
+.cre b{font-weight:600;font-size:11px}
+.cre.mine{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,transparent)}
+.cre.add{opacity:.55}
+.cre.add:hover,.cre.add:focus-visible{opacity:1}
+.cpick{display:flex;gap:4px;margin-top:4px;padding:4px;border:1px solid var(--edge);border-radius:999px;background:var(--panel);width:max-content;max-width:100%;box-shadow:var(--soft)}
+.cpick button{border:0;background:transparent;font-size:18px;line-height:1;padding:4px 6px;border-radius:999px;cursor:pointer}
+.cpick button:hover,.cpick button:focus-visible{background:var(--panel-2)}
+.cpin{display:flex;gap:8px;align-items:flex-start;margin:0 0 8px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:var(--r-md,12px);background:color-mix(in srgb,var(--accent) 10%,var(--panel-2))}
+.cpin>span:nth-child(2){flex:1;min-width:0;overflow-wrap:anywhere}
+.cpin small{display:block;color:var(--muted);font-size:11px}
+.crx{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 4px}
+#clubPostF .wave{flex:0 0 auto;padding-inline:12px}
+.admfun{display:grid;gap:5px;margin:10px 0}
+.admfun div{display:grid;grid-template-columns:minmax(0,10em) 1fr auto;gap:8px;align-items:center;font-size:13px}
+.admfun i{display:block;height:10px;border-radius:999px;background:var(--panel-2);position:relative;overflow:hidden}
+.admfun i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--accent);border-radius:inherit}
+.admfun b{font-weight:600;white-space:nowrap}
+.admfun small{color:var(--muted);font-weight:400}
+.admerrs{display:grid;gap:6px;margin:8px 0}
+.admerrs details{text-align:left}
+.admerrs summary{display:list-item;text-align:left;overflow-wrap:anywhere;cursor:pointer}
+.admerrs summary small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.admerrs pre{white-space:pre-wrap;font:11px/1.4 ui-monospace,monospace;max-height:180px;overflow:auto;background:rgba(0,0,0,.18);padding:8px;border-radius:8px}
+:root[data-device="phone"] .admfun div{grid-template-columns:minmax(0,8em) 1fr auto}
+
 </style>
 
 <div class="wrap">
@@ -2003,13 +2031,16 @@ html{-webkit-tap-highlight-color:transparent}
     let box=document.getElementById('errBox');
     if(!box){box=document.createElement('div');box.id='errBox';box.setAttribute('role','alert');
       box.style.cssText='position:fixed;z-index:99;left:12px;right:12px;top:12px;max-width:560px;margin:0 auto;background:#3a1410;color:#ffe2da;border:1px solid #ff8c6b;border-radius:14px;padding:10px 14px;font:13px/1.4 system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.4)';
-      box.innerHTML='<b>Fehler / Error</b> – bitte diesen Text an Claude schicken:<pre style="white-space:pre-wrap;margin:6px 0;font:12px ui-monospace,monospace"></pre><button type="button" style="border:0;border-radius:999px;padding:5px 12px;background:#ff8c6b;color:#2b0d05;font-weight:700;cursor:pointer">OK</button>';
+      box.innerHTML='<b>Fehler / Error</b> – automatisch gemeldet · reported automatically:<pre style="white-space:pre-wrap;margin:6px 0;font:12px ui-monospace,monospace"></pre><button type="button" style="border:0;border-radius:999px;padding:5px 12px;background:#ff8c6b;color:#2b0d05;font-weight:700;cursor:pointer">OK</button>';
       box.querySelector('button').onclick=()=>box.remove();(document.body||document.documentElement).appendChild(box);}
     const pre=box.querySelector('pre');pre.textContent=(pre.textContent?pre.textContent+'\n':'')+msg;
   }
   window.__kfErr=show;
-  addEventListener('error',e=>{show((e.message||'Fehler')+(e.lineno?' (Zeile '+e.lineno+')':''));});
-  addEventListener('unhandledrejection',e=>{const r=e.reason;if(r&&/AudioContext|play\(\)|NotAllowed/i.test(String(r))) return;show('Promise: '+(r&&r.message||r));});
+  /* Absturzberichte: jeder Fehler wird gemerkt und (ab V51) an den Server geschickt. */
+  const Q=window.__kfErrQ=[];
+  const keep=(m,st,src)=>{try{Q.push({m:String(m||'').slice(0,300),st:String(st||'').slice(0,2000),src:String(src||'').slice(0,200)});if(window.__kfErrFlush) window.__kfErrFlush();}catch(x){}};
+  addEventListener('error',e=>{if(!e.message&&!e.error) return;keep(e.message||(e.error&&e.error.message),e.error&&e.error.stack,String(e.filename||'').split('/').pop()+':'+e.lineno+':'+e.colno);show((e.message||'Fehler')+(e.lineno?' (Zeile '+e.lineno+')':''));});
+  addEventListener('unhandledrejection',e=>{const r=e.reason;if(r&&/AudioContext|play\(\)|NotAllowed|Failed to fetch|NetworkError|Load failed|AbortError/i.test(String(r&&r.message||r))) return;keep('Promise: '+(r&&r.message||r),r&&r.stack,'');show('Promise: '+(r&&r.message||r));});
 })();
 (function(){
 'use strict';
@@ -2865,8 +2896,15 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=50;
+const NEWS_VER=51;
 const NEWS=[
+  {v:51,sum:['Neu: Willkommensgeschenk, Reaktionen und angeheftete Nachrichten im Club-Chat!','New: a welcome-back gift, plus reactions and pinned messages in club chat!'],items:[
+    ['new','Willkommensgeschenk: Wer nach 3 oder mehr Tagen zurückkommt, bekommt Edelsteine (bis zu 50) und 30 Minuten Kekse geschenkt.','Welcome-back gift: come back after 3 or more days and get up to 50 gems and 30 minutes of cookies.'],
+    ['new','Club-Chat: Reagiere mit 👍 ❤️ 😂 🎉 🍪 auf Nachrichten, wink deinem Club mit 👋 zu, und der Club-Chef kann eine Nachricht oben anheften.','Club chat: react to messages with 👍 ❤️ 😂 🎉 🍪, wave to your club with 👋, and the club leader can pin a message to the top.'],
+    ['new','Mit Push-Benachrichtigungen erinnert dich das Spiel nach 3 Tagen Pause an dein Geschenk.','With push notifications on, the game reminds you about your gift after 3 days away.'],
+    ['change','Fehler im Spiel werden jetzt automatisch und anonym gemeldet, damit sie schneller behoben werden.','Errors in the game are now reported automatically and anonymously, so they get fixed faster.'],
+    ['change','Das Spiel kann jetzt auch auf Spieleseiten wie itch.io laufen.','The game can now also run on game sites like itch.io.']
+  ]},
   {v:50,sum:['Push-Benachrichtigungen sind jetzt einfacher und sicherer eingerichtet.','Push notifications are now simpler and safer to set up.'],items:[
     ['change','Push-Benachrichtigungen holen ihren Schlüssel jetzt vom Server. Wenn es beim ersten Mal „wird eingerichtet“ heißt, versuch es eine Minute später nochmal.','Push notifications now get their key from the server. If it says “being set up” the first time, try again a minute later.']
   ]},
@@ -3379,7 +3417,7 @@ let WFX=null;
 /* ======================= Spielstand ======================= */
 const defAdmin=()=>({prod:1,click:1,cost:1,speed:1,gold:1,goldPow:1,growth:1.15,ac:0,b:{}});
 function fresh(){
-  return {name:'',codes:{},lb:{on:0,id:'',t:0,ls:0,pb:null,ban:0},adm:0,tamp:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
+  return {name:'',codes:{},lb:{on:0,id:'',t:0,ls:0,pb:null,ban:0},adm:0,tamp:0,cb:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
 }
 function sanitize(o){
   const s=fresh();
@@ -3387,7 +3425,7 @@ function sanitize(o){
   const seal=sealState(o);
   const num=(v,d)=>(typeof v==='number'&&isFinite(v)&&v>=0)?v:(d||0);
   s.cookies=num(o.cookies);s.run=num(o.run);s.all=Math.max(num(o.all),s.run);
-  s.clicks=Math.floor(num(o.clicks));s.gold=Math.floor(num(o.gold));
+  s.clicks=Math.floor(num(o.clicks));s.gold=Math.floor(num(o.gold));s.cb=num(o.cb);
   s.chips=Math.floor(num(o.chips));s.asc=Math.floor(num(o.asc));
   s.t=num(o.t,Date.now());
   if(Array.isArray(o.b)) B.forEach((_,i)=>{s.b[i]=Math.floor(num(o.b[i]));});
@@ -6011,6 +6049,7 @@ function offlineHelpers(gap){
 let awayOpen=false;
 function showAway(r){
   const p=r.pre,T=[];
+  if(r.cb) T.push(['box',tt('🎁 Willkommensgeschenk','🎁 Welcome-back gift'),'+'+r.cb.g+' '+tt('Edelsteine','gems')+' · +'+r.cb.mins+' min']);
   if(r.mana>=1) T.push(['spark','Mana','+'+Math.floor(r.mana)]);
   if(p.exp) T.push(['moon',tt('Expeditionen zurück','Expeditions back'),String(p.exp)]);
   if(p.lab) T.push(['scale',tt('Forschung fertig','Research done'),p.lab]);
@@ -8169,7 +8208,7 @@ function updApp(){
 }
 $id('installBtn').addEventListener('click',doInstall);
 $id('appState').addEventListener('click',e=>{if(e.target.closest('#appInstall')) doInstall();});
-if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
+if(!window.KF_PORTAL&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
 }
 
@@ -8916,8 +8955,8 @@ function clubMineHtml(){
     const me=accMe&&m.username.toLowerCase()===accMe.username.toLowerCase();
     return '<div class="lbrow'+(me?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk">'+(m.role==='owner'?'👑':i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(m.username)+'">'+escName(m.username)+'</button><span class="sc">+'+fmt(+m.gain||0)+(own&&!me?' <button type="button" class="btn sm warn'+(clubArmed('kick:'+m.username)?' armed':'')+'" data-cl="kick:'+escName(m.username)+'">'+(clubArmed('kick:'+m.username)?tt('Sicher?','Sure?'):tt('Entfernen','Remove'))+'</button>':'')+'</span></div>';
   }).join('')+'</div>';
-  h+='<h4 class="clubh">'+tt('Club-Chat','Club chat')+'</h4><div class="clubchat" aria-live="polite">'+(D.msgs&&D.msgs.length?D.msgs.map(m=>{const me=accMe&&String(m.username).toLowerCase()===accMe.username.toLowerCase(),adm=!/^[A-Za-z0-9_]+$/.test(String(m.username)),rk='report:'+m.id;return '<div class="cmsg'+(me?' me':'')+(adm?' adm':'')+'"><small>'+escName(String(m.username))+' · '+new Date(m.created_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+(me||adm?'':' <button type="button" class="crep'+(clubArmed(rk)?' armed':'')+'" data-cl="'+rk+'" title="'+tt('Melden','Report')+'" aria-label="'+tt('Nachricht melden','Report message')+'">'+(clubArmed(rk)?tt('Melden?','Report?'):'⚑')+'</button>')+'</small><span>'+escName(String(m.body))+'</span></div>';}).join(''):'<p class="small" style="margin:0;text-align:center">'+tt('Noch keine Nachrichten. Sag Hallo!','No messages yet. Say hello!')+'</p>')+'</div>'
-    +(!featOn('chat')?'<p class="small clubnote">'+tt('💬 Der Club-Chat ist gerade ausgeschaltet.','💬 Club chat is turned off right now.')+'</p>':clubMuted>Date.now()?'<p class="small clubnote">'+tt('🔇 Du bist bis ','🔇 You’re muted until ')+new Date(clubMuted).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+tt(' stummgeschaltet.','.')+'</p>':'<form class="coderow" id="clubPostF" novalidate><input class="namein" name="body" maxlength="200" autocomplete="off" placeholder="'+tt('Nachricht an deinen Club','Message to your club')+'" aria-label="'+tt('Nachricht','Message')+'"><button type="submit" class="btn primary"'+(clubBusy?' disabled':'')+'>'+tt('Senden','Send')+'</button></form>')
+  h+='<h4 class="clubh">'+tt('Club-Chat','Club chat')+'</h4>'+(v51Ready?chatPinHtml(D,own):'')+'<div class="clubchat" aria-live="polite">'+(D.msgs&&D.msgs.length?D.msgs.map(m=>{const me=accMe&&String(m.username).toLowerCase()===accMe.username.toLowerCase(),adm=!/^[A-Za-z0-9_]+$/.test(String(m.username)),rk='report:'+m.id;return '<div class="cmsg'+(me?' me':'')+(adm?' adm':'')+'"><small>'+escName(String(m.username))+' · '+new Date(m.created_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+(me||adm?'':' <button type="button" class="crep'+(clubArmed(rk)?' armed':'')+'" data-cl="'+rk+'" title="'+tt('Melden','Report')+'" aria-label="'+tt('Nachricht melden','Report message')+'">'+(clubArmed(rk)?tt('Melden?','Report?'):'⚑')+'</button>')+'</small><span>'+escName(String(m.body))+'</span>'+(v51Ready?chatMsgExtra(m,own):'')+'</div>';}).join(''):'<p class="small" style="margin:0;text-align:center">'+tt('Noch keine Nachrichten. Sag Hallo!','No messages yet. Say hello!')+'</p>')+'</div>'
+    +(!featOn('chat')?'<p class="small clubnote">'+tt('💬 Der Club-Chat ist gerade ausgeschaltet.','💬 Club chat is turned off right now.')+'</p>':clubMuted>Date.now()?'<p class="small clubnote">'+tt('🔇 Du bist bis ','🔇 You’re muted until ')+new Date(clubMuted).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+tt(' stummgeschaltet.','.')+'</p>':'<form class="coderow" id="clubPostF" novalidate><input class="namein" name="body" maxlength="200" autocomplete="off" placeholder="'+tt('Nachricht an deinen Club','Message to your club')+'" aria-label="'+tt('Nachricht','Message')+'">'+(v51Ready?'<button type="button" class="btn wave" data-cr="wave" title="'+tt('Winken','Wave')+'" aria-label="'+tt('Winken','Wave')+'"'+(clubBusy?' disabled':'')+'>👋</button>':'')+'<button type="submit" class="btn primary"'+(clubBusy?' disabled':'')+'>'+tt('Senden','Send')+'</button></form>')
     +'<p class="small">'+tt('Sei freundlich. Mit ⚑ meldest du eine Nachricht an den Admin.','Be kind. Tap ⚑ to report a message to the admin.')+'</p>';
   if(own) h+='<details class="fold accfold"><summary>'+tt('Club bearbeiten','Edit club')+'</summary><form class="accform" id="clubEditF" novalidate><input class="namein" name="edescr" maxlength="140" value="'+escName(c.descr||'')+'" placeholder="'+tt('Beschreibung','Description')+'"><label class="chk"><input type="checkbox" name="eopen"'+(c.open?' checked':'')+'><span>'+tt('Neue Mitglieder dürfen beitreten','New members may join')+'</span></label><button type="submit" class="btn">'+tt('Speichern','Save')+'</button></form></details>';
   h+='<div class="lbfoot"><span class="small">'+(own?tt('Du bist Club-Chef. Wenn du gehst, übernimmt das älteste Mitglied.','You’re the club leader. If you leave, the longest member takes over.'):'')+'</span><span class="btns"><button type="button" class="btn sm" data-cl="refresh">'+tt('Aktualisieren','Refresh')+'</button><button type="button" class="btn sm warn'+(clubArmed('leave')?' armed':'')+'" data-cl="leave">'+(clubArmed('leave')?tt('Wirklich verlassen?','Really leave?'):tt('Club verlassen','Leave club'))+'</button></span></div>';
@@ -9206,6 +9245,7 @@ async function admSrvLoad(){
   try{const [s,c,se,l]=await Promise.all([admMod('stats'),admMod('settings'),admMod('seasons'),admMod('log')]);admStats=s;admCfg=c||{};admSeasons=se||[];admLog=l||[];admSrvErr='';}
   catch(x){admSrvErr=admErrTxt(x);}
   if(v46Ready) admBkCall('list');
+  if(v51Ready) admInsLoad();
   admSrvRender();
 }
 function admBars(rows){
@@ -9236,6 +9276,7 @@ function admSrvRender(){
     const Se=admSeasons||[],armS=admSrvArm.k==='season'&&Date.now()-admSrvArm.t<5000;
     h+=admCardH('🏛️ '+tt('Saisons','Seasons'),'<p class="small">'+tt('Speichert die Top 10 der Bestenliste als beendete Saison (alle sehen sie in der Bestenliste) und startet sie danach neu.','Saves the leaderboard’s top 10 as a finished season (everyone sees it in the leaderboard), then starts it fresh.')+'</p><form class="coderow" id="admSeasonF" novalidate><input class="namein" name="name" maxlength="40" placeholder="'+tt('Name, z. B. Saison ','Name, e.g. Season ')+(Se.length+1)+'"><button type="submit" class="btn warn'+(armS?' armed':'')+'">'+(armS?tt('Wirklich? Nochmal','Really? Again'):tt('Saison beenden','End season'))+'</button></form>'
       +(Se.length?'<div class="admlbl">'+Se.map(s=>'<div class="admlbr"><span class="rk">🏛️</span><span class="who"><b>'+escName(s.name)+'</b><small>'+(s.top||[]).slice(0,3).map((t,i)=>['🥇','🥈','🥉'][i]+' '+escName(t.name)+' '+fmt(+t.score||0)).join(' · ')+'</small><small>'+admDT(s.archived_at)+'</small></span></div>').join('')+'</div>':''));
+    if(v51Ready) h+=admInsHtml();
     h+=admCardH('💾 '+tt('Backups','Backups'),admBkHtml());
     const Lg=admLog||[];
     h+=admCardH('📜 '+tt('Admin-Protokoll','Admin log'),'<p class="small">'+tt('Jede Admin-Aktion auf dem Server, die neuesten zuerst.','Every admin action on the server, newest first.')+'</p>'+(Lg.length?'<div class="admlog">'+Lg.map(l=>'<div><small>'+admDT(l.at)+'</small><b>'+escName(l.action)+'</b>'+(l.detail?'<span>'+escName(l.detail)+'</span>':'')+'</div>').join('')+'</div>':'<p class="small">–</p>'));
@@ -9517,7 +9558,7 @@ v48Ready=true;
 /* ======================= V49: Push-Benachrichtigungen ======================= */
 var v49Ready=false;
 function b64u(s){const p='='.repeat((4-s.length%4)%4),b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(b,c=>c.charCodeAt(0));}
-const pushOk=()=>'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+const pushOk=()=>!window.KF_PORTAL&&'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
 var pushOn=null,pushBusy=false,pushMsgT='',pushMsgOk=true,pushSynced=false;
 async function pushSub(){if(!pushOk()) return null;try{const r=await navigator.serviceWorker.getRegistration();return r?await r.pushManager.getSubscription():null;}catch(e){return null;}}
 async function pushState(){
@@ -9562,6 +9603,133 @@ function pushRender(){
 $id('pushBtn').addEventListener('click',()=>{if(pushBusy) return;if(pushOn) pushDisable();else pushEnable();});
 pushState();
 v49Ready=true;
+
+/* ======================= V51: Absturzberichte, Spieler-Weg, Chat-Reaktionen ======================= */
+var v51Ready=false;
+
+/* ---------- Absturzberichte: Fehler gehen anonym an den Server (höchstens 5 pro Sitzung) ---------- */
+let errSent=0,errBusy=false,errOff=false;const errSeen={};
+const errNoise=m=>!m||/^Script error\.?$/i.test(m)||/ResizeObserver loop|Failed to fetch|NetworkError|Load failed|AbortError|QuotaExceeded|chrome-extension|moz-extension|safari-extension/i.test(m);
+async function errFlush(){
+  const Q=window.__kfErrQ||[];
+  if(errBusy||errOff||!lbOn()) return;
+  errBusy=true;
+  while(Q.length){
+    const e=Q.shift(),k=e.m+'|'+e.src;
+    if(errNoise(e.m)||errSeen[k]||errSent>=5) continue;
+    errSeen[k]=1;errSent++;
+    try{await lbApi('rpc/kf_report_error',{p_msg:e.m,p_stack:e.st,p_src:e.src,p_ver:NEWS_VER,p_ua:String(navigator.userAgent||'').slice(0,200)});}
+    catch(x){if(lbMissing(x)){errOff=true;break;}}
+  }
+  errBusy=false;
+}
+window.__kfErrFlush=()=>{setTimeout(errFlush,0);};
+
+/* ---------- Spieler-Weg: jeder Schritt wird einmal pro Spielstand gemeldet (anonym, nur die Kennung) ---------- */
+const STEP_KEY='keksfabrik-steps';
+let stepOff=false,stepBusy=false;
+function stepsDone(){let o={};try{o=JSON.parse(localStorage.getItem(STEP_KEY)||'{}')||{};}catch(x){}if(o.id!==S.lb.id) o={id:S.lb.id,s:{}};if(!o.s) o.s={};return o;}
+async function kfTrackStep(step){
+  if(stepOff||!lbOn()||S.adm) return;
+  kfId();const o=stepsDone();if(o.s[step]) return;
+  o.s[step]=1;try{localStorage.setItem(STEP_KEY,JSON.stringify(o));}catch(x){}
+  try{await lbApi('rpc/kf_track',{p_id:S.lb.id,p_step:step});}
+  catch(x){if(lbMissing(x)) stepOff=true;else{const p=stepsDone();delete p.s[step];try{localStorage.setItem(STEP_KEY,JSON.stringify(p));}catch(y){}}}
+}
+const STEPS=[
+  ['open',()=>true],
+  ['click50',()=>S.clicks>=50],
+  ['build1',()=>S.b.some(n=>n>0)],
+  ['up1',()=>Object.keys(S.up).length>0],
+  ['tut5',()=>S.tut&&S.tut.i>=5],
+  ['tutdone',()=>S.tut&&S.tut.i>=TUT.length],
+  ['bld25',()=>S.b.reduce((a,n)=>a+n,0)>=25],
+  ['world',()=>tabUnl('world')],
+  ['asc1',()=>S.asc>=1],
+  ['acc',()=>!!accTok],
+  ['club',()=>clubIn()],
+  ['lb',()=>!!S.lb.on],
+  ['push',()=>pushOn===true]
+];
+async function stepCheck(){
+  if(stepOff||stepBusy||!lbOn()||document.hidden) return;
+  stepBusy=true;
+  try{const o=stepsDone();for(const [k,f] of STEPS){if(o.s[k]) continue;let ok=false;try{ok=f();}catch(x){}if(ok) await kfTrackStep(k);if(stepOff) break;}}
+  finally{stepBusy=false;}
+}
+
+/* ---------- Club-Chat: Reaktionen, angeheftete Nachricht, Winken ---------- */
+const CHAT_EMO=['👍','❤️','😂','🎉','🍪'];
+let chatPick=0;
+function chatPinHtml(D,own){
+  const p=D.pinned;if(!p) return '';
+  return '<div class="cpin"><span aria-hidden="true">📌</span><span><small>'+tt('Angeheftet','Pinned')+' · '+escName(String(p.username))+'</small>'+escName(String(p.body))+'</span>'+(own?'<button type="button" class="crx" data-cr="unpin" aria-label="'+tt('Lösen','Unpin')+'" title="'+tt('Lösen','Unpin')+'">✕</button>':'')+'</div>';
+}
+function chatMsgExtra(m,own){
+  const R=m.reacts||[];
+  let h='<div class="creact">'+R.map(r=>'<button type="button" class="cre'+(r.mine?' mine':'')+'" data-cr="re:'+m.id+':'+r.e+'" aria-pressed="'+(r.mine?'true':'false')+'">'+r.e+' <b>'+r.n+'</b></button>').join('');
+  if(featOn('chat')&&!(clubMuted>Date.now())) h+='<button type="button" class="cre add" data-cr="pick:'+m.id+'" aria-label="'+tt('Reagieren','React')+'" title="'+tt('Reagieren','React')+'">☺︎+</button>';
+  if(own) h+='<button type="button" class="cre add" data-cr="pin:'+m.id+'" aria-label="'+tt('Anheften','Pin')+'" title="'+tt('Anheften','Pin')+'">📌</button>';
+  h+='</div>';
+  if(chatPick===m.id) h+='<div class="cpick" role="group" aria-label="'+tt('Reaktion wählen','Pick a reaction')+'">'+CHAT_EMO.map(e=>'<button type="button" data-cr="re:'+m.id+':'+e+'">'+e+'</button>').join('')+'</div>';
+  return h;
+}
+$id('clubOv').addEventListener('click',async e=>{
+  const b=e.target.closest('[data-cr]');if(!b) return;
+  const [a,id,emo]=b.dataset.cr.split(':');clubMsg='';
+  if(a==='pick'){chatPick=chatPick===+id?0:+id;clubRender();return;}
+  if(a==='re'){chatPick=0;await clubCall('club_react',{p_msg:+id,p_emoji:emo});return;}
+  if(a==='pin'){await clubCall('club_pin',{p_msg:+id},tt('Nachricht angeheftet.','Message pinned.'));return;}
+  if(a==='unpin'){await clubCall('club_pin',{p_msg:null},tt('Nachricht gelöst.','Message unpinned.'));return;}
+  if(a==='wave'){await clubCall('club_post',{p_body:'👋'});return;}
+});
+
+/* ---------- Admin: Absturzberichte und Spieler-Weg (Server-Tab) ---------- */
+var admErrs=null,admJour=null,admInsErr='',admInsArm=0;
+async function admIns(action,data){return lbApi('rpc/admin_insights',{p_pass:admPass,p_action:action,p_data:data||null});}
+async function admInsLoad(){
+  if(!admPass) return;
+  try{const [e,j]=await Promise.all([admIns('errors'),admIns('journey')]);admErrs=e||[];admJour=j||{};admInsErr='';}
+  catch(x){admInsErr=lbMissing(x)?tt('Dafür braucht der Server zuerst docs/insights-v10.sql.','This needs docs/insights-v10.sql on the server first.'):admErrTxt(x);}
+  admSrvRender();
+}
+const STEP_TXT={open:['Spiel geöffnet','Opened the game'],click50:['50 Klicks','50 clicks'],build1:['Erstes Gebäude','First building'],up1:['Erstes Upgrade','First upgrade'],
+  tut5:['5 Tipps gelesen','5 tips done'],tutdone:['Erste Schritte fertig','First steps done'],bld25:['25 Gebäude','25 buildings'],world:['Welt freigeschaltet','World unlocked'],
+  asc1:['Erster Aufstieg','First ascension'],acc:['Konto erstellt','Made an account'],club:['In einem Club','Joined a club'],lb:['In der Bestenliste','On the leaderboard'],push:['Push an','Push on'],comeback:['Kam nach 3+ Tagen zurück','Came back after 3+ days']};
+function admInsHtml(){
+  const pct=(a,b)=>b?Math.round(a/b*100)+'%':'–';
+  let h='';
+  if(admInsErr) return admCardH('🧭 '+tt('Spieler-Weg','Player journey'),'<p class="nameerr">'+admInsErr+'</p>');
+  const J=admJour||{},St=J.steps||{},base=Math.max(+J.new30||0,+St.open||0);
+  h+=admCardH('🧭 '+tt('Spieler-Weg (neue Spieler, 30 Tage)','Player journey (new players, 30 days)'),
+    '<p class="small">'+tt('Wie weit neue Spieler kommen. Anonym: gezählt wird nur, welcher Schritt einmal erreicht wurde.','How far new players get. Anonymous: only which steps were reached once is counted.')+'</p>'
+    +'<div class="admstats"><span><small>'+tt('Neue Spieler','New players')+'</small><b>'+fmt(+J.new30||0)+'</b></span><span><small>'+tt('Am 2. Tag zurück','Back on day 2')+'</small><b>'+pct(+J.back1||0,+J.cohort||0)+'</b></span><span><small>'+tt('Nach 7 Tagen zurück','Back after 7 days')+'</small><b>'+pct(+J.back7||0,+J.cohort7||0)+'</b></span></div>'
+    +'<div class="admfun">'+Object.keys(STEP_TXT).map(k=>{const n=+St[k]||0,w=base?Math.round(n/base*100):0;return '<div><span>'+tt(STEP_TXT[k][0],STEP_TXT[k][1])+'</span><i style="--w:'+Math.min(100,w)+'%"></i><b>'+n+' <small>'+(base?w+'%':'')+'</small></b></div>';}).join('')+'</div>'
+    +'<h5 class="admh5">'+tt('Spieler pro Tag (14 Tage)','Players per day (14 days)')+'</h5>'+admBars(J.daily));
+  const E=admErrs||[],arm=Date.now()-admInsArm<5000;
+  h+=admCardH('🐞 '+tt('Absturzberichte','Crash reports'),
+    '<p class="small">'+tt('Fehler, die bei Spielern passiert sind. Gleiche Fehler werden zusammengezählt. Es wird kein Spielstand und kein Name mitgeschickt.','Errors that happened for players. The same error is counted together. No save and no name are sent.')+'</p>'
+    +(E.length?'<div class="admerrs">'+E.map(x=>'<details class="fold"><summary><b>'+escName(x.msg)+'</b><small>'+x.count+'× · v'+x.ver+' · '+admDT(x.last_at)+'</small></summary>'+(x.src?'<p class="small">'+escName(x.src)+'</p>':'')+(x.stack?'<pre>'+escName(x.stack)+'</pre>':'')+(x.ua?'<p class="small">'+escName(x.ua)+'</p>':'')+'<div class="btns"><button type="button" class="btn sm" data-ina="done:'+escName(x.fp)+'">'+tt('Behoben','Mark fixed')+'</button></div></details>').join('')+'</div>'
+      +'<div class="btns"><button type="button" class="btn sm warn'+(arm?' armed':'')+'" data-ina="clear">'+(arm?tt('Wirklich alle löschen?','Really clear all?'):tt('Liste leeren','Clear list'))+'</button></div>'
+      :'<p class="small">'+(admErrs?tt('Keine Fehler gemeldet. 🎉','No errors reported. 🎉'):tt('Lädt …','Loading …'))+'</p>'));
+  return h;
+}
+els.admin.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-ina]');if(!b) return;
+  const [a,fp]=b.dataset.ina.split(':');
+  try{
+    if(a==='done'){admErrs=await admIns('error_done',{fp});toast(tt('Als behoben markiert.','Marked as fixed.'));}
+    if(a==='clear'){if(Date.now()-admInsArm>=5000){admInsArm=Date.now();admSrvRender();return;}admInsArm=0;admErrs=await admIns('errors_clear');toast(tt('Liste geleert.','List cleared.'));}
+  }catch(x){admInsErr=admErrTxt(x);}
+  admSrvRender();
+});
+
+/* ---------- Spieleportale (itch.io, CrazyGames …): keine App-Installation, kein Offline-Speicher ---------- */
+if(window.KF_PORTAL){const a=$id('appT');if(a&&a.parentElement) a.parentElement.hidden=true;}
+
+setInterval(stepCheck,15000);
+setTimeout(()=>{stepCheck();errFlush();},4000);
+v51Ready=true;
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};
@@ -9670,6 +9838,7 @@ window.__kfDeviceChanged=updDev;
 /* ======================= V38: Neue Version sofort melden ======================= */
 let updShown=0,updLast=0;
 async function checkUpdate(){
+  if(window.KF_PORTAL) return;
   if(updShown||navigator.onLine===false||Date.now()-updLast<60000) return;
   updLast=Date.now();
   try{
@@ -9842,6 +10011,12 @@ if(hadSave){
     const frp=frOffline(gap),help=offlineHelpers(gap);if(frp>0) help.push([tt('Filialen','Stores'),'+'+fmt(frp)]);
     regenSta();
     awayRep={gap,gain,mana:S.w.mana-m0,pre,help,sta:Math.max(0,S.hero.sta-sta0)};
+    /* V51: Willkommensgeschenk nach 3+ Tagen Pause (höchstens alle 3 Tage) */
+    if(gap>=259200&&Date.now()-(S.cb||0)>=259200){
+      const days=Math.floor(gap/86400),g=Math.min(50,10+5*days),mins=30;
+      S.w.mat.gem+=g;addCk(Math.max(10000*mins/60,C.kps0*60*mins));S.cb=Date.now();recalc();
+      awayRep.cb={g,mins};if(typeof kfTrackStep==='function') kfTrackStep('comeback');
+    }
   }
 }
 checkDay(true);

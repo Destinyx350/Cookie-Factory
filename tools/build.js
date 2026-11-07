@@ -16,6 +16,8 @@ function build() {
   return order.map(f => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('\n');
 }
 
+module.exports = { build, ROOT };
+if (require.main !== module) return;
 const out = build();
 const target = path.join(ROOT, 'index.html');
 if (process.argv.includes('--check')) {

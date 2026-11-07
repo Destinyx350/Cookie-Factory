@@ -1,6 +1,7 @@
 /* ======================= V38: Neue Version sofort melden ======================= */
 let updShown=0,updLast=0;
 async function checkUpdate(){
+  if(window.KF_PORTAL) return;
   if(updShown||navigator.onLine===false||Date.now()-updLast<60000) return;
   updLast=Date.now();
   try{

@@ -1,7 +1,7 @@
 /* ======================= V49: Push-Benachrichtigungen ======================= */
 var v49Ready=false;
 function b64u(s){const p='='.repeat((4-s.length%4)%4),b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(b,c=>c.charCodeAt(0));}
-const pushOk=()=>'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+const pushOk=()=>!window.KF_PORTAL&&'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
 var pushOn=null,pushBusy=false,pushMsgT='',pushMsgOk=true,pushSynced=false;
 async function pushSub(){if(!pushOk()) return null;try{const r=await navigator.serviceWorker.getRegistration();return r?await r.pushManager.getSubscription():null;}catch(e){return null;}}
 async function pushState(){

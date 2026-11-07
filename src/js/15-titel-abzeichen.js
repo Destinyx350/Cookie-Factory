@@ -190,6 +190,7 @@ function offlineHelpers(gap){
 let awayOpen=false;
 function showAway(r){
   const p=r.pre,T=[];
+  if(r.cb) T.push(['box',tt('🎁 Willkommensgeschenk','🎁 Welcome-back gift'),'+'+r.cb.g+' '+tt('Edelsteine','gems')+' · +'+r.cb.mins+' min']);
   if(r.mana>=1) T.push(['spark','Mana','+'+Math.floor(r.mana)]);
   if(p.exp) T.push(['moon',tt('Expeditionen zurück','Expeditions back'),String(p.exp)]);
   if(p.lab) T.push(['scale',tt('Forschung fertig','Research done'),p.lab]);

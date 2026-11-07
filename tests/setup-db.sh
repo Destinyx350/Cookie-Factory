@@ -12,7 +12,7 @@ PSQL=(psql -v ON_ERROR_STOP=1 -q)
 end \$\$;"
 "${PSQL[@]}" -d "$DB" -c "grant usage on schema public to anon, authenticated" \
   -c "alter default privileges in schema public grant execute on functions to anon, authenticated"
-for f in leaderboard-setup leaderboard-v2 online-v3 accounts-v4 clubs-v5 lock-internal-functions security-v6 update-v7 social-v8 push-v9; do
+for f in leaderboard-setup leaderboard-v2 online-v3 accounts-v4 clubs-v5 lock-internal-functions security-v6 update-v7 social-v8 push-v9 insights-v10; do
   "${PSQL[@]}" -d "$DB" -f "docs/$f.sql" 2>&1 | grep -v NOTICE || true
 done
 # A test-only server admin password (never the real one).

@@ -62,6 +62,7 @@ Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.
 6. [`update-v7.sql`](update-v7.sql): weekly automatic backups (download them in the admin **Server** tab), leaderboard spots linked to accounts and unique leaderboard names.
 7. [`social-v8.sql`](social-v8.sql): player profiles, friends, weekend club wars and invite bonuses.
 8. [`push-v9.sql`](push-v9.sql): push notifications (also needs the edge function, see [PUSH.md](PUSH.md)).
+9. [`insights-v10.sql`](insights-v10.sql): crash reports and the player journey (admin **Server** tab), push reminders for players away 3+ days, and club chat reactions and pinned messages.
 
 The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password.
 
