@@ -43,6 +43,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
 | 📐 **Fits every device** | Separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. |
+| 👤 **Accounts** | Create an account with a username and password (no email needed). Your bakery is saved to it automatically, so you can keep playing on any device. |
 | 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter, server codes, and a transfer code to move your save to another device. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
@@ -78,6 +79,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
 - 📐 **Passt auf jedes Gerät**: eigene Layouts für Handy (hochkant und quer), Tablet und Computer
+- 👤 **Konten**: Benutzername und Passwort (ohne E-Mail), deine Bäckerei auf jedem Gerät
 - 🌍 **Online-Funktionen**: globale Events, Ankündigungen, Live-Zähler, Server-Codes und ein Transfer-Code fürs andere Gerät
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
@@ -92,21 +94,17 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 42
-- **New:** Global events. Sometimes everyone gets a boost at the same time, like double production, shown in a banner under the cookie with a countdown.
-- **New:** Announcements from Cookie Factory appear when you open the game.
-- **New:** A live counter on the start screen and leaderboard shows how many bakeries are online and how many cookies everyone has baked together.
-- **New:** Move to another device: under **Settings → Saving**, create a transfer code (valid for 24 hours) and enter it on your other device.
-- **New:** Codes can now also come straight from the server.
+### Version 43
+- **New:** Accounts! Under **Settings → Saving**, create an account with a username and password (no email needed). Your bakery is saved to your account automatically.
+- **New:** Sign in on another device to keep playing the same bakery. If both have a save, you choose which one to keep.
+- **New:** Change your password or delete your account at any time.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Globale Events. Manchmal bekommen alle gleichzeitig einen Schub, z. B. doppelte Produktion – mit Banner und Countdown unter dem Keks.
-- **Neu:** Ankündigungen der Keksfabrik erscheinen beim Start.
-- **Neu:** Ein Live-Zähler auf dem Startbildschirm und in der Bestenliste zeigt, wie viele Bäckereien online sind und wie viele Kekse alle zusammen gebacken haben.
-- **Neu:** Auf ein anderes Gerät mitnehmen: Unter **Einstellungen → Speichern** einen Transfer-Code erstellen (24 Stunden gültig) und auf dem anderen Gerät eingeben.
-- **Neu:** Codes können jetzt auch direkt vom Server kommen.
+- **Neu:** Konten! Unter **Einstellungen → Speichern** erstellst du ein Konto mit Benutzername und Passwort (keine E-Mail nötig). Deine Bäckerei wird automatisch im Konto gespeichert.
+- **Neu:** Melde dich auf einem anderen Gerät an und spiel dieselbe Bäckerei weiter. Gibt es zwei Spielstände, entscheidest du, welcher bleibt.
+- **Neu:** Passwort ändern oder Konto löschen – jederzeit.
 
 </details>
 
