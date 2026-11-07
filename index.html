@@ -1442,6 +1442,150 @@ html{-webkit-tap-highlight-color:transparent}
 /* Einstellungen: erkanntes Gerät */
 .devinfo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px;color:var(--muted);font-size:13px}
 .devinfo b{color:var(--fg)}
+
+/* ================= V47: Klares, modernes Design ================= */
+/* Flach statt 3D: Die Schatten-, Kanten- und Glanzfarben des alten Designs werden neutral, dann bekommen
+   Flächen weiche Schatten und feine Kanten. Gilt für das dunkle und das helle Design. */
+:root[data-look]{
+  --sh:transparent;--hi:transparent;--btnd:transparent;--goldd:transparent;--grnd:transparent;
+  --btn1:var(--panel-3);--btn2:var(--panel-3);--gold1:var(--accent);--gold2:var(--accent);--grn1:var(--good);--grn2:var(--good);
+  --edge:rgba(255,255,255,.07);--edge-2:rgba(255,255,255,.12);
+  --soft:0 1px 2px rgba(0,0,0,.2),0 10px 30px rgba(0,0,0,.22);
+  --r-lg:24px;--r-md:16px;--r-sm:12px
+}
+:root[data-look="light"]{--edge:rgba(70,35,0,.09);--edge-2:rgba(70,35,0,.16);--soft:0 1px 2px rgba(70,35,0,.06),0 10px 30px rgba(70,35,0,.08)}
+:root[data-look]:not([data-look="light"]){
+  --bg:#130d29;--panel:#1d1540;--panel-2:#251c4f;--panel-3:#30255f;--line:#3a2e70;
+  --bgimg:radial-gradient(1100px 620px at 8% -12%,rgba(124,92,255,.20),transparent 60%),radial-gradient(900px 600px at 108% -4%,rgba(255,120,170,.10),transparent 55%),linear-gradient(180deg,#160f31,#110b24)
+}
+:root[data-look] body::after{display:none}
+
+/* Schrift: verspielte Rundschrift nur für große Zahlen und Überschriften */
+:root[data-look] .btn,:root[data-look] .tab,:root[data-look] .chip,:root[data-look] .seg button,:root[data-look] .price,:root[data-look] .toast,:root[data-look] .mini dd,:root[data-look] .kps,:root[data-look] .buff,:root[data-look] .ttlchip,:root[data-look] .tag,:root[data-look] .gochip b,:root[data-look] .lbbar b,:root[data-look] #gSeg button{font-family:var(--font-body)!important;letter-spacing:0}
+:root[data-look] h1{font-size:22px;text-shadow:none}
+:root[data-look] .logo{width:34px;height:34px;animation:none;filter:none}
+:root[data-look] .unit{letter-spacing:.14em;font-size:11px;font-weight:700;color:var(--muted)}
+:root[data-look] .count{text-shadow:0 2px 18px rgba(255,190,80,.28)}
+:root[data-look="light"] .count{color:#3b220c;text-shadow:none}
+
+/* Kopfzeile: nur das Nötigste */
+:root[data-look] .top{margin-bottom:16px;gap:10px}
+:root[data-look] .topr{gap:6px}
+:root[data-look] .topr>.langseg,:root[data-look] #saveNote,:root[data-look] #helpBtn{display:none!important}
+:root[data-look] .iconbtn{width:40px;height:40px;padding:0;background:transparent;border:1px solid var(--edge);box-shadow:none;color:var(--fg)}
+:root[data-look] .iconbtn:hover{background:var(--edge)}
+:root[data-look] .newsbtn{position:relative;width:40px;height:40px;padding:0;justify-content:center;background:transparent;border:1px solid var(--edge);border-radius:50%;box-shadow:none}
+:root[data-look] .newsbtn>span[data-i18n="news"]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+:root[data-look] .newsbtn .nico{margin:0}
+:root[data-look] .newsbtn .badge{position:absolute;top:-1px;right:-1px;min-width:0;width:11px;height:11px;padding:0;font-size:0;border-radius:50%;border:2px solid var(--bg)}
+:root[data-look] .ttlchip{border:1px solid var(--edge-2);background:transparent;font-size:11px}
+:root[data-look] .plname{font-weight:600}
+
+/* Flächen */
+:root[data-look] .stage,:root[data-look] .store{background:var(--panel);border:1px solid var(--edge);border-radius:var(--r-lg);box-shadow:var(--soft)}
+:root[data-look] .kps{background:var(--edge);box-shadow:none;color:var(--accent);font-weight:600}
+:root[data-look="light"] .kps{background:rgba(70,35,0,.06);color:#a15800}
+:root[data-look] .mini>div{background:transparent;border:1px solid var(--edge);box-shadow:none;border-radius:var(--r-md)}
+:root[data-look] .mini dt{letter-spacing:.06em;font-size:10.5px}
+:root[data-look] .bhint,:root[data-look] .hint{border:1px solid var(--edge-2);background:var(--edge);box-shadow:none}
+:root[data-look] .hint.go{background:var(--accent);color:var(--accent-ink);animation:none}
+:root[data-look] .buff{border:1px solid var(--edge-2);background:transparent;box-shadow:none;font-size:12px}
+:root[data-look] .cookie-stage::before{opacity:.55}
+
+/* Knöpfe */
+:root[data-look] .btn{background:var(--panel-3);border:1px solid var(--edge);box-shadow:none;text-shadow:none}
+:root[data-look] .btn:hover{background:color-mix(in srgb,var(--panel-3) 82%,#fff 18%);filter:none}
+:root[data-look="light"] .btn:hover{background:color-mix(in srgb,var(--panel-3) 85%,#000 6%)}
+:root[data-look] .btn:active{transform:scale(.97);box-shadow:none}
+:root[data-look] .btn.primary,:root[data-look] .tgl[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:transparent;box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 30%,transparent);text-shadow:none}
+:root[data-look] .btn.primary:hover{background:color-mix(in srgb,var(--accent) 88%,#fff 12%)}
+:root[data-look] .btn.primary::after{display:none}
+:root[data-look] .btn.armed{background:var(--warn);color:#fff;box-shadow:none;border-color:transparent}
+:root[data-look] .btn.warn{color:var(--warn)}
+
+/* Reiter */
+:root[data-look] .tabs{gap:4px}
+:root[data-look] .tab{border-radius:14px}
+:root[data-look] .tab .tico svg{filter:none}
+:root[data-look] .tab[aria-selected="true"]{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--fg);box-shadow:none}
+:root[data-look] .tab[aria-selected="true"] .tico{transform:none;animation:none}
+:root[data-look] .badge{border:2px solid var(--panel);box-shadow:none;background:#ef4b5f}
+:root[data-look] .seg{background:var(--edge);box-shadow:none;border:1px solid var(--edge)}
+:root[data-look] .seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg);box-shadow:none}
+:root[data-look] #gSeg button{background:transparent!important;border:1px solid var(--edge)!important;box-shadow:none!important}
+:root[data-look] #gSeg button[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 16%,transparent)!important;color:var(--fg)!important;border-color:color-mix(in srgb,var(--accent) 40%,transparent)!important}
+:root[data-look] #gSeg button[aria-pressed="true"] .gi{animation:none}
+:root[data-look] .chip{border:1px solid var(--edge);box-shadow:none}
+:root[data-look] .chip.on{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+
+/* Listen und Karten */
+:root[data-look] .row,:root[data-look] .wcard,:root[data-look] .order,:root[data-look] .scard,:root[data-look] .icard,:root[data-look] .frc,:root[data-look] .tcard,:root[data-look] .bdg,:root[data-look] .ach,:root[data-look] .trk{background:var(--panel-2);border:1px solid var(--edge);box-shadow:none}
+:root[data-look] .row:hover{background:var(--panel-3);transform:translateY(-1px);box-shadow:none;filter:none}
+:root[data-look] .row:active{transform:scale(.99)}
+:root[data-look] .row.best{box-shadow:inset 0 0 0 1.5px var(--accent)}
+:root[data-look] .ico{background:var(--edge);border:0;border-radius:12px}
+:root[data-look] .price{background:var(--edge);box-shadow:none;font-size:14px}
+:root[data-look] .row.can .price{background:color-mix(in srgb,var(--good) 20%,transparent);color:var(--good);box-shadow:none}
+:root[data-look="light"] .row.can .price{color:#126b3c}
+:root[data-look] .tag{border:0;background:var(--accent)}
+:root[data-look] .obar{height:6px;background:var(--edge);box-shadow:none}
+:root[data-look] .obar i{background-image:none;background:var(--good);animation:none}
+:root[data-look] .gochip,:root[data-look] .lbbar{background:var(--panel-2);border:1px solid var(--edge);box-shadow:none}
+:root[data-look] .gochip:hover,:root[data-look] .lbbar:hover{background:var(--panel-3)}
+#buildList>.row,#upList>.row{animation-duration:.25s}
+
+/* Fenster und Hinweise */
+:root[data-look] .overlay{background:rgba(8,5,20,.6);backdrop-filter:none;-webkit-backdrop-filter:none}
+:root[data-look="light"] .overlay{background:rgba(60,35,10,.3)}
+:root[data-look] .dlg{background:var(--panel);border:1px solid var(--edge-2);border-radius:var(--r-lg);box-shadow:0 24px 70px rgba(0,0,0,.45)}
+:root[data-look="light"] .dlg{box-shadow:0 24px 70px rgba(70,35,0,.18)}
+:root[data-look] .toast{background:var(--panel-3);border:1px solid var(--edge-2);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+:root[data-look] .namein{border:1px solid var(--edge-2);box-shadow:none}
+:root[data-look] .namein:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+:root[data-look] .admcard{border:1px solid var(--edge);box-shadow:none}
+:root[data-look] details.fold>summary{cursor:pointer}
+
+/* Erste Schritte: feiner Akzent statt Goldrahmen; gesperrte Knöpfe ruhig */
+:root[data-look] .tut{border:1px solid var(--edge);box-shadow:inset 3px 0 0 var(--accent)!important;background:var(--panel-2)}
+:root[data-look] .btn.dis,:root[data-look] .btn[disabled]{filter:none;opacity:1;background:var(--edge);color:var(--muted);border-color:var(--edge);box-shadow:none}
+:root[data-look] .gochip.go,:root[data-look] .hint.go{box-shadow:none}
+
+/* Telefon: Kopfzeile in einer Reihe */
+:root[data-device="phone"][data-look] .top{flex-wrap:nowrap;margin-bottom:10px}
+:root[data-device="phone"][data-look] .brandrow{flex-wrap:nowrap;min-width:0;gap:8px}
+:root[data-device="phone"][data-look] #brand:not(:only-of-type){font-size:18px}
+:root[data-device="phone"][data-look] .plname:not([hidden])~#ttlChip,:root[data-device="phone"][data-look] #ttlChip{display:none}
+:root[data-device="phone"][data-look] .brandrow:has(.plname:not([hidden])) #brand{display:none}
+:root[data-device="phone"][data-look] .plname{order:0;flex-basis:auto;padding-left:0;font:600 17px/1.2 var(--font-display);color:var(--fg);max-width:40vw}
+:root[data-device="phone"][data-look] .topr{flex-wrap:nowrap;gap:4px}
+:root[data-device="phone"][data-look] .iconbtn,:root[data-device="phone"][data-look] .newsbtn{width:36px;height:36px}
+:root[data-device="phone"][data-look] .iconbtn svg{width:18px;height:18px}
+.savemore{margin-top:4px}
+.savemore>summary{font:700 15px/1.3 var(--font-display);padding:10px 0;color:var(--muted)}
+.savemore[open]>summary{color:var(--fg)}
+
+/* Admin: zwei Gruppen */
+.admgrp{display:grid;grid-template-columns:1fr 1fr;width:100%;margin-bottom:8px}
+#admSeg[data-grp="game"] [data-g="online"],#admSeg[data-grp="online"] [data-g="game"]{display:none}
+
+/* Barrierefreiheit: klare Fokus-Ringe und hoher Kontrast */
+:root[data-look] :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+:root[data-hc="1"]{--muted:#e6e0f7;--edge:rgba(255,255,255,.3);--edge-2:rgba(255,255,255,.45)}
+:root[data-hc="1"][data-look="light"]{--muted:#3b2a17;--edge:rgba(40,20,0,.4);--edge-2:rgba(40,20,0,.55)}
+:root[data-hc="1"] .row:not(.can),:root[data-hc="1"] .row.locked{opacity:1}
+:root[data-hc="1"] :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+:root[data-hc="1"] .small,:root[data-hc="1"] small{color:var(--fg)}
+
+/* Startbildschirm: ein klarer Knopf, der Rest leise */
+:root[data-look] .stbox .btns.c .btn{background:transparent;border-color:transparent;color:var(--muted)}
+:root[data-look] .stbox .btns.c .btn:hover{color:var(--fg);background:var(--edge)}
+:root[data-look] .stbox .stacc{background:transparent;border:1px solid var(--edge-2)}
+:root[data-look] .stbox .stcard{border:1px solid var(--edge);background:var(--panel);box-shadow:none}
+:root[data-look] .stbox .stgo{min-width:200px}
+:root[data-look] .sttitle{text-shadow:none}
+
+/* Telefon: Reiterleiste ruhiger */
+:root[data-device="phone"][data-look] .tabs{border-top:1px solid var(--edge);box-shadow:0 -8px 24px rgba(0,0,0,.25)}
 </style>
 
 <div class="wrap">
@@ -1675,6 +1819,7 @@ html{-webkit-tap-highlight-color:transparent}
           <label class="check" style="margin-top:12px"><input type="checkbox" id="titleChk"> <span id="oTitleL"></span></label>
           <label class="check" style="margin-top:10px"><input type="checkbox" id="shakeChk"> <span id="oShakeL"></span></label>
           <label class="check" style="margin-top:10px"><input type="checkbox" id="ecoChk"> <span id="oEcoL"></span></label>
+          <label class="check" style="margin-top:10px"><input type="checkbox" id="hcChk"> <span id="oHcL"></span></label>
           <p class="small" id="oEcoH" style="margin-top:4px"></p>
         </div>
         <div class="optsec" data-sc="disp">
@@ -1770,6 +1915,10 @@ html{-webkit-tap-highlight-color:transparent}
           <div id="appState"></div>
         </div>
         <div class="optsec" data-sc="game">
+          <h2 id="helpSetT"></h2>
+          <div class="btns"><button type="button" class="btn" id="helpSetBtn"></button><button type="button" class="btn" id="shareSetBtn"></button></div>
+        </div>
+        <div class="optsec" data-sc="game">
           <h2 data-i18n="new_game"></h2>
           <div class="btns"><button type="button" class="btn" id="resetBtn"></button></div>
         </div>
@@ -1860,7 +2009,7 @@ tree_title:'Himmlischer Baum',tree_head:'Frei: {f} von {t}. Tippe einen Knoten a
 tree_locked:'Noch gesperrt. Braucht: {r}.',tree_buy:'Kaufen für {c}',tree_missing:'Dir fehlen {c}.',tree_unlocked:'{n} freigeschaltet.',
 respec:'Baum zurücksetzen',respec_confirm:'Wirklich zurücksetzen? Nochmal klicken.',respec_done:'Alle Himmelschips sind wieder frei.',asc_done:'Aufgestiegen! Du hast jetzt {n} Himmelschips.',
 opt_display:'Anzeige',opt_fx:'Zahlen, Krümel und Animationen',opt_lang:'Sprache',opt_save:'Speichern',save_now:'Jetzt speichern',
-save_hint:'Der Spielstand liegt im Browser dieses Geräts. Für ein anderes Gerät nutzt du Export und Import.',
+save_hint:'Dein Spiel speichert automatisch auf diesem Gerät. Mit einem Konto wird es zusätzlich online gespeichert.',
 export:'Export',show_save:'Spielstand anzeigen',copy:'Kopieren',export_ph:'Hier erscheint dein Spielstand als Text.',import:'Import',import_ph:'Spielstand-Text hier einfügen.',load:'Laden',
 new_game:'Neu anfangen',wipe:'Alles löschen',wipe_confirm:'Wirklich alles löschen? Nochmal klicken.',
 toast_saved:'Spielstand gespeichert.',toast_copied:'Spielstand kopiert.',toast_select:'Text markiert. Kopiere ihn mit Strg+C.',toast_loaded:'Spielstand geladen.',
@@ -1909,7 +2058,7 @@ tree_title:'Heavenly Tree',tree_head:'Free: {f} of {t}. Tap a node to buy it.',c
 tree_locked:'Locked for now. Requires: {r}.',tree_buy:'Buy for {c}',tree_missing:'You are missing {c}.',tree_unlocked:'{n} unlocked.',
 respec:'Reset tree',respec_confirm:'Really reset? Click again.',respec_done:'All heavenly chips are free again.',asc_done:'Ascended! You now have {n} heavenly chips.',
 opt_display:'Display',opt_fx:'Numbers, crumbs and animations',opt_lang:'Language',opt_save:'Saving',save_now:'Save now',
-save_hint:"Your save lives in this device's browser. Use export and import to move it to another device.",
+save_hint:"Your game saves automatically on this device. With an account it's also saved online.",
 export:'Export',show_save:'Show save',copy:'Copy',export_ph:'Your save appears here as text.',import:'Import',import_ph:'Paste your save text here.',load:'Load',
 new_game:'New game',wipe:'Delete everything',wipe_confirm:'Really delete everything? Click again.',
 toast_saved:'Game saved.',toast_copied:'Save copied.',toast_select:'Text selected. Copy it with Ctrl+C.',toast_loaded:'Save loaded.',
@@ -1943,19 +2092,22 @@ function group(n){return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/
 const DEFOPT=()=>({num:'short',fs:1,acc:'orange',title:false,eco:false,ask:true,as:30,sn:{click:true,buy:true,gold:true,ach:true,other:true,ui:true},mus:1,trk:'auto',bgm:true,m24:1,ntf:'all',ntfT:5,ntfB:true,motion:'on',start:true,upc:true,shake:true});
 let numMode='short';
 const TRK_OK=['bake','market','stars','adv','fest'];
+/* Zahlenformate einmal bauen und wiederverwenden: toLocaleString mit Optionen baut sonst jedes Mal ein neues. */
+const NFC={};
+function nf(d){const k=LANG+d;return NFC[k]||(NFC[k]=new Intl.NumberFormat(LOC[LANG],{maximumFractionDigits:d}));}
 function fmt(n){
   if(!isFinite(n)) return '∞';
   if(n<0) n=0;
   if(numMode==='sci'&&n>=1e6||n>=1e27) return n.toExponential(2).replace('e+','e').replace('.',LANG==='de'?',':'.');
   if(n<1e6||numMode==='long'&&n<1e18) return group(n);
   for(const [v,s] of SUF[LANG]){
-    if(n>=v){const x=n/v;return x.toLocaleString(LOC[LANG],{maximumFractionDigits:x>=100?0:x>=10?1:2})+' '+s;}
+    if(n>=v){const x=n/v;return nf(x>=100?0:x>=10?1:2).format(x)+' '+s;}
   }
   return group(n);
 }
 function fmtRate(n){
   if(n>=1000) return fmt(n);
-  return (Math.round(n*10)/10).toLocaleString(LOC[LANG],{maximumFractionDigits:1});
+  return nf(1).format(Math.round(n*10)/10);
 }
 
 /* ======================= Bilder (gezeichnet) ======================= */
@@ -2659,8 +2811,16 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=46;
+const NEWS_VER=47;
 const NEWS=[
+  {v:47,sum:['Neues, klares Design: ruhiger, flacher und schneller.','A clean new look: calmer, flatter and faster.'],items:[
+    ['change','Das ganze Spiel sieht klarer und moderner aus: flache Flächen, feine Kanten und weniger Gedränge.','The whole game looks cleaner and more modern: flat surfaces, fine edges and less clutter.'],
+    ['change','Die Kopfzeile zeigt nur noch das Nötigste. Sprache, Hilfe und Teilen findest du in den Einstellungen.','The header shows only what you need. Language, help and sharing are in Settings.'],
+    ['change','Speichern ist einfacher: Das Konto steht oben, alles andere unter „Weitere Möglichkeiten“.','Saving is simpler: your account comes first, everything else is under “More options”.'],
+    ['change','Höchstens 3 Hinweise auf einmal – der Rest hinter „+“.','At most 3 hints at once – the rest behind “+”.'],
+    ['new','Neu in den Einstellungen: Hoher Kontrast für bessere Lesbarkeit.','New in Settings: high contrast for easier reading.'],
+    ['change','Schneller, besonders auf älteren Handys: weniger Rechenarbeit pro Sekunde.','Faster, especially on older phones: less work every second.']
+  ]},
   {v:46,sum:['Dein Platz in der Bestenliste gehört jetzt zu deinem Konto – auf jedem Gerät.','Your leaderboard spot now belongs to your account – on every device.'],items:[
     ['new','Mit Konto nimmst du deinen Platz in der Bestenliste auf jedes Gerät mit. Kein doppelter Eintrag mehr.','With an account your leaderboard spot comes with you to every device. No more duplicate entries.'],
     ['change','Namen in der Bestenliste gibt es jetzt nur einmal.','Each leaderboard name can now only be used once.'],
@@ -3238,7 +3398,7 @@ function sanitize(o){
   if(spent>s.chips) s.chips=spent;
   if(o.opt&&typeof o.opt==='object'){s.opt.fx=o.opt.fx!==false;if(o.opt.lang==='de'||o.opt.lang==='en') s.opt.lang=o.opt.lang;if(SKINS.some(k=>k.id===o.opt.skin)) s.opt.skin=o.opt.skin;s.opt.news=Math.floor(num(o.opt.news));if([0,1,2].includes(o.opt.vol)) s.opt.vol=o.opt.vol;if(['dark','light','auto'].includes(o.opt.look)) s.opt.look=o.opt.look;s.opt.compact=!!o.opt.compact;
     {const q=o.opt,d=DEFOPT();if(['short','long','sci'].includes(q.num)) s.opt.num=q.num;if([0,1,2].includes(q.fs)) s.opt.fs=q.fs;if(['orange','blue','teal','purple','pink'].includes(q.acc)) s.opt.acc=q.acc;
-     s.opt.title=!!q.title;s.opt.eco=!!q.eco;s.opt.ask=q.ask!==false;if([10,30,60].includes(q.as)) s.opt.as=q.as;if([0,1,2].includes(q.mus)) s.opt.mus=q.mus;if(q.trk==='auto'||TRK_OK.includes(q.trk)) s.opt.trk=q.trk;if(!q.m24) s.opt.mus=Math.max(1,s.opt.mus);s.opt.m24=1;if(['all','imp','off'].includes(q.ntf)) s.opt.ntf=q.ntf;if([3,5,8].includes(q.ntfT)) s.opt.ntfT=q.ntfT;s.opt.ntfB=q.ntfB!==false;if(['on','sys','off'].includes(q.motion)) s.opt.motion=q.motion;s.opt.start=q.start!==false;s.opt.shake=q.shake!==false;s.opt.upc=q.upc!==false;s.opt.bgm=q.bgm!==false;
+     s.opt.title=!!q.title;s.opt.eco=!!q.eco;s.opt.hc=!!q.hc;s.opt.ask=q.ask!==false;if([10,30,60].includes(q.as)) s.opt.as=q.as;if([0,1,2].includes(q.mus)) s.opt.mus=q.mus;if(q.trk==='auto'||TRK_OK.includes(q.trk)) s.opt.trk=q.trk;if(!q.m24) s.opt.mus=Math.max(1,s.opt.mus);s.opt.m24=1;if(['all','imp','off'].includes(q.ntf)) s.opt.ntf=q.ntf;if([3,5,8].includes(q.ntfT)) s.opt.ntfT=q.ntfT;s.opt.ntfB=q.ntfB!==false;if(['on','sys','off'].includes(q.motion)) s.opt.motion=q.motion;s.opt.start=q.start!==false;s.opt.shake=q.shake!==false;s.opt.upc=q.upc!==false;s.opt.bgm=q.bgm!==false;
      if(q.sn&&typeof q.sn==='object') Object.keys(d.sn).forEach(k=>{s.opt.sn[k]=q.sn[k]!==false;});}if(o.opt.cd&&typeof o.opt.cd==='object'){const q=(v,n)=>Math.max(0,Math.min(n-1,Math.floor(num(v))));s.opt.cd={d:q(o.opt.cd.d,DOUGHS.length),c:q(o.opt.cd.c,CHIPS.length),g:q(o.opt.cd.g,GLAZES.length),t:q(o.opt.cd.t,TOPS.length)};}}
   if(o.admin&&typeof o.admin==='object'){
     const cl=(v,lo,hi,d)=>(typeof v==='number'&&isFinite(v))?Math.min(hi,Math.max(lo,v)):d;
@@ -3596,15 +3756,20 @@ const rain={ctx:null,sprite:null,parts:[],acc:0,last:0,w:0,h:0};
   g.fillStyle=gr;g.strokeStyle='#8f5a1b';g.lineWidth=2;g.beginPath();g.arc(24,24,21,0,Math.PI*2);g.fill();g.stroke();
   g.fillStyle='#4b2a16';[[16,17,3.4],[30,15,3],[32,29,3.4],[17,31,3],[25,24,2.4]].forEach(c=>{g.beginPath();g.arc(c[0],c[1],c[2],0,Math.PI*2);g.fill();});
   rain.sprite=sp;rain.ctx=els.rain.getContext('2d');
+  /* Sparsam: Größe nur bei Änderung messen, nicht zeichnen, wenn der Bereich nicht zu sehen ist, und 30 Bilder pro Sekunde reichen. */
+  rain.vis=true;rain.mw=0;rain.mh=0;
+  try{new IntersectionObserver(es=>{rain.vis=es[es.length-1].isIntersecting;}).observe(els.rain);}catch(e){}
+  try{new ResizeObserver(es=>{const r=es[es.length-1].contentRect;rain.mw=Math.round(r.width);rain.mh=Math.round(r.height);}).observe(els.rain);}catch(e){}
   function loop(ts){
     requestAnimationFrame(loop);
-    const dt=Math.min(.05,(ts-rain.last)/1000||0);rain.last=ts;
-    if(document.hidden||!fxOk()){if(rain.parts.length){rain.parts.length=0;rain.ctx.clearRect(0,0,rain.w,rain.h);}return;}
-    const cv=els.rain,w=cv.clientWidth,h=cv.clientHeight;
+    if(ts-rain.last<30) return;
+    const dt=Math.min(.08,(ts-rain.last)/1000||0);rain.last=ts;
+    if(document.hidden||!fxOk()||!rain.vis){if(rain.parts.length){rain.parts.length=0;rain.ctx.clearRect(0,0,rain.w,rain.h);}return;}
+    const cv=els.rain,w=rain.mw||cv.clientWidth,h=rain.mh||cv.clientHeight;
     if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;rain.w=w;rain.h=h;}
     const rate=C.kps>0?Math.min(14,1+Math.log10(1+C.kps)*2.3):0;
     rain.acc+=rate*dt;
-    while(rain.acc>=1&&rain.parts.length<70){rain.acc--;rain.parts.push({x:rand(0,w),y:-30,vy:rand(50,130),s:rand(.35,.85),r:rand(0,6.28),vr:rand(-1.4,1.4),a:rand(.3,.7)});}
+    while(rain.acc>=1&&rain.parts.length<45){rain.acc--;rain.parts.push({x:rand(0,w),y:-30,vy:rand(50,130),s:rand(.35,.85),r:rand(0,6.28),vr:rand(-1.4,1.4),a:rand(.3,.7)});}
     if(rain.acc>1) rain.acc=0;
     const ctx=rain.ctx;ctx.clearRect(0,0,w,h);
     for(let i=rain.parts.length-1;i>=0;i--){
@@ -4751,6 +4916,7 @@ function showSetPane(id){
   let n=0;
   document.querySelectorAll('#setOv .optsec').forEach(s=>{const show=q?s.textContent.toLowerCase().includes(q):s.dataset.sc===setSub;s.hidden=!show;if(show) n++;});
   document.querySelectorAll('#setSeg button').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.sp===setSub?'true':'false'));
+  document.querySelectorAll('#setOv details.savemore').forEach(d=>{if(q&&!d.hidden) d.open=true;});
   const no=document.getElementById('setNone');no.hidden=!q||n>0;no.textContent=tt('Nichts gefunden.','Nothing found.');
   if(adm) fillAdmin();
 }
@@ -5836,12 +6002,16 @@ function hintList(){
   if(rebGain()>=1) L.push(['asc:reb',tt('Wiedergeburt möglich','Rebirth possible')]);
   return L;
 }
+let hintsAll=false;
 function updHints(){
   const L=hintList(),el=document.getElementById('hints');
-  const sig=LANG+'|'+L.map(x=>x[0]+':'+x[1]).join(',');
+  const sig=LANG+'|'+hintsAll+'|'+L.map(x=>x[0]+':'+x[1]).join(',');
   if(sig===hintSig) return;
   hintSig=sig;el.hidden=!L.length;
-  el.innerHTML=L.map(x=>'<button type="button" class="hint'+(x[2]?' go':'')+'" data-hint="'+x[0]+'">'+x[1]+'</button>').join('');
+  /* Ruhiger: höchstens 3 Hinweise, der Rest hinter „+N“ */
+  const show=hintsAll||L.length<=4?L:L.slice(0,3);
+  el.innerHTML=show.map(x=>'<button type="button" class="hint'+(x[2]?' go':'')+'" data-hint="'+x[0]+'">'+x[1]+'</button>').join('')
+    +(show.length<L.length?'<button type="button" class="hint more" data-hint="more" aria-label="'+tt('Weitere Hinweise zeigen','Show more hints')+'">+'+(L.length-show.length)+'</button>':'');
 }
 function claimAll(){
   let n=0;
@@ -5855,6 +6025,7 @@ function claimAll(){
 }
 document.getElementById('hints').addEventListener('click',e=>{
   const b=e.target.closest('[data-hint]');if(!b) return;
+  if(b.dataset.hint==='more'){hintsAll=true;hintSig='';updHints();return;}
   const [t,sub]=b.dataset.hint.split(':');
   if(t==='claim'){if(!claimAll()) nope(b);return;}
   if(t==='vis'){openVis();return;}
@@ -5890,6 +6061,7 @@ function applyLook(){
   document.body.classList.toggle('compact',!!S.opt.compact);
   numMode=S.opt.num;
   reduced=S.opt.motion==='off'||(S.opt.motion==='sys'&&!!(mqRM&&mqRM.matches));{const mv=reduced?'off':'on';if(de.dataset.motion!==mv) de.dataset.motion=mv;}
+  {const hc=S.opt.hc?'1':'0';if(de.dataset.hc!==hc) de.dataset.hc=hc;}
   const bc=document.body.classList;bc.toggle('fs0',S.opt.fs===0);bc.toggle('fs2',S.opt.fs===2);bc.toggle('eco',!!S.opt.eco);
   const A=ACC[S.opt.acc],ak=S.opt.acc+'|'+want;
   if(de._acc!==ak){de._acc=ak;if(A){de.style.setProperty('--accent',want==='light'?A[1]:A[0]);}else de.style.removeProperty('--accent');}
@@ -5907,7 +6079,7 @@ document.getElementById('compactChk').addEventListener('change',e=>{S.opt.compac
   document.getElementById('trkList').addEventListener('click',e=>{const b=e.target.closest('[data-trk]');if(!b) return;S.opt.trk=b.dataset.trk;if(!S.opt.mus) S.opt.mus=1;getCtx();render();save();});
   document.getElementById('musSeg').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b) return;S.opt.mus=+b.dataset.v;if(S.opt.mus) getCtx();render();save();});
   const chk=(id,k,fn)=>document.getElementById(id).addEventListener('change',e=>{S.opt[k]=e.target.checked;if(fn) fn();render();save();});
-  chk('titleChk','title',()=>{titleT=0;});chk('shakeChk','shake',()=>{if(S.opt.shake) setTimeout(shake,50);});chk('startChk','start');chk('ntfBChk','ntfB');chk('ecoChk','eco');chk('bgmChk','bgm');chk('askChk','ask');
+  chk('titleChk','title',()=>{titleT=0;});chk('shakeChk','shake',()=>{if(S.opt.shake) setTimeout(shake,50);});chk('startChk','start');chk('ntfBChk','ntfB');chk('ecoChk','eco');chk('hcChk','hc');chk('bgmChk','bgm');chk('askChk','ask');
   document.getElementById('snList').addEventListener('change',e=>{const x=e.target.closest('[data-sn]');if(!x) return;S.opt.sn[x.dataset.sn]=x.checked;save();if(x.checked){const k=x.dataset.sn==='other'?'claim':x.dataset.sn==='ui'?'sel':x.dataset.sn;snd(k);sndAny=performance.now();}});
   const rb=document.getElementById('optReset');let rt=null;
   rb.addEventListener('click',()=>{
@@ -5931,7 +6103,7 @@ function updOptTxt(){
   const an={orange:['Orange','Orange'],blue:['Blau','Blue'],teal:['Türkis','Teal'],purple:['Lila','Purple'],pink:['Pink','Pink']};
   document.querySelectorAll('#accSeg button').forEach(b=>{const l=tx(an[b.dataset.v]);b.setAttribute('aria-label',l);b.title=l;});
   T('oTitleL','Kekse im Browser-Tab anzeigen','Show cookies in the browser tab');
-  T('oEcoL','Spar-Modus','Saver mode');T('oEcoH','Weniger Animationen und seltenere Updates. Gut für alte Handys und den Akku.','Fewer animations and less frequent updates. Good for old phones and battery.');
+  T('oEcoL','Spar-Modus','Saver mode');T('oHcL','Hoher Kontrast (besser lesbar)','High contrast (easier to read)');T('oEcoH','Weniger Animationen und seltenere Updates. Gut für alte Handys und den Akku.','Fewer animations and less frequent updates. Good for old phones and battery.');
   T('oSnH','Einzelne Töne','Single sounds');T('oBgmL','Stumm, wenn ein anderer Tab offen ist','Mute when another tab is open');
   document.getElementById('snList').innerHTML=SNL.map(([k,de,en])=>'<label class="check"><input type="checkbox" data-sn="'+k+'"> <span>'+tt(de,en)+'</span></label>').join('');
   T('oMusH','Hintergrundmusik','Background music');
@@ -5959,7 +6131,7 @@ function updOpts(){
   pr('#numSeg',S.opt.num);pr('#motSeg',S.opt.motion);pr('#ntfSeg',S.opt.ntf);pr('#ntfTSeg',S.opt.ntfT);pr('#fsSeg',S.opt.fs);pr('#accSeg',S.opt.acc);pr('#musSeg',S.opt.mus);document.querySelectorAll('#trkList [data-trk]').forEach(x=>{const p=x.dataset.trk===(S.opt.trk||'auto')?'true':'false';if(x.getAttribute('aria-pressed')!==p) x.setAttribute('aria-pressed',p);});
   setTxt(document.getElementById('oMusNow'),S.opt.mus?tt('Läuft gerade: ','Now playing: ')+tx(TRK[curTrk()].n)+(actx&&actx.state==='running'?'':tt(' (startet nach einem Klick)',' (starts after a click)')):tt('Musik ist aus.','Music is off.'));pr('#asSeg',S.opt.as);
   const ck=(id,v)=>{const e=document.getElementById(id);if(e.checked!==!!v) e.checked=!!v;};
-  ck('titleChk',S.opt.title);ck('shakeChk',S.opt.shake!==false);ck('startChk',S.opt.start!==false);ck('ntfBChk',S.opt.ntfB);ck('ecoChk',S.opt.eco);ck('bgmChk',S.opt.bgm);ck('askChk',S.opt.ask);
+  ck('titleChk',S.opt.title);ck('shakeChk',S.opt.shake!==false);ck('startChk',S.opt.start!==false);ck('ntfBChk',S.opt.ntfB);ck('ecoChk',S.opt.eco);ck('hcChk',!!S.opt.hc);ck('bgmChk',S.opt.bgm);ck('askChk',S.opt.ask);
   document.querySelectorAll('#snList [data-sn]').forEach(x=>{const v=S.opt.sn[x.dataset.sn]!==false;if(x.checked!==v) x.checked=v;});
   document.querySelectorAll('#lookSeg [data-look]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.look===S.opt.look?'true':'false'));
   const cc=document.getElementById('compactChk');if(cc.checked!==!!S.opt.compact) cc.checked=!!S.opt.compact;
@@ -7256,6 +7428,7 @@ function unlockSec(g,titleKey,list){
 }
 const ADM_TABS=[['lb','Bestenliste','Leaderboard'],['online','Online','Online'],['mod','Moderation','Moderation'],['srv','Server','Server'],['quick','Schnell','Quick'],['val','Werte','Values'],['bld','Gebäude','Buildings'],['unl','Freischalten','Unlock'],['world','Welt & Held','World & hero'],['end','Endgame','Endgame'],['tool','Werkzeuge','Tools']];
 let admTab='quick',admPass='';
+const ADM_ONLINE=['lb','online','mod','srv'];
 function admXV(){
   const X={};
   MATS.forEach(m=>{X['mat_'+m.id]=[()=>S.w.mat[m.id],v=>{S.w.mat[m.id]=Math.floor(v);},m.n];});
@@ -7354,7 +7527,7 @@ function buildAdmin(){
     +admCard(tr('adm_reset'),'<div class="btns">'+ab('reset:admin',tr('adm_reset_btn'))+'</div>');
   P.lb='<div id="admLb" class="admlb"></div>';P.online='<div id="admOn" class="admlb"></div><div id="admAcc" class="admlb" style="margin-top:10px"></div><div id="admClub" class="admlb" style="margin-top:10px"></div>';P.mod='<div id="admMod" class="admlb"></div>';P.srv='<div id="admSrv" class="admlb"></div>';
   let h='<div class="admlockbar"><button type="button" class="btn sm" id="admLockBtn">'+tt('Admin sperren','Lock admin')+'</button></div><div class="admhead"><div class="admstats">'+[['ck',tt('Kekse','Cookies')],['kps',tt('pro Sek.','per sec')],['clk',tt('pro Klick','per click')],['chips',tt('Chips','Chips')],['spd',tt('Tempo','Speed')]].map(([k,l])=>'<span><small>'+l+'</small><b data-al="'+k+'"></b></span>').join('')+'</div>'
-    +'<input type="search" class="setq" id="admQ" autocomplete="off" placeholder="'+tt('Admin durchsuchen …','Search admin …')+'"><div class="seg admseg" id="admSeg">'+ADM_TABS.map(t=>'<button type="button" data-ap="'+t[0]+'" aria-pressed="'+(t[0]===admTab)+'">'+tt(t[1],t[2])+'</button>').join('')+'</div></div>'
+    +'<input type="search" class="setq" id="admQ" autocomplete="off" placeholder="'+tt('Admin durchsuchen …','Search admin …')+'"><div class="seg admgrp" id="admGrp" role="group"><button type="button" data-ag="game">'+tt('Spiel','Game')+'</button><button type="button" data-ag="online">'+tt('Online','Online')+'</button></div><div class="seg admseg" id="admSeg">'+ADM_TABS.map(t=>'<button type="button" data-ap="'+t[0]+'" data-g="'+(ADM_ONLINE.includes(t[0])?'online':'game')+'" aria-pressed="'+(t[0]===admTab)+'">'+tt(t[1],t[2])+'</button>').join('')+'</div></div>'
     +ADM_TABS.map(t=>'<div class="admpane" data-ap="'+t[0]+'">'+P[t[0]]+'</div>').join('')+'<p class="small" id="admNone" hidden>'+tt('Nichts gefunden.','Nothing found.')+'</p>';
   els.admin.innerHTML=h;
   admShow();
@@ -7366,9 +7539,13 @@ function admShow(){
   els.admin.querySelectorAll('.admpane').forEach(p=>{p.hidden=!q&&p.dataset.ap!==admTab;});
   els.admin.querySelectorAll('.admitem').forEach(it=>{const show=!q||(it.dataset.k+' '+it.textContent).toLowerCase().includes(q);it.hidden=!show;if(show&&(q||it.closest('.admpane').dataset.ap===admTab)) n++;});
   els.admin.querySelectorAll('#admSeg [data-ap]').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.ap===admTab?'true':'false'));
+  const grp=ADM_ONLINE.includes(admTab)?'online':'game',sg=document.getElementById('admSeg');if(sg) sg.dataset.grp=q?'':grp;
+  els.admin.querySelectorAll('#admGrp [data-ag]').forEach(b=>b.setAttribute('aria-pressed',!q&&b.dataset.ag===grp?'true':'false'));
   const no=document.getElementById('admNone');if(no) no.hidden=n>0;
 }
 els.admin.addEventListener('input',e=>{if(e.target.id==='admQ') admShow();});
+/* Admin in zwei Gruppen: Spiel und Online */
+els.admin.addEventListener('click',e=>{const g=e.target.closest('#admGrp [data-ag]');if(!g) return;const cur=ADM_ONLINE.includes(admTab)?'online':'game';if(g.dataset.ag===cur) return;const first=els.admin.querySelector('#admSeg [data-g="'+g.dataset.ag+'"]');if(first) first.click();});
 els.admin.addEventListener('click',e=>{const b=e.target.closest('#admSeg [data-ap]');if(!b) return;admTab=b.dataset.ap;const q=document.getElementById('admQ');if(q) q.value='';admShow();},true);
 function admScanFix(){
   let n=0;const walk=(o,d)=>{if(!o||typeof o!=='object'||d>8) return;for(const k in o){const v=o[k];if(typeof v==='number'&&!isFinite(v)){o[k]=0;n++;}else if(v&&typeof v==='object') walk(v,d+1);}};
@@ -7970,7 +8147,7 @@ function updV34Txt(){
   set('shareT',tt('Teilen','Share'));
   set('shareP',tt('Kopiere diesen Text und schick ihn deinen Freunden.','Copy this text and send it to your friends.'));
   set('shareCopy',tt('Kopieren','Copy'));set('shareClose',tt('Schließen','Close'));
-  updApp();renderLb();updDev();updShopNav();updV42Txt();accRender();if(v44Ready) clubRender();
+  updApp();renderLb();updDev();updShopNav();updV42Txt();accRender();if(v44Ready) clubRender();if(typeof updV47Txt==='function'&&$id('saveMoreT')) updV47Txt();
 }
 
 /* ======================= V35/V40: Bestenliste ======================= */
@@ -9124,6 +9301,28 @@ els.admin.addEventListener('submit',async e=>{
   if(r&&r.restored) toast(tt('Konto wiederhergestellt. Der Spieler lädt es beim nächsten Anmelden.','Account restored. The player gets it the next time they sign in.'),true);
 });
 v46Ready=true;
+
+/* ======================= V47: Aufgeräumte Einstellungen ======================= */
+/* Speichern: Konto zuerst, dann Speichern; alles andere unter „Weitere Möglichkeiten“. */
+(function(){
+  const secs=[...document.querySelectorAll('#setOv .optsec[data-sc="save"]')];
+  const acc=secs.find(x=>x.querySelector('#accBox')),main=secs.find(x=>x.querySelector('#saveBtn'));
+  if(!acc||!main) return;
+  main.parentNode.insertBefore(acc,main);
+  const det=document.createElement('details');det.className='optsec fold savemore';det.dataset.sc='save';
+  det.innerHTML='<summary id="saveMoreT"></summary>';
+  main.after(det);
+  secs.filter(x=>x!==acc&&x!==main).forEach(x=>det.appendChild(x));
+})();
+function updV47Txt(){
+  set$('saveMoreT',tt('Weitere Möglichkeiten: Speicherplätze, Backups, Datei, Transfer-Code, Text','More options: save slots, backups, file, transfer code, text'));
+  set$('helpSetT',tt('Hilfe und Teilen','Help and sharing'));
+  set$('helpSetBtn',tt('❓ Hilfe öffnen','❓ Open help'));
+  set$('shareSetBtn',tt('📣 Spiel teilen','📣 Share the game'));
+}
+$id('helpSetBtn').addEventListener('click',()=>{closeSettings();openHelp();});
+$id('shareSetBtn').addEventListener('click',()=>{closeSettings();$id('shareBtn').click();});
+updV47Txt();
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};
