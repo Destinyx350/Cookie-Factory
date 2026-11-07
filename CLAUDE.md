@@ -76,6 +76,12 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Client is the `V42` block. Event multipliers live in `GEV` and are applied in `recalc()` and `ordReward()`. Every player gets an anonymous id (`kfId()`, stored in `S.lb.id`) for pings and server codes.
 - Cloud transfer uploads the same sealed text as a save file, so the anti-cheat seal still applies.
 
+## Accounts (version 43)
+
+- Server side is `docs/accounts-v4.sql` (needs `leaderboard-v2.sql`): `kf_accounts` (bcrypt via pgcrypto in schema `extensions`), `kf_sessions` (only sha256 of tokens stored), `kf_login_fails` (8 wrong tries lock a name for 15 min; `acc_login` returns `{error}` instead of raising so the failure is recorded).
+- Client is the `V43` block. The session token lives in `localStorage['keksfabrik-session']`, never in the save. Account saves use the sealed save text. Auto-save every 5 minutes and on `pagehide` (keepalive).
+- Never name a form field `id`: `form.id` then returns that field instead of the form's id (use `getAttribute('id')`).
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass. After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.
