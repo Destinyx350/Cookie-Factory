@@ -55,7 +55,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. Shared links show a preview card. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
 | 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
-| 🔒 **Protected admin panel** | The admin panel needs a password, and the online tools have a second password with a lockout after wrong tries. The admin can moderate reports, find players, mute, rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and see how far new players get (day 2 and day 7 return rates). |
+| 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries. The admin can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and see how far new players get (day 2 and day 7 return rates). |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
 ### 🕹️ How to play
@@ -97,7 +97,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit; Wochen- und Monatspreise für die Top 3, Updates jede Minute
 - 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, und die Bestenliste lehnt zu schnell wachsende Punkte ab; dazu Wortfilter, Melde-Knopf im Club-Chat und Limits pro Gerät
-- 🔒 **Admin-Panel mit Passwort** und eigenem Server-Passwort für die Online-Werkzeuge: Meldungen, Spielersuche, Stummschalten, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte und Spieler-Weg
+- 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort und eigenem Server-Passwort für die Online-Werkzeuge: Meldungen, Spielersuche, Stummschalten, Sperren, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte und Spieler-Weg
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
 **[▶ Jetzt spielen](https://destinyx350.github.io/Cookie-Factory/)**
@@ -106,19 +106,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 51
-- **New:** Welcome-back gift. Come back after 3 or more days and get up to 50 gems plus 30 minutes of cookies. With push notifications on, the game reminds you.
-- **New:** Club chat reactions (👍 ❤️ 😂 🎉 🍪), a 👋 wave button, and the club leader can pin a message to the top.
-- **Changed:** Errors in the game are reported automatically and anonymously, so they get fixed faster.
-- **Changed:** The game can also run on game sites like itch.io.
+### Version 52
+- **Changed:** The game is about 10% smaller and loads faster. The admin tools are no longer inside the game, and the Admin tab is gone.
+- **New:** Players who break the rules can now be banned. Banned players see the reason and how long the ban lasts.
+
+Also new since version 51: a welcome-back gift after 3+ days away, reactions and pinned messages in club chat, and the game on sites like itch.io.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Willkommensgeschenk. Wer nach 3 oder mehr Tagen zurückkommt, bekommt bis zu 50 Edelsteine und 30 Minuten Kekse. Mit Push-Benachrichtigungen erinnert dich das Spiel daran.
-- **Neu:** Reaktionen im Club-Chat (👍 ❤️ 😂 🎉 🍪), ein 👋-Knopf zum Winken, und der Club-Chef kann eine Nachricht oben anheften.
-- **Geändert:** Fehler im Spiel werden automatisch und anonym gemeldet, damit sie schneller behoben werden.
-- **Geändert:** Das Spiel läuft jetzt auch auf Spieleseiten wie itch.io.
+- **Geändert:** Das Spiel ist rund 10 % kleiner und lädt schneller. Die Admin-Werkzeuge stecken nicht mehr im Spiel, und der Admin-Tab ist weg.
+- **Neu:** Wer gegen die Regeln verstößt, kann jetzt gesperrt werden. Gesperrte Spieler sehen den Grund und wie lange die Sperre dauert.
+
+Außerdem neu seit Version 51: ein Willkommensgeschenk nach 3+ Tagen Pause, Reaktionen und angeheftete Nachrichten im Club-Chat und das Spiel auf Seiten wie itch.io.
 
 </details>
 
@@ -128,7 +128,7 @@ Older updates are listed in the game under **What's New**.
 
 ## 💻 Run it locally
 
-Players get a single `index.html` file. It is built from the parts in `src/` with `node tools/build.js` (no other tools needed). `manifest.webmanifest`, `sw.js` and the `icons` folder make it installable as an app. Download the files and open `index.html` in your browser, or serve the folder:
+Players get a single `index.html` file. It is built from the parts in `src/` with `node tools/build.js` (no other tools needed), which also builds `admin.html`, the owner's version with the admin panel. `manifest.webmanifest`, `sw.js` and the `icons` folder make it installable as an app. Download the files and open `index.html` in your browser, or serve the folder:
 
 ```bash
 python3 -m http.server 8000

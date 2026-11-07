@@ -2,12 +2,12 @@
 const { chromium } = require('playwright');
 const fs = require('fs'), path = require('path');
 const { pool, handle, check, ADMIN_PASS, LB, ROOT } = require('./lib');
-const ADM_HASH = /ADM_HASH='([0-9a-f]+)'/.exec(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'))[1];
+const ADM_HASH = /ADM_HASH='([0-9a-f]+)'/.exec(fs.readFileSync(path.join(ROOT, 'admin.html'), 'utf8'))[1];
 const PHONE = { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true };
 
 module.exports = async function browserTests(url) {
   console.log('\nBrowser');
-  await pool.query("delete from kf_backups; delete from kf_accounts; delete from kf_clubs; delete from leaderboard; delete from lb_period; delete from kf_rate; delete from kf_admin_fails; delete from kf_reports; delete from kf_mail; delete from kf_news; delete from kf_events; delete from kf_errors; delete from kf_steps; delete from kf_days; update kf_config set v = '{\"on\":false,\"de\":\"\",\"en\":\"\"}' where k = 'maint'");
+  await pool.query("delete from kf_backups; delete from kf_accounts; delete from kf_clubs; delete from leaderboard; delete from lb_period; delete from kf_rate; delete from kf_admin_fails; delete from kf_reports; delete from kf_mail; delete from kf_news; delete from kf_events; delete from kf_errors; delete from kf_steps; delete from kf_days; delete from kf_bans; delete from kf_device_bans; update kf_config set v = '{\"on\":false,\"de\":\"\",\"en\":\"\"}' where k = 'maint'");
   const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
   const errors = [];
   async function device(name, ip, opts = {}, admin = false) {
@@ -18,7 +18,7 @@ module.exports = async function browserTests(url) {
     const p = await ctx.newPage();
     p.on('pageerror', e => errors.push(name + ': ' + e.message));
     p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|ERR_FAILED/.test(m.text())) errors.push(name + ': ' + m.text()); });
-    await p.goto(url);
+    await p.goto(admin ? url + 'admin.html' : url);
     await p.locator('#startOv [data-lang=en]').click();
     await p.click('#stGo');
     if (await p.isVisible('#nameOv')) { await p.fill('#nameIn', name); await p.click('#nameOk'); }
@@ -208,6 +208,24 @@ module.exports = async function browserTests(url) {
   check(await pp.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length === 0), 'portal version: no offline service worker');
   check(await pp.evaluate(() => document.getElementById('appT').parentElement.hidden), 'portal version: the app install section is hidden');
   await pctx.close();
+
+  // 5f. Player version has no admin code; account bans (v52)
+  check(!(await a.evaluate(() => !!document.querySelector('[data-sp=admin]') || !!document.getElementById('admin') || typeof window.buildAdmin !== 'undefined')), 'the player version has no admin tab or panel');
+  check(!/admin_mod|admin_bans|ADM_HASH|admSrvLogin/.test(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')), 'the player file contains no admin code');
+  check(await d.evaluate(() => !!document.querySelector('[data-sp=admin]')), 'admin.html has the admin tab');
+  await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="mod"]');
+  await d.waitForSelector('#admBanF', { timeout: 10000 });
+  await d.fill('#admBanF [name=user]', 'gamma_ci'); await d.selectOption('#admBanF [name=hours]', '0'); await d.fill('#admBanF [name=reason]', 'spam in chat');
+  await d.click('#admBanF button[type=submit]'); await d.click('#admBanF button[type=submit]'); await d.waitForTimeout(1500);
+  check((await pool.query("select count(*)::int n from kf_bans where username = 'gamma_ci' and until is null")).rows[0].n === 1, 'admin bans an account from the Moderation tab');
+  check(/gamma_ci/.test(await text(d, '#admMod')) && await d.isVisible('[data-ban="unban:gamma_ci"]'), 'the ban shows in the ban list');
+  await goals(c); await c.click('#clubBar'); await c.waitForSelector('#banOv', { timeout: 10000 }).catch(() => {});
+  check(/spam in chat/.test(await text(c, '#banOv')), 'the banned player sees the ban and the reason');
+  check(!(await c.evaluate(() => !!localStorage.getItem('keksfabrik-session'))), 'the banned player is signed out');
+  await c.click('#banOk'); await c.click('#clubClose').catch(() => {});
+  await d.click('[data-ban="unban:gamma_ci"]'); await d.waitForTimeout(1200);
+  check((await pool.query('select count(*)::int n from kf_bans')).rows[0].n === 0, 'admin unbans the account');
+  await d.click('#setClose');
 
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {

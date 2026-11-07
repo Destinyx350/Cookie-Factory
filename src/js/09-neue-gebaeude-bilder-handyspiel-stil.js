@@ -44,8 +44,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=51;
+const NEWS_VER=52;
 const NEWS=[
+  {v:52,sum:['Schneller laden und mehr Schutz vor Regelbrechern.','Faster loading and better protection from rule-breakers.'],items:[
+    ['change','Das Spiel ist rund 10 % kleiner und lädt schneller: Die Admin-Werkzeuge stecken nicht mehr im Spiel, und der Admin-Tab ist weg.','The game is about 10% smaller and loads faster: the admin tools are no longer inside the game, and the Admin tab is gone.'],
+    ['new','Wer gegen die Regeln verstößt, kann jetzt gesperrt werden. Gesperrte Spieler sehen den Grund und wie lange die Sperre dauert.','Players who break the rules can now be banned. Banned players see the reason and how long the ban lasts.']
+  ]},
   {v:51,sum:['Neu: Willkommensgeschenk, Reaktionen und angeheftete Nachrichten im Club-Chat!','New: a welcome-back gift, plus reactions and pinned messages in club chat!'],items:[
     ['new','Willkommensgeschenk: Wer nach 3 oder mehr Tagen zurückkommt, bekommt Edelsteine (bis zu 50) und 30 Minuten Kekse geschenkt.','Welcome-back gift: come back after 3 or more days and get up to 50 gems and 30 minutes of cookies.'],
     ['new','Club-Chat: Reagiere mit 👍 ❤️ 😂 🎉 🍪 auf Nachrichten, wink deinem Club mit 👋 zu, und der Club-Chef kann eine Nachricht oben anheften.','Club chat: react to messages with 👍 ❤️ 😂 🎉 🍪, wave to your club with 👋, and the club leader can pin a message to the top.'],

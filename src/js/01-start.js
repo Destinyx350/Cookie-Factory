@@ -19,3 +19,5 @@
 })();
 (function(){
 'use strict';
+/* Admin-Haken: Nur admin.html trägt hier Funktionen ein. Im Spiel für Spieler bleibt das leer. */
+const ADMH={on:false};

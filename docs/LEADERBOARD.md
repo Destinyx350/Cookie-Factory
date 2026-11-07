@@ -63,8 +63,9 @@ Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.
 7. [`social-v8.sql`](social-v8.sql): player profiles, friends, weekend club wars and invite bonuses.
 8. [`push-v9.sql`](push-v9.sql): push notifications (also needs the edge function, see [PUSH.md](PUSH.md)).
 9. [`insights-v10.sql`](insights-v10.sql): crash reports and the player journey (admin **Server** tab), push reminders for players away 3+ days, and club chat reactions and pinned messages.
+10. [`admin-v11.sql`](admin-v11.sql): account bans (sign-in and every online feature blocked, with the reason shown; optionally the player's devices too).
 
-The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password.
+The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password. Since version 52 the admin panel is only in `admin.html` (https://destinyx350.github.io/Cookie-Factory/admin.html), not in the game players get.
 
 ## Anti-cheat
 

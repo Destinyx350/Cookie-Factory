@@ -199,7 +199,7 @@
 </div>
 <div class="overlay" id="setOv" hidden><div class="dlg wide" role="dialog" aria-modal="true" aria-labelledby="setT"><div class="dhead"><h2 id="setT" data-i18n="settings"></h2><button type="button" class="btn sm" id="setClose" data-i18n="news_close"></button></div>
 <input type="search" id="setQ" class="setq" autocomplete="off">
-<div class="seg setseg" id="setSeg"><button type="button" data-sp="disp" aria-pressed="true"></button><button type="button" data-sp="snd" aria-pressed="false"></button><button type="button" data-sp="game" aria-pressed="false"></button><button type="button" data-sp="save" aria-pressed="false"></button><button type="button" data-sp="admin" aria-pressed="false" data-i18n="tab_admin"></button></div>
+<div class="seg setseg" id="setSeg"><button type="button" data-sp="disp" aria-pressed="true"></button><button type="button" data-sp="snd" aria-pressed="false"></button><button type="button" data-sp="game" aria-pressed="false"></button><button type="button" data-sp="save" aria-pressed="false"></button><!--admin--><button type="button" data-sp="admin" aria-pressed="false" data-i18n="tab_admin"></button><!--/admin--></div>
 <p class="small" id="setNone" hidden></p>
 <div class="spane" data-spane="opt">
         <div class="optsec" data-sc="disp">
@@ -341,9 +341,10 @@
           <div class="btns"><button type="button" class="btn" id="resetBtn"></button></div>
         </div>
 </div>
-<div class="spane" data-spane="admin" hidden>
+<!--admin--><div class="spane" data-spane="admin" hidden>
         <div id="admin"></div>
 </div>
+<!--/admin-->
 </div></div>
 <div class="overlay" id="newsOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="newsT"><div class="dhead"><h2 id="newsT" data-i18n="news_title"></h2><button type="button" class="btn sm" id="newsClose" data-i18n="news_close"></button></div><div id="newsBody"></div></div></div>
 <div class="overlay" id="nameOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="nameT"><h2 id="nameT"></h2><p id="nameP"></p><form id="nameForm" novalidate><input type="text" id="nameIn" class="namein" maxlength="20" autocomplete="off" spellcheck="false"><p class="nameerr" id="nameErr" aria-live="polite"></p><div class="btns"><button type="submit" class="btn primary" id="nameOk"></button><button type="button" class="btn" id="nameCancel"></button></div></form></div></div>
