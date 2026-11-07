@@ -57,7 +57,10 @@ Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.
 2. [`accounts-v4.sql`](accounts-v4.sql): username + password accounts with a cloud save.
 3. [`clubs-v5.sql`](clubs-v5.sql): bakery clubs (up to 30 members, club chat, weekly prizes for the top 3 clubs) and gifts (daily limits: 50 gems, 5 star crumbs and 10 gifts sent; 60 gems and 6 star crumbs received).
 
-The admin panel's **Online** tab manages codes, announcements, events, accounts, clubs and chat messages.
+4. [`lock-internal-functions.sql`](lock-internal-functions.sql): closes internal helper functions to players (only needed for projects set up before it existed).
+5. [`security-v6.sql`](security-v6.sql): the separate server admin password with lockout, per-device limits, the word filter, reports, mutes, admin mail, feature switches, maintenance mode, statistics, the admin log and seasons. Then run the one-line server password setup the owner received privately.
+
+The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password.
 
 ## Anti-cheat
 

@@ -43,15 +43,15 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
 | 📐 **Fits every device** | Separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. |
-| 👤 **Accounts** | Create an account with a username and password (no email needed). Your bakery is saved to it automatically, so you can keep playing on any device. |
+| 👤 **Accounts** | Create an account with a username and password (no email needed). Your bakery is saved to it automatically, so you can keep playing on any device. Sign out other devices at any time. |
 | 👥 **Bakery clubs** | Start or join a club of up to 30 bakers, chat with your club, and bake together for weekly prizes for the top 3 clubs. |
 | 🎁 **Gifts** | Send gems or star crumbs to friends with an account (daily limits keep it fair). |
 | 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter, server codes, and a transfer code to move your save to another device. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
-| 🛡️ **Anti-cheat** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. |
-| 🔒 **Protected admin panel** | The admin panel needs a password, so regular players can't use it. |
+| 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
+| 🔒 **Protected admin panel** | The admin panel needs a password, and the online tools have a second password with a lockout after wrong tries. The admin can moderate reports, find players, mute, rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, and start new leaderboard seasons. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
 ### 🕹️ How to play
@@ -88,8 +88,8 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit; Wochen- und Monatspreise für die Top 3, Updates jede Minute
-- 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, und die Bestenliste lehnt zu schnell wachsende Punkte ab
-- 🔒 **Admin-Panel mit Passwort**, damit nicht jeder es benutzen kann
+- 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, und die Bestenliste lehnt zu schnell wachsende Punkte ab; dazu Wortfilter, Melde-Knopf im Club-Chat und Limits pro Gerät
+- 🔒 **Admin-Panel mit Passwort** und eigenem Server-Passwort für die Online-Werkzeuge: Meldungen, Spielersuche, Stummschalten, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll und Saisons
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
 **[▶ Jetzt spielen](https://destinyx350.github.io/Cookie-Factory/)**
@@ -98,19 +98,23 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 44
-- **New:** Bakery clubs! Open the **Goals** tab and tap **Bakery clubs** to start a club or join one. Up to 30 members, with a club chat.
-- **New:** Weekly club prizes: the 3 clubs that bake the most cookies in a week win gems and cookies for every member who helped.
-- **New:** Gifts: send gems or star crumbs to other players. They get them the next time they play.
-- Clubs and gifts need an account (**Settings → Saving**).
+### Version 45
+- **New:** Report unkind club chat messages with ⚑. The admin sees every report.
+- **New:** **Sign out other devices** under **Settings → Saving**. Changing your password signs out other devices too.
+- **New:** Messages and gifts from the admin arrive right in your game, and the leaderboard has a **hall of fame** for past seasons.
+- **Changed:** A word filter blocks rude words in usernames, club names, chat and leaderboard names.
+- **Changed:** Sending gifts needs an account that is a day old and has baked 1 million cookies, so fake accounts can't farm gifts.
+- **Changed:** Stronger protection: per-device limits, a stricter limit on score jumps, and a website security rule that only allows the game's own code.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Bäckerei-Clubs! Öffne den Tab **Ziele** und tippe auf **Bäckerei-Clubs**, um einen Club zu gründen oder einem beizutreten. Bis zu 30 Mitglieder, mit Club-Chat.
-- **Neu:** Wöchentliche Club-Preise: Die 3 Clubs, die in einer Woche die meisten Kekse backen, gewinnen Edelsteine und Kekse für jedes Mitglied, das mitgebacken hat.
-- **Neu:** Geschenke: Schicke anderen Spielern Edelsteine oder Sternenkrümel. Sie bekommen sie beim nächsten Spielen.
-- Clubs und Geschenke brauchen ein Konto (**Einstellungen → Speichern**).
+- **Neu:** Melde unfreundliche Nachrichten im Club-Chat mit ⚑. Der Admin sieht jede Meldung.
+- **Neu:** **Andere Geräte abmelden** unter **Einstellungen → Speichern**. Wenn du dein Passwort änderst, werden andere Geräte auch abgemeldet.
+- **Neu:** Nachrichten und Geschenke vom Admin kommen direkt in dein Spiel, und die Bestenliste hat eine **Ruhmeshalle** für frühere Saisons.
+- **Geändert:** Ein Wortfilter blockiert unfreundliche Wörter in Benutzernamen, Clubnamen, im Chat und in der Bestenliste.
+- **Geändert:** Geschenke senden geht ab einem Tag Kontoalter und 1 Million gebackenen Keksen, damit Fake-Konten keine Geschenke sammeln.
+- **Geändert:** Besserer Schutz: Limits pro Gerät, eine strengere Grenze für Punkte-Sprünge und eine Sicherheitsregel, die nur den Code des Spiels erlaubt.
 
 </details>
 

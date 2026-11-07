@@ -90,6 +90,18 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Gift limits: a sender 50 gems, 5 star crumbs and 10 gifts per UTC day; a receiver 60 gems and 6 star crumbs. The client takes the gift from the sender's save after `gift_send` succeeds, and gifting is blocked when `lbCheat()`.
 - Client is the `V44` block. `social_claim` (every 2 minutes and when the club dialog opens) hands out gifts and club prizes once; prizes are in `CLUB_PRIZE`. Admin tools: `admin_clubs` (list, delete a club, delete a chat message), shown in the admin Online tab.
 
+## Security and admin tools (version 45)
+
+- Server side is `docs/security-v6.sql` (needs parts 1–5). It turns off Supabase's default execute grant for new functions and removes all rights from `authenticated`.
+- **Server admin password** is separate from the in-game panel password and stored as bcrypt in `kf_admin_auth`. `admin_login` returns `{error}` instead of raising (5 wrong tries per device, 30 overall, lock for 15 min) and gives a 12-hour session token. `lb_admin_ok(p_pass)` now checks that token, so every `admin_*` function takes the token in `p_pass`. The client keeps it in `sessionStorage['keksfabrik-admtok']`. The bcrypt insert line is given to the owner in chat only; never commit it or the password.
+- **Per-device limits:** `kf_ip()` hashes the address from `request.headers`; `kf_rate_hit(kind, max, window)` limits sign-ups, clubs, cloud codes, gifts and reports. Without a known address only the older global limits apply.
+- **Word filter:** `kf_text_ok()` with words in `kf_badwords` (leetspeak mapped, short words match whole words only). Used for usernames, club names, chat, gift notes and leaderboard names.
+- **Gifts** need an account at least 24 h old with `club_hw` ≥ 1e6. **Mutes** (`kf_mutes`) block chat and gifts. **Reports** (`kf_reports`, `club_report`) show in the admin Moderation tab.
+- `kf_config` holds feature switches (`feat`), maintenance mode (`maint`) and the minimum version (`min_ver`); `kf_live()` returns them as `cfg`, so every player gets them with the minute ping (`cfgApply`, `featOn`, `#maintOv`).
+- Score growth is capped at 10x per 5 minutes but at most 10^12 for one jump (`least(12*hrs, 12)` in `submit_score` and `kf_ping`, mirrored in `lbCapped()`).
+- Admin tools: `admin_mod` (search, mail, mute, reports, rename, words, settings, stats, log, seasons). Changes made with any `admin_*` function are written to `kf_admin_log`. Client is the `V45` block (Moderation and Server tabs). Never reuse a function name from elsewhere in `index.html` (an `admSet` clash broke the value editor once).
+- `index.html` has a Content-Security-Policy meta tag. A new external host (fonts, API) must be added there.
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass. After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.
