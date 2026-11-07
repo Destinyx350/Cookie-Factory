@@ -1,6 +1,13 @@
 # Cookie Factory (Keksfabrik): rules for every change
 
-The game is one file, `index.html`. `manifest.webmanifest`, `sw.js` (offline support) and `icons/` make it installable as an app. It is published with GitHub Pages from the `main` branch.
+Players get one file, `index.html`. `manifest.webmanifest`, `sw.js` (offline support) and `icons/` make it installable as an app. It is published with GitHub Pages from the `main` branch.
+
+## Source parts and the build
+
+- **Edit the parts in `src/`, never `index.html` directly.** `src/page/*.html` (page skeleton), `src/css/*.css` (the stylesheet in order), `src/js/*.js` (the one big script, split at its section markers). `src/order.txt` lists the order.
+- After every change run `node tools/build.js`; it joins the parts into `index.html`. Commit both. GitHub's `Tests` check runs `node tools/build.js --check` and fails if `index.html` doesn't match `src/`.
+- The script parts are one shared scope (one IIFE across the files): a name declared in one part is visible in all later parts, and top-level names must stay unique across all parts.
+- New feature blocks go in a new `src/js/NN-vXX-….js` file, placed in `src/order.txt` before `44-v40-admin-bestenliste-verwalten.js` (like the V42–V49 blocks), and new CSS at the end of `src/css/08-clean-v47-v48.css` or in a new CSS file listed after it.
 
 ## Every update must also update the docs
 

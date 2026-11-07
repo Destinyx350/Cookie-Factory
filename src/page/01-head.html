@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self' https://nmmlemtljjvfurlrvuvm.supabase.co; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="description" content="Keksfabrik / Cookie Factory: Backe, baue und erobere das Keks-Universum! Kostenloses Idle-Spiel im Browser.">
+<meta name="theme-color" content="#1a1036">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cookie Factory · Keksfabrik">
+<meta property="og:title" content="Cookie Factory · Keksfabrik – free idle game">
+<meta property="og:description" content="Bake, build and conquer the cookie universe! Free in your browser, no install. · Backe, baue und erobere das Keks-Universum!">
+<meta property="og:url" content="https://destinyx350.github.io/Cookie-Factory/">
+<meta property="og:image" content="https://destinyx350.github.io/Cookie-Factory/docs/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Cookie Factory: a big cookie and the game title">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Keksfabrik">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<script>
+/* V39: Gerät erkennen, bevor die Seite gezeichnet wird. */
+(function(){
+  var de=document.documentElement,mm=function(q){try{return matchMedia(q).matches}catch(e){return false}};
+  function detect(){
+    var w=innerWidth,h=innerHeight,sh=Math.min(w,h),ua=navigator.userAgent||'',tp=navigator.maxTouchPoints||0;
+    var coarse=mm('(pointer: coarse)'),hover=mm('(hover: hover)');
+    var touch=coarse||(!hover&&tp>0);
+    var ipad=/iPad/.test(ua)||(navigator.platform==='MacIntel'&&tp>1);
+    var phoneUA=!ipad&&/iPhone|iPod|Android.+Mobile|Windows Phone/.test(ua);
+    var auto=touch?((phoneUA||sh<600)?'phone':'tablet'):(w<600?'phone':w<1000?'tablet':'desktop');
+    var pick=null;try{pick=localStorage.getItem('keksfabrik-device');}catch(e){}
+    var dev=(pick==='phone'||pick==='tablet'||pick==='desktop')?pick:auto;
+    var o=w>h?'landscape':'portrait',inp=touch?'touch':'mouse';
+    if(de.dataset.device!==dev) de.dataset.device=dev;
+    if(de.dataset.orient!==o) de.dataset.orient=o;
+    if(de.dataset.input!==inp) de.dataset.input=inp;
+    return {device:dev,auto:auto,pick:pick||'auto',orient:o,input:inp};
+  }
+  window.__kfDevice=detect;detect();
+  var t=0;addEventListener('resize',function(){clearTimeout(t);t=setTimeout(function(){detect();if(window.__kfDeviceChanged) window.__kfDeviceChanged();},120);});
+})();
+</script>
+<title>Keksfabrik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>

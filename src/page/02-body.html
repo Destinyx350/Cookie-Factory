@@ -1,0 +1,370 @@
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brandrow"><span class="logo" id="logo" aria-hidden="true"></span><h1 id="brand" data-i18n="brand">Keksfabrik</h1><span class="plname" id="plName" hidden></span><button type="button" class="ttlchip" id="ttlChip" hidden></button></div>
+    <div class="topr">
+      <div class="seg langseg" role="group" aria-label="Sprache / Language">
+        <button type="button" data-lang="de" aria-pressed="true">DE</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="btn iconbtn ntfbtn" id="ntfBtn" aria-label="Meldungen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="badge nb" id="ntfBadge" hidden>0</span></button>
+      <span class="note" id="saveNote"></span>
+      <button type="button" class="btn newsbtn" id="newsBtn"><span class="nico" aria-hidden="true"></span><span data-i18n="news"></span><span class="badge" id="newsBadge" hidden data-i18n="news_tag"></span></button>
+      <button type="button" class="btn iconbtn" id="installBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></button><button type="button" class="btn iconbtn lbtb" id="lbTopBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg><span class="badge nb" id="lbTopRk" hidden></span></button><button type="button" class="btn iconbtn" id="shareBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button><button type="button" class="btn iconbtn" id="helpBtn" aria-label="Hilfe / Help" style="font:700 18px/1 var(--font-display)">?</button><button type="button" class="btn iconbtn" id="setBtn" data-aria="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    </div>
+  </header>
+  <div class="curbar" id="curBar" hidden></div>
+
+  <div class="game">
+    <section class="stage" id="stage">
+      <canvas id="rain" aria-hidden="true"></canvas>
+      <div class="stage-in">
+        <div class="count" id="count">0</div>
+        <div class="unit" data-i18n="cookies"></div>
+        <div class="kps"><span data-i18n="per_sec"></span> <span id="kps">0</span></div><div class="qchip" id="qChip" hidden></div>
+        <div class="wxfx" id="wxfx" aria-hidden="true"></div>
+        <div class="buffs" id="buffs"></div><div class="gevbar" id="gevBar" hidden></div>
+        <div class="combo" id="combo" hidden><b id="comboT"></b><span class="cbar"><i id="comboW"></i></span></div>
+        <div class="cookie-stage" id="cookieStage">
+          <button type="button" class="cookie" id="cookie" data-aria="aria_cookie"></button>
+        </div>
+        <p class="bhint" id="hint" aria-live="polite" hidden></p>
+        <dl class="mini">
+          <div><dt data-i18n="per_click"></dt><dd id="perClick">1</dd></div>
+          <div><dt data-i18n="this_run"></dt><dd id="run">0</dd></div>
+          <div><dt data-i18n="chips"></dt><dd id="chips">0</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="store">
+      <div class="hints" id="hints" hidden></div>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="build" aria-selected="true"><span data-i18n="tab_build"></span></button>
+        <button class="tab" role="tab" data-tab="up" aria-selected="false" tabindex="-1"><span data-i18n="tab_up"></span><span class="badge" id="upBadge" hidden>0</span></button>
+        <button class="tab" role="tab" data-tab="work" aria-selected="false" tabindex="-1"><span data-i18n="tab_work"></span></button>
+        <button class="tab" role="tab" data-tab="orders" aria-selected="false" tabindex="-1"><span data-i18n="tab_orders"></span></button>
+        <button class="tab" role="tab" data-tab="world" aria-selected="false" tabindex="-1"><span data-i18n="tab_world"></span><i class="dot" id="wDot" hidden></i></button>
+        <button class="tab" role="tab" data-tab="ach" aria-selected="false" tabindex="-1"><span data-i18n="tab_ach"></span><i class="dot" id="gDot" hidden></i></button>
+        <button class="tab" role="tab" data-tab="shop" aria-selected="false" tabindex="-1"><span data-i18n="tab_shop"></span><i class="dot" id="shDot" hidden></i></button>
+        <button class="tab" role="tab" data-tab="asc" aria-selected="false" tabindex="-1"><span data-i18n="tab_asc"></span><span class="badge" id="ascBadge" hidden>0</span></button>
+      </div>
+
+      <div class="pane" data-pane="build" role="tabpanel">
+        <div id="tutBox"></div>
+        <div class="amount">
+          <span data-i18n="amount"></span>
+          <div class="seg" id="amountSeg">
+            <button type="button" data-amt="1" aria-pressed="true">1</button>
+            <button type="button" data-amt="10" aria-pressed="false">10</button>
+            <button type="button" data-amt="100" aria-pressed="false">100</button>
+            <button type="button" data-amt="max" aria-pressed="false" data-i18n="max"></button>
+          </div>
+        </div>
+        <div class="qol">
+          <button type="button" class="btn sm primary" id="bestBtn"></button>
+          <span class="budlab small"></span>
+          <div class="seg bud"><button type="button" data-bud="10" aria-pressed="false">10 %</button><button type="button" data-bud="25" aria-pressed="false">25 %</button><button type="button" data-bud="50" aria-pressed="true">50 %</button><button type="button" data-bud="100" aria-pressed="false">100 %</button></div>
+        </div>
+        <details class="fold" id="factFold" style="margin-bottom:12px"><summary class="wt" id="factHead"></summary><div class="fact" id="factView"></div></details>
+        <div class="list" id="buildList"></div>
+        <details class="fold" id="qualF" style="margin-top:14px" hidden><summary class="wt" id="qualH"></summary><div id="qualBox" style="margin-top:8px"></div></details>
+        <details class="fold" id="evoF" style="margin-top:14px" hidden><summary class="wt" id="evoH"></summary><div id="evoBox" style="margin-top:8px"></div></details>
+      </div>
+
+      <div class="pane" data-pane="up" role="tabpanel" hidden>
+        <div class="qol">
+          <button type="button" class="btn sm primary" id="allUpBtn"></button>
+          <button type="button" class="btn sm tgl" id="autoU" aria-pressed="false"></button>
+          <span class="budlab small"></span>
+          <div class="seg bud"><button type="button" data-bud="10" aria-pressed="false">10 %</button><button type="button" data-bud="25" aria-pressed="false">25 %</button><button type="button" data-bud="50" aria-pressed="true">50 %</button><button type="button" data-bud="100" aria-pressed="false">100 %</button></div>
+        </div>
+        <section class="wsec first" id="infSec" hidden>
+          <h3 class="wt" id="infTitle"></h3>
+          <p class="small wnote" id="infNote"></p>
+          <div class="list" id="infList"></div>
+        </section>
+        <div class="upctl"><div class="chips" id="upCats"></div><div class="seg" id="upSort"><button type="button" data-us="price" aria-pressed="true"></button><button type="button" data-us="value" aria-pressed="false"></button></div><button type="button" class="chip" id="upCompact"></button></div>
+        <div class="list" id="upList"></div>
+        <p class="empty" id="upEmpty" data-i18n="up_empty"></p>
+        <p class="small" id="upNote" style="margin-top:12px"></p>
+        <details class="fold" id="upBoughtF" style="margin-top:12px"><summary class="wt" id="upBoughtH"></summary><div class="list" id="upBought" style="margin-top:8px"></div></details>
+      </div>
+
+      <div class="pane" data-pane="work" role="tabpanel" hidden>
+        <h3 class="wt" id="workHead"></h3>
+        <p class="small wnote" id="workNote"></p>
+        <div class="qol" style="margin-top:8px"><span class="budlab small"></span><div class="seg bud"><button type="button" data-bud="10" aria-pressed="false">10 %</button><button type="button" data-bud="25" aria-pressed="false">25 %</button><button type="button" data-bud="50" aria-pressed="true">50 %</button><button type="button" data-bud="100" aria-pressed="false">100 %</button></div></div>
+        <div class="list" id="workList"></div>
+        <section class="wsec" id="autoSec" hidden></section>
+        <section class="wsec"><h3 class="wt" id="logHead"></h3><div class="wlog" id="workLog"></div></section>
+      </div>
+
+      <div class="pane" data-pane="orders" role="tabpanel" hidden>
+        <div class="obanner" id="ordStats"></div>
+        <div class="list" id="ordList"></div>
+        <div class="btns" style="margin-top:12px"><button type="button" class="btn" id="ordReroll"></button></div>
+      </div>
+
+      <div class="pane" data-pane="world" id="worldPane" role="tabpanel" hidden>
+        <div class="seg wseg" id="wSeg"><button type="button" data-ws="world" aria-pressed="true"><span data-i18n="tab_world"></span></button><button type="button" data-ws="adv" aria-pressed="false"><span data-i18n="tab_adv"></span><i class="dot" id="advDot" hidden></i></button><button type="button" data-ws="fr" aria-pressed="false"><span data-i18n="tab_fr"></span><i class="dot" id="frDot" hidden></i></button></div>
+        <div class="wmap" id="wMap"></div>
+        <div class="wsub" data-wsub="world"><div id="wTop"></div><div id="wBody"></div></div>
+        <div class="wsub" data-wsub="adv" hidden><div id="advBox"></div></div>
+        <div class="wsub" data-wsub="fr" hidden><div id="frBox"></div></div>
+      </div>
+
+
+      <div class="pane" data-pane="ach" role="tabpanel" hidden>
+        <div class="gover" id="gOver"></div>
+        <button type="button" class="lbbar" id="lbBar" hidden></button>
+        <button type="button" class="lbbar clubbar" id="clubBar" hidden></button>
+        <div class="seg gseg" id="gSeg"><button type="button" data-g="daily" aria-pressed="true" data-i18n="g_daily"></button><button type="button" data-g="wheel" aria-pressed="false" id="gWheelB"></button><button type="button" data-g="ttl" aria-pressed="false" id="gTtlB"></button><button type="button" data-g="pass" aria-pressed="false" data-i18n="g_pass"></button><button type="button" data-g="ach" aria-pressed="false" data-i18n="g_ach"></button><button type="button" data-g="book" aria-pressed="false" data-i18n="g_book"></button><button type="button" data-g="stats" aria-pressed="false" data-i18n="g_stats"></button></div>
+        <div class="gsub" data-gsub="daily"><div id="dailyBox"></div></div>
+        <div class="gsub" data-gsub="wheel" hidden><div class="whwrap"><div class="whbox"><div class="whptr" aria-hidden="true"></div><div id="wheelSvg"></div></div><div id="wheelInfo"></div></div></div>
+        <div class="gsub" data-gsub="ttl" hidden><div id="ttlBox"></div></div>
+        <div class="gsub" data-gsub="pass" hidden><div id="passBox"></div></div>
+        <div class="gsub" data-gsub="ach" hidden><p class="lead" id="achHead"></p><div class="chips achf" id="achF"></div><div class="agrid" id="achGrid"></div></div>
+        <div class="gsub" data-gsub="book" hidden><div id="bookBox"></div></div>
+        <div class="gsub" data-gsub="stats" hidden><div id="statBox"></div></div>
+      </div>
+
+      <div class="pane" data-pane="shop" id="shopPane" role="tabpanel" hidden>
+        <section class="wsec first">
+          <h3 class="wt" id="starTitle"></h3>
+          <div class="mats" id="starHead"></div>
+          <p class="small wnote" id="starNote"></p>
+          <div class="igrid" id="starShop"></div>
+          <details class="fold" style="margin-top:12px"><summary class="wt" id="starEarnHead"></summary><div id="starEarn" class="small"></div></details>
+        </section>
+        <section class="wsec" id="artSec" hidden></section>
+        <section class="wsec" id="cardSec" hidden></section>
+        <section class="wsec">
+          <h3 class="wt" data-i18n="boosts_title"></h3>
+          <p class="small wnote" data-i18n="boosts_lead"></p>
+          <div class="list" id="boostList"></div>
+        </section>
+        <section class="wsec">
+          <h3 class="wt" id="wBoostTitle"></h3>
+          <p class="small wnote" id="wBoostNote"></p>
+          <div class="list" id="boostListW"></div>
+        </section>
+        <section class="wsec">
+          <h3 class="wt" data-i18n="box_title"></h3>
+          <p class="small wnote" data-i18n="box_lead"></p>
+          <div class="btns"><button type="button" class="btn primary" id="boxBtn"></button></div>
+          <div class="reveal" id="boxReveal" hidden><div class="big" id="rvIco"></div><div><b id="rvName"></b><span class="sub" id="rvSub"></span></div></div>
+        </section>
+        <section class="wsec">
+          <details class="fold" open>
+            <summary class="wt" id="itemsHead"></summary>
+            <p class="small wnote" id="itemsNote"></p>
+            <div class="igrid" id="itemGrid"></div>
+          </details>
+        </section>
+        <section class="wsec">
+          <h3 class="wt" data-i18n="skins_title"></h3>
+          <p class="small wnote" data-i18n="skins_lead"></p>
+          <div class="skins" id="skinRow"></div>
+          <details class="fold" id="designFold" style="margin-top:14px"><summary class="wt" id="designHead"></summary><div id="designBox"></div></details>
+        </section>
+      </div>
+
+      <div class="pane" data-pane="asc" id="ascPane" role="tabpanel" hidden>
+        <div class="seg gseg" id="ascSeg"></div>
+        <div class="asub" data-asub="asc">
+        <p class="lead" data-i18n="asc_lead"></p>
+        <dl class="kv" id="kv"></dl>
+        <button type="button" class="btn primary" id="ascBtn" disabled></button>
+        <p class="small" style="margin-top:12px" data-i18n="asc_hint"></p>
+        </div>
+        <div class="asub" data-asub="tree" hidden>
+        <div class="optsec" style="margin-top:24px">
+          <h2 data-i18n="tree_title"></h2>
+          <p class="lead" id="treeHead" style="margin-bottom:0"></p>
+          <div class="smap" id="smap"><div class="smap-in" id="tree"><svg class="smap-stars" id="smapStars" width="4000" height="4000" viewBox="0 0 4000 4000" aria-hidden="true"></svg><div class="smap-core"></div><svg class="tree-lines" id="treeLines" width="4000" height="4000" viewBox="0 0 4000 4000" aria-hidden="true"></svg></div><div class="smap-ctl"><button type="button" class="btn sm" id="tzIn" aria-label="Zoom +">+</button><button type="button" class="btn sm" id="tzOut" aria-label="Zoom −">−</button><button type="button" class="btn sm" id="tzHome" aria-label="Mitte">⌂</button></div><p class="smap-help" id="smapHelp"></p></div>
+          <div class="tdetail" id="tdetail"></div>
+          <div class="btns"><button type="button" class="btn" id="respecBtn"></button></div>
+        </div>
+        </div>
+        <div class="asub" data-asub="reb" hidden><div class="optsec" id="rebSec"></div></div>
+        <div class="asub" data-asub="cos" hidden><div id="egCos"></div></div>
+        <div class="asub" data-asub="par" hidden><div id="egPar"></div></div>
+        <div class="asub" data-asub="rank" hidden><div id="egRank"></div></div>
+      </div>
+
+    </section>
+  </div>
+</div>
+<div class="overlay" id="setOv" hidden><div class="dlg wide" role="dialog" aria-modal="true" aria-labelledby="setT"><div class="dhead"><h2 id="setT" data-i18n="settings"></h2><button type="button" class="btn sm" id="setClose" data-i18n="news_close"></button></div>
+<input type="search" id="setQ" class="setq" autocomplete="off">
+<div class="seg setseg" id="setSeg"><button type="button" data-sp="disp" aria-pressed="true"></button><button type="button" data-sp="snd" aria-pressed="false"></button><button type="button" data-sp="game" aria-pressed="false"></button><button type="button" data-sp="save" aria-pressed="false"></button><button type="button" data-sp="admin" aria-pressed="false" data-i18n="tab_admin"></button></div>
+<p class="small" id="setNone" hidden></p>
+<div class="spane" data-spane="opt">
+        <div class="optsec" data-sc="disp">
+          <h2 id="devT"></h2>
+          <p class="small" id="devP"></p>
+          <div class="seg" id="devSeg" style="margin-top:8px"><button type="button" data-dev="auto"></button><button type="button" data-dev="phone"></button><button type="button" data-dev="tablet"></button><button type="button" data-dev="desktop"></button></div>
+          <div class="devinfo" id="devInfo"></div>
+        </div>
+        <div class="optsec" data-sc="disp">
+          <h2 data-i18n="opt_lang"></h2>
+          <div class="seg langseg">
+            <button type="button" data-lang="de" aria-pressed="true">Deutsch</button>
+            <button type="button" data-lang="en" aria-pressed="false">English</button>
+          </div>
+        </div>
+        <div class="optsec" data-sc="disp">
+          <h2 data-i18n="opt_display"></h2>
+          <label class="check"><input type="checkbox" id="fx" checked> <span data-i18n="opt_fx"></span></label>
+          <button type="button" class="btn sm" id="tutShow" style="margin-top:10px"></button>
+          <label class="check" style="margin-top:10px"><input type="checkbox" id="compactChk"> <span data-i18n="opt_compact"></span></label>
+          <div class="setrow"><span data-i18n="opt_look"></span><div class="seg" id="lookSeg"><button type="button" data-look="dark" aria-pressed="true" data-i18n="look_dark"></button><button type="button" data-look="light" aria-pressed="false" data-i18n="look_light"></button><button type="button" data-look="auto" aria-pressed="false" data-i18n="look_auto"></button></div></div>
+        </div>
+        <div class="optsec" data-sc="disp">
+          <h2 id="oAppH"></h2>
+          <div class="setrow"><span id="oNumL"></span><div class="seg" id="numSeg"><button type="button" data-v="short"></button><button type="button" data-v="long"></button><button type="button" data-v="sci"></button></div></div>
+          <div class="setrow"><span id="oFsL"></span><div class="seg" id="fsSeg"><button type="button" data-v="0"></button><button type="button" data-v="1"></button><button type="button" data-v="2"></button></div></div>
+          <div class="setrow"><span id="oAccL"></span><div class="accs" id="accSeg"><button type="button" data-v="orange" style="--c:#ffb347"></button><button type="button" data-v="blue" style="--c:#6cb6ff"></button><button type="button" data-v="teal" style="--c:#4fd1c5"></button><button type="button" data-v="purple" style="--c:#b794f6"></button><button type="button" data-v="pink" style="--c:#ff7eb6"></button></div></div>
+          <div class="setrow"><span id="oMotL"></span><div class="seg" id="motSeg"><button type="button" data-v="on"></button><button type="button" data-v="sys"></button><button type="button" data-v="off"></button></div></div>
+          <label class="check" style="margin-top:12px"><input type="checkbox" id="titleChk"> <span id="oTitleL"></span></label>
+          <label class="check" style="margin-top:10px"><input type="checkbox" id="shakeChk"> <span id="oShakeL"></span></label>
+          <label class="check" style="margin-top:10px"><input type="checkbox" id="ecoChk"> <span id="oEcoL"></span></label>
+          <label class="check" style="margin-top:10px"><input type="checkbox" id="hcChk"> <span id="oHcL"></span></label>
+          <p class="small" id="oEcoH" style="margin-top:4px"></p>
+        </div>
+        <div class="optsec" data-sc="disp">
+          <h2 id="pushT"></h2>
+          <p class="small" id="pushP"></p>
+          <div class="btns" style="margin-top:8px"><button type="button" class="btn primary" id="pushBtn"></button></div>
+          <p class="nameerr ok" id="pushMsg" aria-live="polite"></p>
+        </div>
+        <div class="optsec" data-sc="disp">
+          <h2 id="oNtfH"></h2>
+          <div class="seg" id="ntfSeg"><button type="button" data-v="all"></button><button type="button" data-v="imp"></button><button type="button" data-v="off"></button></div>
+          <p class="small" id="oNtfP" style="margin-top:6px"></p>
+          <div class="setrow"><span id="oNtfTL"></span><div class="seg" id="ntfTSeg"><button type="button" data-v="3"></button><button type="button" data-v="5"></button><button type="button" data-v="8"></button></div></div>
+          <label class="check" style="margin-top:12px"><input type="checkbox" id="ntfBChk"> <span id="oNtfBL"></span></label>
+          <div class="btns" style="margin-top:10px"><button type="button" class="btn sm" id="ntfTest"></button></div>
+        </div>
+        <div class="optsec" data-sc="snd">
+          <h2 data-i18n="snd_title"></h2>
+          <div class="seg" id="sndSeg"><button type="button" data-vol="0" aria-pressed="false" data-i18n="snd_0"></button><button type="button" data-vol="1" aria-pressed="true" data-i18n="snd_1"></button><button type="button" data-vol="2" aria-pressed="false" data-i18n="snd_2"></button></div>
+        </div>
+        <div class="optsec" data-sc="snd">
+          <h2 id="oSnH"></h2>
+          <div class="sngrid" id="snList"></div>
+          <label class="check" style="margin-top:12px"><input type="checkbox" id="bgmChk"> <span id="oBgmL"></span></label>
+        </div>
+        <div class="optsec" data-sc="snd">
+          <h2 id="oMusH"></h2>
+          <div class="seg" id="musSeg"><button type="button" data-v="0"></button><button type="button" data-v="1"></button><button type="button" data-v="2"></button></div>
+          <div class="setrow"><span id="oTrkL"></span></div>
+          <div class="trks" id="trkList"></div>
+          <p class="small" id="oMusNow" style="margin-top:8px"></p>
+          <p class="small" id="oMusP" style="margin-top:4px"></p>
+        </div>
+        <div class="optsec" data-sc="game">
+          <h2 id="oAskH"></h2>
+          <label class="check" style="margin-bottom:10px"><input type="checkbox" id="startChk"> <span id="oStartL"></span></label>
+          <label class="check"><input type="checkbox" id="askChk"> <span id="oAskL"></span></label>
+          <p class="small" id="oAskP" style="margin-top:6px"></p>
+        </div>
+        <div class="optsec" data-sc="game">
+          <h2 id="oResH"></h2>
+          <p class="small" id="oResP"></p>
+          <div class="btns" style="margin-top:8px"><button type="button" class="btn" id="optReset"></button></div>
+        </div>
+        <div class="optsec" data-sc="save">
+          <h2 data-i18n="opt_save"></h2>
+          <div class="btns"><button type="button" class="btn" id="saveBtn" data-i18n="save_now"></button></div>
+          <div class="setrow"><span id="oAsL"></span><div class="seg" id="asSeg"><button type="button" data-v="10">10 s</button><button type="button" data-v="30">30 s</button><button type="button" data-v="60">60 s</button></div></div>
+          <p class="small" style="margin-top:8px" data-i18n="save_hint"></p>
+        </div>
+        <div class="optsec" data-sc="save">
+          <h2 id="accT"></h2>
+          <div id="accBox" class="accbox"></div>
+        </div>
+        <div class="optsec" data-sc="save">
+          <h2 data-i18n="slot_title"></h2>
+          <p class="small" data-i18n="slot_hint"></p>
+          <div class="list" id="slotList" style="margin-top:10px"></div>
+        </div>
+        <div class="optsec" data-sc="save">
+          <h2 data-i18n="bk_title"></h2>
+          <p class="small" data-i18n="bk_hint"></p>
+          <div class="list" id="bkList" style="margin-top:10px"></div>
+        </div>
+        <div class="optsec" data-sc="save">
+          <h2 id="fileT"></h2>
+          <p class="small" id="fileP"></p>
+          <div class="sealrow" id="sealRow"></div>
+          <div class="btns" style="margin-top:10px"><button type="button" class="btn primary" id="fileDl"></button><button type="button" class="btn" id="fileUp"></button></div>
+          <input type="file" id="fileIn" accept=".keks,.txt,.json,text/plain,application/json" hidden>
+        </div>
+        <div class="optsec" data-sc="save">
+          <h2 id="cloudT"></h2>
+          <p class="small" id="cloudP"></p>
+          <div class="btns" style="margin-top:10px"><button type="button" class="btn primary" id="cloudUp"></button></div>
+          <div class="cloudcode" id="cloudCode" hidden></div>
+          <form id="cloudForm" class="coderow" novalidate><input type="text" id="cloudIn" class="namein" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="KEKS-XXXX-XXXX"><button type="submit" class="btn" id="cloudGo"></button></form>
+          <p class="nameerr" id="cloudMsg" aria-live="polite"></p>
+        </div>
+        <div class="optsec" data-sc="save">
+          <h2 data-i18n="export"></h2>
+          <div class="btns"><button type="button" class="btn" id="exportBtn" data-i18n="show_save"></button><button type="button" class="btn" id="copyBtn" data-i18n="copy"></button></div>
+          <textarea id="exportBox" readonly data-ph="export_ph" data-aria="export"></textarea>
+        </div>
+        <div class="optsec" data-sc="save">
+          <h2 data-i18n="import"></h2>
+          <textarea id="importBox" data-ph="import_ph" data-aria="import"></textarea>
+          <div class="btns"><button type="button" class="btn" id="importBtn" data-i18n="load"></button></div>
+        </div>
+        <div class="optsec" data-sc="game">
+          <h2 id="codeT"></h2>
+          <p class="small" id="codeP"></p>
+          <form id="codeForm" class="coderow" novalidate><input type="text" id="codeIn" class="namein" maxlength="24" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="submit" class="btn primary" id="codeBtn"></button></form>
+          <p class="nameerr" id="codeMsg" aria-live="polite"></p>
+        </div>
+        <div class="optsec" data-sc="game">
+          <h2 id="appT"></h2>
+          <p class="small" id="appP"></p>
+          <div id="appState"></div>
+        </div>
+        <div class="optsec" data-sc="game">
+          <h2 id="helpSetT"></h2>
+          <div class="btns"><button type="button" class="btn" id="helpSetBtn"></button><button type="button" class="btn" id="shareSetBtn"></button></div>
+        </div>
+        <div class="optsec" data-sc="game">
+          <h2 data-i18n="new_game"></h2>
+          <div class="btns"><button type="button" class="btn" id="resetBtn"></button></div>
+        </div>
+</div>
+<div class="spane" data-spane="admin" hidden>
+        <div id="admin"></div>
+</div>
+</div></div>
+<div class="overlay" id="newsOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="newsT"><div class="dhead"><h2 id="newsT" data-i18n="news_title"></h2><button type="button" class="btn sm" id="newsClose" data-i18n="news_close"></button></div><div id="newsBody"></div></div></div>
+<div class="overlay" id="nameOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="nameT"><h2 id="nameT"></h2><p id="nameP"></p><form id="nameForm" novalidate><input type="text" id="nameIn" class="namein" maxlength="20" autocomplete="off" spellcheck="false"><p class="nameerr" id="nameErr" aria-live="polite"></p><div class="btns"><button type="submit" class="btn primary" id="nameOk"></button><button type="button" class="btn" id="nameCancel"></button></div></form></div></div>
+<div class="overlay" id="shareOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="shareT"><h2 id="shareT"></h2><p id="shareP" class="small"></p><textarea id="shareBox" readonly></textarea><div class="btns"><button type="button" class="btn primary" id="shareCopy"></button><button type="button" class="btn" id="shareClose"></button></div></div></div>
+<div class="overlay" id="lbOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="lbT"><div class="dhead"><h2 id="lbT"></h2><button type="button" class="btn sm" id="lbClose"></button></div><p class="lblive" id="lbLive" hidden></p><div id="lbBody"></div></div></div>
+<div class="overlay" id="clubOv" hidden><div class="dlg clubdlg" role="dialog" aria-modal="true" aria-labelledby="clubT"><div class="dhead"><h2 id="clubT"></h2><button type="button" class="btn sm" id="clubClose"></button></div><div id="clubBody"></div></div></div>
+<div class="overlay" id="profOv" hidden><div class="dlg profdlg" role="dialog" aria-modal="true" aria-labelledby="profT"><div class="dhead"><h2 id="profT"></h2><button type="button" class="btn sm" id="profClose"></button></div><div id="profBody"></div></div></div>
+<div id="updBar" role="status" hidden></div>
+<div class="overlay" id="maintOv" hidden><div class="dlg namedlg maintdlg" role="alertdialog" aria-modal="true" aria-labelledby="maintT"><div id="maintBody"></div></div></div>
+<div class="overlay" id="rwOv" hidden><div class="dlg namedlg rwdlg" role="dialog" aria-modal="true" aria-labelledby="rwT"><div class="rwburst" id="rwBurst" aria-hidden="true">🏆</div><h2 id="rwT"></h2><div id="rwBody"></div><div class="btns" style="justify-content:center;margin-top:14px"><button type="button" class="btn primary" id="rwClose"></button></div></div></div>
+<div class="overlay" id="accAskOv" hidden><div class="dlg namedlg" role="dialog" aria-modal="true" aria-labelledby="accAskT"><h2 id="accAskT"></h2><div id="accAskB"></div><div class="btns" style="margin-top:12px"><button type="button" class="btn primary" id="accYes"></button><button type="button" class="btn" id="accNo"></button></div></div></div>
+<div class="overlay" id="awayOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="awayT"><div class="dhead"><h2 id="awayT"></h2><button type="button" class="btn sm primary" id="awayClose" data-i18n="away_close"></button></div><div id="awayBody"></div></div></div>
+<button type="button" class="btn undo" id="undoBtn" hidden></button>
+<div class="overlay" id="visOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="visT"><div class="dhead"><h2 id="visT"></h2><button type="button" class="btn sm" id="visClose"></button></div><div id="visBody"></div></div></div>
+<div class="overlay" id="ntfOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ntfT"><div class="dhead"><h2 id="ntfT"></h2><div class="btns"><button type="button" class="btn sm" id="ntfClear"></button><button type="button" class="btn sm primary" id="ntfClose"></button></div></div><div id="ntfBody"></div></div></div>
+<div class="curtip" id="curTip" hidden></div>
+<div class="overlay" id="helpOv" hidden><div class="dlg wide" role="dialog" aria-modal="true" aria-labelledby="helpT"><div class="dhead"><h2 id="helpT"></h2><button type="button" class="btn sm" id="helpClose"></button></div><input type="search" class="setq" id="helpQ" autocomplete="off"><div id="helpBody"></div></div></div>
+<div class="overlay" id="introOv" hidden><div class="dlg intro" role="dialog" aria-modal="true" id="introBody"></div></div>
+<div class="startov" id="startOv" hidden><div class="stbox"><div class="stlogo" id="stLogo"></div><h1 class="sttitle" id="stTitle"></h1><p class="stsub" id="stSub"></p><div class="stcard" id="stCard"></div><p class="stlive" id="stLive" hidden></p><p class="stref" id="stRef" hidden></p><button type="button" class="btn sm stacc" id="stAcc" hidden></button><button type="button" class="btn primary stgo" id="stGo"></button><div class="btns c"><button type="button" class="btn" id="stSlots"></button><button type="button" class="btn" id="stSet"></button><button type="button" class="btn" id="stHelp"></button></div><div class="seg langseg" role="group" aria-label="Sprache / Language"><button type="button" data-lang="de" aria-pressed="true">DE</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div><label class="check stchk"><input type="checkbox" id="stShow" checked> <span id="stShowL"></span></label></div></div>
+<div class="overlay packov" id="packOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="packT"><h2 id="packT"></h2><div class="packcards" id="packCards"></div><div class="btns c"><button type="button" class="btn" id="packAll"></button><button type="button" class="btn primary" id="packDone"></button></div></div></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div id="flash" aria-hidden="true"></div>
+
+<script>

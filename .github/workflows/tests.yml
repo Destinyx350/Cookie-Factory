@@ -35,6 +35,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Check that index.html was built from src/
+        run: node tools/build.js --check
       - name: Check that the game script parses
         run: |
           node -e "const s=require('fs').readFileSync('index.html','utf8');const re=/<script(?![^>]*src)[^>]*>([\s\S]*?)<\/script>/g;let m;while((m=re.exec(s))) new Function(m[1]);console.log('index.html script parses');"

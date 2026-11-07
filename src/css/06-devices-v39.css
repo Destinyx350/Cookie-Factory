@@ -1,0 +1,81 @@
+/* ================= V39: Layouts für jedes Gerät, ruhiger und flüssiger ================= */
+:root{--ease-out:cubic-bezier(.2,.8,.2,1);--ease-spring:cubic-bezier(.2,1.3,.35,1)}
+html{-webkit-tap-highlight-color:transparent}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+:root[data-look] body::after{opacity:.045}
+
+/* Flüssige, einheitliche Rückmeldung */
+.btn,.tab,.seg button,.chip,.iconbtn,.gochip,.lbbar{transition:transform .2s var(--ease-spring),background-color .2s,color .2s,box-shadow .2s,opacity .2s,filter .2s}
+.btn:active,.tab:active,.seg button:active,.iconbtn:active,.chip:active,.gochip:active,.lbbar:active{transform:scale(.94)}
+:root[data-input="mouse"] .iconbtn:hover,:root[data-input="mouse"] .gochip:hover,:root[data-input="mouse"] .lbbar:hover{transform:translateY(-2px);filter:brightness(1.08)}
+:root[data-input="touch"] .cookie:hover svg{transform:none}
+:focus-visible{outline-offset:3px}
+
+/* Eröffnung und Reiterwechsel */
+.wrap>.top{animation:riseIn .5s var(--ease-out) backwards}
+.game>.stage{animation:riseIn .55s .07s var(--ease-out) backwards}
+/* Nur einblenden: eine Verschiebung würde die feste Reiterleiste am Handy mitnehmen. */
+.game>.store{animation:fadeIn2 .5s .14s var(--ease-out) backwards}
+.pane:not([hidden]){animation:paneIn .34s var(--ease-out)}
+.gsub:not([hidden]),.wsub:not([hidden]),.asub:not([hidden]){animation:paneIn .3s var(--ease-out)}
+.overlay:not([hidden])>.dlg{animation:dlgIn2 .34s var(--ease-spring)}
+@keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn2{from{opacity:0}to{opacity:1}}
+@keyframes paneIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes dlgIn2{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+
+/* Computer: breiter, Kopfzeile in einer Reihe */
+:root[data-device="desktop"] .wrap{max-width:1280px}
+@media (min-width:1200px){:root[data-device="desktop"] .game{grid-template-columns:minmax(360px,420px) minmax(0,1fr);gap:24px}}
+
+/* Tablet: zwei Spalten, große Tippflächen */
+@media (min-width:740px){
+  :root[data-device="tablet"] .wrap{max-width:1240px}
+  :root[data-device="tablet"] .game{grid-template-columns:minmax(280px,36%) minmax(0,1fr);align-items:start;gap:16px}
+  :root[data-device="tablet"] .stage{position:sticky;top:16px}
+  :root[data-device="tablet"] .stage-in{padding:22px 14px 16px}
+  :root[data-device="tablet"] .cookie-stage{width:min(100%,260px)}
+  :root[data-device="tablet"] .mini{gap:8px}
+}
+:root[data-device="tablet"] .tab{padding-top:8px;padding-bottom:8px}
+:root[data-device="tablet"] .iconbtn{width:44px;height:44px}
+
+/* Handy hochkant: kompakter, der Keks bleibt im Blick */
+:root[data-device="phone"][data-orient="portrait"] .wrap{padding-top:12px}
+:root[data-device="phone"][data-orient="portrait"] .top{margin-bottom:12px}
+:root[data-device="phone"][data-orient="portrait"] .stage-in{padding:18px 14px 14px}
+:root[data-device="phone"][data-orient="portrait"] .cookie-stage{width:min(100%,236px);margin:14px auto 10px}
+:root[data-device="phone"][data-orient="portrait"] .mini{margin-top:12px;padding-top:12px}
+
+/* Handy quer: Keks links, Laden rechts */
+:root[data-device="phone"][data-orient="landscape"] .wrap{max-width:none;padding-block:8px 16px}
+:root[data-device="phone"][data-orient="landscape"] .top{margin-bottom:8px;gap:8px;flex-wrap:nowrap}
+:root[data-device="phone"][data-orient="landscape"] .topr{flex-wrap:nowrap;gap:6px}
+:root[data-look][data-device="phone"][data-orient="landscape"] h1{font-size:19px}
+:root[data-look][data-device="phone"][data-orient="landscape"] .logo{width:30px;height:30px}
+:root[data-device="phone"][data-orient="landscape"] .plname,:root[data-device="phone"][data-orient="landscape"] .ttlchip,:root[data-device="phone"][data-orient="landscape"] .note,:root[data-device="phone"][data-orient="landscape"] .newsbtn>span[data-i18n]{display:none!important}
+:root[data-device="phone"][data-orient="landscape"] .iconbtn{width:36px;height:36px}
+:root[data-device="phone"][data-orient="landscape"] .game{grid-template-columns:minmax(220px,34%) minmax(0,1fr);gap:10px;align-items:start}
+:root[data-device="phone"][data-orient="landscape"] .stage{position:sticky;top:8px}
+:root[data-device="phone"][data-orient="landscape"] .stage-in{padding:10px 10px 10px}
+:root[data-look][data-device="phone"][data-orient="landscape"] .count{font-size:32px}
+:root[data-device="phone"][data-orient="landscape"] .cookie-stage{width:min(100%,44vh,190px);margin:6px auto 4px}
+:root[data-device="phone"][data-orient="landscape"] .bhint{display:none!important}
+:root[data-device="phone"][data-orient="landscape"] .mini{margin-top:6px;padding-top:6px;gap:4px}
+:root[data-device="phone"][data-orient="landscape"] .mini dt{font-size:9px}
+:root[data-look][data-device="phone"][data-orient="landscape"] .tabs{position:static;border-radius:0;padding:10px 14px;background:none;border:0;box-shadow:none}
+:root[data-look][data-device="phone"][data-orient="landscape"] .wrap{padding-bottom:16px}
+:root[data-look][data-device="phone"][data-orient="landscape"] .toasts{padding-bottom:0}
+
+/* Feinschliff Handy */
+:root[data-device="phone"][data-orient="portrait"] .cookie-stage{width:min(100%,210px);margin:10px auto 8px}
+:root[data-look][data-device="phone"][data-orient="portrait"] .count{font-size:44px}
+:root[data-device="phone"][data-orient="portrait"] .unit{margin-top:4px}
+:root[data-device="phone"][data-orient="portrait"] .bhint{font-size:12.5px;padding:6px 12px;margin-bottom:4px}
+:root[data-device="phone"] .mini dt{letter-spacing:.06em}
+:root[data-device="phone"][data-orient="portrait"] .mini{gap:8px}
+:root[data-device="phone"][data-orient="landscape"] .unit{display:none}
+:root[data-device="phone"][data-orient="landscape"] .kps{margin-top:4px;font-size:13px}
+:root[data-device="phone"][data-orient="landscape"] .buffs{flex-wrap:nowrap;gap:4px;margin-top:6px;overflow:hidden;justify-content:center}
+:root[data-device="phone"][data-orient="landscape"] .buffs .buff{font-size:10.5px;padding:2px 8px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+:root[data-device="phone"][data-orient="landscape"] .cookie-stage{width:min(100%,40vh,170px)}
