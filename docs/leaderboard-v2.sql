@@ -211,8 +211,8 @@ begin
 end $$;
 
 -- 7. Who may call what ----------------------------------------------------------------------------
-revoke all on function public.lb_close_periods() from public;
-revoke all on function public.lb_admin_ok(text) from public;
+revoke all on function public.lb_close_periods() from public, anon, authenticated;
+revoke all on function public.lb_admin_ok(text) from public, anon, authenticated;
 revoke all on function public.submit_score(uuid, text, double precision) from public;
 revoke all on function public.lb_period_rank(text, double precision) from public;
 revoke all on function public.leave_leaderboard(uuid) from public;
