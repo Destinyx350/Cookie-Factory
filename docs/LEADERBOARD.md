@@ -61,6 +61,7 @@ Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.
 5. [`security-v6.sql`](security-v6.sql): the separate server admin password with lockout, per-device limits, the word filter, reports, mutes, admin mail, feature switches, maintenance mode, statistics, the admin log and seasons. Then run the one-line server password setup the owner received privately.
 6. [`update-v7.sql`](update-v7.sql): weekly automatic backups (download them in the admin **Server** tab), leaderboard spots linked to accounts and unique leaderboard names.
 7. [`social-v8.sql`](social-v8.sql): player profiles, friends, weekend club wars and invite bonuses.
+8. [`push-v9.sql`](push-v9.sql): push notifications (also needs the edge function, see [PUSH.md](PUSH.md)).
 
 The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password.
 
