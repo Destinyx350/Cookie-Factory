@@ -7,10 +7,10 @@ const PHONE = { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch:
 
 module.exports = async function browserTests(url) {
   console.log('\nBrowser');
-  await pool.query("delete from kf_backups; delete from kf_accounts; delete from kf_clubs; delete from leaderboard; delete from lb_period; delete from kf_rate; delete from kf_admin_fails; delete from kf_reports; delete from kf_mail; delete from kf_news; delete from kf_events; delete from kf_errors; delete from kf_steps; delete from kf_days; delete from kf_bans; delete from kf_device_bans; update kf_config set v = '{\"on\":false,\"de\":\"\",\"en\":\"\"}' where k = 'maint'");
+  await pool.query("delete from kf_backups; delete from kf_accounts; delete from kf_clubs; delete from leaderboard; delete from lb_period; delete from kf_rate; delete from kf_admin_fails; delete from kf_reports; delete from kf_mail; delete from kf_news; delete from kf_events; delete from kf_errors; delete from kf_steps; delete from kf_days; delete from kf_bans; delete from kf_device_bans; delete from kf_appeals; delete from kf_mods; update kf_admin_auth set totp_on = false, totp_secret = null, totp_pending = null; update kf_config set v = '{\"on\":false,\"de\":\"\",\"en\":\"\"}' where k = 'maint'");
   const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
   const errors = [];
-  async function device(name, ip, opts = {}, admin = false) {
+  async function device(name, ip, opts = {}, admin = false, page = '') {
     const ctx = await browser.newContext(Object.assign({ viewport: { width: 1280, height: 820 }, extraHTTPHeaders: { 'x-test-ip': ip }, acceptDownloads: true }, opts));
     await ctx.route(LB + '/**', handle);
     await ctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
@@ -18,7 +18,7 @@ module.exports = async function browserTests(url) {
     const p = await ctx.newPage();
     p.on('pageerror', e => errors.push(name + ': ' + e.message));
     p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|ERR_FAILED/.test(m.text())) errors.push(name + ': ' + m.text()); });
-    await p.goto(admin ? url + 'admin.html' : url);
+    await p.goto(page ? url + page : admin ? url + 'admin.html' : url);
     await p.locator('#startOv [data-lang=en]').click();
     await p.click('#stGo');
     if (await p.isVisible('#nameOv')) { await p.fill('#nameIn', name); await p.click('#nameOk'); }
@@ -225,7 +225,78 @@ module.exports = async function browserTests(url) {
   await c.click('#banOk'); await c.click('#clubClose').catch(() => {});
   await d.click('[data-ban="unban:gamma_ci"]'); await d.waitForTimeout(1200);
   check((await pool.query('select count(*)::int n from kf_bans')).rows[0].n === 0, 'admin unbans the account');
+  // 5g. Moderators, appeals, two-step sign-in, weekly summary, portal ads (v53)
+  const totp = (b32, off = 0) => {
+    const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; let bits = '';
+    for (const ch of b32.replace(/\s/g, '')) bits += A.indexOf(ch).toString(2).padStart(5, '0');
+    const key = Buffer.from(bits.match(/.{8}/g).map(x => parseInt(x, 2)));
+    const msg = Buffer.alloc(8); msg.writeBigUInt64BE(BigInt(Math.floor(Date.now() / 30000) + off));
+    const h = require('crypto').createHmac('sha1', key).update(msg).digest(), o = h[19] & 15;
+    return String(((h.readUInt32BE(o) & 0x7fffffff) % 1000000)).padStart(6, '0');
+  };
+  await d.waitForSelector('#admModAddF', { timeout: 10000 });
+  await d.fill('#admModAddF [name=name]', 'mod_ci'); await d.fill('#admModAddF [name=pass]', 'mod-pass-ci-1'); await d.click('#admModAddF button[type=submit]');
+  await d.waitForTimeout(1500);
+  check((await pool.query("select count(*)::int n from kf_mods where name = 'mod_ci'")).rows[0].n === 1, 'the owner adds a moderator in admin.html');
+  const mo = await device('Mod Device', '10.0.0.7', {}, false, 'admin.html');
+  await settings(mo, 'admin'); await mo.click('.modlock summary');
+  await mo.fill('#modLoginF [name=mname]', 'mod_ci'); await mo.fill('#modLoginF [name=mpass]', 'mod-pass-ci-1'); await mo.click('#modLoginF button[type=submit]');
+  await mo.waitForSelector('#modBox .admcard', { timeout: 10000 }).catch(() => {});
+  check(await mo.isVisible('#modBox') && !(await mo.isVisible('#admSeg')), 'a moderator signs in and sees only the moderator panel');
+  await mo.fill('#modMuteF [name=user]', 'gamma_ci'); await mo.fill('#modMuteF [name=hours]', '500'); await mo.click('#modMuteF button[type=submit]'); await mo.waitForTimeout(1500);
+  const mrow = (await pool.query("select until from kf_mutes m join kf_accounts a on a.id = m.account where a.username = 'gamma_ci'")).rows[0];
+  check(mrow && Date.parse(mrow.until) - Date.now() < 7 * 86400000 + 60000, 'a moderator mutes a player (at most 7 days)');
+  check((await pool.query("select count(*)::int n from kf_admin_log where who = 'mod_ci'")).rows[0].n >= 2, 'moderator actions are logged with their name');
+  await mo.click('[data-moda="unmute:gamma_ci"]'); await mo.waitForTimeout(1000);
+  await mo.click('#modOutBtn'); await mo.waitForTimeout(500);
+  check(await mo.isVisible('#admLockF'), 'the moderator signs out');
+  await mo.context().close();
+  // appeal: ban gamma again, gamma signs in, sees the ban and appeals; the owner accepts
+  await d.fill('#admBanF [name=user]', 'gamma_ci'); await d.fill('#admBanF [name=reason]', 'second warning');
+  await d.click('#admBanF button[type=submit]'); await d.click('#admBanF button[type=submit]'); await d.waitForTimeout(1500);
+  await settings(c, 'save'); await c.fill('#accF [name=user]', 'gamma_ci'); await c.fill('#accF [name=pass]', 'cookies123'); await c.click('#accF button[type=submit]');
+  await c.waitForSelector('#banOv', { timeout: 10000 }).catch(() => {});
+  check(/second warning/.test(await text(c, '#banOv')), 'signing in to a banned account shows the ban');
+  await c.click('#banOv .banfold summary'); await c.fill('#banApF [name=pass]', 'cookies123'); await c.fill('#banApF [name=body]', 'Sorry, it will not happen again.');
+  await c.click('#banApF button[type=submit]'); await c.waitForTimeout(1500);
+  check((await pool.query("select count(*)::int n from kf_appeals where status = 'open'")).rows[0].n === 1 && /reviewed/.test(await text(c, '#banAp')), 'a banned player sends an appeal');
+  await c.click('#banOk'); await c.click('#setClose').catch(() => {});
+  await d.click('[data-mda=reload]'); await d.waitForSelector('[data-apa^="yes:"]', { timeout: 10000 }).catch(() => {});
+  await d.fill('[data-apans]', 'OK, welcome back.'); await d.click('[data-apa^="yes:"]'); await d.waitForTimeout(1500);
+  check((await pool.query("select count(*)::int n from kf_bans")).rows[0].n === 0 && (await pool.query("select status from kf_appeals")).rows[0].status === 'accepted', 'the owner accepts the appeal and the ban ends');
+  // weekly summary and two-step sign-in
+  await d.click('#admSeg [data-ap="srv"]'); await d.waitForSelector('.admweek', { timeout: 10000 }).catch(() => {});
+  check(await d.isVisible('.admweek'), 'the Server tab shows the weekly summary');
+  await d.click('[data-tfa=setup]'); await d.waitForSelector('#adm2faKey', { timeout: 10000 });
+  const key = (await text(d, '#adm2faKey')).replace(/\s/g, '');
+  await d.fill('#adm2faOnF [name=code]', totp(key)); await d.click('#adm2faOnF button[type=submit]'); await d.waitForTimeout(1500);
+  check((await pool.query('select totp_on from kf_admin_auth')).rows[0].totp_on === true, 'the owner turns on two-step sign-in');
+  await d.click('[data-sva=logout]'); await d.waitForSelector('#admSrvPwF', { timeout: 8000 });
+  await d.fill('#admSrvPwF [name=spw]', ADMIN_PASS); await d.click('#admSrvPwF button[type=submit]');
+  await d.waitForSelector('#admSrvPwF [autocomplete=one-time-code]', { timeout: 8000 }).catch(() => {});
+  check(await d.isVisible('#admSrvPwF [autocomplete=one-time-code]'), 'server sign-in asks for the code');
+  await d.fill('#admSrvPwF [name=spw]', totp(key, 1)); await d.click('#admSrvPwF button[type=submit]');
+  await d.waitForSelector('.admweek', { timeout: 10000 }).catch(() => {});
+  check(await d.isVisible('.admweek'), 'password plus code unlocks the server tools');
+  await pool.query('update kf_admin_auth set totp_on = false, totp_secret = null');
   await d.click('#setClose');
+  // portal ads: only in the CrazyGames / GameDistribution builds, with a fake SDK here
+  require('child_process').execFileSync(process.execPath, [path.join(ROOT, 'tools/portal.js'), '--sdk', 'crazygames']);
+  const actx = await browser.newContext({ viewport: { width: 1280, height: 820 } });
+  await actx.route(LB + '/**', handle); await actx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+  await actx.route('https://sdk.crazygames.com/**', r => r.fulfill({ contentType: 'text/javascript', body: 'window.__adCalls=0;window.CrazyGames={SDK:{init:async()=>{},game:{loadingStop(){}},ad:{requestAd(t,cb){window.__adCalls++;cb.adStarted&&cb.adStarted();setTimeout(()=>cb.adFinished&&cb.adFinished(),300);}}}};' }));
+  const ap = await actx.newPage(); ap.on('pageerror', x => errors.push('ads: ' + x.message));
+  await ap.goto(url + 'dist/portal-crazygames/'); await ap.locator('#startOv [data-lang=en]').click(); await ap.click('#stGo');
+  if (await ap.isVisible('#nameOv')) { await ap.fill('#nameIn', 'Ad Bakery'); await ap.click('#nameOk'); }
+  await ap.addStyleTag({ content: '#introOv{display:none!important}' });
+  await ap.waitForSelector('#adBtn:not([hidden])', { timeout: 10000 }).catch(() => {});
+  check(await ap.isVisible('#adBtn'), 'the CrazyGames version shows the optional ad button');
+  const before = await text(ap, '#count'); await ap.click('#adBtn'); await ap.waitForTimeout(1200);
+  check(await ap.evaluate(() => window.__adCalls) === 1 && await ap.isDisabled('#adBtn') && (await text(ap, '#count')) !== before, 'watching an ad gives the reward, then waits');
+  await actx.close();
+  check(!(await a.isVisible('#adBtn')), 'the normal game shows no ads');
+
+  await d.click('#setClose').catch(() => {});
 
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {

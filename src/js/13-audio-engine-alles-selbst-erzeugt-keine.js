@@ -5,7 +5,7 @@ const gestured=()=>!navigator.userActivation||navigator.userActivation.hasBeenAc
 function getCtx(){
   if(!actx){if(!gestured()) return null;const AC=window.AudioContext||window.webkitAudioContext;if(!AC) return null;try{actx=new AC({latencyHint:'playback'});}catch(e){try{actx=new AC();}catch(e2){return null;}}}
   if(!AU) initAU();
-  if(actx.state==='suspended'&&!(document.hidden&&S.opt.bgm)) actx.resume().catch(()=>{});
+  if(actx.state==='suspended'&&!(document.hidden&&S.opt.bgm)&&!adMute) actx.resume().catch(()=>{});
   return actx;
 }
 function irBuf(sec,decay){const r=actx.sampleRate,n=Math.floor(r*sec),b=actx.createBuffer(2,n,r);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n,decay);}return b;}
@@ -142,7 +142,7 @@ function musTick(){
   while(M.t<now+ahead&&n<64){const sw=T.swing&&M.step%2?T.swing*sd*2:0;playStep(T,M.step,M.t+sw);M.t+=sd;M.step++;n++;}
 }
 addEventListener('pointerdown',()=>{getCtx();},{passive:true});
-document.addEventListener('visibilitychange',()=>{if(!actx) return;if(document.hidden&&S.opt.bgm) actx.suspend().catch(()=>{});else if(!document.hidden) actx.resume().catch(()=>{});});
+document.addEventListener('visibilitychange',()=>{if(!actx) return;if(document.hidden&&S.opt.bgm) actx.suspend().catch(()=>{});else if(!document.hidden&&!adMute) actx.resume().catch(()=>{});});
 /* Töne für alle Knöpfe, Tabs, Schalter und Fenster */
 document.addEventListener('click',e=>{
   const el=e.target.closest('button,[role="tab"],summary,input[type="checkbox"],.chip,a');

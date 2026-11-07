@@ -200,3 +200,23 @@
 #banOv .dlg{text-align:center}
 #banOv .mbig{font-size:54px;line-height:1;margin:4px 0 8px}
 #admBanF .chk{display:flex;align-items:center;gap:8px}
+
+/* V53: Moderator-Panel, Einsprüche, Wochenbericht, Zwei-Schritt-Anmeldung, Werbe-Knopf (nur Portale) */
+.modlock{margin-top:12px}
+.modbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.admlbr.appeal .namein{margin-top:6px;width:100%}
+.admweek{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;margin-top:8px}
+.admweek span{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2)}
+.admweek small{color:var(--muted);font-size:11px}
+.admweek b{font-size:18px}
+.admweek i{font-style:normal;font-size:11px;color:var(--muted)}
+.admweek .good i{color:var(--good,#5bd17a)}
+.admweek .bad i{color:var(--bad,#ff7b6b)}
+.adm2fa{padding-left:18px;display:grid;gap:8px}
+.admkey{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+.admkey code{font:600 14px/1.4 ui-monospace,monospace;letter-spacing:.06em;padding:6px 8px;border-radius:8px;background:rgba(0,0,0,.2);overflow-wrap:anywhere}
+.banap{margin:6px 0;font-size:14px}
+.banfold{text-align:left;margin:8px 0}
+#banApF{display:grid;gap:6px;margin-top:6px}
+.adbtn{display:block;margin:6px auto 0;border:1px solid var(--edge);background:var(--panel-2);color:inherit;border-radius:999px;padding:6px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.adbtn:disabled{opacity:.55;cursor:default}

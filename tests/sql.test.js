@@ -243,4 +243,73 @@ module.exports = async function sqlTests() {
   check((await rpc('acc_me', { p_token: e1.token })).username === 'test_eps', 'a timed ban ends by itself');
   check((await rpc('admin_bans', { p_pass: tok, p_action: 'list' })).length === 0, 'ended bans leave the list');
   await expectError(rpc('admin_bans', { p_pass: tok, p_action: 'ban', p_data: { user: 'nobody_here' } }), /player not found/, 'banning an unknown name fails');
+
+  // Moderators, appeals, two-step sign-in, weekly summary (v53)
+  const totp = (b32, off = 0) => {
+    const A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'; let bits = '';
+    for (const ch of b32) bits += A.indexOf(ch).toString(2).padStart(5, '0');
+    const key = Buffer.from(bits.match(/.{8}/g).map(x => parseInt(x, 2)));
+    const msg = Buffer.alloc(8); msg.writeBigUInt64BE(BigInt(Math.floor(Date.now() / 30000) + off));
+    const h = require('crypto').createHmac('sha1', key).update(msg).digest(), o = h[19] & 15;
+    return String(((h.readUInt32BE(o) & 0x7fffffff) % 1000000)).padStart(6, '0');
+  };
+  await expectError(rpc('admin_mods', { p_pass: 'x', p_action: 'list' }), /wrong admin password/, 'only the owner manages moderators');
+  await expectError(rpc('admin_mods', { p_pass: tok, p_action: 'add', p_data: { name: 'mod_anna', pass: 'short' } }), /invalid password/, 'moderator passwords need 8+ characters');
+  check((await rpc('admin_mods', { p_pass: tok, p_action: 'add', p_data: { name: 'mod_anna', pass: 'mod-pass-123' } }))[0].name === 'mod_anna', 'the owner adds a moderator');
+  check((await rpc('mod_login', { p_user: 'mod_anna', p_pass: 'nope' }, '7.1.1.1')).error === 'wrong password', 'a wrong moderator password is refused');
+  const ml = await rpc('mod_login', { p_user: 'MOD_ANNA', p_pass: 'mod-pass-123' }, '7.1.1.2');
+  check(ml.token && ml.name === 'mod_anna', 'a moderator signs in', ml);
+  const mt = ml.token;
+  await expectError(rpc('admin_mod', { p_pass: mt, p_action: 'stats' }), /wrong admin password/, 'moderators cannot use the owner tools');
+  await expectError(rpc('admin_bans', { p_pass: mt, p_action: 'list' }), /wrong admin password/, 'moderators cannot ban');
+  check((await rpc('mod_tools', { p_pass: mt, p_action: 'me' })).name === 'mod_anna', 'moderator tools know who is signed in');
+  check(Array.isArray(await rpc('mod_tools', { p_pass: mt, p_action: 'reports' })), 'moderators see the reports');
+  const mm = await rpc('mod_tools', { p_pass: mt, p_action: 'mute', p_data: { user: 'test_beta', hours: 9999, reason: 'spam' } });
+  const mu = mm.find(x => x.username === 'test_beta');
+  check(mu && Date.parse(mu.until) - Date.now() < 7 * 86400000 + 60000, 'moderators can mute for at most 7 days');
+  check((await q("select count(*)::int n from kf_admin_log where who = 'mod_anna' and action like '👮 mod_anna%mute%'")).rows[0].n === 1, 'moderator actions are logged with their name');
+  check((await rpc('mod_tools', { p_pass: mt, p_action: 'search', p_data: { q: 'test_b' } })).some(x => x.username === 'test_beta'), 'moderators can find players');
+  await rpc('mod_tools', { p_pass: mt, p_action: 'unmute', p_data: { user: 'test_beta' } });
+  check((await rpc('admin_mods', { p_pass: tok, p_action: 'list' }))[0].actions >= 2, 'the owner sees how much each moderator did');
+  await rpc('admin_mods', { p_pass: tok, p_action: 'remove', p_data: { name: 'mod_anna' } });
+  await expectError(rpc('mod_tools', { p_pass: mt, p_action: 'me' }), /wrong admin password/, 'removing a moderator ends their session');
+  // appeals
+  await rpc('admin_bans', { p_pass: tok, p_action: 'ban', p_data: { user: 'test_eps', hours: 0, reason: 'cheating' } });
+  await expectError(rpc('ban_appeal', { p_user: 'test_eps', p_pass: 'wrong', p_body: 'please' }), /wrong username or password/, 'an appeal needs the account password');
+  await expectError(rpc('ban_appeal', { p_user: 'test_beta', p_pass: 'secret123', p_body: 'hi' }), /not banned/, 'only banned players can appeal');
+  check((await rpc('ban_appeal', { p_user: 'test_eps', p_pass: 'secret123', p_body: 'I did not cheat, sorry if it looked like it' })).status === 'open', 'a banned player sends an appeal');
+  await expectError(rpc('ban_appeal', { p_user: 'test_eps', p_pass: 'secret123', p_body: 'again' }), /appeal already open/, 'one open appeal at a time');
+  const lgA = await rpc('acc_login', { p_user: 'test_eps', p_pass: 'secret123' }, '5.5.6.6');
+  check(lgA.error === 'banned' && lgA.appeal && lgA.appeal.status === 'open', 'sign-in shows the appeal is waiting', lgA);
+  const apl = await rpc('admin_appeals', { p_pass: tok, p_action: 'list' });
+  check(apl.length === 1 && apl[0].ban.reason === 'cheating', 'the owner sees the appeal with the ban reason');
+  await expectError(rpc('admin_appeals', { p_pass: mt, p_action: 'list' }), /wrong admin password/, 'moderators cannot answer appeals');
+  await rpc('admin_appeals', { p_pass: tok, p_action: 'answer', p_data: { id: apl[0].id, accept: false, answer: 'Sorry, the ban stays.' } });
+  const lgR = await rpc('acc_login', { p_user: 'test_eps', p_pass: 'secret123' }, '5.5.6.6');
+  check(lgR.appeal.status === 'rejected' && /stays/.test(lgR.appeal.answer), 'a rejected player sees the answer');
+  await expectError(rpc('ban_appeal', { p_user: 'test_eps', p_pass: 'secret123', p_body: 'pls' }), /one appeal per day/, 'one appeal per day');
+  await q("update kf_appeals set created_at = now() - interval '2 days'");
+  await rpc('ban_appeal', { p_user: 'test_eps', p_pass: 'secret123', p_body: 'second try' });
+  const ap2 = (await rpc('admin_appeals', { p_pass: tok, p_action: 'list' })).find(x => x.status === 'open');
+  await rpc('admin_appeals', { p_pass: tok, p_action: 'answer', p_data: { id: ap2.id, accept: true, answer: 'OK, welcome back.' } });
+  check((await rpc('acc_login', { p_user: 'test_eps', p_pass: 'secret123' }, '5.5.6.6')).token, 'accepting an appeal lifts the ban');
+  // two-step sign-in
+  check((await rpc('admin_2fa', { p_pass: tok, p_action: 'status' })).on === false, 'two-step sign-in starts off');
+  const su2 = await rpc('admin_2fa', { p_pass: tok, p_action: 'setup' });
+  check(/^[A-Z2-7]{32}$/.test(su2.secret) && /^otpauth:\/\/totp\//.test(su2.uri), 'setup gives a key for the authenticator app');
+  await expectError(rpc('admin_2fa', { p_pass: tok, p_action: 'confirm', p_data: { code: '000000' } }), /wrong code/, 'a wrong code does not turn it on');
+  check((await rpc('admin_2fa', { p_pass: tok, p_action: 'confirm', p_data: { code: totp(su2.secret) } })).on === true, 'the right code turns two-step sign-in on');
+  check((await rpc('admin_login', { p_pass: ADMIN_PASS }, '8.2.2.2')).error === 'code needed', 'sign-in now asks for the code');
+  check((await rpc('admin_login', { p_pass: ADMIN_PASS, p_code: '123456' }, '8.2.2.3')).error === 'wrong code', 'a wrong code is refused');
+  const tok2 = (await rpc('admin_login', { p_pass: ADMIN_PASS, p_code: totp(su2.secret, 1) }, '8.2.2.4')).token;
+  check(tok2 && tok2.length === 64, 'password plus code signs in');
+  check((await rpc('admin_login', { p_pass: ADMIN_PASS, p_code: totp(su2.secret, 1) }, '8.2.2.5')).error === 'wrong code', 'a code works only once');
+  check((await rpc('mod_login', { p_user: 'nobody', p_pass: 'x' }, '8.2.2.6')).error === 'wrong password', 'moderator sign-in still works without codes');
+  await rpc('admin_2fa', { p_pass: tok2, p_action: 'disable', p_data: { code: totp(su2.secret, -1) } }).catch(() => null);
+  if ((await rpc('admin_2fa', { p_pass: tok2, p_action: 'status' })).on) await q('update kf_admin_auth set totp_on = false, totp_secret = null');
+  check((await rpc('admin_login', { p_pass: ADMIN_PASS }, '8.2.2.7')).token, 'with two-step sign-in off, the password alone works again');
+  // weekly summary
+  const sm = await rpc('admin_summary', { p_pass: tok });
+  check(sm.this && sm.last && sm.this.accounts >= 5 && 'players' in sm.this && 'crashes' in sm.last, 'the weekly summary compares this week with last week', sm);
+  await expectError(rpc('admin_summary', { p_pass: mt }), /wrong admin password/, 'the summary is for the owner only');
 };

@@ -1658,6 +1658,26 @@ html{-webkit-tap-highlight-color:transparent}
 #banOv .mbig{font-size:54px;line-height:1;margin:4px 0 8px}
 #admBanF .chk{display:flex;align-items:center;gap:8px}
 
+/* V53: Moderator-Panel, Einsprüche, Wochenbericht, Zwei-Schritt-Anmeldung, Werbe-Knopf (nur Portale) */
+.modlock{margin-top:12px}
+.modbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.admlbr.appeal .namein{margin-top:6px;width:100%}
+.admweek{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;margin-top:8px}
+.admweek span{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2)}
+.admweek small{color:var(--muted);font-size:11px}
+.admweek b{font-size:18px}
+.admweek i{font-style:normal;font-size:11px;color:var(--muted)}
+.admweek .good i{color:var(--good,#5bd17a)}
+.admweek .bad i{color:var(--bad,#ff7b6b)}
+.adm2fa{padding-left:18px;display:grid;gap:8px}
+.admkey{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+.admkey code{font:600 14px/1.4 ui-monospace,monospace;letter-spacing:.06em;padding:6px 8px;border-radius:8px;background:rgba(0,0,0,.2);overflow-wrap:anywhere}
+.banap{margin:6px 0;font-size:14px}
+.banfold{text-align:left;margin:8px 0}
+#banApF{display:grid;gap:6px;margin-top:6px}
+.adbtn{display:block;margin:6px auto 0;border:1px solid var(--edge);background:var(--panel-2);color:inherit;border-radius:999px;padding:6px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.adbtn:disabled{opacity:.55;cursor:default}
+
 </style>
 
 <div class="wrap">
@@ -2901,8 +2921,14 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=52;
+const NEWS_VER=53;
 const NEWS=[
+  {v:53,sum:['Gesperrt? Jetzt kannst du Einspruch einlegen. Dazu mehr Moderation und Sicherheit.','Banned? You can now appeal. Plus more moderation and security.'],items:[
+    ['new','Einspruch gegen eine Sperre: Gesperrte Spieler können direkt im Sperr-Hinweis einmal am Tag um eine Prüfung bitten und sehen die Antwort beim nächsten Anmelden.','Ban appeals: banned players can ask for a review right in the ban notice, once a day, and see the answer the next time they sign in.'],
+    ['new','Moderatoren helfen jetzt mit: Sie kümmern sich um Meldungen im Club-Chat.','Moderators now help out: they take care of reports in club chat.'],
+    ['change','Mehr Sicherheit für die Server-Werkzeuge mit Zwei-Schritt-Anmeldung.','More security for the server tools with two-step sign-in.'],
+    ['change','Auf CrazyGames und GameDistribution kannst du freiwillig eine Werbung ansehen und bekommst 20 Minuten Produktion. Auf der eigenen Seite gibt es keine Werbung.','On CrazyGames and GameDistribution you can choose to watch an ad for 20 minutes of production. The game’s own site has no ads.']
+  ]},
   {v:52,sum:['Schneller laden und mehr Schutz vor Regelbrechern.','Faster loading and better protection from rule-breakers.'],items:[
     ['change','Das Spiel ist rund 10 % kleiner und lädt schneller: Die Admin-Werkzeuge stecken nicht mehr im Spiel, und der Admin-Tab ist weg.','The game is about 10% smaller and loads faster: the admin tools are no longer inside the game, and the Admin tab is gone.'],
     ['new','Wer gegen die Regeln verstößt, kann jetzt gesperrt werden. Gesperrte Spieler sehen den Grund und wie lange die Sperre dauert.','Players who break the rules can now be banned. Banned players see the reason and how long the ban lasts.']
@@ -5474,7 +5500,7 @@ const gestured=()=>!navigator.userActivation||navigator.userActivation.hasBeenAc
 function getCtx(){
   if(!actx){if(!gestured()) return null;const AC=window.AudioContext||window.webkitAudioContext;if(!AC) return null;try{actx=new AC({latencyHint:'playback'});}catch(e){try{actx=new AC();}catch(e2){return null;}}}
   if(!AU) initAU();
-  if(actx.state==='suspended'&&!(document.hidden&&S.opt.bgm)) actx.resume().catch(()=>{});
+  if(actx.state==='suspended'&&!(document.hidden&&S.opt.bgm)&&!adMute) actx.resume().catch(()=>{});
   return actx;
 }
 function irBuf(sec,decay){const r=actx.sampleRate,n=Math.floor(r*sec),b=actx.createBuffer(2,n,r);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n,decay);}return b;}
@@ -5611,7 +5637,7 @@ function musTick(){
   while(M.t<now+ahead&&n<64){const sw=T.swing&&M.step%2?T.swing*sd*2:0;playStep(T,M.step,M.t+sw);M.t+=sd;M.step++;n++;}
 }
 addEventListener('pointerdown',()=>{getCtx();},{passive:true});
-document.addEventListener('visibilitychange',()=>{if(!actx) return;if(document.hidden&&S.opt.bgm) actx.suspend().catch(()=>{});else if(!document.hidden) actx.resume().catch(()=>{});});
+document.addEventListener('visibilitychange',()=>{if(!actx) return;if(document.hidden&&S.opt.bgm) actx.suspend().catch(()=>{});else if(!document.hidden&&!adMute) actx.resume().catch(()=>{});});
 /* Töne für alle Knöpfe, Tabs, Schalter und Fenster */
 document.addEventListener('click',e=>{
   const el=e.target.closest('button,[role="tab"],summary,input[type="checkbox"],.chip,a');
@@ -8416,7 +8442,7 @@ $id('accBox').addEventListener('submit',async e=>{
         await accUpload(false);if(v48Ready) refClaim();accMsg=tt('Konto erstellt! Deine Bäckerei ist jetzt in deinem Konto gespeichert.','Account created! Your bakery is now saved in your account.');accMsgOk=true;toast(accMsg,true);
       }else{
         const r=await lbApi('rpc/acc_login',{p_user:user,p_pass:pass});accV4=true;
-        if(r&&r.error){accMsg=r.error==='banned'?banTxt(r):r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
+        if(r&&r.error){if(r.error==='banned') banShow(r,user);accMsg=r.error==='banned'?banTxt(r):r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
         else{
           accTok=r.token;lsSet(ACC_KEY,accTok);accMe=r;accBusy=false;
           if(r.has_save){accAsked=true;accAsk(tt('Willkommen zurück, ','Welcome back, ')+r.username+'!','<p>'+tt('In deinem Konto liegt eine Bäckerei mit ','Your account has a bakery with ')+'<b>'+fmt(r.save_baked||0)+tt(' Keksen',' cookies')+'</b>.</p><p class="small">'+tt('Auf diesem Gerät: ','On this device: ')+fmt(S.all)+tt(' Kekse',' cookies')+'</p>',tt('Konto-Bäckerei laden','Load account bakery'),tt('Dieses Gerät ins Konto','Use this device’s bakery'),()=>accDownload(),()=>accUpload(true));}
@@ -9058,15 +9084,101 @@ function banTxt(b){
     +(b&&b.reason?' '+tt('Grund: ','Reason: ')+escName(String(b.reason)):'');
 }
 function banSeen(m){
-  const b=banParse(m);
+  const b=banParse(m),user=accMe&&accMe.username||'';
   if(accTok){accUnset();accMsg=banTxt(b);accMsgOk=false;accRender();}
   clubData=null;clubRender();
   if(banShown) return;banShown=true;
+  banShow(b,user);
+}
+/* V53: Der Hinweis enthält jetzt einen Einspruch. Gesperrte Spieler können sich nicht anmelden,
+   deshalb bestätigen sie den Einspruch mit Benutzername und Passwort. */
+function banAppealHtml(b){
+  const a=b&&b.appeal;
+  if(a&&a.status==='open') return '<p class="banap">⏳ '+tt('Dein Einspruch wird geprüft. Versuch später nochmal, dich anzumelden, um die Antwort zu sehen.','Your appeal is being reviewed. Try signing in again later to see the answer.')+'</p>';
+  let h=a&&a.status==='rejected'?'<p class="banap">❌ '+tt('Dein Einspruch wurde abgelehnt.','Your appeal was rejected.')+(a.answer?' „'+escName(a.answer)+'“':'')+'</p>':'';
+  return h+'<details class="fold banfold"><summary>'+tt('Einspruch einlegen','Appeal this ban')+'</summary><form class="accform" id="banApF" novalidate>'
+    +'<input class="namein" name="user" maxlength="16" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="'+tt('Benutzername','Username')+'" value="'+escName(b&&b.username||'')+'">'
+    +'<input class="namein" name="pass" type="password" maxlength="72" autocomplete="current-password" placeholder="'+tt('Passwort','Password')+'">'
+    +'<textarea class="namein" name="body" maxlength="500" rows="3" placeholder="'+tt('Warum sollte die Sperre aufgehoben werden?','Why should the ban be lifted?')+'"></textarea>'
+    +'<button type="submit" class="btn primary">'+tt('Einspruch senden','Send appeal')+'</button><p class="nameerr" id="banApErr" aria-live="polite"></p></form>'
+    +'<p class="small">'+tt('Ein Einspruch pro Tag. Der Admin liest ihn und antwortet.','One appeal per day. The admin reads it and answers.')+'</p></details>';
+}
+function banShow(b,user){
+  b=Object.assign({},b||{});if(!b.username&&user) b.username=user;
+  const old=$id('banOv');if(old) old.remove();
   const ov=document.createElement('div');ov.className='overlay';ov.id='banOv';
-  ov.innerHTML='<div class="dlg namedlg" role="alertdialog" aria-modal="true" aria-labelledby="banT"><div class="mbig" aria-hidden="true">⛔</div><h2 id="banT">'+tt('Konto gesperrt','Account banned')+'</h2><p>'+banTxt(b)+'</p><p class="small">'+tt('Online-Funktionen wie Konto, Clubs, Geschenke und Bestenliste sind gesperrt. Dein Spiel auf diesem Gerät bleibt.','Online features like your account, clubs, gifts and the leaderboard are blocked. Your game on this device stays.')+'</p><div class="btns" style="justify-content:center"><button type="button" class="btn primary" id="banOk">OK</button></div></div>';
+  ov.innerHTML='<div class="dlg namedlg" role="alertdialog" aria-modal="true" aria-labelledby="banT"><div class="mbig" aria-hidden="true">⛔</div><h2 id="banT">'+tt('Konto gesperrt','Account banned')+'</h2><p>'+banTxt(b)+'</p><p class="small">'+tt('Online-Funktionen wie Konto, Clubs, Geschenke und Bestenliste sind gesperrt. Dein Spiel auf diesem Gerät bleibt.','Online features like your account, clubs, gifts and the leaderboard are blocked. Your game on this device stays.')+'</p><div id="banAp">'+banAppealHtml(b)+'</div><div class="btns" style="justify-content:center"><button type="button" class="btn primary" id="banOk">OK</button></div></div>';
   document.body.appendChild(ov);const ok=ov.querySelector('#banOk');ok.focus();
   ok.addEventListener('click',()=>ov.remove());
+  ov.addEventListener('submit',async e=>{
+    e.preventDefault();const f=e.target;if(f.getAttribute('id')!=='banApF') return;
+    const d=Object.fromEntries(new FormData(f).entries()),err=$id('banApErr'),body=String(d.body||'').trim();
+    if(!body){err.textContent=tt('Schreib kurz, warum.','Write a few words why.');return;}
+    const btn=f.querySelector('[type=submit]');btn.disabled=true;err.textContent='';
+    try{
+      const r=await lbApi('rpc/ban_appeal',{p_user:String(d.user||'').trim(),p_pass:String(d.pass||''),p_body:body});
+      $id('banAp').innerHTML=banAppealHtml(Object.assign({},b,{appeal:r}));toast(tt('Einspruch gesendet.','Appeal sent.'));
+    }catch(x){
+      const m=String(x.message||'');btn.disabled=false;
+      err.textContent=/wrong username or password/.test(m)?tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.'):/too many tries/.test(m)?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):/appeal already open/.test(m)?tt('Du hast schon einen offenen Einspruch.','You already have an open appeal.'):/one appeal per day/.test(m)?tt('Nur ein Einspruch pro Tag. Versuch es morgen nochmal.','Only one appeal per day. Try again tomorrow.'):/not banned/.test(m)?tt('Dieses Konto ist nicht (mehr) gesperrt. Melde dich einfach an.','This account isn’t banned (any more). Just sign in.'):lbMissing(x)?tt('Einsprüche gehen erst nach dem nächsten Server-Update.','Appeals work after the next server update.'):tt('Keine Verbindung. Versuch es gleich nochmal.','No connection. Try again in a moment.');
+    }
+  });
 }
+
+/* ======================= V53: Freiwillige Werbung, nur in Portal-Versionen ======================= */
+/* Nur die Zip-Dateien für CrazyGames und GameDistribution laden deren SDK (tools/portal.js --sdk …).
+   Auf der eigenen Seite und in der normalen Portal-Version gibt es keine Werbung. */
+const AD_SDK=window.KF_PORTAL==='crazygames'||window.KF_PORTAL==='gamedistribution'?window.KF_PORTAL:'';
+const AD_MIN=20,AD_CD=300000,AD_KEY='keksfabrik-adt';
+var adMute=false;
+let adReady=false,adBusy=false,adNext=0,adGdOk=false;
+try{adNext=+localStorage.getItem(AD_KEY)||0;}catch(x){}
+function adSound(off){adMute=off;try{if(typeof actx!=='undefined'&&actx){if(off) actx.suspend().catch(()=>{});else if(!document.hidden) actx.resume().catch(()=>{});}}catch(x){}}
+function adReward(){
+  const g=Math.max(1000,C.kps0*60*AD_MIN);addCk(g);
+  adNext=Date.now()+AD_CD;try{localStorage.setItem(AD_KEY,String(adNext));}catch(x){}
+  toast(tt('🎬 Danke! +','🎬 Thanks! +')+fmt(g)+tt(' Kekse',' cookies'),true);snd('claim');render();adRender();
+}
+function adRender(){
+  if(!AD_SDK) return;
+  let b=$id('adBtn');
+  if(!b){const gb=$id('gevBar');if(!gb) return;b=document.createElement('button');b.type='button';b.id='adBtn';b.className='adbtn';gb.insertAdjacentElement('afterend',b);b.addEventListener('click',adShow);}
+  const wait=Math.max(0,adNext-Date.now());b.hidden=!adReady;b.disabled=adBusy||wait>0;
+  const t=adBusy?tt('Werbung läuft …','Ad playing …'):wait>0?'🎬 '+Math.ceil(wait/60000)+' min':'🎬 '+tt('Werbung ansehen: +','Watch an ad: +')+AD_MIN+' min';
+  if(b.textContent!==t) b.textContent=t;
+  b.title=tt('Freiwillig: Sieh dir eine kurze Werbung an und bekomm '+AD_MIN+' Minuten Produktion.','Optional: watch a short ad and get '+AD_MIN+' minutes of production.');
+}
+function adDone(ok){adBusy=false;adSound(false);if(ok) adReward();else{toast(tt('Gerade gibt es keine Werbung. Versuch es später nochmal.','No ad available right now. Try again later.'));adRender();}}
+function adShow(){
+  if(adBusy||!adReady||Date.now()<adNext) return;
+  adBusy=true;adRender();
+  try{
+    if(AD_SDK==='crazygames'){
+      window.CrazyGames.SDK.ad.requestAd('rewarded',{adStarted:()=>adSound(true),adFinished:()=>adDone(true),adError:()=>adDone(false)});
+    }else{
+      adGdOk=false;
+      window.gdsdk.showAd('rewarded').then(()=>adDone(adGdOk)).catch(()=>adDone(false));
+    }
+  }catch(x){adDone(false);}
+}
+/* GameDistribution meldet sich über GD_OPTIONS.onEvent (in tools/portal.js gesetzt). */
+window.__kfGdEvent=e=>{
+  const n=e&&e.name;
+  if(n==='SDK_READY'){adReady=true;try{window.gdsdk.preloadAd('rewarded').catch(()=>{});}catch(x){}adRender();}
+  else if(n==='SDK_GAME_PAUSE') adSound(true);
+  else if(n==='SDK_GAME_START') adSound(false);
+  else if(n==='SDK_REWARDED_WATCH_COMPLETE') adGdOk=true;
+};
+async function adInit(){
+  if(AD_SDK==='crazygames'){
+    for(let i=0;i<20&&!(window.CrazyGames&&window.CrazyGames.SDK);i++) await new Promise(r=>setTimeout(r,500));
+    if(!(window.CrazyGames&&window.CrazyGames.SDK)) return;
+    try{await window.CrazyGames.SDK.init();}catch(x){}
+    try{window.CrazyGames.SDK.game.loadingStop();}catch(x){}
+    adReady=true;adRender();
+  }else if(AD_SDK==='gamedistribution'&&window.__kfGdReady){window.__kfGdEvent({name:'SDK_READY'});}
+}
+if(AD_SDK){adInit();setInterval(adRender,15000);}
 
 /* ======================= V40: Shop-Navigation & Welt-Übergänge ======================= */
 const SHOPK=[['starShop','⭐','Sterne','Stars'],['artSec','⚒️','Schmiede','Forge'],['cardSec','🃏','Karten','Cards'],['boostList','⚡','Boosts','Boosts'],['boostListW','🌍','Welt','World'],['boxBtn','🎁','Keksbox','Cookie box'],['itemGrid','🎒','Gegenstände','Items'],['skinRow','🍪','Designs','Designs']];

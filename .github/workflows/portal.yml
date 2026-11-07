@@ -1,7 +1,9 @@
 name: Portal package
 
 # Builds the zip for game portals (itch.io, CrazyGames, GameDistribution, Newgrounds) on every push to main.
-# Download "cookie-factory-portal" from the workflow run's Artifacts section: that zip is the upload file. Steps and store texts: docs/PORTALS.md
+# Download a zip from the workflow run's Artifacts section: cookie-factory-portal (no ads, itch.io etc.),
+# cookie-factory-crazygames and cookie-factory-gamedistribution (optional rewarded ads). Each zip is the upload file.
+# For GameDistribution, add the repository variable GD_GAME_ID (Settings → Secrets and variables → Actions → Variables). Steps and store texts: docs/PORTALS.md
 on:
   push:
     branches: [main]
@@ -19,10 +21,25 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Build the portal version
-        run: node tools/portal.js
+      - name: Build the portal versions
+        env:
+          GD_GAME_ID: ${{ vars.GD_GAME_ID }}
+        run: |
+          node tools/portal.js
+          node tools/portal.js --sdk crazygames
+          node tools/portal.js --sdk gamedistribution
       - uses: actions/upload-artifact@v4
         with:
           name: cookie-factory-portal
           path: dist/portal/
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cookie-factory-crazygames
+          path: dist/portal-crazygames/
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cookie-factory-gamedistribution
+          path: dist/portal-gamedistribution/
           retention-days: 90
