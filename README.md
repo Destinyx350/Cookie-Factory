@@ -29,12 +29,12 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 
 | | |
 | --- | --- |
-| 🏭 **Buildings** | From the Dough Finger to the Bakery and beyond. Each one shows its output and payback time. |
-| ⬆️ **325 upgrades** | Make buildings and clicks much stronger. Turn on auto upgrades or use *Buy all*. |
+| 🏭 **23 buildings** | From the Dough Finger to the Cookie Singularity. Each one shows its output and payback time. |
+| ⬆️ **349 upgrades** | Make buildings and clicks much stronger. Turn on auto upgrades or use *Buy all*. |
 | 🤖 **Automation** | *Best buy* picks the smartest purchase, and you choose how much of your cookies automation may spend. |
 | 🧑‍🍳 **Helpers** | Helpers buy buildings, harvest, fight or trade, and level up with experience. |
 | 🌍 **World** | Adventure, stores, a lucky wheel, titles, a pass and a collection to complete. |
-| 🏆 **175 achievements** | Plus guided *First Steps* goals and detailed statistics. |
+| 🏆 **192 achievements** | Plus guided *First Steps* goals and detailed statistics. |
 | 📅 **Daily rewards** | A 7-day login streak and three daily tasks with a bonus chest. |
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
 | ☀️ **Living world** | Time of day and weather change while you play. Combos and boosts speed things up. |
@@ -50,6 +50,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | ⚔️ **Club wars** | Every weekend your club faces a club of similar strength. Winners collect trophies and gems. |
 | 💌 **Invites** | Share your invite link; when a friend starts playing through it, you both get a bonus. |
 | 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter, server codes, and a transfer code to move your save to another device. |
+| 🔔 **Push notifications** | Get notified about gifts, friend requests, club prizes and events, even when the game is closed. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. Shared links show a preview card. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
@@ -71,12 +72,12 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 
 Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Computer und auf dem Handy. Klicke auf den großen Keks, baue deine Fabrik aus, stelle Helfer ein und werde vom *Bäckerlehrling* zum Keks-Tycoon.
 
-- 🏭 **Gebäude** mit Ertrag und Amortisationszeit
-- ⬆️ **325 Upgrades**, auf Wunsch automatisch gekauft
+- 🏭 **23 Gebäude** mit Ertrag und Amortisationszeit
+- ⬆️ **349 Upgrades**, auf Wunsch automatisch gekauft
 - 🤖 **Automatik**: *Bester Kauf* und ein einstellbares Ausgabelimit
 - 🧑‍🍳 **Helfer**, die kaufen, ernten, kämpfen oder handeln und dabei aufsteigen
 - 🌍 **Welt** mit Abenteuer, Läden, Glücksrad, Titeln, Pass und Sammlung
-- 🏆 **175 Erfolge**, Ziele und Statistiken
+- 🏆 **192 Erfolge**, Ziele und Statistiken
 - 📅 **Tägliche Belohnungen**: 7-Tage-Serie und drei Tagesaufgaben
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
 - 💾 **Spielstände mit Namen**: 3 Speicherplätze, jedes neue Spiel bekommt einen Namen
@@ -91,6 +92,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - ⚔️ **Clubkriege** jedes Wochenende mit Trophäen und Edelsteinen
 - 💌 **Einladungen**: Wer über deinen Link anfängt, bringt euch beiden einen Bonus
 - 🌍 **Online-Funktionen**: globale Events, Ankündigungen, Live-Zähler, Server-Codes und ein Transfer-Code fürs andere Gerät
+- 🔔 **Push-Benachrichtigungen** für Geschenke, Freundschaftsanfragen, Club-Preise und Events
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit; Wochen- und Monatspreise für die Top 3, Updates jede Minute
@@ -104,19 +106,17 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 48
-- **New:** Player profiles. Tap a name in the leaderboard or your club to see that bakery.
-- **New:** Friends. A new **Friends** tab in clubs shows who's online and lets you send a gift in one tap.
-- **New:** Weekend club wars. Every Saturday and Sunday your club faces one of similar strength; the winner gets a trophy and every member 40 gems.
-- **New:** Invites. Share the game while signed in, and anyone who starts through your link earns you both a bonus. Shared links now show a preview card.
+### Version 49
+- **New:** Three late-game buildings after the Big Bang Oven: Constellation Bakery, Quantum Patisserie and Cookie Singularity, each with 8 upgrades.
+- **New:** 17 achievements, including **Complete Factory** and goals up to 10 decillion cookies.
+- **New:** Push notifications under **Settings → Display**: gifts, friend requests, club prizes, admin messages and events, even when the game is closed.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Spielerprofile. Tippe in der Bestenliste oder im Club auf einen Namen und sieh dir die Bäckerei an.
-- **Neu:** Freunde. Der neue Reiter **Freunde** bei den Clubs zeigt, wer online ist, und mit einem Tipp schickst du ein Geschenk.
-- **Neu:** Clubkriege am Wochenende. Jeden Samstag und Sonntag tritt dein Club gegen einen ähnlich starken an; der Gewinner bekommt eine Trophäe und jedes Mitglied 40 Edelsteine.
-- **Neu:** Einladungen. Teile das Spiel mit deinem Konto, und wer über deinen Link anfängt, bringt euch beiden einen Bonus. Geteilte Links zeigen jetzt eine Vorschau.
+- **Neu:** Drei Gebäude fürs späte Spiel nach dem Urknall-Ofen: Sternbild-Bäckerei, Quanten-Konditorei und Keks-Singularität, jeweils mit 8 Upgrades.
+- **Neu:** 17 Erfolge, darunter **Komplette Fabrik** und Ziele bis 10 Quintilliarden Kekse.
+- **Neu:** Push-Benachrichtigungen unter **Einstellungen → Anzeige**: Geschenke, Freundschaftsanfragen, Club-Preise, Admin-Nachrichten und Events, auch wenn das Spiel geschlossen ist.
 
 </details>
 
@@ -136,7 +136,7 @@ Then open http://localhost:8000.
 
 Automatic tests run on every change; see [tests/README.md](tests/README.md).
 
-To switch on the leaderboard, follow [docs/LEADERBOARD.md](docs/LEADERBOARD.md).
+To switch on the leaderboard, follow [docs/LEADERBOARD.md](docs/LEADERBOARD.md). Push notifications: [docs/PUSH.md](docs/PUSH.md).
 
 <div align="center">
 <sub>Made with 🍪 by <a href="https://github.com/Destinyx350">Destinyx350</a></sub>

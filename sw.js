@@ -1,6 +1,6 @@
 // Keksfabrik service worker: lets the game open offline and as an installed app.
 // Raise CACHE with every game update (see CLAUDE.md) so old files are cleared out.
-const CACHE = 'keksfabrik-v48';
+const CACHE = 'keksfabrik-v49';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -44,4 +44,23 @@ self.addEventListener('fetch', (e) => {
       }))
     );
   }
+});
+
+// Push notifications (gifts, friend requests, admin messages, club prizes, global events).
+self.addEventListener('push', (e) => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = { title: e.data ? e.data.text() : '' }; }
+  const title = d.title || 'Cookie Factory';
+  e.waitUntil(self.registration.showNotification(title, {
+    body: d.body || '', icon: './icons/icon-192.png', badge: './icons/icon-192.png', tag: 'kf-' + title.slice(0, 24), data: { url: d.url || './' }
+  }));
+});
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  const target = (e.notification.data && e.notification.data.url) || './';
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+    for (const c of list) { if ('focus' in c) return c.focus(); }
+    return self.clients.openWindow ? self.clients.openWindow(target) : null;
+  }));
 });

@@ -128,6 +128,12 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - **Invites:** `?ref=<username>` is stored in `localStorage['keksfabrik-ref']` and removed from the URL; after sign-up `ref_claim` records it (only for accounts under a day old). `kf_ref_rewards` mails both players once the new player has `club_hw` ≥ 1e6; an inviter is rewarded for at most 10 invites a week. `shareURL()` adds the ref when signed in.
 - Link previews: Open Graph tags in `<head>` and `docs/og-card.png` (1200×630).
 
+## Late-game content and push (version 49)
+
+- Buildings are data in `B`; tier upgrades, ownership achievements, heavenly nodes and milestones are generated from it. A new building needs a `B` entry and an `ART` icon `b<index>` (outlined style in the `Object.assign(ART,{…})` block). Keep README counts in sync (now 23 buildings, 349 upgrades, 192 achievements; the Goals statistics show the live numbers).
+- **Push:** server side is `docs/push-v9.sql` (`kf_push_subs`, `kf_push_queue`, `kf_push_cfg`, triggers on gifts, mail, friend requests, club prizes and events; `push_take`/`push_gone` need the shared secret). The sender is the edge function `supabase/functions/kf-push` (Verify JWT off; secrets `VAPID_PUBLIC`, `VAPID_PRIVATE`, `KF_PUSH_SECRET` live only in Supabase). Owner steps: `docs/PUSH.md`. The VAPID private key, the shared secret and the `kf_push_cfg` insert line are given in chat only; never commit them. `VAPID_PUB` in `index.html` is public.
+- Client: `V49` block (`pushEnable/Disable/State`), switch under Settings → Display. `sw.js` shows notifications (`push`, `notificationclick`).
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass (including the GitHub `Tests` check). After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

@@ -152,4 +152,27 @@ module.exports = async function sqlTests() {
   check(after.war.closed && after.war.won && after.club.trophies === 1, 'the winning club gets a trophy', after.war);
   check((await W('select social_claim($1) v', [c2.token], false)).mail.some(m => /War Club B/.test(m.title)), 'winning members get a prize');
   check((await rpc('club_list', {})).some(c => c.name === 'War Club B' && c.trophies === 1), 'trophies show in the club list');
+
+  // Push notifications (v49)
+  const sub = { endpoint: 'https://push.example.com/abc123', keys: { p256dh: 'BPk', auth: 'xyz' } };
+  check((await rpc('push_subscribe', { p_token: b.token, p_sub: sub, p_lang: 'de' })).ok, 'a device can turn push on');
+  await expectError(rpc('push_subscribe', { p_token: b.token, p_sub: { endpoint: 'http://evil', keys: {} } }), /invalid subscription/, 'bad push subscriptions are refused');
+  await q('delete from kf_push_queue');
+  await q("update kf_accounts set created_at = now() - interval '2 days', club_hw = 1e9 where username = 'test_gamma'");
+  await rpc('gift_send', { p_token: c1.token, p_to: 'test_beta', p_kind: 'stars', p_amount: 1, p_note: '' });
+  await rpc('friend_request', { p_token: c1.token, p_user: 'test_beta' });
+  const qd = (await q("select t_en from kf_push_queue order by id")).rows.map(r => r.t_en);
+  check(qd.some(t => /Gift from test_gamma/.test(t)) && qd.some(t => /Friend request/.test(t)), 'gifts and friend requests queue a push', qd);
+  await rpc('gift_send', { p_token: b.token, p_to: 'test_gamma', p_kind: 'stars', p_amount: 1, p_note: '' }).catch(() => {});
+  check((await q("select count(*)::int n from kf_push_queue q join kf_accounts a on a.id = q.account where a.username = 'test_gamma'")).rows[0].n === 0, 'no push is queued for players without push');
+  await expectError(rpc('push_take', { p_secret: 'guess' }), /forbidden/, 'only the push sender can take notifications');
+  await q("insert into kf_push_cfg (k, url, secret) values (1, 'https://example.invalid/kf-push', 'test-secret') on conflict (k) do update set secret = excluded.secret");
+  const taken = await rpc('push_take', { p_secret: 'test-secret' });
+  check(taken.length >= 2 && taken[0].subs[0].lang === 'de' && /Geschenk/.test(taken[0].t_de), 'the push sender gets the notifications with the device', taken.length);
+  check((await rpc('push_take', { p_secret: 'test-secret' })).length === 0, 'each notification is sent once');
+  await rpc('admin_online', { p_pass: tok, p_action: 'event_add', p_data: { kind: 'prod', mult: 2, hours: 1 } });
+  const bc = await rpc('push_take', { p_secret: 'test-secret' });
+  check(bc.length === 1 && bc[0].subs.length >= 1, 'a new global event notifies every device');
+  await rpc('push_gone', { p_secret: 'test-secret', p_endpoints: [sub.endpoint] });
+  check((await q('select count(*)::int n from kf_push_subs')).rows[0].n === 0, 'dead devices are removed');
 };

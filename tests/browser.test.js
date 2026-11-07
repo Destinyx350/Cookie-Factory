@@ -156,6 +156,11 @@ module.exports = async function browserTests(url) {
   check((await pool.query("select count(*)::int n from kf_referrals r join kf_accounts a on a.id = r.inviter where a.username = 'alpha_ci'")).rows[0].n === 1, 'signing up through an invite link records the invite');
   await ectx.close();
 
+  // 5d. Push setting (v49)
+  await settings(a, 'disp');
+  check(await a.isVisible('#pushBtn') && /Push/.test(await text(a, '#pushT')), 'push notification switch shows in Settings → Display');
+  await a.click('#setClose');
+
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {
     await b.evaluate(t => { const e = document.querySelector('[data-tab="' + t + '"]'); if (e) e.click(); }, tab); await b.waitForTimeout(200);

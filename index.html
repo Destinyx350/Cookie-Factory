@@ -1862,6 +1862,12 @@ html{-webkit-tap-highlight-color:transparent}
           <p class="small" id="oEcoH" style="margin-top:4px"></p>
         </div>
         <div class="optsec" data-sc="disp">
+          <h2 id="pushT"></h2>
+          <p class="small" id="pushP"></p>
+          <div class="btns" style="margin-top:8px"><button type="button" class="btn primary" id="pushBtn"></button></div>
+          <p class="nameerr ok" id="pushMsg" aria-live="polite"></p>
+        </div>
+        <div class="optsec" data-sc="disp">
           <h2 id="oNtfH"></h2>
           <div class="seg" id="ntfSeg"><button type="button" data-v="all"></button><button type="button" data-v="imp"></button><button type="button" data-v="off"></button></div>
           <p class="small" id="oNtfP" style="margin-top:6px"></p>
@@ -2261,7 +2267,10 @@ const B=[
   {name:['Sternenschmiede','Star Forge'],plural:['Sternenschmieden','Star Forges'],base:3.7e18,cps:6.3e12,flavor:['Schmiedet Kekse in Sternenglut.','Forges cookies in starfire.']},
   {name:['Schwarzes Loch','Black Hole'],plural:['Schwarze Löcher','Black Holes'],base:4.4e19,cps:7.2e13,flavor:['Zieht Kekse aus dem ganzen All an.','Pulls in cookies from all of space.']},
   {name:['Traumbäckerei','Dream Bakery'],plural:['Traumbäckereien','Dream Bakeries'],base:5.3e20,cps:8.3e14,flavor:['Backt alles, was du dir erträumst.','Bakes everything you dream of.']},
-  {name:['Urknall-Ofen','Big Bang Oven'],plural:['Urknall-Öfen','Big Bang Ovens'],base:6.4e21,cps:9.6e15,flavor:['Hier begann das Keks-Universum.','This is where the cookie universe began.']}
+  {name:['Urknall-Ofen','Big Bang Oven'],plural:['Urknall-Öfen','Big Bang Ovens'],base:6.4e21,cps:9.6e15,flavor:['Hier begann das Keks-Universum.','This is where the cookie universe began.']},
+  {name:['Sternbild-Bäckerei','Constellation Bakery'],plural:['Sternbild-Bäckereien','Constellation Bakeries'],base:7.7e22,cps:1.1e17,flavor:['Zeichnet Kekse quer über den Nachthimmel.','Draws cookies across the night sky.']},
+  {name:['Quanten-Konditorei','Quantum Patisserie'],plural:['Quanten-Konditoreien','Quantum Patisseries'],base:9.3e23,cps:1.27e18,flavor:['Backt jeden möglichen Keks – gleichzeitig.','Bakes every possible cookie – all at once.']},
+  {name:['Keks-Singularität','Cookie Singularity'],plural:['Keks-Singularitäten','Cookie Singularities'],base:1.12e25,cps:1.46e19,flavor:['Alle Kekse in einem Punkt. Unendlich knusprig.','All cookies in a single point. Infinitely crunchy.']}
 ];
 
 const UP=[];
@@ -2341,12 +2350,14 @@ B.forEach((b,i)=>TIER_REQ.forEach((req,k)=>UP.push({
 const UPMAP={};UP.forEach(u=>{UPMAP[u.id]=u;});
 
 const A=[];
-[[1,'Erster Krümel','First Crumb'],[100,'Kleine Auslage','Small Display'],[1e3,'Volle Backstube','Full Bakery'],[1e4,'Marktstand','Market Stall'],[1e5,'Lieferwagen','Delivery Van'],[1e6,'Millionenbäcker','Millionaire Baker'],[1e7,'Keksbaron','Cookie Baron'],[1e8,'Zuckerkaiser','Sugar Emperor'],[1e9,'Milliardär','Billionaire'],[1e10,'Kekslawine','Cookie Avalanche'],[1e11,'Mehlberg','Flour Mountain'],[1e12,'Teigimperium','Dough Empire'],[1e13,'Kekskosmos','Cookie Cosmos'],[1e15,'Unendliche Rezeptur','Infinite Recipe'],[1e16,'Keksgalaxie','Cookie Galaxy'],[1e18,'Sternenbäcker','Star Baker'],[1e20,'Universumsbäcker','Universe Baker'],[1e22,'Multiversum-Meister','Multiverse Master'],[1e25,'Keksgott','Cookie God']]
+[[1,'Erster Krümel','First Crumb'],[100,'Kleine Auslage','Small Display'],[1e3,'Volle Backstube','Full Bakery'],[1e4,'Marktstand','Market Stall'],[1e5,'Lieferwagen','Delivery Van'],[1e6,'Millionenbäcker','Millionaire Baker'],[1e7,'Keksbaron','Cookie Baron'],[1e8,'Zuckerkaiser','Sugar Emperor'],[1e9,'Milliardär','Billionaire'],[1e10,'Kekslawine','Cookie Avalanche'],[1e11,'Mehlberg','Flour Mountain'],[1e12,'Teigimperium','Dough Empire'],[1e13,'Kekskosmos','Cookie Cosmos'],[1e15,'Unendliche Rezeptur','Infinite Recipe'],[1e16,'Keksgalaxie','Cookie Galaxy'],[1e18,'Sternenbäcker','Star Baker'],[1e20,'Universumsbäcker','Universe Baker'],[1e22,'Multiversum-Meister','Multiverse Master'],[1e25,'Keksgott','Cookie God'],[1e28,'Keks-Ewigkeit','Cookie Eternity'],[1e31,'Jenseits der Zahlen','Beyond Numbers'],[1e34,'Krümel-Unendlich','Crumb Infinity']]
   .forEach(([n,de,en])=>A.push({id:'all'+n,name:[de,en],desc:()=>tr(n===1?'a_all_1':'a_all_n',{n:fmt(n)}),test:()=>S.all>=n}));
 [[1,'Läuft von selbst','Runs by Itself'],[10,'Zehnerpack','Ten-Pack'],[100,'Hundertschaft','Hundred Strong'],[1e3,'Tausendsassa','Jack of All Trades'],[1e4,'Dauerbetrieb','Non-Stop'],[1e5,'Nachtschicht','Night Shift'],[1e6,'Keksflut','Cookie Flood'],[1e7,'Backorkan','Baking Hurricane'],[1e8,'Teigtsunami','Dough Tsunami'],[1e9,'Gigabäcker','Giga Baker'],[1e10,'Keksstrom','Cookie Stream'],[1e11,'Keksfluss','Cookie River'],[1e12,'Keksozean','Cookie Ocean'],[1e14,'Kekssturmflut','Cookie Deluge']]
   .forEach(([n,de,en])=>A.push({id:'kps'+n,name:[de,en],desc:()=>tr('a_kps',{n:fmt(n)}),test:()=>C.kps>=n}));
 [[1,'Erster Klick','First Click'],[100,'Warmgeklickt','Warmed Up'],[1e3,'Klickgewitter','Click Storm'],[1e4,'Mausarm','Mouse Arm'],[1e5,'Klickmaschine','Click Machine']]
   .forEach(([n,de,en])=>A.push({id:'clk'+n,name:[de,en],desc:()=>tr('a_clicks',{n:fmt(n)}),test:()=>S.clicks>=n}));
+A.push({id:'allb1',name:['Komplette Fabrik','Complete Factory'],desc:()=>tt('Besitze von jedem Gebäude mindestens eins.','Own at least one of every building.'),test:()=>B.every((b,i)=>S.b[i]>=1)});
+A.push({id:'allb100',name:['Keks-Imperium','Cookie Empire'],desc:()=>tt('Besitze von jedem Gebäude mindestens 100.','Own at least 100 of every building.'),test:()=>B.every((b,i)=>S.b[i]>=100)});
 B.forEach((b,i)=>[[1,'Der Anfang','The Beginning'],[50,'Belegschaft','Workforce'],[100,'Großbetrieb','Large Operation'],[150,'Riesenbetrieb','Giant Operation']].forEach(([n,de,en])=>A.push({
   id:'own'+i+'_'+n,name:[b.name[0]+': '+de,b.name[1]+': '+en],desc:()=>tr('a_own',{n,name:tx(n===1?b.name:b.plural)}),test:()=>S.b[i]>=n
 })));
@@ -2836,7 +2847,10 @@ b16:SH+'<path d="M12 34h34c0 5-5 8-11 8v6h7v7H21v-7h7v-6c-9 0-16-3-16-8z" fill="
 ,
 b17:'<path d="M6 10h1M56 54h1M50 8h1M10 54h1" stroke="#fff" stroke-width="2" stroke-linecap="round"/><ellipse cx="32" cy="33" rx="27" ry="10.5" fill="#ff9a3c"'+O+'/><ellipse cx="32" cy="33" rx="19" ry="6.5" fill="#ffd96a"/><circle cx="32" cy="30" r="13.5" fill="none" stroke="rgba(255,200,120,.7)" stroke-width="2.4"/><circle cx="32" cy="30" r="11" fill="#0d0a14"'+O+'/><path d="M7 34c6 7 44 7 50 0" fill="none" stroke="#ffb347" stroke-width="4.2" stroke-linecap="round"/>'+ck(53,15,2.8)+ck(11,18,2.2),
 b18:SH+'<path d="M44 5a10 10 0 1 0 11 15 8 8 0 1 1-11-15z" fill="#ffd96a"'+O+'/><path d="M11 50a9 9 0 0 1 3-17 12 12 0 0 1 22-6 10 10 0 0 1 15 9 8 8 0 0 1-2 14z" fill="#f5f0ff"'+O+'/>'+HL('M16 37c1-3 4-5 7-5')+ck(29,41,7.5)+'<path d="M13 12h5l-5 5h5" fill="none" stroke="#b8a8ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'+st(26,8,3)+st(56,32,2.5,'#e6d4ff'),
-b19:SH+'<path d="M32 1l4.5 10 10-6-3 11 11 1-9 7 7 8.5-11-.5 1 10.5-10-5-10 5 1-10.5-11 .5 7-8.5-9-7 11-1-3-11 10 6z" fill="#ffb347" opacity=".95"/><rect x="13" y="24" width="38" height="32" rx="6" fill="#4b4f5c"'+O+'/><rect x="18.5" y="31" width="27" height="18" rx="3.5" fill="#2a1035"'+o+'/><circle cx="32" cy="40" r="7" fill="#ff7a3c"/><circle cx="32" cy="40" r="3.6" fill="#fff3b0"/>'+st(23,35,2.2,'#fff')+st(41,45,2,'#ffd96a')+'<circle cx="19" cy="27.5" r="1.7" fill="#ffd96a"/><circle cx="25" cy="27.5" r="1.7" fill="#5ad8ff"/><path d="M38 27.5h8" stroke="#8a98a3" stroke-width="2" stroke-linecap="round"/>'+HL('M16 30v20')
+b19:SH+'<path d="M32 1l4.5 10 10-6-3 11 11 1-9 7 7 8.5-11-.5 1 10.5-10-5-10 5 1-10.5-11 .5 7-8.5-9-7 11-1-3-11 10 6z" fill="#ffb347" opacity=".95"/><rect x="13" y="24" width="38" height="32" rx="6" fill="#4b4f5c"'+O+'/><rect x="18.5" y="31" width="27" height="18" rx="3.5" fill="#2a1035"'+o+'/><circle cx="32" cy="40" r="7" fill="#ff7a3c"/><circle cx="32" cy="40" r="3.6" fill="#fff3b0"/>'+st(23,35,2.2,'#fff')+st(41,45,2,'#ffd96a')+'<circle cx="19" cy="27.5" r="1.7" fill="#ffd96a"/><circle cx="25" cy="27.5" r="1.7" fill="#5ad8ff"/><path d="M38 27.5h8" stroke="#8a98a3" stroke-width="2" stroke-linecap="round"/>'+HL('M16 30v20'),
+b20:SH+'<circle cx="32" cy="30" r="25" fill="#1d1846"'+O+'/><path d="M16 36 26 22 38 30 48 18" fill="none" stroke="#9fb4ff" stroke-width="1.6" stroke-dasharray="2 2.5"/>'+ck(16,36,4.5)+ck(26,22,4)+ck(38,30,4.5)+ck(48,18,4)+st(20,46,2.4,'#fff')+st(44,44,2,'#ffd96a')+HL('M14 18c3-5 8-9 14-10'),
+b21:SH+'<ellipse cx="32" cy="32" rx="26" ry="9" fill="none" stroke="#5ad8ff" stroke-width="2.2" transform="rotate(30 32 32)"/><ellipse cx="32" cy="32" rx="26" ry="9" fill="none" stroke="#c48bff" stroke-width="2.2" transform="rotate(-30 32 32)"/>'+ck(26,30,10)+'<g opacity=".55">'+ck(38,34,10)+'</g>'+st(50,14,2.4,'#5ad8ff')+st(14,50,2,'#c48bff'),
+b22:SH+'<circle cx="32" cy="32" r="24" fill="#0b0716"'+O+'/><path d="M32 12a20 20 0 0 1 20 20M32 52a20 20 0 0 1-20-20M12 32a20 20 0 0 1 20-20" fill="none" stroke="#ffb347" stroke-width="2.4" stroke-linecap="round" opacity=".8"/><circle cx="32" cy="32" r="9" fill="#ffcf7a"'+o+'/><circle cx="32" cy="32" r="4" fill="#fff6d6"/>'+st(48,48,2.2,'#fff')
 });
 }
 
@@ -2851,8 +2865,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=48;
+const NEWS_VER=49;
 const NEWS=[
+  {v:49,sum:['Neu: drei Gebäude fürs späte Spiel, 17 Erfolge und Push-Benachrichtigungen!','New: three late-game buildings, 17 achievements and push notifications!'],items:[
+    ['new','Drei neue Gebäude nach dem Urknall-Ofen: Sternbild-Bäckerei, Quanten-Konditorei und Keks-Singularität – mit je 8 Upgrades.','Three new buildings after the Big Bang Oven: Constellation Bakery, Quantum Patisserie and Cookie Singularity – each with 8 upgrades.'],
+    ['new','17 neue Erfolge, darunter „Komplette Fabrik“ und Ziele bis 10 Quintilliarden Kekse.','17 new achievements, including “Complete Factory” and goals up to 10 decillion cookies.'],
+    ['new','Push-Benachrichtigungen (Einstellungen → Anzeige): Geschenke, Freundschaftsanfragen, Club-Preise, Admin-Nachrichten und Events – auch wenn das Spiel zu ist.','Push notifications (Settings → Display): gifts, friend requests, club prizes, admin messages and events – even when the game is closed.']
+  ]},
   {v:48,sum:['Neu: Spielerprofile, Freunde, Clubkriege am Wochenende und Einladungen mit Bonus!','New: player profiles, friends, weekend club wars and invites with a bonus!'],items:[
     ['new','Profile: Tippe in der Bestenliste oder im Club auf einen Namen und sieh dir die Bäckerei an.','Profiles: tap a name in the leaderboard or your club to see that bakery.'],
     ['new','Freunde: Neuer Reiter „Freunde“ bei den Clubs. Sieh, wer online ist, und schick schnell ein Geschenk.','Friends: a new “Friends” tab in clubs. See who’s online and send a gift in one tap.'],
@@ -8194,7 +8213,7 @@ function updV34Txt(){
   set('shareT',tt('Teilen','Share'));
   set('shareP',tt('Kopiere diesen Text und schick ihn deinen Freunden.','Copy this text and send it to your friends.'));
   set('shareCopy',tt('Kopieren','Copy'));set('shareClose',tt('Schließen','Close'));
-  updApp();renderLb();updDev();updShopNav();updV42Txt();accRender();if(v44Ready) clubRender();if(typeof updV47Txt==='function'&&$id('saveMoreT')) updV47Txt();if(v48Ready) refNote();
+  updApp();renderLb();updDev();updShopNav();updV42Txt();accRender();if(v44Ready) clubRender();if(typeof updV47Txt==='function'&&$id('saveMoreT')) updV47Txt();if(v48Ready) refNote();if(v49Ready){pushSynced=false;pushState();}
 }
 
 /* ======================= V35/V40: Bestenliste ======================= */
@@ -9491,6 +9510,51 @@ $id('clubOv').addEventListener('submit',e=>{
   e.target.reset();
 });
 v48Ready=true;
+
+/* ======================= V49: Push-Benachrichtigungen ======================= */
+var v49Ready=false;
+const VAPID_PUB='BBGPPZ-TiVAiwkLwol7eM6rI1Owkm8wPJVkYNkyV7H6LfUZAQaHb-gSFae2nLhlQTgk_aDrZmsdLV1V6L_-kmT8';
+function b64u(s){const p='='.repeat((4-s.length%4)%4),b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(b,c=>c.charCodeAt(0));}
+const pushOk=()=>'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+var pushOn=null,pushBusy=false,pushMsgT='',pushMsgOk=true,pushSynced=false;
+async function pushSub(){if(!pushOk()) return null;try{const r=await navigator.serviceWorker.getRegistration();return r?await r.pushManager.getSubscription():null;}catch(e){return null;}}
+async function pushState(){
+  if(!pushOk()){pushOn=false;pushRender();return;}
+  const s=await pushSub();pushOn=!!s;
+  if(s&&accTok&&lbOn()&&!pushSynced){pushSynced=true;lbApi('rpc/push_subscribe',{p_token:accTok,p_sub:s.toJSON(),p_lang:LANG}).catch(()=>{});}
+  pushRender();
+}
+async function pushEnable(){
+  if(!accTok){pushMsgT=tt('Melde dich zuerst mit deinem Konto an (Einstellungen → Speichern).','Sign in to your account first (Settings → Saving).');pushMsgOk=false;pushRender();return;}
+  pushBusy=true;pushMsgT='';pushRender();
+  try{
+    const perm=await Notification.requestPermission();if(perm!=='granted') throw new Error('denied');
+    const reg=await navigator.serviceWorker.ready;
+    let sub=await reg.pushManager.getSubscription();if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUB)});
+    await lbApi('rpc/push_subscribe',{p_token:accTok,p_sub:sub.toJSON(),p_lang:LANG});
+    pushOn=true;pushSynced=true;pushMsgT=tt('Benachrichtigungen sind an. Du bekommst Bescheid bei Geschenken, Freundschaftsanfragen, Club-Preisen, Nachrichten vom Admin und globalen Events.','Notifications are on. You’ll hear about gifts, friend requests, club prizes, messages from the admin and global events.');pushMsgOk=true;
+  }catch(x){const m=String(x&&x.message||'');pushMsgT=/denied/.test(m)?tt('Benachrichtigungen sind blockiert. Erlaube sie in den Einstellungen deines Browsers.','Notifications are blocked. Allow them in your browser settings.'):lbMissing(x)?tt('Das kommt mit dem nächsten Server-Update.','This arrives with the next server update.'):tt('Hat nicht geklappt. Versuch es nochmal.','Didn’t work. Please try again.');pushMsgOk=false;}
+  pushBusy=false;pushRender();
+}
+async function pushDisable(){
+  pushBusy=true;pushRender();
+  try{const s=await pushSub();if(s){const ep=s.endpoint;await s.unsubscribe();lbApi('rpc/push_unsubscribe',{p_endpoint:ep}).catch(()=>{});}}catch(e){}
+  pushOn=false;pushBusy=false;pushMsgT=tt('Benachrichtigungen sind aus.','Notifications are off.');pushMsgOk=true;pushRender();
+}
+function pushRender(){
+  const B=$id('pushBtn'),P=$id('pushP'),M=$id('pushMsg');if(!B) return;
+  set$('pushT',tt('Push-Benachrichtigungen','Push notifications'));
+  const ok=pushOk()&&lbOn();
+  const p=!ok?(isIOS?tt('Auf iPhone und iPad: Füge das Spiel zuerst zum Home-Bildschirm hinzu und öffne es von dort. Dann kannst du Benachrichtigungen einschalten.','On iPhone and iPad: add the game to your home screen first and open it from there. Then you can turn notifications on.'):tt('Dieser Browser kann keine Push-Benachrichtigungen.','This browser can’t show push notifications.')):tt('Auch wenn das Spiel geschlossen ist: Geschenke, Freundschaftsanfragen, Club-Preise, Nachrichten vom Admin und globale Events. Braucht ein Konto.','Even when the game is closed: gifts, friend requests, club prizes, messages from the admin and global events. Needs an account.');
+  if(P.textContent!==p) P.textContent=p;
+  B.hidden=!ok;B.disabled=pushBusy;
+  const bt=pushBusy?tt('Moment …','One moment …'):pushOn?tt('Ausschalten','Turn off'):tt('Einschalten','Turn on');if(B.textContent!==bt) B.textContent=bt;
+  B.classList.toggle('primary',!pushOn);
+  M.className='nameerr'+(pushMsgOk?' ok':'');if(M.textContent!==pushMsgT) M.textContent=pushMsgT;
+}
+$id('pushBtn').addEventListener('click',()=>{if(pushBusy) return;if(pushOn) pushDisable();else pushEnable();});
+pushState();
+v49Ready=true;
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};
