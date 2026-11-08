@@ -110,6 +110,9 @@ module.exports = async function browserTests(url) {
   await c.waitForSelector('#rwOv:not([hidden])', { timeout: 10000 }).catch(() => {});
   check(/Welcome!/.test(await text(c, '#rwOv')), 'player gets the admin message as a popup');
 
+  // Maintenance is over: every device checks the server again before going on (slow machines may not have yet)
+  for (const pg of [a, b, c, d]) { await ping(pg); await pg.waitForSelector('#maintOv', { state: 'hidden', timeout: 10000 }).catch(() => {}); }
+
   // 5b. Clean layout (v47): settings order, admin groups, accessibility
   await settings(b, 'save');
   const order = await b.evaluate(() => [...document.querySelectorAll('#setOv .optsec[data-sc="save"]:not([hidden])')].map(x => x.querySelector('#accBox') ? 'account' : x.querySelector('#saveBtn') ? 'save' : x.classList.contains('savemore') ? 'more' : 'other').slice(0, 3).join(','));

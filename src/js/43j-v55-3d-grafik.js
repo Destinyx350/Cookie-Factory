@@ -70,6 +70,8 @@ function g3dInit(cv){
   const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,G3D_VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,G3D_FS));gl.linkProgram(pr);
   if(!gl.getProgramParameter(pr,gl.LINK_STATUS)) throw new Error('link');
   const R={gl,prog:pr,buf:gl.createBuffer(),ibuf:gl.createBuffer(),n:0,loc:{}};
+  /* Ohne Grafikkarte (Software-Rendering) nur bei Bedarf zeichnen, damit der Prozessor nicht dauernd arbeitet */
+  try{const ext=gl.getExtension('WEBGL_debug_renderer_info'),ren=String(ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER));R.soft=/swiftshader|llvmpipe|software|basic render/i.test(ren);}catch(e){R.soft=false;}
   ['p','n','c','g'].forEach(k=>R.loc[k]=gl.getAttribLocation(pr,k));['M','P','glow'].forEach(k=>R.loc[k]=gl.getUniformLocation(pr,k));
   gl.enable(gl.DEPTH_TEST);return R;
 }
@@ -102,8 +104,9 @@ function g3dAttach(){
 function g3dFrame(ts){
   requestAnimationFrame(g3dFrame);
   if(!G3D.on||document.hidden||!G3D.vis) return;
-  const still=!fxOk();
+  const still=!fxOk(),soft=G3D.R&&G3D.R.soft;
   if(still&&!G3D.dirty) return;
+  if(soft&&!G3D.dirty&&G3D.kick<.02&&Math.abs(G3D.ptx-G3D.tx)+Math.abs(G3D.pty-G3D.ty)<.004&&Math.abs(G3D.spinV)<.02) return;
   if(ts-G3D.last<(G3D.slow?66:33)&&!G3D.dirty) return;
   const dt=Math.min(.1,(ts-G3D.last)/1000||0);G3D.last=ts;
   const cv=G3D.cv,dpr=Math.min(2,window.devicePixelRatio||1),w=Math.max(64,Math.round(cv.clientWidth*dpr)),h=Math.max(64,Math.round(cv.clientHeight*dpr));
@@ -118,7 +121,7 @@ function g3dFrame(ts){
 /* Neigen zum Finger, Hüpfer beim Klick */
 (function(){
   const stage=$id('cookieStage')||els.cookie;
-  stage.addEventListener('pointermove',e=>{if(!G3D.on) return;const r=els.cookie.getBoundingClientRect();G3D.ptx=Math.max(-1,Math.min(1,(e.clientY-r.top-r.height/2)/(r.height/2)))*-.22;G3D.pty=Math.max(-1,Math.min(1,(e.clientX-r.left-r.width/2)/(r.width/2)))*.26;});
+  stage.addEventListener('pointermove',e=>{if(!G3D.on) return;G3D.dirty=1;const r=els.cookie.getBoundingClientRect();G3D.ptx=Math.max(-1,Math.min(1,(e.clientY-r.top-r.height/2)/(r.height/2)))*-.22;G3D.pty=Math.max(-1,Math.min(1,(e.clientX-r.left-r.width/2)/(r.width/2)))*.26;});
   stage.addEventListener('pointerleave',()=>{G3D.ptx=0;G3D.pty=0;});
   els.cookie.addEventListener('pointerdown',()=>{if(!G3D.on) return;G3D.kick=Math.min(1.2,G3D.kick+.55);G3D.spinV+=(Math.random()<.5?-1:1)*.9;G3D.dirty=1;});
   try{new IntersectionObserver(es=>{G3D.vis=es[es.length-1].isIntersecting;}).observe(els.cookie);}catch(e){}
