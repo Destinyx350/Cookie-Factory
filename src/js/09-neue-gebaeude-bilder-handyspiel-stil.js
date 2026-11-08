@@ -44,8 +44,14 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=54;
+const NEWS_VER=55;
 const NEWS=[
+  {v:55,sum:['Neuer Soundtrack und 3D-Grafik!','A new soundtrack and 3D graphics!'],items:[
+    ['new','Neuer Soundtrack: 7 Stücke mit echten Instrumenten (E-Piano, Streicher, Blech, Glocken, Kontrabass, Schlagzeug), Hall und Echo – Morgenbäckerei, Fabrik-Groove, Nachtschicht, Großes Abenteuer, Showdown, Sternenaufstieg und Keks-Fest.','New soundtrack: 7 tracks with real instruments (electric piano, strings, brass, bells, upright bass, drums), reverb and echo – Morning Bakery, Factory Groove, Night Shift, Great Adventure, Showdown, Starry Ascension and Cookie Festival.'],
+    ['new','Die Musik passt sich an: Sie wird voller bei Combos und Boosts, spielt nachts Jazz und im Kampf den Showdown.','The music adapts: it gets fuller during combos and boosts, plays jazz at night and the Showdown in fights.'],
+    ['new','3D-Keks: Der große Keks ist jetzt ein echtes 3D-Modell mit Licht, Schokostücken und knusprigem Rand. Er neigt sich zum Finger und hüpft beim Klicken – in jedem Keks-Design.','3D cookie: the big cookie is now a real 3D model with lighting, chocolate chips and a crispy edge. It tilts toward your finger and bounces when you click – in every cookie design.'],
+    ['new','Goldkekse, die Kekse im Hintergrund und alle Symbole haben jetzt einen 3D-Look. Abschalten unter Einstellungen → Anzeige.','Golden cookies, the background cookies and all icons now have a 3D look. Turn it off under Settings → Display.']
+  ]},
   {v:54,sum:['Neu: Club-Stufen mit Bonus für alle Mitglieder und ein Feedback-Knopf!','New: club levels with a bonus for every member, and a feedback button!'],items:[
     ['new','Club-Stufen 1–10: Clubs sammeln XP, wenn Mitglieder in einer Woche mitbacken (100) und wenn sie Clubkriege gewinnen (500). Jede Stufe gibt allen Mitgliedern +1 % Produktion und +5 % auf Club-Preise.','Club levels 1–10: clubs earn XP when members bake in a week (100) and when they win club wars (500). Every level gives all members +1% production and +5% on club prizes.'],
     ['new','Feedback senden: Unter Einstellungen → Spiel kannst du Fehler melden oder Ideen schicken.','Send feedback: report bugs or share ideas under Settings → Game.'],
