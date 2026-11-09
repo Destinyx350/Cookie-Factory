@@ -67,6 +67,7 @@ Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.
 11. [`staff-v12.sql`](staff-v12.sql): moderator logins, ban appeals, two-step sign-in for the server password, and the weekly summary.
 12. [`community-v13.sql`](community-v13.sql): club levels, player feedback, and push alerts for the owner and moderators (the alerts also need the updated `kf-push` edge function, which opens admin.html when you tap an alert).
 13. [`server-v14.sql`](server-v14.sql): automatic cleanup of old data, the database usage card, checks for unrealistic account-save jumps, planned events and announcements, the off-site backup function, and removes the transfer codes.
+14. [`stats-v15.sql`](stats-v15.sql): the live dashboard (players, new players, accounts and crashes per day; languages, devices, where people play) and the automatic weekly report with a push every Monday.
 
 The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password. Since version 52 the admin panel is only in `admin.html` (https://destinyx350.github.io/Cookie-Factory/admin.html), not in the game players get.
 

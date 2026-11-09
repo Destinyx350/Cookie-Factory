@@ -395,6 +395,40 @@ module.exports = async function browserTests(url) {
   check(/CI weekly news/.test(await text(d, '#admOn')) && /every week/.test(await text(d, '#admOn')), 'planned items are listed');
   await d.click('#setClose');
 
+  // 5k. Live dashboard, weekly report and landing page (v57)
+  await ping(b); await b.waitForTimeout(1200);
+  const dd = (await pool.query("select lang, dev, src from kf_days where dev = 'phone' and src = 'web'")).rows;
+  check(dd.length >= 1 && /^[a-z]{2}$/.test(dd[0].lang), 'the minute ping tells the dashboard language, device and source', dd);
+  await pool.query("delete from kf_week_reports");
+  await pool.query("insert into kf_week_reports (week, data) select '2026-W01', kf_week_data()");
+  await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
+  await d.waitForSelector('.dchart', { timeout: 10000 }).catch(() => {});
+  check(await d.locator('#admSrv .dchart').count() === 4 && /Live dashboard/.test(await text(d, '#admSrv')) && /Devices/.test(await text(d, '#admSrv')), 'the Server tab shows the live dashboard with 4 charts');
+  check(await d.locator('#admSrv .dchart[data-chart=players] .dcols i').count() === 30, 'the dashboard shows 30 days');
+  await d.click('[data-dash="7"]'); await d.waitForTimeout(1200);
+  check(await d.locator('#admSrv .dchart[data-chart=players] .dcols i').count() === 7, 'the dashboard switches to 7 days');
+  const plot = await d.locator('#admSrv .dchart[data-chart=players] .dplot').boundingBox();
+  if (plot) await d.mouse.move(plot.x + plot.width - 3, plot.y + plot.height - 10);
+  await d.waitForTimeout(200);
+  check(await d.isVisible('#admSrv .dchart[data-chart=players] .dtip'), 'hovering a day shows its number');
+  check(/Weekly report/.test(await text(d, '#admSrv')) && await d.locator('#admSrv .rep').count() >= 1, 'the Server tab lists weekly reports');
+  await d.click('[data-repa="prev"]'); await d.waitForTimeout(1200);
+  check(/Right now/.test(await text(d, '#admSrv')) && /To do/.test(await text(d, '#admSrv')), 'the owner sees this week\'s numbers and to-dos right now');
+  await d.click('#setClose');
+  {
+    const w = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    const werr = []; w.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|ERR_FAILED/.test(m.text())) werr.push(m.text()); }); w.on('pageerror', e => werr.push(e.message));
+    await w.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    await w.goto(url + 'welcome.html'); await w.waitForTimeout(500);
+    check((await w.getAttribute('.hero .btn.play', 'href')) === './' && await w.isVisible('.video video') && (await w.getAttribute('.video video', 'src')) === 'docs/trailer.mp4', 'the landing page has the trailer and a Play button');
+    await w.click('.lang [data-l=de]');
+    check(await w.evaluate(() => document.documentElement.lang === 'de' && /Jetzt spielen/.test(document.querySelector('.hero .btn.play').innerText)), 'the landing page switches to German');
+    check(await w.evaluate(() => document.documentElement.scrollWidth - innerWidth) <= 1 && werr.length === 0, 'the landing page fits a phone and has no errors (its script matches the page\'s security rule)', werr);
+    await w.close();
+  }
+  for (const f of ['docs/trailer.mp4', 'docs/trailer.jpg', 'docs/trailer.gif'])
+    check(fs.existsSync(path.join(ROOT, f)) && fs.statSync(path.join(ROOT, f)).size > 50000, f + ' is there');
+
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {
     await b.evaluate(t => { const e = document.querySelector('[data-tab="' + t + '"]'); if (e) e.click(); }, tab); await b.waitForTimeout(200);

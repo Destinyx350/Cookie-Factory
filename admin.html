@@ -1708,6 +1708,31 @@ html{-webkit-tap-highlight-color:transparent}
 .offkey{border:1px solid var(--edge);border-radius:var(--r-md,12px);padding:8px 10px;margin:6px 0;background:var(--panel-2)}
 .offkey ol{margin:6px 0;padding-left:20px}.offkey code{font-size:12px}
 #admPlanF[data-kind=event] .plnnews,#admPlanF[data-kind=news] .plnev{display:none}
+/* V57: admin live dashboard (one series per chart, one hue checked against the dark panel) */
+:root{--viz-1:#3987e5}
+.drange{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.drange .btn.on{border-color:var(--viz-1);color:var(--text,#fff);box-shadow:inset 0 0 0 1px var(--viz-1)}
+.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:8px 0}
+@media (max-width:640px){.dgrid{grid-template-columns:minmax(0,1fr)}}
+.dchart{margin:0;padding:8px 10px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2);min-width:0}
+.dchart figcaption{display:flex;justify-content:space-between;gap:6px;align-items:baseline;font-size:12px;margin-bottom:6px}
+.dchart figcaption span{color:var(--muted);font-size:11px;white-space:nowrap}
+.dplot{position:relative;height:92px;border-bottom:1px solid var(--edge-2,rgba(255,255,255,.18));touch-action:pan-y}
+.dmax{position:absolute;top:-2px;left:0;font-size:10px;color:var(--muted);pointer-events:none}
+.dplot::before{content:"";position:absolute;left:0;right:0;top:0;border-top:1px dashed var(--edge)}
+.dcols{position:absolute;inset:12px 0 0 0;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));align-items:end;column-gap:2px}
+.dcols i{display:block;background:var(--viz-1);border-radius:4px 4px 0 0;min-height:0;opacity:.85}
+.dcols i.hi{opacity:1;box-shadow:0 0 0 1px var(--text,#fff)}
+.dtip{position:absolute;top:2px;padding:3px 7px;border-radius:8px;background:var(--bg,#0e1013);border:1px solid var(--edge);font-size:11px;white-space:nowrap;pointer-events:none;z-index:2}
+.dx{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:3px}
+.dshare{padding:8px 10px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2);min-width:0;font-size:12px}
+.dshare>b{display:block;margin-bottom:6px}
+.dsr{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;gap:6px;align-items:center;margin:3px 0}
+.dsr span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dsr i{display:block;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}.dsr em{display:block;height:100%;background:var(--viz-1);border-radius:4px}
+.dsr small{color:var(--muted);font-size:11px;white-space:nowrap}
+.dtable{max-height:260px;overflow:auto}.dtable table{width:100%;border-collapse:collapse;font-size:12px}
+.dtable th,.dtable td{padding:3px 6px;text-align:right;border-bottom:1px solid var(--edge)}.dtable th:first-child,.dtable td:first-child{text-align:left}
+.rep{margin-top:8px}.rep>summary{font-weight:600}.reptodo{margin:4px 0;padding-left:4px;list-style:none;font-size:13px}.reptodo li{margin:3px 0}
 
 </style>
 
@@ -2937,8 +2962,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=56;
+const NEWS_VER=57;
 const NEWS=[
+  {v:57,sum:['Website, Trailer und Werkzeuge für den Betreiber','A website, a trailer and tools for the owner'],items:[
+    ['new','Website: Die Keksfabrik hat jetzt eine eigene Seite mit Trailer, Bildern und einer Anleitung zum Installieren – perfekt zum Teilen: destinyx350.github.io/Cookie-Factory/welcome.html','Website: Cookie Factory now has its own page with a trailer, screenshots and install steps – perfect for sharing: destinyx350.github.io/Cookie-Factory/welcome.html'],
+    ['new','Trailer: ein kurzes Gameplay-Video vom 3D-Keks, den Gebäuden und der Welt.','Trailer: a short gameplay video of the 3D cookie, the buildings and the world.'],
+    ['change','Hinter den Kulissen: Der Betreiber sieht jetzt ein Live-Dashboard und bekommt jeden Montag einen Wochenbericht – so werden Probleme schneller gefunden. Dafür zählt das Spiel anonym Browsersprache, Gerätetyp und ob es als App läuft.','Behind the scenes: the owner now has a live dashboard and a weekly report every Monday, so problems get found faster. For this the game anonymously counts browser language, device type and whether it runs as an app.']]},
   {v:56,sum:['Einfacher speichern und ein sichererer Server','Simpler saving and a safer server'],items:[
     ['change','Einfacher speichern: Dein Konto und die Spielstand-Datei sind die zwei Wege, deine Bäckerei auf ein anderes Gerät mitzunehmen. Transfer-Code und Spielstand-Text gibt es nicht mehr.','Simpler saving: your account and the save file are the two ways to take your bakery to another device. The transfer code and the save text are gone.'],
     ['new','Geplante Events: Events und Ankündigungen starten jetzt auch zu festen Zeiten, manche jede Woche – halte Ausschau!','Planned events: events and announcements now also start at set times, some every week – keep an eye out!'],
@@ -8712,9 +8741,14 @@ async function kfLoadNews(){
 }
 
 /* Live-Zähler */
+var kfPingX=true;
 async function kfPing(){
   if(!kfOk()||document.hidden) return;
-  try{kfLive=await lbApi('rpc/kf_ping',{p_id:kfId(),p_baked:lbCheat()?0:Math.floor(Math.min(S.all,9.9e299))});kfV3=true;if(kfLive&&kfLive.cfg) cfgApply(kfLive.cfg);}catch(x){kfNote(x);}
+  const pb={p_id:kfId(),p_baked:lbCheat()?0:Math.floor(Math.min(S.all,9.9e299))};
+  /* V57: browser language, device and where the game runs, for the owner's dashboard (older servers don't know them yet) */
+  if(kfPingX) Object.assign(pb,{p_lang:String(navigator.language||'').slice(0,2).toLowerCase(),p_dev:document.documentElement.dataset.device||null,p_src:window.KF_PORTAL?'portal':(matchMedia('(display-mode: standalone)').matches||navigator.standalone)?'app':'web'});
+  try{kfLive=await lbApi('rpc/kf_ping',pb);kfV3=true;if(kfLive&&kfLive.cfg) cfgApply(kfLive.cfg);}
+  catch(x){if(kfPingX&&lbMissing(x)){kfPingX=false;return kfPing();}kfNote(x);}
   renderLive();
 }
 function renderLive(){
@@ -9313,7 +9347,7 @@ async function admSrvLogin(pw,where){
   admPass=r.token;try{sessionStorage.setItem(ADM_TOK,JSON.stringify({t:r.token,e:Date.parse(r.expires_at)||Date.now()+11*3600e3}));}catch(x){}
   toast(tt('Server-Werkzeuge entsperrt.','Server tools unlocked.'));admSrvAfter();
 }
-function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();if(v56aReady) admCareLoad();}
+function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();if(v56aReady) admCareLoad();if(v57aReady) admV57Load();}
 function admSrvRerender(){admLbRender();admOnRender();admModRender();admSrvRender();}
 const admSrvForm=(id,note)=>(admNeedCode?'<form class="coderow" id="'+id+'" novalidate><input type="text" class="namein" name="spw" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="'+tt('6-stelliger Code','6-digit code')+'" aria-label="'+tt('Code aus der Authenticator-App','Code from your authenticator app')+'"><button type="submit" class="btn primary">'+tt('Bestätigen','Confirm')+'</button><button type="button" class="btn" data-sva="codeback">'+tt('Zurück','Back')+'</button></form><p class="small" style="margin-top:6px">'+tt('Zwei-Schritt-Anmeldung ist an. Gib den Code aus deiner Authenticator-App ein.','Two-step sign-in is on. Enter the code from your authenticator app.')+'</p>':'<form class="coderow" id="'+id+'" novalidate><input type="password" class="namein" name="spw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button></form>')+'<p class="small" style="margin-top:6px">'+(note||tt('Die Server-Werkzeuge haben ein eigenes Passwort. Nach 5 falschen Versuchen sind sie 15 Minuten gesperrt.','The server tools have their own password. After 5 wrong tries they lock for 15 minutes.'))+'</p>';
 els.admin.addEventListener('submit',e=>{
@@ -9452,6 +9486,7 @@ async function admSrvLoad(){
   if(v53Ready) admWeekLoad();
   if(v54aReady){admFbCall('list');admAlertState();}
   if(v56aReady){admUseDo('usage');admOffDo('status');}
+  if(v57aReady) admV57Load();
   admSrvRender();
 }
 function admBars(rows){
@@ -9468,7 +9503,9 @@ function admSrvRender(){
     if(admSrvErr) h+='<p class="nameerr">'+admSrvErr+'</p>';
     const St=admStats||{},L=St.live||{},C=admCfg||{},F=Object.assign({chat:true,gifts:true,clubs:true,lb:true},C.feat||{}),Mt=Object.assign({on:false,de:'',en:''},C.maint||{}),mv=+C.min_ver||0;
     const tile=(l,v)=>'<span><small>'+l+'</small><b>'+(v==null?'–':typeof v==='number'?fmt(v):escName(String(v)))+'</b></span>';
+    if(v57aReady) h+=admDashHtml();
     if(v53Ready) h+=admWeekHtml();
+    if(v57aReady) h+=admRepHtml();
     h+=admCardH('📊 '+tt('Statistik','Statistics'),'<div class="admstats">'+tile(tt('Jetzt online','Online now'),L.online)+tile(tt('Heute','Today'),L.today)+tile(tt('Spieler','Players'),L.players)+tile(tt('Konten','Accounts'),St.accounts)+tile(tt('Aktiv (7 Tage)','Active (7 days)'),St.active7)+tile(tt('Clubs','Clubs'),St.clubs)+tile(tt('Chat (24 Std)','Chat (24 h)'),St.msgs24)+tile(tt('Offene Meldungen','Open reports'),St.reports_open)+tile(tt('In der Bestenliste','On the leaderboard'),St.lb_entries)+tile(tt('Stumm','Muted'),St.mutes)+'</div>'
       +'<h5 class="admh5">'+tt('Neue Konten pro Tag (14 Tage)','New accounts per day (14 days)')+'</h5>'+admBars(St.new14)
       +'<h5 class="admh5">'+tt('Geschenke pro Tag (14 Tage)','Gifts per day (14 days)')+'</h5>'+admBars(St.gifts14)
@@ -10689,6 +10726,117 @@ els.admin.addEventListener('click',e=>{
 
 v56aReady=true;
 admCareLoad();
+
+/* Nur in admin.html (nicht im Spiel für Spieler). */
+/* ======================= V57: Live-Dashboard und Wochenbericht ======================= */
+var v57aReady=false;
+var admDash=null,admDashErr='',admDashDays=30,admReps=null,admRepPrev=null,admRepErr='',admDashT=0;
+const admDashMiss=x=>lbMissing(x)?tt('Braucht zuerst docs/stats-v15.sql in Supabase.','Needs docs/stats-v15.sql in Supabase first.'):admErrTxt(x);
+async function admDashLoad(){
+  if(!admPass) return;
+  try{admDash=await lbApi('rpc/admin_dash',{p_pass:admPass,p_days:admDashDays});admDashErr='';admDashT=Date.now();}catch(x){admDashErr=admDashMiss(x);}
+  admSrvRender();
+}
+async function admRepLoad(prev){
+  if(!admPass) return;
+  try{if(prev) admRepPrev=await lbApi('rpc/admin_reports',{p_pass:admPass,p_action:'preview'});else admReps=await lbApi('rpc/admin_reports',{p_pass:admPass,p_action:'list'})||[];admRepErr='';}
+  catch(x){admRepErr=admDashMiss(x);}
+  admSrvRender();
+}
+function admV57Load(){if(!admPass) return;admDashLoad();admRepLoad(false);}
+
+/* ---------- Diagramme (eine Reihe, eine Farbe; Werte im Tooltip und in der Tabelle) ---------- */
+const dashDay=d=>new Date(d+'T12:00:00Z').toLocaleDateString(LOC[LANG],{day:'2-digit',month:'2-digit'});
+const dashWd=d=>new Date(d+'T12:00:00Z').toLocaleDateString(LOC[LANG],{weekday:'short',day:'2-digit',month:'2-digit'});
+function dashBars(id,title,days,key){
+  const v=days.map(d=>+d[key]||0),mx=Math.max(1,...v),sum=v.reduce((a,b)=>a+b,0),last=v[v.length-1];
+  const cols=days.map((d,i)=>'<i style="height:'+(v[i]?Math.max(2,v[i]/mx*100):0).toFixed(1)+'%" data-i="'+i+'"></i>').join('');
+  return '<figure class="dchart" data-chart="'+id+'"><figcaption><b>'+title+'</b><span>'+tt('Heute ','Today ')+fmt(last)+' · Ø '+fmt(Math.round(sum/v.length))+'</span></figcaption>'
+    +'<div class="dplot" role="img" aria-label="'+title+': '+tt('höchstens ','max ')+fmt(mx)+', '+tt('heute ','today ')+fmt(last)+'"><span class="dmax">'+fmt(mx)+'</span><div class="dcols" style="--n:'+v.length+'">'+cols+'</div><div class="dtip" hidden></div></div>'
+    +'<div class="dx"><span>'+dashDay(days[0].day)+'</span><span>'+dashDay(days[days.length-1].day)+'</span></div></figure>';
+}
+const DASH_NAME={phone:['Handy','Phone'],tablet:['Tablet','Tablet'],desktop:['Computer','Computer'],web:['Website','Website'],app:['Installierte App','Installed app'],portal:['Spieleportal','Game portal'],'?':['Unbekannt','Unknown']};
+function dashLangName(k){if(k==='?') return tt('Unbekannt','Unknown');try{return new Intl.DisplayNames([LOC[LANG]],{type:'language'}).of(k)+' ('+k+')';}catch(x){return k;}}
+function dashShare(title,rows,name){
+  const R=rows||[],tot=R.reduce((a,r)=>a+(+r.n||0),0)||1,mx=Math.max(1,...R.map(r=>+r.n||0));
+  return '<div class="dshare"><b>'+title+'</b>'+(R.length?R.map(r=>'<div class="dsr"><span>'+escName(name(r.k))+'</span><i><em style="width:'+Math.max(1,r.n/mx*100).toFixed(1)+'%"></em></i><small>'+fmt(+r.n)+' · '+Math.round(r.n/tot*100)+'%</small></div>').join(''):'<p class="small">–</p>')+'</div>';
+}
+function admDashHtml(){
+  const D=admDash;
+  let b='<div class="drange" role="group" aria-label="'+tt('Zeitraum','Time range')+'">'+[7,30,90].map(n=>'<button type="button" class="btn sm'+(admDashDays===n?' on':'')+'" data-dash="'+n+'" aria-pressed="'+(admDashDays===n)+'">'+n+' '+tt('Tage','days')+'</button>').join('')+'<button type="button" class="btn sm" data-dash="reload" aria-label="'+tt('Neu laden','Reload')+'">↻</button></div>';
+  if(!D){b+='<p class="small">'+(admDashErr?'':tt('Lädt …','Loading …'))+'</p>';}
+  else{
+    const days=D.days||[],today=days.length?days[days.length-1]:{},avg=days.length?Math.round(days.reduce((a,d)=>a+(+d.players||0),0)/days.length):0;
+    b+='<div class="admstats dtiles">'+[[tt('Jetzt online','Online now'),D.online],[tt('Heute','Today'),today.players],[tt('Ø pro Tag','Avg per day'),avg],[tt('Spieler im Zeitraum','Players in range'),D.players]].map(([l,v])=>'<span><small>'+l+'</small><b>'+fmt(+v||0)+'</b></span>').join('')+'</div>';
+    if(days.length) b+='<div class="dgrid">'+dashBars('players',tt('Spieler pro Tag','Players per day'),days,'players')+dashBars('new',tt('Neue Spieler','New players'),days,'new')+dashBars('accounts',tt('Neue Konten','New accounts'),days,'accounts')+dashBars('crashes',tt('Abstürze','Crashes'),days,'crashes')+'</div>';
+    b+='<div class="dgrid">'+dashShare(tt('Sprachen (Browser)','Languages (browser)'),D.langs,dashLangName)+dashShare(tt('Geräte','Devices'),D.devs,k=>tx(DASH_NAME[k]||[k,k]))+dashShare(tt('Wo gespielt wird','Where people play'),D.srcs,k=>tx(DASH_NAME[k]||[k,k]))+'</div>';
+    if(days.length) b+='<details class="fold"><summary>'+tt('Als Tabelle','As a table')+'</summary><div class="dtable"><table><thead><tr><th>'+tt('Tag','Day')+'</th><th>'+tt('Spieler','Players')+'</th><th>'+tt('Neu','New')+'</th><th>'+tt('Konten','Accounts')+'</th><th>'+tt('Abstürze','Crashes')+'</th></tr></thead><tbody>'
+      +days.slice().reverse().map(d=>'<tr><td>'+dashWd(d.day)+'</td><td>'+fmt(+d.players)+'</td><td>'+fmt(+d.new)+'</td><td>'+fmt(+d.accounts)+'</td><td>'+fmt(+d.crashes)+'</td></tr>').join('')+'</tbody></table></div></details>';
+    b+='<p class="small muted">'+tt('Sprache, Gerät und Ort zählen ab Version 57. Stand: ','Language, device and place are counted from version 57 on. As of ')+new Date(admDashT).toLocaleTimeString(LOC[LANG],{hour:'2-digit',minute:'2-digit'})+'</p>';
+  }
+  if(admDashErr) b+='<p class="nameerr">'+admDashErr+'</p>';
+  return admCardH('📊 '+tt('Live-Dashboard','Live dashboard'),b);
+}
+els.admin.addEventListener('click',e=>{
+  const b=e.target.closest('[data-dash]');if(!b) return;
+  if(b.dataset.dash!=='reload') admDashDays=+b.dataset.dash;
+  admDashLoad();
+});
+/* Tooltip: die ganze Spalte ist das Ziel, nicht nur der Balken */
+function dashTip(e){
+  const p=e.target.closest&&e.target.closest('.dplot');if(!p) return;
+  const fig=p.closest('.dchart'),c=p.querySelector('.dcols'),tip=p.querySelector('.dtip'),days=admDash&&admDash.days;if(!c||!tip||!days) return;
+  const r=c.getBoundingClientRect(),i=Math.max(0,Math.min(days.length-1,Math.floor((e.clientX-r.left)/r.width*days.length))),key=fig.dataset.chart;
+  c.querySelectorAll('i.hi').forEach(x=>x.classList.remove('hi'));const col=c.children[i];if(col) col.classList.add('hi');
+  tip.hidden=false;tip.innerHTML='<b>'+fmt(+days[i][key]||0)+'</b> '+dashWd(days[i].day);
+  const x=(i+.5)/days.length*r.width;tip.style.left=Math.max(4,Math.min(r.width-tip.offsetWidth-4,x-tip.offsetWidth/2))+'px';
+}
+els.admin.addEventListener('pointermove',dashTip);
+els.admin.addEventListener('pointerdown',dashTip);
+els.admin.addEventListener('pointerout',e=>{const p=e.target.closest&&e.target.closest('.dplot');if(p&&!p.contains(e.relatedTarget)){const t=p.querySelector('.dtip');if(t) t.hidden=true;p.querySelectorAll('i.hi').forEach(x=>x.classList.remove('hi'));}});
+
+/* ---------- Wochenbericht ---------- */
+function repTodo(d){
+  const T=d.todo||{},A=d.this||{},L=d.last||{},out=[];
+  const add=(ic,de,en)=>out.push('<li>'+ic+' '+tt(de,en)+'</li>');
+  if(+T.reports) add('🚩',T.reports+' offene Meldungen – siehe Moderation.',T.reports+' open reports – see Moderation.');
+  if(+T.appeals) add('📨',T.appeals+' offene Einsprüche.',T.appeals+' open ban appeals.');
+  if(+T.saves) add('⚠️',T.saves+' verdächtige Spielstände prüfen.',T.saves+' suspicious saves to check.');
+  if(+T.feedback) add('💬',T.feedback+' neues Feedback lesen.',T.feedback+' new feedback to read.');
+  if(+T.crashes) add('🐞',T.crashes+' Arten von Abstürzen – siehe Absturzberichte.',T.crashes+' kinds of crashes – see Crash reports.');
+  if(+T.db_pct>=70) add('🗄️','Die Datenbank ist zu '+T.db_pct+' % voll – jetzt aufräumen oder alte Daten prüfen.','The database is '+T.db_pct+'% full – clean up now or check old data.');
+  if(T.offsite==='off') add('🛰️','Backups außerhalb von Supabase sind noch nicht eingerichtet.','Off-site backups aren’t set up yet.');
+  if(T.offsite==='late') add('🛰️','Die letzte Backup-Kopie bei GitHub ist über 9 Tage alt – prüfe den GitHub-Job.','The last off-site copy is over 9 days old – check the GitHub job.');
+  if(d.day2!=null&&+d.day2<20&&+A.new_players>=10) add('🌱','Nur '+d.day2+' % der neuen Spieler kommen am nächsten Tag wieder – vielleicht den Anfang leichter machen.','Only '+d.day2+'% of new players come back the next day – maybe make the start easier.');
+  if(+L.players>=10&&+A.players<+L.players*.8) add('📉','Weniger Spieler als letzte Woche – plane ein Event oder eine Ankündigung.','Fewer players than last week – plan an event or an announcement.');
+  if(+A.accounts===0&&+A.players>=20) add('👤','Keine neuen Konten – erinnere Spieler an die Vorteile eines Kontos.','No new accounts – remind players what an account is good for.');
+  return out.length?'<ul class="reptodo">'+out.join('')+'</ul>':'<p class="small">✅ '+tt('Alles erledigt. 🎉','Nothing to do. 🎉')+'</p>';
+}
+function repBlock(r,open){
+  const d=r.data||{},A=d.this||{},L=d.last||{},bad=['reports','crashes','bans'];
+  const tiles=[['players','🍪','Spieler','Players'],['new_players','🌱','Neue Spieler','New players'],['returning','🔁','Kamen wieder','Came back'],['accounts','👤','Neue Konten','New accounts'],['chat','💬','Chat','Chat'],['gifts','🎁','Geschenke','Gifts'],['feedback','📝','Feedback','Feedback'],['crashes','🐞','Abstürze','Crashes']];
+  const T=tiles.map(([k,ic,de,en])=>{const a=+A[k]||0,b=+L[k]||0,dd=a-b,up=dd>0,cls=dd===0?'':(up!==bad.includes(k)?'good':'bad');
+    return '<span class="'+cls+'"><small>'+ic+' '+tt(de,en)+'</small><b>'+fmt(a)+'</b><i>'+(dd===0?'±0':(up?'▲ +':'▼ ')+fmt(dd))+(b?' ('+(up?'+':'')+Math.round(dd/b*100)+'%)':'')+'</i></span>';}).join('');
+  const head=r.week==='now'?tt('Gerade eben (letzte 7 Tage)','Right now (last 7 days)'):tt('Woche ','Week ')+escName(String(r.week).replace(/^\d{4}-W/,''))+' · '+new Date(r.created_at).toLocaleDateString(LOC[LANG]);
+  const langs=(d.todo&&d.todo.top_lang)||[];
+  return '<details class="fold rep"'+(open?' open':'')+'><summary>'+head+' · 🍪 '+fmt(+A.players||0)+'</summary>'
+    +'<div class="admweek">'+T+'</div>'
+    +(d.day2!=null?'<p class="small">'+tt('Kamen am nächsten Tag wieder: ','Came back the next day: ')+'<b>'+d.day2+' %</b>'+(langs.length?' · '+tt('Top-Sprachen: ','Top languages: ')+langs.map(x=>escName(x.lang)+' '+fmt(+x.n)).join(', '):'')+'</p>':'')
+    +'<p class="small"><b>'+tt('Zu tun','To do')+'</b></p>'+repTodo(d)+'</details>';
+}
+function admRepHtml(){
+  const R=admReps||[];
+  let b='<p class="small">'+tt('Jeden Montag fasst der Server die Woche zusammen und schickt dir eine Push-Nachricht (wenn „Alarme aufs Handy“ an ist). Hier stehen die letzten 12 Wochen.','Every Monday the server sums up the week and sends you a push (if “Alerts on your phone” is on). The last 12 weeks are here.')+'</p>'
+    +'<div class="btns"><button type="button" class="btn sm" data-repa="prev">'+tt('Zahlen von jetzt','Numbers right now')+'</button></div>';
+  if(admRepPrev) b+=repBlock(admRepPrev,true);
+  b+=R.length?R.map((r,i)=>repBlock(r,i===0&&!admRepPrev)).join(''):'<p class="small">'+(admReps?tt('Noch kein Bericht – der erste kommt am Montag.','No report yet – the first one comes on Monday.'):admRepErr?'':tt('Lädt …','Loading …'))+'</p>';
+  if(admRepErr) b+='<p class="nameerr">'+admRepErr+'</p>';
+  return admCardH('📈 '+tt('Wochenbericht','Weekly report'),b);
+}
+els.admin.addEventListener('click',e=>{if(e.target.closest('[data-repa="prev"]')) admRepLoad(true);});
+
+v57aReady=true;
+admV57Load();
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};

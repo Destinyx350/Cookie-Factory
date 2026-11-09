@@ -453,4 +453,43 @@ module.exports = async function sqlTests() {
     check(/wrong key/.test(wrong), 'a wrong key cannot open it');
   } catch (e) { check(false, 'off-site decrypt test', e.message); }
   }
+  {
+  // Live dashboard and weekly report (v57)
+  for (const t of ['kf_week_reports', 'kf_err_days'])
+    await expectError(asAnon('select * from public.' + t + ' limit 1'), /permission denied/, 'players cannot read ' + t);
+  await expectError(rpc('kf_week_data', {}), /permission denied/, 'players cannot call the report helper');
+  const pidD = '58585858-5858-5858-5858-585858585858';
+  await rpc('kf_ping', { p_id: pidD, p_baked: 5, p_lang: 'fr', p_dev: 'phone', p_src: 'app' });
+  let dr = (await q("select lang, dev, src from kf_days where id = $1", [pidD])).rows[0];
+  check(dr && dr.lang === 'fr' && dr.dev === 'phone' && dr.src === 'app', 'the minute ping notes language, device and source', dr);
+  const pidE = '59595959-5959-5959-5959-595959595959';
+  check('cfg' in (await rpc('kf_ping', { p_id: pidE, p_baked: 5 })), 'older games can still ping without the new fields');
+  await rpc('kf_ping', { p_id: pidE, p_baked: 5, p_lang: 'english', p_dev: 'fridge', p_src: 'x' });
+  dr = (await q("select lang, dev, src from kf_days where id = $1", [pidE])).rows[0];
+  check(dr.lang === null && dr.dev === null && dr.src === null, 'unknown values are not stored', dr);
+  await rpc('kf_ping', { p_id: pidE, p_baked: 5, p_lang: 'es', p_dev: 'desktop', p_src: 'web' });
+  check((await q("select lang from kf_days where id = $1", [pidE])).rows[0].lang === 'es', 'a later ping fills in the day once');
+  const errBefore = +((await q("select n from kf_err_days where day = (now() at time zone 'UTC')::date")).rows[0] || { n: 0 }).n;
+  await rpc('kf_report_error', { p_msg: 'dash crash', p_src: 'd.js:1:1', p_ver: 57 }, '9.3.3.3');
+  await rpc('kf_report_error', { p_msg: 'dash crash', p_src: 'd.js:1:1', p_ver: 57 }, '9.3.3.3');
+  check(+(await q("select n from kf_err_days where day = (now() at time zone 'UTC')::date")).rows[0].n === errBefore + 2, 'crashes are counted per day');
+  await expectError(rpc('admin_dash', { p_pass: mt }), /wrong admin password/, 'the dashboard is for the owner only');
+  const dash = await rpc('admin_dash', { p_pass: tok, p_days: 30 });
+  check(dash.days.length === 30 && dash.days[29].players >= 2 && dash.days[29].crashes >= 2 && typeof dash.online === 'number', 'the dashboard has 30 days of players and crashes', dash.days[29]);
+  check(dash.langs.some(l => l.k === 'fr') && dash.devs.some(d => d.k === 'phone') && dash.srcs.some(x => x.k === 'app'), 'the dashboard shows languages, devices and sources');
+  check((await rpc('admin_dash', { p_pass: tok, p_days: 7 })).days.length === 7, 'the dashboard can show 7 days');
+  // weekly report
+  await q("delete from kf_week_reports; delete from kf_push_queue where kind = 'week'");
+  await rpc('admin_push', { p_pass: tok, p_action: 'subscribe', p_data: { sub: { endpoint: 'https://push.example.com/owner2', keys: { p256dh: 'x', auth: 'y' } }, lang: 'en' } });
+  const wr = await rpc('kf_week_report', {});
+  check(wr.made === true && /^\d{4}-W\d{2}$/.test(wr.week), 'the weekly report is made once a week', wr);
+  check((await rpc('kf_week_report', {})).made === false, 'it is not made twice in the same week');
+  const wp = (await q("select b_en, target from kf_push_queue where kind = 'week'")).rows;
+  check(wp.length === 1 && wp[0].target === 'owner' && /players .* new accounts/.test(wp[0].b_en), 'the owner gets the weekly report as a push', wp);
+  await expectError(rpc('admin_reports', { p_pass: mt, p_action: 'list' }), /wrong admin password/, 'reports are for the owner only');
+  const reps = await rpc('admin_reports', { p_pass: tok, p_action: 'list' });
+  check(reps.length === 1 && reps[0].data.this && 'players' in reps[0].data.this && reps[0].data.todo && 'db_pct' in reps[0].data.todo, 'the owner reads past weekly reports', reps[0] && Object.keys(reps[0].data));
+  check((await rpc('admin_reports', { p_pass: tok, p_action: 'preview' })).data.last, 'the owner can preview the numbers right now');
+  await rpc('admin_push', { p_pass: tok, p_action: 'unsubscribe', p_data: { endpoint: 'https://push.example.com/owner2' } });
+  }
 };

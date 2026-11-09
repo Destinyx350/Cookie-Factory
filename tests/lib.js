@@ -51,7 +51,7 @@ async function handle(route) {
 }
 // Serves the game folder so the browser loads the real index.html.
 function serve(port) {
-  const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.css': 'text/css' };
+  const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.css': 'text/css', '.mp4': 'video/mp4', '.jpg': 'image/jpeg', '.gif': 'image/gif' };
   const srv = http.createServer((q, s) => {
     let f = decodeURIComponent(q.url.split('?')[0]); if (f.endsWith('/')) f += 'index.html';
     const full = path.join(ROOT, path.normalize(f));

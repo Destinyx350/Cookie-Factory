@@ -1,6 +1,6 @@
 // Keksfabrik service worker: lets the game open offline and as an installed app.
 // Raise CACHE with every game update (see CLAUDE.md) so old files are cleared out.
-const CACHE = 'keksfabrik-v56';
+const CACHE = 'keksfabrik-v57';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -26,7 +26,12 @@ self.addEventListener('fetch', (e) => {
   // The game page: always ask the server for the newest version first (skipping the
   // browser's 10-minute page cache), and fall back to the saved copy when offline.
   // admin.html (the owner's version) is kept apart, so players never get it from the cache.
-  if (req.mode === 'navigate' || (url.origin === location.origin && /\/(index|admin)\.html$/.test(url.pathname))) {
+  const same = url.origin === location.origin;
+  const game = same && (url.pathname.endsWith('/') || /\/(index|admin)\.html$/.test(url.pathname));
+  // Other pages (welcome.html, privacy.html) and videos come straight from the network: they must never be saved as the
+  // game page, and video is loaded in pieces (range requests), which the cache can't store.
+  if (!game && (req.mode === 'navigate' || /\.(mp4|webm)$/.test(url.pathname) || req.headers.has('range'))) return;
+  if (game) {
     const key = url.pathname.endsWith('/admin.html') ? './admin.html' : './index.html';
     e.respondWith(
       fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' })

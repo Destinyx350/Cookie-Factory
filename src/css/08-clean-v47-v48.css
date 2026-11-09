@@ -250,3 +250,28 @@
 .offkey{border:1px solid var(--edge);border-radius:var(--r-md,12px);padding:8px 10px;margin:6px 0;background:var(--panel-2)}
 .offkey ol{margin:6px 0;padding-left:20px}.offkey code{font-size:12px}
 #admPlanF[data-kind=event] .plnnews,#admPlanF[data-kind=news] .plnev{display:none}
+/* V57: admin live dashboard (one series per chart, one hue checked against the dark panel) */
+:root{--viz-1:#3987e5}
+.drange{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.drange .btn.on{border-color:var(--viz-1);color:var(--text,#fff);box-shadow:inset 0 0 0 1px var(--viz-1)}
+.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:8px 0}
+@media (max-width:640px){.dgrid{grid-template-columns:minmax(0,1fr)}}
+.dchart{margin:0;padding:8px 10px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2);min-width:0}
+.dchart figcaption{display:flex;justify-content:space-between;gap:6px;align-items:baseline;font-size:12px;margin-bottom:6px}
+.dchart figcaption span{color:var(--muted);font-size:11px;white-space:nowrap}
+.dplot{position:relative;height:92px;border-bottom:1px solid var(--edge-2,rgba(255,255,255,.18));touch-action:pan-y}
+.dmax{position:absolute;top:-2px;left:0;font-size:10px;color:var(--muted);pointer-events:none}
+.dplot::before{content:"";position:absolute;left:0;right:0;top:0;border-top:1px dashed var(--edge)}
+.dcols{position:absolute;inset:12px 0 0 0;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));align-items:end;column-gap:2px}
+.dcols i{display:block;background:var(--viz-1);border-radius:4px 4px 0 0;min-height:0;opacity:.85}
+.dcols i.hi{opacity:1;box-shadow:0 0 0 1px var(--text,#fff)}
+.dtip{position:absolute;top:2px;padding:3px 7px;border-radius:8px;background:var(--bg,#0e1013);border:1px solid var(--edge);font-size:11px;white-space:nowrap;pointer-events:none;z-index:2}
+.dx{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:3px}
+.dshare{padding:8px 10px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2);min-width:0;font-size:12px}
+.dshare>b{display:block;margin-bottom:6px}
+.dsr{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;gap:6px;align-items:center;margin:3px 0}
+.dsr span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dsr i{display:block;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}.dsr em{display:block;height:100%;background:var(--viz-1);border-radius:4px}
+.dsr small{color:var(--muted);font-size:11px;white-space:nowrap}
+.dtable{max-height:260px;overflow:auto}.dtable table{width:100%;border-collapse:collapse;font-size:12px}
+.dtable th,.dtable td{padding:3px 6px;text-align:right;border-bottom:1px solid var(--edge)}.dtable th:first-child,.dtable td:first-child{text-align:left}
+.rep{margin-top:8px}.rep>summary{font-weight:600}.reptodo{margin:4px 0;padding-left:4px;list-style:none;font-size:13px}.reptodo li{margin:3px 0}

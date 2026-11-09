@@ -44,8 +44,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=56;
+const NEWS_VER=57;
 const NEWS=[
+  {v:57,sum:['Website, Trailer und Werkzeuge für den Betreiber','A website, a trailer and tools for the owner'],items:[
+    ['new','Website: Die Keksfabrik hat jetzt eine eigene Seite mit Trailer, Bildern und einer Anleitung zum Installieren – perfekt zum Teilen: destinyx350.github.io/Cookie-Factory/welcome.html','Website: Cookie Factory now has its own page with a trailer, screenshots and install steps – perfect for sharing: destinyx350.github.io/Cookie-Factory/welcome.html'],
+    ['new','Trailer: ein kurzes Gameplay-Video vom 3D-Keks, den Gebäuden und der Welt.','Trailer: a short gameplay video of the 3D cookie, the buildings and the world.'],
+    ['change','Hinter den Kulissen: Der Betreiber sieht jetzt ein Live-Dashboard und bekommt jeden Montag einen Wochenbericht – so werden Probleme schneller gefunden. Dafür zählt das Spiel anonym Browsersprache, Gerätetyp und ob es als App läuft.','Behind the scenes: the owner now has a live dashboard and a weekly report every Monday, so problems get found faster. For this the game anonymously counts browser language, device type and whether it runs as an app.']]},
   {v:56,sum:['Einfacher speichern und ein sichererer Server','Simpler saving and a safer server'],items:[
     ['change','Einfacher speichern: Dein Konto und die Spielstand-Datei sind die zwei Wege, deine Bäckerei auf ein anderes Gerät mitzunehmen. Transfer-Code und Spielstand-Text gibt es nicht mehr.','Simpler saving: your account and the save file are the two ways to take your bakery to another device. The transfer code and the save text are gone.'],
     ['new','Geplante Events: Events und Ankündigungen starten jetzt auch zu festen Zeiten, manche jede Woche – halte Ausschau!','Planned events: events and announcements now also start at set times, some every week – keep an eye out!'],
