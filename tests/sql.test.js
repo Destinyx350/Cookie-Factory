@@ -365,4 +365,92 @@ module.exports = async function sqlTests() {
   check((await q('select count(*)::int n from kf_admin_push')).rows[0].n === 1, 'dead admin devices are removed');
   check((await rpc('admin_push', { p_pass: tok, p_action: 'unsubscribe', p_data: { endpoint: 'https://push.example.com/owner' } })).on === false, 'the owner turns alerts off');
   }
+  {
+  // Server care (v56): no transfer codes, save checks, planned events, off-site backups, cleanup and usage
+  for (const t of ['kf_save_flags', 'kf_schedule', 'kf_offsite', 'kf_jobs'])
+    await expectError(asAnon('select * from public.' + t + ' limit 1'), /permission denied/, 'players cannot read ' + t);
+  await expectError(rpc('kf_cleanup_run', {}), /permission denied/, 'players cannot run the cleanup directly');
+  await expectError(rpc('save_upload', { p_data: 'x'.repeat(40) }), /does not exist|function/, 'transfer codes are gone from the server');
+  check((await q("select to_regclass('public.kf_saves') t")).rows[0].t === null, 'the transfer code table is removed');
+  // save checks
+  const sf = await rpc('acc_signup', { p_user: 'test_jump', p_pass: 'secret123' }, '6.1.1.1');
+  await rpc('acc_save', { p_token: sf.token, p_data: SAVE, p_baked: 1e30 });
+  check((await q("select count(*)::int n from kf_save_flags where username = 'test_jump'")).rows[0].n === 0, 'the first account save is never flagged (any size)');
+  await q("update kf_accounts set save_at = now() - interval '10 minutes' where username = 'test_jump'");
+  await rpc('acc_save', { p_token: sf.token, p_data: SAVE, p_baked: 1e31 });
+  check((await q("select count(*)::int n from kf_save_flags where username = 'test_jump'")).rows[0].n === 0, 'normal growth is not flagged');
+  await q("update kf_accounts set save_at = now() - interval '10 minutes' where username = 'test_jump'");
+  await rpc('acc_save', { p_token: sf.token, p_data: SAVE, p_baked: 1e45 });
+  await q("update kf_accounts set save_at = now() - interval '1 minute' where username = 'test_jump'");
+  await rpc('acc_save', { p_token: sf.token, p_data: SAVE, p_baked: 1e60 });
+  check((await q("select count(*)::int n from kf_save_flags where username = 'test_jump'")).rows[0].n === 1, 'an impossible jump is flagged once an hour');
+  check((await q("select save_baked from kf_accounts where username = 'test_jump'")).rows[0].save_baked === 1e60, 'a flagged save is still kept');
+  await q("update kf_accounts set save_at = now() - interval '3 days' where username = 'test_jump'");
+  await rpc('acc_save', { p_token: sf.token, p_data: SAVE, p_baked: 1e70 });
+  check((await q("select count(*)::int n from kf_save_flags where username = 'test_jump'")).rows[0].n === 1, 'days away allow more growth');
+  await expectError(rpc('admin_saveflags', { p_pass: mt, p_action: 'list' }), /wrong admin password/, 'save flags are for the owner only');
+  const fl = await rpc('admin_saveflags', { p_pass: tok, p_action: 'list' });
+  check(fl.length === 1 && fl[0].username === 'test_jump' && fl[0].old === 1e31 && fl[0].new === 1e45 && fl[0].banned === false, 'the owner sees the suspicious save', fl);
+  check((await rpc('admin_saveflags', { p_pass: tok, p_action: 'ok', p_data: { id: fl[0].id } })).length === 0, 'the owner marks it as OK');
+  // planned events and announcements
+  await q('delete from kf_schedule');
+  await expectError(rpc('admin_schedule', { p_pass: mt, p_action: 'list' }), /wrong admin password/, 'planning is for the owner only');
+  const inH = new Date(Date.now() + 3600e3).toISOString(), ago = new Date(Date.now() - 60e3).toISOString();
+  await expectError(rpc('admin_schedule', { p_pass: tok, p_action: 'add', p_data: { kind: 'event', ev_kind: 'prod', mult: 20, hours: 2, at: inH } }), /invalid multiplier/, 'event multipliers stay 1–10');
+  await expectError(rpc('admin_schedule', { p_pass: tok, p_action: 'add', p_data: { kind: 'news', title: 'Hi', hours: 24, at: new Date(Date.now() - 600e3).toISOString() } }), /time in the past/, 'a one-time plan cannot be in the past');
+  await expectError(rpc('admin_schedule', { p_pass: tok, p_action: 'add', p_data: { kind: 'news', title: ' ', hours: 24, at: inH } }), /title missing/, 'an announcement needs a title');
+  const evBefore = (await q('select count(*)::int n from kf_events')).rows[0].n;
+  let sc = await rpc('admin_schedule', { p_pass: tok, p_action: 'add', p_data: { kind: 'event', title: 'Plan test', ev_kind: 'gold', mult: 3, hours: 2, at: inH } });
+  check(sc.length === 1 && sc[0].active && (await q('select count(*)::int n from kf_events')).rows[0].n === evBefore, 'a planned event waits for its time');
+  sc = await rpc('admin_schedule', { p_pass: tok, p_action: 'add', p_data: { kind: 'news', title: 'Weekly news', body: 'Every week', hours: 24, repeat: 'weekly', at: ago } });
+  const wk = sc.find(x => x.repeat === 'weekly');
+  check((await q("select count(*)::int n from kf_news where title = 'Weekly news'")).rows[0].n === 1, 'a weekly plan that is due starts at once');
+  check(wk.active && new Date(wk.next_at) > Date.now() + 6.9 * 864e5, 'a weekly plan moves on by a week', wk.next_at);
+  await q("update kf_schedule set next_at = now() - interval '1 second' where kind = 'event'");
+  check((await rpc('kf_schedule_tick', {})) === 1, 'the minute tick starts what is due');
+  check((await q("select count(*)::int n from kf_events where title = 'Plan test' and kind = 'gold' and mult = 3 and ends_at > now() + interval '119 minutes'")).rows[0].n === 1, 'the planned event runs with its multiplier and length');
+  check((await rpc('kf_schedule_tick', {})) === 0, 'nothing starts twice');
+  const lv = await rpc('kf_ping', { p_id: '56565656-5656-5656-5656-565656565656', p_baked: 1 });
+  check(lv && 'cfg' in lv, 'the minute ping still works');
+  sc = await rpc('admin_schedule', { p_pass: tok, p_action: 'toggle', p_data: { id: wk.id } });
+  check(sc.find(x => x.id === wk.id).active === false, 'a weekly plan can be paused');
+  sc = await rpc('admin_schedule', { p_pass: tok, p_action: 'delete', p_data: { id: wk.id } });
+  check(!sc.some(x => x.id === wk.id), 'a plan can be deleted');
+  check((await q("select count(*)::int n from kf_admin_log where action like 'schedule:%'")).rows[0].n >= 4, 'planning is written to the admin log');
+  // off-site backups
+  await expectError(rpc('backup_offsite', { p_key: 'nope' }), /forbidden/, 'off-site backup needs the key');
+  await expectError(rpc('admin_offsite', { p_pass: mt, p_action: 'newkey' }), /wrong admin password/, 'only the owner makes the key');
+  const ok1 = await rpc('admin_offsite', { p_pass: tok, p_action: 'newkey' });
+  check(/^[0-9a-f]{48}$/.test(ok1.key) && ok1.on, 'the owner gets a new key once');
+  check((await rpc('admin_offsite', { p_pass: tok, p_action: 'status' })).key === null, 'the key is never shown again');
+  check(!(await q('select key_hash from kf_offsite')).rows[0].key_hash.includes(ok1.key), 'only a hash of the key is stored');
+  const bk = await rpc('backup_offsite', { p_key: ok1.key });
+  check(bk.id && bk.data && bk.data.kf_accounts && bk.counts, 'the key fetches the newest backup', Object.keys(bk));
+  await expectError(rpc('backup_offsite', { p_key: ok1.key }), /too soon/, 'off-site copies are limited');
+  await rpc('admin_offsite', { p_pass: tok, p_action: 'remove' });
+  await q('update kf_offsite set last_export = null');
+  await expectError(rpc('backup_offsite', { p_key: ok1.key }), /forbidden/, 'a removed key stops working');
+  // cleanup and usage
+  await q("delete from kf_jobs");
+  await q("insert into kf_rate (kind, key, at) values ('t56', 'k', now() - interval '5 days'), ('t56', 'k', now())");
+  await q("insert into kf_presence (id, baked, seen_at) values ('57575757-5757-5757-5757-575757575757', 1, now() - interval '400 days')");
+  await q("insert into kf_admin_log (at, action, detail) values (now() - interval '200 days', 'old t56', '')");
+  const cl = await rpc('kf_cleanup', {});
+  check(cl.ran && cl.removed.limits >= 1 && cl.removed.players >= 1 && cl.removed.admin_log >= 1, 'the cleanup removes old data', cl);
+  check((await q("select count(*)::int n from kf_rate where kind = 't56'")).rows[0].n === 1, 'the cleanup keeps recent data');
+  check((await rpc('kf_cleanup', {})).ran === false, 'the cleanup runs at most every 6 hours');
+  await expectError(rpc('admin_usage', { p_pass: mt }), /wrong admin password/, 'usage is for the owner only');
+  const us = await rpc('admin_usage', { p_pass: tok, p_action: 'usage' });
+  check(us.db_bytes > 0 && us.limit_bytes === 524288000 && us.tables.length > 0 && typeof us.mau === 'number' && us.cleanup && us.cleanup.at, 'the owner sees database size, players and the last cleanup', Object.keys(us));
+  check((await rpc('admin_usage', { p_pass: tok, p_action: 'cleanup' })).cleanup.at, 'the owner can run the cleanup now');
+  // the off-site copy opens with tools/decrypt-backup.js (same steps as the GitHub job)
+  try {
+    const { execFileSync } = require('child_process'), zlib = require('zlib');
+    const { decrypt } = require('../tools/decrypt-backup.js'), keyO = 'ab'.repeat(24);
+    const enc = execFileSync('openssl', ['enc', '-aes-256-cbc', '-pbkdf2', '-iter', '200000', '-md', 'sha256', '-salt', '-pass', 'env:KEY'], { input: zlib.gzipSync(JSON.stringify(bk)), env: { ...process.env, KEY: keyO } });
+    check(JSON.parse(decrypt(enc, keyO)).id === bk.id, 'an encrypted off-site copy opens with the key');
+    let wrong = ''; try { decrypt(enc, 'cd'.repeat(24)); } catch (e) { wrong = e.message; }
+    check(/wrong key/.test(wrong), 'a wrong key cannot open it');
+  } catch (e) { check(false, 'off-site decrypt test', e.message); }
+  }
 };

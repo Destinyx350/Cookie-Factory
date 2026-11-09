@@ -2,22 +2,6 @@
 els.fx.checked=S.opt.fx;
 els.fx.addEventListener('change',()=>{S.opt.fx=els.fx.checked;});
 els.saveBtn.addEventListener('click',()=>{save();toast(tr('toast_saved'));});
-els.exportBtn.addEventListener('click',()=>{S.t=Date.now();els.exportBox.value=enc(sealJSON(S));els.exportBox.focus();els.exportBox.select();});
-els.copyBtn.addEventListener('click',()=>{
-  if(!els.exportBox.value) els.exportBox.value=enc(sealJSON(S));
-  const done=()=>toast(tr('toast_copied'));
-  const fallback=()=>{els.exportBox.focus();els.exportBox.select();toast(tr('toast_select'));};
-  try{navigator.clipboard.writeText(els.exportBox.value).then(done,fallback);}catch(e){fallback();}
-});
-els.importBtn.addEventListener('click',()=>{
-  try{
-    const s=sanitize(JSON.parse(dec(els.importBox.value)));
-    if(!s.name) s.name=S.name;
-    if(s.tamp&&!S.tamp) setTimeout(tampWarn,400);
-    S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;els.importBox.value='';
-    applyLang();rebuildAll();save();toast(tr('toast_loaded'));
-  }catch(e){toast(tr('toast_invalid'));}
-});
 armed(els.resetBtn,'wipe_confirm',()=>{els.resetBtn.textContent=tr('wipe');},()=>{
   askName({title:tt('Neues Spiel','New game'),text:tt('Wie soll dein neuer Spielstand heißen? Dein bisheriger Fortschritt in diesem Platz wird gelöscht.','What should your new save be called? Your current progress in this slot will be erased.'),ok:tt('Neu starten','Start over')},nm=>{
     const l=LANG;S=fresh();S.opt.lang=l;S.name=nm;els.fx.checked=true;rebuildAll();save();slotSig='';toast(tr('toast_new'));

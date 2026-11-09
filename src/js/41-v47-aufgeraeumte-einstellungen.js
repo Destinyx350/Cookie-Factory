@@ -11,7 +11,7 @@
   secs.filter(x=>x!==acc&&x!==main).forEach(x=>det.appendChild(x));
 })();
 function updV47Txt(){
-  set$('saveMoreT',tt('Weitere Möglichkeiten: Speicherplätze, Backups, Datei, Transfer-Code, Text','More options: save slots, backups, file, transfer code, text'));
+  set$('saveMoreT',tt('Weitere Möglichkeiten: Speicherplätze, Backups, Spielstand-Datei','More options: save slots, backups, save file'));
   set$('helpSetT',tt('Hilfe und Teilen','Help and sharing'));
   set$('helpSetBtn',tt('❓ Hilfe öffnen','❓ Open help'));
   set$('shareSetBtn',tt('📣 Spiel teilen','📣 Share the game'));

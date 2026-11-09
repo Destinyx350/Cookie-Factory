@@ -1,0 +1,57 @@
+name: Off-site backup
+
+# Once a week this fetches the newest database backup (the weekly snapshot from docs/update-v7.sql) and keeps an
+# encrypted copy here at GitHub for 90 days, so the game can be restored even if something happens to the Supabase project.
+# The repository is public, so the copy is encrypted (AES-256, key from the KF_BACKUP_KEY secret) before it is stored.
+# The same key unlocks the server function backup_offsite; only its hash is on the server. The owner creates the key
+# in admin.html (Server tab → Off-site backups). To open a copy: node tools/decrypt-backup.js <file> (see docs/LEADERBOARD.md).
+on:
+  schedule:
+    - cron: "41 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      URL: https://nmmlemtljjvfurlrvuvm.supabase.co/rest/v1/rpc
+      ANON: sb_publishable_STHuGWpHxg6efQhuvc_sQQ_xO5AvI5J
+      KEY: ${{ secrets.KF_BACKUP_KEY }}
+    steps:
+      - name: Fetch and encrypt the newest backup
+        id: b
+        run: |
+          set -euo pipefail
+          if [ -z "$KEY" ]; then
+            echo "::notice::No KF_BACKUP_KEY secret yet. Create the key in admin.html (Server tab → Off-site backups) and save it as a repository secret."
+            echo "skip=1" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          umask 077
+          code=000
+          for i in 1 2 3; do
+            code=$(curl -sS -o backup.json -w '%{http_code}' "$URL/backup_offsite" -H "apikey: $ANON" -H "Authorization: Bearer $ANON" \
+              -H "Content-Type: application/json" -d "{\"p_key\":\"$KEY\"}" || echo 000)
+            [ "$code" = "200" ] && break
+            echo "Try $i: server answered $code"; sleep 20
+          done
+          if [ "$code" != "200" ]; then
+            echo "::error::The server refused the backup ($code): $(head -c 200 backup.json 2>/dev/null | tr -cd '[:print:]')"; rm -f backup.json; exit 1
+          fi
+          name="kf-backup-$(date -u +%Y-%m-%d)"
+          gzip -9 backup.json
+          openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -md sha256 -salt -in backup.json.gz -out "$name.json.gz.enc" -pass env:KEY
+          rm -f backup.json.gz
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "Encrypted backup: $(stat -c %s "$name.json.gz.enc") bytes"
+      - name: Keep the encrypted copy for 90 days
+        if: steps.b.outputs.skip != '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.b.outputs.name }}
+          path: ${{ steps.b.outputs.name }}.json.gz.enc
+          retention-days: 90
+          if-no-files-found: error

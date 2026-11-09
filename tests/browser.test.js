@@ -117,7 +117,7 @@ module.exports = async function browserTests(url) {
   await settings(b, 'save');
   const order = await b.evaluate(() => [...document.querySelectorAll('#setOv .optsec[data-sc="save"]:not([hidden])')].map(x => x.querySelector('#accBox') ? 'account' : x.querySelector('#saveBtn') ? 'save' : x.classList.contains('savemore') ? 'more' : 'other').slice(0, 3).join(','));
   check(order === 'account,save,more', 'saving page shows the account first and tucks the rest under "More options"', order);
-  await b.fill('#setQ', 'transfer'); await b.waitForTimeout(200);
+  await b.fill('#setQ', 'backup'); await b.waitForTimeout(200);
   check(await b.evaluate(() => document.querySelector('#setOv details.savemore').open), 'searching settings opens "More options" when it matches');
   await b.fill('#setQ', ''); await b.click('#setSeg [data-sp=disp]'); await b.check('#hcChk');
   check(await b.evaluate(() => document.documentElement.dataset.hc === '1'), 'high contrast can be switched on');
@@ -361,6 +361,39 @@ module.exports = async function browserTests(url) {
   await a.check('#g3dChk'); await a.waitForTimeout(200);
   check(await a.evaluate(() => document.documentElement.hasAttribute('data-g3d')), 'turning 3D on again works');
   await a.click('#setClose');
+
+  // 5j. Simpler saving and server care (v56)
+  await settings(a, 'save');
+  check(await a.evaluate(() => !document.getElementById('exportBox') && !document.getElementById('importBox') && !/transfer code/i.test(document.getElementById('setOv').textContent)), 'the transfer code and save text are gone from Settings');
+  check(await a.evaluate(() => !!document.getElementById('fileDl') && !!document.getElementById('fileUp')), 'the save file is still there');
+  await a.click('#setClose');
+  await pool.query("delete from kf_save_flags; delete from kf_schedule; delete from kf_jobs");
+  await pool.query("insert into kf_save_flags (account, username, old_baked, new_baked, hours) select id, username, 1e10, 1e40, 0.2 from kf_accounts where username = 'alpha_ci'");
+  await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="mod"]');
+  await d.click('[data-mda="reload"]').catch(() => {});
+  await d.waitForSelector('[data-sfa^="ok:"]', { timeout: 10000 }).catch(() => {});
+  check(/Suspicious saves/.test(await text(d, '#admMod')) && await d.isVisible('[data-sfa^="ok:"]') && await d.isVisible('#admMod [data-ban="pick:alpha_ci"]'), 'the owner sees suspicious saves with OK and Ban');
+  await d.click('[data-sfa^="ok:"]'); await d.waitForTimeout(1200);
+  check((await pool.query("select status from kf_save_flags")).rows[0].status === 'ok', 'the owner marks a suspicious save as OK');
+  await d.click('#admSeg [data-ap="srv"]'); await d.waitForSelector('[data-offa=newkey]', { timeout: 10000 }).catch(() => {});
+  check(/Database & cleanup/.test(await text(d, '#admSrv')) && /of 500 MB/.test(await text(d, '#admSrv')), 'the Server tab shows how full the database is');
+  await d.click('[data-usea=cleanup]'); await d.waitForTimeout(1500);
+  check((await pool.query("select count(*)::int n from kf_jobs where k = 'cleanup'")).rows[0].n === 1 && /Last cleanup: (?!never)/.test(await text(d, '#admSrv')), 'the owner runs the cleanup');
+  await pool.query('delete from kf_offsite');
+  await d.click('#admSeg [data-ap="mod"]'); await d.click('#admSeg [data-ap="srv"]');
+  await d.click('[data-offa=newkey]'); await d.waitForSelector('#admOffKeyIn', { timeout: 8000 }).catch(() => {});
+  const offKey = await d.inputValue('#admOffKeyIn').catch(() => '');
+  check(/^[0-9a-f]{48}$/.test(offKey) && /KF_BACKUP_KEY/.test(await text(d, '#admSrv')), 'the owner creates the off-site key and sees the GitHub steps');
+  check((await pool.query('select key_hash from kf_offsite')).rows[0].key_hash.length === 64, 'only the hash of the key is stored');
+  await d.click('#admSeg [data-ap="online"]'); await d.waitForSelector('#admPlanF', { timeout: 10000 }).catch(() => {});
+  await d.selectOption('#admPlanF [name=kind]', 'news');
+  check(!(await d.isVisible('#admPlanF [name=mult]')) && await d.isVisible('#admPlanF [name=body]'), 'the plan form shows only what an announcement needs');
+  await d.fill('#admPlanF [name=title]', 'CI weekly news'); await d.selectOption('#admPlanF [name=repeat]', 'weekly'); await d.selectOption('#admPlanF [name=hours]', '24');
+  await d.click('#admPlanF button[type=submit]'); await d.waitForTimeout(1500);
+  const pl = (await pool.query("select kind, repeat, hours, next_at from kf_schedule where title = 'CI weekly news'")).rows;
+  check(pl.length === 1 && pl[0].kind === 'news' && pl[0].repeat === 'weekly' && pl[0].hours === 24 && new Date(pl[0].next_at) > Date.now(), 'the owner plans a weekly announcement', pl);
+  check(/CI weekly news/.test(await text(d, '#admOn')) && /every week/.test(await text(d, '#admOn')), 'planned items are listed');
+  await d.click('#setClose');
 
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {

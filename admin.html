@@ -1701,6 +1701,13 @@ html{-webkit-tap-highlight-color:transparent}
 .golden img.gold3d{display:block;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 0 10px rgba(255,214,90,.75)) drop-shadow(0 4px 6px rgba(0,0,0,.35))}
 :root[data-g3d] svg.art,:root[data-g3d] .tab svg{filter:url(#kf3d)}
 .stlogo img.st3d{width:100%;height:100%;display:block;filter:drop-shadow(0 12px 18px rgba(0,0,0,.45))}
+/* V56: admin cards for database use, off-site backups and plans */
+.usebar{height:10px;border-radius:99px;background:var(--panel-2);border:1px solid var(--edge);overflow:hidden;margin:4px 0}
+.usebar i{display:block;height:100%;background:var(--grn1,#3a9d5d);border-radius:inherit}
+.usebar.hot i{background:#d9534f}
+.offkey{border:1px solid var(--edge);border-radius:var(--r-md,12px);padding:8px 10px;margin:6px 0;background:var(--panel-2)}
+.offkey ol{margin:6px 0;padding-left:20px}.offkey code{font-size:12px}
+#admPlanF[data-kind=event] .plnnews,#admPlanF[data-kind=news] .plnev{display:none}
 
 </style>
 
@@ -2007,24 +2014,6 @@ html{-webkit-tap-highlight-color:transparent}
           <div class="btns" style="margin-top:10px"><button type="button" class="btn primary" id="fileDl"></button><button type="button" class="btn" id="fileUp"></button></div>
           <input type="file" id="fileIn" accept=".keks,.txt,.json,text/plain,application/json" hidden>
         </div>
-        <div class="optsec" data-sc="save">
-          <h2 id="cloudT"></h2>
-          <p class="small" id="cloudP"></p>
-          <div class="btns" style="margin-top:10px"><button type="button" class="btn primary" id="cloudUp"></button></div>
-          <div class="cloudcode" id="cloudCode" hidden></div>
-          <form id="cloudForm" class="coderow" novalidate><input type="text" id="cloudIn" class="namein" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="KEKS-XXXX-XXXX"><button type="submit" class="btn" id="cloudGo"></button></form>
-          <p class="nameerr" id="cloudMsg" aria-live="polite"></p>
-        </div>
-        <div class="optsec" data-sc="save">
-          <h2 data-i18n="export"></h2>
-          <div class="btns"><button type="button" class="btn" id="exportBtn" data-i18n="show_save"></button><button type="button" class="btn" id="copyBtn" data-i18n="copy"></button></div>
-          <textarea id="exportBox" readonly data-ph="export_ph" data-aria="export"></textarea>
-        </div>
-        <div class="optsec" data-sc="save">
-          <h2 data-i18n="import"></h2>
-          <textarea id="importBox" data-ph="import_ph" data-aria="import"></textarea>
-          <div class="btns"><button type="button" class="btn" id="importBtn" data-i18n="load"></button></div>
-        </div>
         <div class="optsec" data-sc="game">
           <h2 id="codeT"></h2>
           <p class="small" id="codeP"></p>
@@ -2139,7 +2128,7 @@ tree_locked:'Noch gesperrt. Braucht: {r}.',tree_buy:'Kaufen für {c}',tree_missi
 respec:'Baum zurücksetzen',respec_confirm:'Wirklich zurücksetzen? Nochmal klicken.',respec_done:'Alle Himmelschips sind wieder frei.',asc_done:'Aufgestiegen! Du hast jetzt {n} Himmelschips.',
 opt_display:'Anzeige',opt_fx:'Zahlen, Krümel und Animationen',opt_lang:'Sprache',opt_save:'Speichern',save_now:'Jetzt speichern',
 save_hint:'Dein Spiel speichert automatisch auf diesem Gerät. Mit einem Konto wird es zusätzlich online gespeichert.',
-export:'Export',show_save:'Spielstand anzeigen',copy:'Kopieren',export_ph:'Hier erscheint dein Spielstand als Text.',import:'Import',import_ph:'Spielstand-Text hier einfügen.',load:'Laden',
+export:'Export',copy:'Kopieren',import:'Import',load:'Laden',
 new_game:'Neu anfangen',wipe:'Alles löschen',wipe_confirm:'Wirklich alles löschen? Nochmal klicken.',
 toast_saved:'Spielstand gespeichert.',toast_copied:'Spielstand kopiert.',toast_select:'Text markiert. Kopiere ihn mit Strg+C.',toast_loaded:'Spielstand geladen.',
 toast_invalid:'Dieser Spielstand ist ungültig.',toast_new:'Neuer Anfang. Viel Erfolg!',toast_ach:'Erfolg: {n}',toast_offline:'Während du weg warst, wurden {n} Kekse gebacken.',
@@ -2188,7 +2177,7 @@ tree_locked:'Locked for now. Requires: {r}.',tree_buy:'Buy for {c}',tree_missing
 respec:'Reset tree',respec_confirm:'Really reset? Click again.',respec_done:'All heavenly chips are free again.',asc_done:'Ascended! You now have {n} heavenly chips.',
 opt_display:'Display',opt_fx:'Numbers, crumbs and animations',opt_lang:'Language',opt_save:'Saving',save_now:'Save now',
 save_hint:"Your game saves automatically on this device. With an account it's also saved online.",
-export:'Export',show_save:'Show save',copy:'Copy',export_ph:'Your save appears here as text.',import:'Import',import_ph:'Paste your save text here.',load:'Load',
+export:'Export',copy:'Copy',import:'Import',load:'Load',
 new_game:'New game',wipe:'Delete everything',wipe_confirm:'Really delete everything? Click again.',
 toast_saved:'Game saved.',toast_copied:'Save copied.',toast_select:'Text selected. Copy it with Ctrl+C.',toast_loaded:'Save loaded.',
 toast_invalid:'This save is invalid.',toast_new:'Fresh start. Good luck!',toast_ach:'Achievement: {n}',toast_offline:'While you were away, {n} cookies were baked.',
@@ -2948,8 +2937,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=55;
+const NEWS_VER=56;
 const NEWS=[
+  {v:56,sum:['Einfacher speichern und ein sichererer Server','Simpler saving and a safer server'],items:[
+    ['change','Einfacher speichern: Dein Konto und die Spielstand-Datei sind die zwei Wege, deine Bäckerei auf ein anderes Gerät mitzunehmen. Transfer-Code und Spielstand-Text gibt es nicht mehr.','Simpler saving: your account and the save file are the two ways to take your bakery to another device. The transfer code and the save text are gone.'],
+    ['new','Geplante Events: Events und Ankündigungen starten jetzt auch zu festen Zeiten, manche jede Woche – halte Ausschau!','Planned events: events and announcements now also start at set times, some every week – keep an eye out!'],
+    ['new','Sicherer Server: Eine verschlüsselte Kopie des wöchentlichen Backups liegt jetzt außerhalb des Spielservers, und alte Daten werden automatisch gelöscht.','Safer server: an encrypted copy of the weekly backup is now kept outside the game server, and old data is deleted automatically.'],
+    ['change','Fairer: Unrealistische Sprünge in Konto-Spielständen werden geprüft. Dein Spielstand wird dabei nie gelöscht.','Fairer: unrealistic jumps in account saves are checked. Your save is never deleted by this.']]},
   {v:55,sum:['Neuer Soundtrack und 3D-Grafik!','A new soundtrack and 3D graphics!'],items:[
     ['new','Neuer Soundtrack: 7 Stücke mit echten Instrumenten (E-Piano, Streicher, Blech, Glocken, Kontrabass, Schlagzeug), Hall und Echo – Morgenbäckerei, Fabrik-Groove, Nachtschicht, Großes Abenteuer, Showdown, Sternenaufstieg und Keks-Fest.','New soundtrack: 7 tracks with real instruments (electric piano, strings, brass, bells, upright bass, drums), reverb and echo – Morning Bakery, Factory Groove, Night Shift, Great Adventure, Showdown, Starry Ascension and Cookie Festival.'],
     ['new','Die Musik passt sich an: Sie wird voller bei Combos und Boosts, spielt nachts Jazz und im Kampf den Showdown.','The music adapts: it gets fuller during combos and boosts, plays jazz at night and the Showdown in fights.'],
@@ -3795,7 +3789,7 @@ function chipsFree(){return S.chips-TREE.reduce((sum,n)=>sum+(S.tree[n.id]?n.cos
 
 /* ======================= Oberfläche ======================= */
 const els={};
-['saveNote','boostListW','starShop','starHead','starNote','starTitle','starEarn','starEarnHead','wBoostTitle','wBoostNote','shDot','setOv','setBtn','setClose','itemsNote','count','kps','perClick','run','chips','buffs','hint','cookie','cookieStage','stage','rain','buildList','upList','upBadge','upNote','upEmpty','achHead','achGrid','kv','ascBtn','ascBadge','toasts','fx','exportBox','importBox','saveBtn','exportBtn','copyBtn','importBtn','resetBtn','amountSeg','respecBtn','tree','treeLines','tdetail','treeHead','admin','flash','newsBtn','newsBadge','newsOv','newsBody','newsClose','boostList','boxBtn','boxReveal','itemGrid','skinRow','itemsHead','rvIco','rvName','rvSub'].forEach(id=>{els[id]=document.getElementById(id);});
+['saveNote','boostListW','starShop','starHead','starNote','starTitle','starEarn','starEarnHead','wBoostTitle','wBoostNote','shDot','setOv','setBtn','setClose','itemsNote','count','kps','perClick','run','chips','buffs','hint','cookie','cookieStage','stage','rain','buildList','upList','upBadge','upNote','upEmpty','achHead','achGrid','kv','ascBtn','ascBadge','toasts','fx','saveBtn','resetBtn','amountSeg','respecBtn','tree','treeLines','tdetail','treeHead','admin','flash','newsBtn','newsBadge','newsOv','newsBody','newsClose','boostList','boxBtn','boxReveal','itemGrid','skinRow','itemsHead','rvIco','rvName','rvSub'].forEach(id=>{els[id]=document.getElementById(id);});
 const tabs=[...document.querySelectorAll('.tab')];
 const panes={};document.querySelectorAll('.pane').forEach(p=>{panes[p.dataset.pane]=p;});
 document.getElementById('logo').innerHTML=art('cookie');
@@ -8023,22 +8017,6 @@ ADMH.build=buildAdmin;ADMH.fill=fillAdmin;
 els.fx.checked=S.opt.fx;
 els.fx.addEventListener('change',()=>{S.opt.fx=els.fx.checked;});
 els.saveBtn.addEventListener('click',()=>{save();toast(tr('toast_saved'));});
-els.exportBtn.addEventListener('click',()=>{S.t=Date.now();els.exportBox.value=enc(sealJSON(S));els.exportBox.focus();els.exportBox.select();});
-els.copyBtn.addEventListener('click',()=>{
-  if(!els.exportBox.value) els.exportBox.value=enc(sealJSON(S));
-  const done=()=>toast(tr('toast_copied'));
-  const fallback=()=>{els.exportBox.focus();els.exportBox.select();toast(tr('toast_select'));};
-  try{navigator.clipboard.writeText(els.exportBox.value).then(done,fallback);}catch(e){fallback();}
-});
-els.importBtn.addEventListener('click',()=>{
-  try{
-    const s=sanitize(JSON.parse(dec(els.importBox.value)));
-    if(!s.name) s.name=S.name;
-    if(s.tamp&&!S.tamp) setTimeout(tampWarn,400);
-    S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;els.importBox.value='';
-    applyLang();rebuildAll();save();toast(tr('toast_loaded'));
-  }catch(e){toast(tr('toast_invalid'));}
-});
 armed(els.resetBtn,'wipe_confirm',()=>{els.resetBtn.textContent=tr('wipe');},()=>{
   askName({title:tt('Neues Spiel','New game'),text:tt('Wie soll dein neuer Spielstand heißen? Dein bisheriger Fortschritt in diesem Platz wird gelöscht.','What should your new save be called? Your current progress in this slot will be erased.'),ok:tt('Neu starten','Start over')},nm=>{
     const l=LANG;S=fresh();S.opt.lang=l;S.name=nm;els.fx.checked=true;rebuildAll();save();slotSig='';toast(tr('toast_new'));
@@ -8744,56 +8722,8 @@ function renderLive(){
   ['stLive','lbLive'].forEach(id=>{const e=$id(id);if(!e) return;e.hidden=!t;if(e.textContent!==t) e.textContent=t;});
 }
 
-/* Cloud: Spielstand per Code auf ein anderes Gerät */
-let cloudArm=0;
-const fmtCloud=c=>'KEKS-'+c.slice(0,4)+'-'+c.slice(4,8);
-$id('cloudUp').addEventListener('click',async()=>{
-  const b=$id('cloudUp'),box=$id('cloudCode'),msg=$id('cloudMsg');msg.className='nameerr';msg.textContent='';
-  if(!lbOn()){msg.textContent=tt('Online-Funktionen sind nicht eingerichtet.','Online features aren’t set up.');return;}
-  b.disabled=true;b.textContent=tt('Lädt hoch …','Uploading …');
-  try{
-    save();const r=await lbApi('rpc/save_upload',{p_data:enc(sealJSON(S))});kfV3=true;
-    const code=fmtCloud(r.code),until=new Date(r.expires_at).toLocaleString(LOC[LANG],{weekday:'short',hour:'2-digit',minute:'2-digit'});
-    box.hidden=false;box.innerHTML='<b class="ccode">'+code+'</b><small>'+tt('Gültig bis ','Valid until ')+until+tt('. Gib ihn auf dem anderen Gerät unter Einstellungen → Speichern ein.','. Enter it on your other device under Settings → Saving.')+'</small><button type="button" class="btn sm" id="cloudCopy">'+tt('Kopieren','Copy')+'</button>';
-    box.dataset.code=code;
-  }catch(x){kfNote(x);msg.textContent=lbMissing(x)?tt('Die Datenbank kennt diese Funktion noch nicht.','The database doesn’t have this feature yet.'):/too many requests/.test(String(x&&x.message))?tt('Zu viele Codes von diesem Gerät. Versuch es in einer Stunde nochmal.','Too many codes from this device. Try again in an hour.'):tt('Hochladen hat nicht geklappt. Prüfe dein Internet.','Upload didn’t work. Check your internet.');}
-  b.disabled=false;updV42Txt();
-});
-$id('cloudCode').addEventListener('click',async e=>{
-  if(!e.target.closest('#cloudCopy')) return;
-  const c=$id('cloudCode').dataset.code;try{await navigator.clipboard.writeText(c);toast(tt('Code kopiert!','Code copied!'));}catch(x){toast(c);}
-});
-$id('cloudForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const inp=$id('cloudIn'),msg=$id('cloudMsg'),go=$id('cloudGo');msg.className='nameerr';
-  const raw=inp.value.trim();if(!raw){msg.textContent=tt('Gib zuerst einen Code ein.','Enter a code first.');inp.focus();return;}
-  if(S.opt.ask!==false&&!cloudArm){go.classList.add('armed');go.textContent=tt('Ersetzt dein Spiel! Nochmal','Replaces your game! Again');cloudArm=setTimeout(()=>{cloudArm=0;go.classList.remove('armed');updV42Txt();},5000);return;}
-  clearTimeout(cloudArm);cloudArm=0;go.classList.remove('armed');go.disabled=true;go.textContent=tt('Lädt …','Loading …');
-  try{
-    const t=await lbApi('rpc/save_download',{p_code:raw});kfV3=true;
-    let o=null;try{o=JSON.parse(dec(String(t)));}catch(x){try{o=JSON.parse(String(t));}catch(y){o=null;}}
-    if(!o||typeof o!=='object'||typeof o.cookies!=='number') throw new Error('bad save');
-    try{pushBackup();}catch(x){}
-    const s=sanitize(o);if(!s.name) s.name=S.name;
-    if(s.tamp) setTimeout(tampWarn,400);
-    S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;
-    applyLang();rebuildAll();save();slotSig='';inp.value='';
-    msg.className='nameerr ok';msg.textContent=tt('Spielstand geladen','Save loaded')+(S.name?': '+S.name:'')+'.';
-    toast(tt('Spielstand aus der Cloud geladen. Dein altes Spiel liegt unter Backups.','Save loaded from the cloud. Your old game is under Backups.'),true);
-  }catch(x){
-    kfNote(x);const m=String(x&&x.message||'');
-    msg.textContent=/unknown or expired/.test(m)?tt('Diesen Code gibt es nicht oder er ist abgelaufen (Codes gelten 24 Stunden).','That code doesn’t exist or has expired (codes last 24 hours).'):/bad save/.test(m)?tt('Unter diesem Code liegt kein gültiger Spielstand.','There’s no valid save under this code.'):lbMissing(x)?tt('Die Datenbank kennt diese Funktion noch nicht.','The database doesn’t have this feature yet.'):tt('Laden hat nicht geklappt. Prüfe dein Internet.','Loading didn’t work. Check your internet.');
-  }
-  go.disabled=false;updV42Txt();
-});
-
 function updV42Txt(){
   const set=(id,t)=>{const e=$id(id);if(e&&e.textContent!==t) e.textContent=t;};
-  set('cloudT',tt('Auf ein anderes Gerät mitnehmen','Move to another device'));
-  set('cloudP',tt('Erstelle einen Code und gib ihn auf deinem anderen Gerät ein. Der Code gilt 24 Stunden. Beim Laden wird dein aktuelles Spiel ersetzt und vorher als Backup gesichert.','Create a code and enter it on your other device. The code lasts 24 hours. Loading replaces your current game, which is kept as a backup first.'));
-  if(!$id('cloudUp').disabled) set('cloudUp',tt('Transfer-Code erstellen','Create transfer code'));
-  if(!cloudArm&&!$id('cloudGo').disabled) set('cloudGo',tt('Laden','Load'));
-  $id('cloudIn').setAttribute('aria-label',tt('Transfer-Code','Transfer code'));
   renderLive();kfApplyEvents();
 }
 
@@ -8824,6 +8754,7 @@ function admOnRender(){
     +((D.news||[]).length?'<div class="admlbl">'+D.news.map(n=>'<div class="admlbr"><span class="rk">📢</span><span class="who"><b>'+escName(n.title)+'</b><small>'+(n.until&&Date.parse(n.until)<Date.now()?tt('abgelaufen','expired'):tt('bis ','until ')+dt(n.until))+'</small></span><span class="btns"><button type="button" class="btn sm'+(arm('news_del:'+n.id)?' armed':'')+'" data-ona="news_del:'+n.id+'">'+(arm('news_del:'+n.id)?tt('Sicher?','Sure?'):tt('Löschen','Delete'))+'</button></span></div>').join('')+'</div>':''));
   h+=card('⚡ '+tt('Globales Event','Global event'),'<form class="admform" id="admEvF" novalidate><label class="small">'+tt('Art','Type')+'<select class="namein" name="kind">'+Object.keys(EVK).map(k=>'<option value="'+k+'">'+EVI[k]+' '+tx(EVK[k])+'</option>').join('')+'</select></label><label class="small">'+tt('Stärke','Strength')+'<select class="namein" name="mult">'+[1.5,2,3,5,10].map(m=>'<option value="'+m+'"'+(m===2?' selected':'')+'>×'+m+'</option>').join('')+'</select></label><label class="small">'+tt('Dauer in Stunden','Hours')+'<input class="namein" name="hours" type="number" min="1" step="1" value="24"></label><label class="small">'+tt('Start in Stunden (0 = jetzt)','Start in hours (0 = now)')+'<input class="namein" name="start_hours" type="number" min="0" step="1" value="0"></label><label class="small">'+tt('Jede Woche wiederholen (Wochen)','Repeat weekly (weeks)')+'<select class="namein" name="repeat_weeks">'+[0,1,2,3,4,8,12].map(w=>'<option value="'+w+'">'+(w?w+'×':tt('Nicht wiederholen','Don’t repeat'))+'</option>').join('')+'</select></label><input class="namein" name="title" maxlength="60" placeholder="'+tt('Name, z. B. Kekswochenende','Name, e.g. Cookie weekend')+'"><button type="submit" class="btn primary" style="grid-column:1/-1">'+tt('Event planen','Schedule event')+'</button></form>'
     +((D.events||[]).length?'<div class="admlbl">'+D.events.map(e=>{const live=Date.parse(e.ends_at)>Date.now(),soon=Date.parse(e.starts_at)>Date.now();return '<div class="admlbr"><span class="rk">'+EVI[e.kind]+'</span><span class="who"><b>×'+e.mult+' '+tx(EVK[e.kind])+(e.title?' · '+escName(e.title):'')+'</b><small>'+(soon?'🗓️ '+tt('startet ','starts ')+dt(e.starts_at)+' · '+tt('bis ','until ')+dt(e.ends_at):live?tt('läuft bis ','running until ')+dt(e.ends_at):tt('beendet ','ended ')+dt(e.ends_at))+'</small></span><span class="btns">'+(live?'<button type="button" class="btn sm'+(arm('event_end:'+e.id)?' armed':'')+'" data-ona="event_end:'+e.id+'">'+(arm('event_end:'+e.id)?tt('Sicher?','Sure?'):soon?tt('Absagen','Cancel'):tt('Beenden','End now'))+'</button>':'')+'</span></div>';}).join('')+'</div>':''));
+  if(v56aReady) h+=admPlanHtml();
   h+=card('🎁 '+tt('Codes','Codes'),'<form class="admform" id="admCodeF" novalidate><input class="namein" name="code" maxlength="24" placeholder="'+tt('CODE (Buchstaben/Zahlen)','CODE (letters/numbers)')+'" style="text-transform:uppercase"><input class="namein" name="label" maxlength="40" placeholder="'+tt('Name, z. B. Freunde-Geschenk','Name, e.g. Friends gift')+'"><label class="small">'+tt('Edelsteine','Gems')+'<input class="namein" name="gems" type="number" min="0" value="50"></label><label class="small">'+tt('Sternenkrümel','Star crumbs')+'<input class="namein" name="stars" type="number" min="0" value="0"></label><label class="small">'+tt('Minuten Produktion','Minutes of production')+'<input class="namein" name="minutes" type="number" min="0" value="30"></label><label class="small">'+tt('Max. Einlösungen (leer = unbegrenzt)','Max uses (empty = unlimited)')+'<input class="namein" name="max_uses" type="number" min="1"></label><label class="small">'+tt('Gültig für Tage (leer = immer)','Valid for days (empty = forever)')+'<input class="namein" name="days" type="number" min="1"></label><button type="submit" class="btn primary">'+tt('Code erstellen','Create code')+'</button></form>'
     +((D.codes||[]).length?'<div class="admlbl">'+D.codes.map(c=>'<div class="admlbr"><span class="rk">🎁</span><span class="who"><b>'+escName(c.code)+(c.label?' · '+escName(c.label):'')+'</b><small>'+[c.gems?c.gems+' '+matName('gem'):'',c.stars?c.stars+' ⭐':'',c.minutes?c.minutes+' min':''].filter(Boolean).join(' + ')+' · '+tt('eingelöst ','used ')+c.uses+(c.max_uses?' / '+c.max_uses:'')+' · '+(c.expires_at?(Date.parse(c.expires_at)<Date.now()?tt('abgelaufen','expired'):tt('bis ','until ')+dt(c.expires_at)):tt('ohne Ablauf','no expiry'))+'</small></span><span class="btns"><button type="button" class="btn sm'+(arm('code_del:'+c.code)?' armed':'')+'" data-ona="code_del:'+escName(c.code)+'">'+(arm('code_del:'+c.code)?tt('Sicher?','Sure?'):tt('Löschen','Delete'))+'</button></span></div>').join('')+'</div>':''));
   h+=card('🎟️ '+tt('Viele Einmal-Codes','Bulk one-time codes'),'<p class="small">'+tt('Erstellt bis zu 100 Codes, die jeweils nur einmal gehen – z. B. für ein Gewinnspiel.','Creates up to 100 codes that each work once – e.g. for a giveaway.')+'</p><form class="admform" id="admBulkF" novalidate><label class="small">'+tt('Anfang (optional)','Prefix (optional)')+'<input class="namein" name="prefix" maxlength="10" style="text-transform:uppercase" placeholder="GIFT"></label><label class="small">'+tt('Anzahl','How many')+'<input class="namein" name="count" type="number" min="1" max="100" value="10"></label><input class="namein" name="label" maxlength="40" placeholder="'+tt('Name, z. B. Gewinnspiel','Name, e.g. Giveaway')+'"><label class="small">'+tt('Edelsteine','Gems')+'<input class="namein" name="gems" type="number" min="0" value="25"></label><label class="small">'+tt('Sternenkrümel','Star crumbs')+'<input class="namein" name="stars" type="number" min="0" value="0"></label><label class="small">'+tt('Minuten Produktion','Minutes of production')+'<input class="namein" name="minutes" type="number" min="0" value="0"></label><label class="small">'+tt('Gültig für Tage (leer = immer)','Valid for days (empty = forever)')+'<input class="namein" name="days" type="number" min="1"></label><button type="submit" class="btn primary">'+tt('Codes erstellen','Create codes')+'</button></form>'
@@ -9382,7 +9313,7 @@ async function admSrvLogin(pw,where){
   admPass=r.token;try{sessionStorage.setItem(ADM_TOK,JSON.stringify({t:r.token,e:Date.parse(r.expires_at)||Date.now()+11*3600e3}));}catch(x){}
   toast(tt('Server-Werkzeuge entsperrt.','Server tools unlocked.'));admSrvAfter();
 }
-function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();}
+function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();if(v56aReady) admCareLoad();}
 function admSrvRerender(){admLbRender();admOnRender();admModRender();admSrvRender();}
 const admSrvForm=(id,note)=>(admNeedCode?'<form class="coderow" id="'+id+'" novalidate><input type="text" class="namein" name="spw" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="'+tt('6-stelliger Code','6-digit code')+'" aria-label="'+tt('Code aus der Authenticator-App','Code from your authenticator app')+'"><button type="submit" class="btn primary">'+tt('Bestätigen','Confirm')+'</button><button type="button" class="btn" data-sva="codeback">'+tt('Zurück','Back')+'</button></form><p class="small" style="margin-top:6px">'+tt('Zwei-Schritt-Anmeldung ist an. Gib den Code aus deiner Authenticator-App ein.','Two-step sign-in is on. Enter the code from your authenticator app.')+'</p>':'<form class="coderow" id="'+id+'" novalidate><input type="password" class="namein" name="spw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button></form>')+'<p class="small" style="margin-top:6px">'+(note||tt('Die Server-Werkzeuge haben ein eigenes Passwort. Nach 5 falschen Versuchen sind sie 15 Minuten gesperrt.','The server tools have their own password. After 5 wrong tries they lock for 15 minutes.'))+'</p>';
 els.admin.addEventListener('submit',e=>{
@@ -9457,6 +9388,7 @@ function admModRender(){
     const Mu=admMutes||[];
     h+=admCardH('🔇 '+tt('Stummgeschaltet','Muted players')+' <small class="muted">('+Mu.length+')</small>','<form class="admform" id="admMuteF" novalidate><label class="small">'+tt('Benutzername','Username')+'<input class="namein" name="user" maxlength="16" autocapitalize="off" spellcheck="false"></label><label class="small">'+tt('Stunden','Hours')+'<input class="namein" name="hours" type="number" min="1" max="8760" value="24"></label><input class="namein" name="reason" maxlength="120" placeholder="'+tt('Grund (optional)','Reason (optional)')+'"><button type="submit" class="btn primary">'+tt('Stummschalten','Mute')+'</button></form><p class="small" style="margin-top:6px">'+tt('Stumme Spieler können nicht im Club-Chat schreiben und nichts verschenken. Sie spielen sonst normal weiter.','Muted players can’t write in club chat or send gifts. Otherwise they play normally.')+'</p>'
       +(Mu.length?'<div class="admlbl">'+Mu.map(m=>'<div class="admlbr"><span class="rk">🔇</span><span class="who"><b>'+escName(m.username)+'</b><small>'+tt('bis ','until ')+admDT(m.until)+(m.reason?' · '+escName(m.reason):'')+'</small></span><span class="btns"><button type="button" class="btn sm" data-mda="unmute:'+escName(m.username)+'">'+tt('Stumm aus','Unmute')+'</button></span></div>').join('')+'</div>':''));
+    if(v56aReady) h+=admSfHtml();
     if(v52Ready) h+=admBanHtml();
     if(v53Ready) h+=admTeamHtml();
     /* Wörter */
@@ -9489,7 +9421,7 @@ els.admin.addEventListener('submit',e=>{
 els.admin.addEventListener('click',e=>{
   const b=e.target.closest('[data-mda]');if(!b) return;
   const parts=b.dataset.mda.split(':'),a=parts[0];
-  if(a==='reload'){admModLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();return;}
+  if(a==='reload'){admModLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();if(v56aReady) admSfDo('list');return;}
   if(a==='repdel'||a==='repok'){admModDo('report_done',{id:parts[1],delete:a==='repdel'},a==='repdel'?tt('Nachricht gelöscht.','Message deleted.'):tt('Erledigt.','Done.'),r=>{admReports=r||[];});return;}
   if(a==='mute24'){admModDo('mute',{user:parts[1],hours:24,reason:tt('Meldung','Report')},tt('24 Stunden stummgeschaltet.','Muted for 24 hours.'),r=>{admMutes=r||[];if(admFindQ) admMod('search',{q:admFindQ}).then(x=>{admFind=x;admModRender();}).catch(()=>{});});return;}
   if(a==='unmute'){admModDo('unmute',{user:parts[1]},tt('Stummschaltung aufgehoben.','Unmuted.'),r=>{admMutes=r||[];if(admFindQ) admMod('search',{q:admFindQ}).then(x=>{admFind=x;admModRender();}).catch(()=>{});});return;}
@@ -9519,6 +9451,7 @@ async function admSrvLoad(){
   if(v51Ready) admInsLoad();
   if(v53Ready) admWeekLoad();
   if(v54aReady){admFbCall('list');admAlertState();}
+  if(v56aReady){admUseDo('usage');admOffDo('status');}
   admSrvRender();
 }
 function admBars(rows){
@@ -9553,6 +9486,7 @@ function admSrvRender(){
     if(v51Ready) h+=admInsHtml();
     if(v54aReady) h+=admFbHtml()+admAlertHtml(false);
     h+=admCardH('💾 '+tt('Backups','Backups'),admBkHtml());
+    if(v56aReady) h+=admOffHtml()+admUseHtml();
     const Lg=admLog||[];
     h+=admCardH('📜 '+tt('Admin-Protokoll','Admin log'),'<p class="small">'+tt('Jede Admin-Aktion auf dem Server, die neuesten zuerst.','Every admin action on the server, newest first.')+'</p>'+(Lg.length?'<div class="admlog">'+Lg.map(l=>'<div><small>'+admDT(l.at)+'</small><b>'+escName(l.action)+'</b>'+(l.detail?'<span>'+escName(l.detail)+'</span>':'')+'</div>').join('')+'</div>':'<p class="small">–</p>'));
     if(v53Ready) h+=adm2faHtml();
@@ -9671,7 +9605,7 @@ els.admin.addEventListener('submit',async e=>{
   secs.filter(x=>x!==acc&&x!==main).forEach(x=>det.appendChild(x));
 })();
 function updV47Txt(){
-  set$('saveMoreT',tt('Weitere Möglichkeiten: Speicherplätze, Backups, Datei, Transfer-Code, Text','More options: save slots, backups, file, transfer code, text'));
+  set$('saveMoreT',tt('Weitere Möglichkeiten: Speicherplätze, Backups, Spielstand-Datei','More options: save slots, backups, save file'));
   set$('helpSetT',tt('Hilfe und Teilen','Help and sharing'));
   set$('helpSetBtn',tt('❓ Hilfe öffnen','❓ Open help'));
   set$('shareSetBtn',tt('📣 Spiel teilen','📣 Share the game'));
@@ -10619,6 +10553,142 @@ updV55Txt();
 v55Ready=true;
 g3dApply();
 requestAnimationFrame(g3dFrame);
+
+/* Nur in admin.html (nicht im Spiel für Spieler). */
+/* ======================= V56: Verdächtige Spielstände, Datenbank & Aufräumen, Backups außerhalb, Planer ======================= */
+var v56aReady=false;
+var admSf=null,admSfErr='',admUse=null,admUseErr='',admUseBusy=false,admOff=null,admOffKey='',admOffErr='',admPlan=null,admPlanErr='',admPlanBusy=false,admCareArm={k:'',t:0};
+const admCareArmed=k=>admCareArm.k===k&&Date.now()-admCareArm.t<5000;
+const admCareMiss=x=>lbMissing(x)?tt('Braucht zuerst docs/server-v14.sql in Supabase.','Needs docs/server-v14.sql in Supabase first.'):admErrTxt(x);
+async function admCareCall(fn,action,data){
+  if(!admPass) return null;
+  return lbApi('rpc/'+fn,data===undefined?{p_pass:admPass,p_action:action}:{p_pass:admPass,p_action:action,p_data:data});
+}
+function admCareLoad(){if(!admPass) return;admSfDo('list');admUseDo('usage');admOffDo('status');admPlanDo('list');}
+
+/* ---------- Verdächtige Spielstände (Moderation) ---------- */
+async function admSfDo(action,data,okTxt){
+  try{admSf=await admCareCall('admin_saveflags',action,data||null)||[];admSfErr='';if(okTxt) toast(okTxt);}catch(x){admSfErr=admCareMiss(x);}
+  admModRender();
+}
+function admSfHtml(){
+  const F=admSf||[];
+  const row=f=>'<div class="admlbr"><span class="rk">⚠️</span><span class="who"><b>'+escName(f.username)+(f.banned?' · ⛔':'')+'</b><small>'+fmt(+f.old||0)+' → '+fmt(+f.new||0)+tt(' Kekse in ',' cookies in ')+(f.hours<1?Math.max(1,Math.round(f.hours*60))+' min':f.hours<48?Math.round(f.hours)+' '+tt('Std','h'):Math.round(f.hours/24)+' '+tt('Tagen','days'))+'</small><small>'+admDT(f.created_at)+'</small></span><span class="btns"><button type="button" class="btn sm" data-sfa="ok:'+f.id+'">'+tt('In Ordnung','OK')+'</button>'+(v52Ready&&!f.banned?'<button type="button" class="btn sm warn" data-ban="pick:'+escName(f.username)+'">'+tt('Sperren …','Ban …')+'</button>':'')+'</span></div>';
+  return admCardH('⚠️ '+tt('Verdächtige Spielstände','Suspicious saves')+' <small class="muted">('+(admSf?F.length:'…')+')</small>',
+    '<p class="small">'+tt('Konto-Spielstände, die viel schneller gewachsen sind, als das Spiel erlaubt. Der Spielstand bleibt erhalten – du entscheidest. Das kann auch ehrlich sein, wenn jemand eine Spielstand-Datei von einem anderen Gerät geladen hat.','Account saves that grew much faster than the game allows. The save is kept – you decide. It can be honest when someone loaded a save file from another device.')+'</p>'
+    +(F.length?'<div class="admlbl">'+F.map(row).join('')+'</div>'+(F.length>1?'<div class="btns"><button type="button" class="btn sm" data-sfa="ok_all">'+tt('Alle in Ordnung','All OK')+'</button></div>':''):'<p class="small">'+(admSf?tt('Nichts Verdächtiges. 🎉','Nothing suspicious. 🎉'):tt('Lädt …','Loading …'))+'</p>')
+    +(admSfErr?'<p class="nameerr">'+admSfErr+'</p>':''));
+}
+els.admin.addEventListener('click',e=>{
+  const b=e.target.closest('[data-sfa]');if(!b) return;
+  const [a,id]=b.dataset.sfa.split(':');
+  admSfDo(a,a==='ok'?{id:+id}:{},tt('Erledigt.','Done.'));
+});
+
+/* ---------- Datenbank & Aufräumen (Server) ---------- */
+async function admUseDo(action){
+  admUseBusy=action==='cleanup';if(admUseBusy) admSrvRender();
+  try{admUse=await admCareCall('admin_usage',action);admUseErr='';if(action==='cleanup') toast(tt('Aufgeräumt.','Cleaned up.'),true);}catch(x){admUseErr=admCareMiss(x);}
+  admUseBusy=false;admSrvRender();
+}
+const admMB=b=>(b/1048576).toLocaleString(LOC[LANG],{maximumFractionDigits:b<10485760?1:0})+' MB';
+function admUseHtml(){
+  const U=admUse;let b='<p class="small">'+tt('Der kostenlose Supabase-Plan hat 500 MB Datenbank und 5 GB Datenverkehr im Monat. Alte Daten (Sitzungen, Limits, abgeholte Geschenke, erledigte Meldungen, alte Fehler …) werden alle 6 Stunden automatisch gelöscht. Spielstände, Konten und die Bestenliste nie.','The free Supabase plan has 500 MB of database and 5 GB of traffic a month. Old data (sessions, limits, claimed gifts, finished reports, old crashes …) is removed automatically every 6 hours. Saves, accounts and the leaderboard never.')+'</p>';
+  if(!U) b+='<p class="small">'+(admUseErr?'':tt('Lädt …','Loading …'))+'</p>';
+  else{
+    const pct=Math.min(100,U.db_bytes/U.limit_bytes*100);
+    b+='<div class="usebar'+(pct>80?' hot':'')+'" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+Math.round(pct)+'" aria-label="'+tt('Datenbank','Database')+'"><i style="width:'+Math.max(1,pct).toFixed(1)+'%"></i></div>'
+      +'<p class="small"><b>'+admMB(U.db_bytes)+'</b> '+tt('von','of')+' 500 MB ('+pct.toFixed(pct<10?1:0)+' %)</p>'
+      +'<div class="admstats">'+[[tt('Spieler (30 Tage)','Players (30 days)'),U.mau],[tt('Heute','Today'),U.dau],[tt('Konten','Accounts'),U.accounts],[tt('Backups','Backups'),U.backups]].map(([l,v])=>'<span><small>'+l+'</small><b>'+(v==null?'–':fmt(+v))+'</b></span>').join('')+'</div>'
+      +((U.tables||[]).length?'<details class="fold"><summary>'+tt('Größte Tabellen','Biggest tables')+'</summary><div class="admlbl">'+U.tables.map(t=>'<div class="admlbr"><span class="who"><b>'+escName(t.name)+'</b><small>'+fmt(+t.rows||0)+' '+tt('Zeilen','rows')+'</small></span><span class="rk">'+admMB(+t.bytes||0)+'</span></div>').join('')+'</div></details>':'');
+    const C=U.cleanup,rm=C&&C.removed?Object.entries(C.removed).filter(([,n])=>n>0):[];
+    b+='<p class="small">'+tt('Zuletzt aufgeräumt: ','Last cleanup: ')+(C?admDT(C.at)+(rm.length?' · '+rm.map(([k,n])=>escName(k)+' '+n).join(', '):' · '+tt('nichts zu tun','nothing to do')):tt('noch nie','never'))+'</p>';
+  }
+  b+='<div class="btns"><button type="button" class="btn sm" data-usea="cleanup"'+(admUseBusy?' disabled':'')+'>'+(admUseBusy?tt('Moment …','One moment …'):tt('Jetzt aufräumen','Clean up now'))+'</button><button type="button" class="btn sm" data-usea="usage">'+tt('Neu laden','Reload')+'</button></div>'
+    +(admUseErr?'<p class="nameerr">'+admUseErr+'</p>':'');
+  return admCardH('🗄️ '+tt('Datenbank & Aufräumen','Database & cleanup'),b);
+}
+els.admin.addEventListener('click',e=>{const b=e.target.closest('[data-usea]');if(b) admUseDo(b.dataset.usea);});
+
+/* ---------- Backups außerhalb von Supabase (Server) ---------- */
+const OFF_SECRET='https://github.com/Destinyx350/Cookie-Factory/settings/secrets/actions/new';
+const OFF_RUN='https://github.com/Destinyx350/Cookie-Factory/actions/workflows/offsite-backup.yml';
+async function admOffDo(action){
+  try{const r=await admCareCall('admin_offsite',action);admOff=r;if(r&&r.key) admOffKey=r.key;else if(action==='remove') admOffKey='';admOffErr='';
+    if(action==='newkey') toast(tt('Neuer Schlüssel erstellt.','New key created.'),true);if(action==='remove') toast(tt('Schlüssel entfernt.','Key removed.'));}
+  catch(x){admOffErr=admCareMiss(x);}
+  admCareArm={k:'',t:0};admSrvRender();
+}
+function admOffHtml(){
+  const O=admOff;let b='<p class="small">'+tt('Einmal pro Woche holt ein GitHub-Job das neueste Backup, verschlüsselt es mit deinem Schlüssel und bewahrt es 90 Tage bei GitHub auf – falls mit Supabase einmal etwas schiefgeht.','Once a week a GitHub job fetches the newest backup, encrypts it with your key and keeps it at GitHub for 90 days – in case something ever goes wrong with Supabase.')+'</p>';
+  if(!O) b+='<p class="small">'+(admOffErr?'':tt('Lädt …','Loading …'))+'</p>';
+  else b+='<p class="small"><b>'+(O.on?'✅ '+tt('Eingerichtet','Set up'):tt('Noch nicht eingerichtet','Not set up yet'))+'</b>'+(O.on?' · '+tt('Letzte Kopie: ','Last copy: ')+(O.last_export?admDT(O.last_export):tt('noch keine','none yet'))+' · '+(O.exports||0)+' '+tt('insgesamt','in total'):'')+'</p>';
+  if(admOffKey) b+='<div class="offkey"><p class="small"><b>'+tt('Dein Schlüssel – wird nur jetzt angezeigt:','Your key – shown only now:')+'</b></p><div class="coderow"><input class="namein" id="admOffKeyIn" readonly value="'+admOffKey+'" aria-label="'+tt('Schlüssel','Key')+'"><button type="button" class="btn sm primary" data-offa="copy">'+tt('Kopieren','Copy')+'</button></div>'
+    +'<ol class="small"><li>'+tt('Öffne ','Open ')+'<a href="'+OFF_SECRET+'" target="_blank" rel="noopener">GitHub → Settings → Secrets → Actions</a>.</li><li>'+tt('Name: ','Name: ')+'<code>KF_BACKUP_KEY</code>, '+tt('Wert: der Schlüssel. Speichern.','value: the key. Save.')+'</li><li>'+tt('Zum Testen: ','To test: ')+'<a href="'+OFF_RUN+'" target="_blank" rel="noopener">Actions → Off-site backup</a> → „Run workflow“.</li></ol>'
+    +'<p class="small">'+tt('Bewahre den Schlüssel auch in deinem Passwort-Manager auf – ohne ihn lassen sich die Kopien nicht öffnen. Wiederherstellen: siehe docs/LEADERBOARD.md.','Also keep the key in your password manager – without it the copies can’t be opened. To restore: see docs/LEADERBOARD.md.')+'</p></div>';
+  b+='<div class="btns"><button type="button" class="btn sm'+(O&&O.on?(admCareArmed('newkey')?' armed':''):' primary')+'" data-offa="newkey">'+(O&&O.on?(admCareArmed('newkey')?tt('Wirklich? Der alte Schlüssel geht dann nicht mehr','Sure? The old key stops working'):tt('Neuer Schlüssel','New key')):tt('Schlüssel erstellen','Create key'))+'</button>'
+    +(O&&O.on?'<button type="button" class="btn sm warn'+(admCareArmed('remove')?' armed':'')+'" data-offa="remove">'+(admCareArmed('remove')?tt('Wirklich ausschalten?','Really turn off?'):tt('Ausschalten','Turn off'))+'</button>':'')+'</div>'
+    +(admOffErr?'<p class="nameerr">'+admOffErr+'</p>':'');
+  return admCardH('🛰️ '+tt('Backups außerhalb von Supabase','Off-site backups'),b);
+}
+els.admin.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-offa]');if(!b) return;
+  const a=b.dataset.offa;
+  if(a==='copy'){try{await navigator.clipboard.writeText(admOffKey);toast(tt('Kopiert!','Copied!'));}catch(x){const i=$id('admOffKeyIn');if(i){i.select();}toast(tt('Markiere den Schlüssel und kopiere ihn.','Select the key and copy it.'));}return;}
+  if((a==='remove'||(a==='newkey'&&admOff&&admOff.on))&&!admCareArmed(a)){admCareArm={k:a,t:Date.now()};admSrvRender();return;}
+  admOffDo(a);
+});
+
+/* ---------- Geplante Events und Ankündigungen (Online) ---------- */
+async function admPlanDo(action,data,okTxt){
+  admPlanBusy=action==='add';
+  try{admPlan=await admCareCall('admin_schedule',action,data||null)||[];admPlanErr='';if(okTxt) toast(okTxt,true);
+    if(action==='add'||action==='toggle'){const f=action==='add'&&$id('admPlanF');if(f){f.reset();f.dataset.kind='event';}if(typeof admOnCall==='function'&&admPass) admOnCall('list');}}
+  catch(x){const m=String(x&&x.message||'');
+    admPlanErr=/time in the past/.test(m)?tt('Diese Zeit ist schon vorbei.','That time has already passed.'):/invalid time/.test(m)?tt('Bitte wähle Datum und Uhrzeit.','Please pick a date and time.'):/title missing/.test(m)?tt('Eine Ankündigung braucht einen Titel.','An announcement needs a title.'):/invalid duration/.test(m)?tt('Ungültige Dauer.','Invalid duration.'):admCareMiss(x);}
+  admPlanBusy=false;admCareArm={k:'',t:0};admOnRender();
+}
+const admPlanLocal=d=>{const z=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+'T'+z(d.getHours())+':'+z(d.getMinutes());};
+function admPlanHtml(){
+  const P=admPlan||[],soon=new Date(Date.now()+36e5);soon.setMinutes(0,0,0);
+  const dt=v=>new Date(v).toLocaleString(LOC[LANG],{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  const what=p=>p.kind==='event'?(EVI[p.ev_kind]||'⚡')+' ×'+p.mult+' '+tx(EVK[p.ev_kind]||['Event','event'])+(p.title?' · '+escName(p.title):''):'📢 '+escName(p.title);
+  const dur=h=>h<1?Math.round(h*60)+' min':h%24===0&&h>=24?(h/24)+' '+tt(h===24?'Tag':'Tage',h===24?'day':'days'):h+' '+tt('Std','h');
+  const row=p=>'<div class="admlbr'+(p.active?'':' done')+'"><span class="rk">'+(p.repeat==='weekly'?'🔁':'🗓️')+'</span><span class="who"><b>'+what(p)+'</b><small>'+(p.active?tt('Nächster Start: ','Next start: ')+dt(p.next_at):p.last_run&&p.repeat==='once'?tt('Gestartet ','Started ')+dt(p.last_run):tt('Pausiert','Paused'))+' · '+dur(+p.hours)+(p.repeat==='weekly'?' · '+tt('jede Woche','every week'):'')+'</small></span><span class="btns">'
+    +(p.repeat==='weekly'||p.active?'<button type="button" class="btn sm" data-plna="toggle:'+p.id+'">'+(p.active?tt('Pause','Pause'):tt('Weiter','Resume'))+'</button>':'')
+    +'<button type="button" class="btn sm warn'+(admCareArmed('pdel'+p.id)?' armed':'')+'" data-plna="delete:'+p.id+'">'+(admCareArmed('pdel'+p.id)?tt('Sicher?','Sure?'):tt('Löschen','Delete'))+'</button></span></div>';
+  return '<div class="admcard"><h4>🗓️ '+tt('Geplant','Planned')+' <small class="muted">('+(admPlan?P.filter(p=>p.active).length:'…')+')</small></h4>'
+    +'<p class="small">'+tt('Events und Ankündigungen für später oder jede Woche – der Server startet sie von allein, auch wenn du offline bist. Zeiten in deiner Ortszeit.','Events and announcements for later or every week – the server starts them on its own, even when you’re offline. Times are in your local time.')+'</p>'
+    +'<form class="admform" id="admPlanF" data-kind="event" novalidate>'
+    +'<label class="small">'+tt('Was','What')+'<select class="namein" name="kind"><option value="event">⚡ '+tt('Event','Event')+'</option><option value="news">📢 '+tt('Ankündigung','Announcement')+'</option></select></label>'
+    +'<label class="small">'+tt('Start','Start')+'<input class="namein" type="datetime-local" name="at" value="'+admPlanLocal(soon)+'"></label>'
+    +'<label class="small">'+tt('Wiederholen','Repeat')+'<select class="namein" name="repeat"><option value="once">'+tt('Einmal','Once')+'</option><option value="weekly">'+tt('Jede Woche','Every week')+'</option></select></label>'
+    +'<label class="small">'+tt('Dauer','Duration')+'<select class="namein" name="hours">'+[[.5,'30 min'],[1,'1 '+tt('Std','h')],[2,'2 '+tt('Std','h')],[4,'4 '+tt('Std','h')],[8,'8 '+tt('Std','h')],[24,'1 '+tt('Tag','day')],[48,'2 '+tt('Tage','days')],[72,'3 '+tt('Tage','days')],[168,'7 '+tt('Tage','days')]].map(([v,l])=>'<option value="'+v+'"'+(v===2?' selected':'')+'>'+l+'</option>').join('')+'</select></label>'
+    +'<label class="small plnev">'+tt('Art','Type')+'<select class="namein" name="ev_kind">'+Object.keys(EVK).map(k=>'<option value="'+k+'">'+EVI[k]+' '+tx(EVK[k])+'</option>').join('')+'</select></label>'
+    +'<label class="small plnev">'+tt('Stärke','Strength')+'<select class="namein" name="mult">'+[1.5,2,3,5,10].map(m=>'<option value="'+m+'"'+(m===2?' selected':'')+'>×'+m+'</option>').join('')+'</select></label>'
+    +'<input class="namein" name="title" maxlength="80" placeholder="'+tt('Titel (bei Events optional)','Title (optional for events)')+'" style="grid-column:1/-1">'
+    +'<textarea class="namein plnnews" name="body" maxlength="600" rows="2" placeholder="'+tt('Nachricht (optional)','Message (optional)')+'" style="grid-column:1/-1"></textarea>'
+    +'<button type="submit" class="btn primary" style="grid-column:1/-1"'+(admPlanBusy?' disabled':'')+'>'+tt('Planen','Schedule')+'</button></form>'
+    +(P.length?'<div class="admlbl">'+P.map(row).join('')+'</div>':'<p class="small">'+(admPlan?tt('Nichts geplant.','Nothing planned.'):tt('Lädt …','Loading …'))+'</p>')
+    +(admPlanErr?'<p class="nameerr">'+admPlanErr+'</p>':'')+'</div>';
+}
+els.admin.addEventListener('change',e=>{const s=e.target.closest('#admPlanF [name=kind]');if(s) s.form.dataset.kind=s.value;});
+els.admin.addEventListener('submit',e=>{
+  const f=e.target.closest('#admPlanF');if(!f) return;e.preventDefault();
+  const d=Object.fromEntries(new FormData(f)),t=d.at?new Date(d.at):null;
+  if(!t||isNaN(t)){admPlanErr=tt('Bitte wähle Datum und Uhrzeit.','Please pick a date and time.');admOnRender();return;}
+  const ev=d.kind==='event';
+  admPlanDo('add',{kind:d.kind,title:String(d.title||'').trim().slice(0,ev?60:80),body:ev?'':String(d.body||''),ev_kind:ev?d.ev_kind:null,mult:ev?+d.mult:null,hours:+d.hours,repeat:d.repeat,at:t.toISOString()},tt('Geplant!','Scheduled!'));
+});
+els.admin.addEventListener('click',e=>{
+  const b=e.target.closest('[data-plna]');if(!b) return;
+  const [a,id]=b.dataset.plna.split(':');
+  if(a==='delete'&&!admCareArmed('pdel'+id)){admCareArm={k:'pdel'+id,t:Date.now()};admOnRender();return;}
+  admPlanDo(a,{id:+id},a==='delete'?tt('Gelöscht.','Deleted.'):null);
+});
+
+v56aReady=true;
+admCareLoad();
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};

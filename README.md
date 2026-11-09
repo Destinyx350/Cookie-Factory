@@ -50,13 +50,13 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🤝 **Friends and profiles** | Add friends, see who's online, and tap any name to see that player's profile. |
 | ⚔️ **Club wars** | Every weekend your club faces a club of similar strength. Winners collect trophies and gems. |
 | 💌 **Invites** | Share your invite link; when a friend starts playing through it, you both get a bonus. |
-| 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter, server codes, and a transfer code to move your save to another device. |
+| 🌍 **Online features** | Global events (like double production for everyone), announcements, a live "bakeries online" counter and server codes. Events and announcements can be planned ahead. |
 | 🔔 **Push notifications** | Get notified about gifts, friend requests, club prizes and events, even when the game is closed, and get a reminder after 3 days away. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. Shared links show a preview card. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
-| 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools, edited files or text) is flagged, and the leaderboard rejects scores that grow too fast. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
-| 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries and optional two-step sign-in. Moderators get their own logins that can only handle reports and mutes. The admin can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player, who can appeal), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and player feedback, see how far new players get (day 2 and day 7 return rates), compare each week with the one before, and get push alerts for new reports, appeals, feedback and crashes. |
+| 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools or edited files) is flagged, the leaderboard rejects scores that grow too fast, and the server flags account saves that jump unrealistically. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
+| 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries and optional two-step sign-in. Moderators get their own logins that can only handle reports and mutes. The admin can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player, who can appeal), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and player feedback, see how far new players get (day 2 and day 7 return rates), compare each week with the one before, get push alerts for new reports, appeals, feedback, crashes and suspicious saves, plan events and announcements (once or every week), and see how full the database is. Old data is cleaned up automatically and an encrypted copy of the weekly backup is kept outside Supabase. |
 | 💬 **Feedback and privacy** | Send bug reports and ideas from Settings → Game. The [privacy info](https://destinyx350.github.io/Cookie-Factory/privacy.html) explains what the game stores. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
@@ -95,13 +95,13 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🤝 **Freunde und Profile**: sieh, wer online ist, und tippe auf Namen für das Profil
 - ⚔️ **Clubkriege** jedes Wochenende mit Trophäen und Edelsteinen
 - 💌 **Einladungen**: Wer über deinen Link anfängt, bringt euch beiden einen Bonus
-- 🌍 **Online-Funktionen**: globale Events, Ankündigungen, Live-Zähler, Server-Codes und ein Transfer-Code fürs andere Gerät
+- 🌍 **Online-Funktionen**: globale Events, Ankündigungen (auch im Voraus geplant), Live-Zähler und Server-Codes
 - 🔔 **Push-Benachrichtigungen** für Geschenke, Freundschaftsanfragen, Club-Preise, Events und eine Erinnerung nach 3 Tagen Pause
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit; Wochen- und Monatspreise für die Top 3, Updates jede Minute
-- 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, und die Bestenliste lehnt zu schnell wachsende Punkte ab; dazu Wortfilter, Melde-Knopf im Club-Chat und Limits pro Gerät
-- 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort, eigenem Server-Passwort und Zwei-Schritt-Anmeldung für die Online-Werkzeuge, dazu Moderatoren-Zugänge: Meldungen, Spielersuche, Stummschalten, Sperren mit Einspruch, Wochenbericht, Spieler-Feedback, Push-Alarme, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte und Spieler-Weg
+- 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, die Bestenliste lehnt zu schnell wachsende Punkte ab, und der Server meldet unrealistische Sprünge in Konto-Spielständen; dazu Wortfilter, Melde-Knopf im Club-Chat und Limits pro Gerät
+- 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort, eigenem Server-Passwort und Zwei-Schritt-Anmeldung für die Online-Werkzeuge, dazu Moderatoren-Zugänge: Meldungen, Spielersuche, Stummschalten, Sperren mit Einspruch, Wochenbericht, Spieler-Feedback, Push-Alarme, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte, geplante Events und Ankündigungen, verdächtige Spielstände, Datenbank-Füllstand, automatisches Aufräumen und verschlüsselte Backups außerhalb von Supabase und Spieler-Weg
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
 **[▶ Jetzt spielen](https://destinyx350.github.io/Cookie-Factory/)**
@@ -110,19 +110,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 55
-- **New:** A new soundtrack. 7 tracks with real instruments (electric piano, strings, brass, bells, upright bass, drums), reverb and echo: Morning Bakery, Factory Groove, Night Shift, Great Adventure, Showdown, Starry Ascension and Cookie Festival. The music gets fuller during combos and boosts, plays jazz at night and the Showdown in fights.
-- **New:** 3D graphics. The big cookie is a real 3D model with lighting, chocolate chips and a crispy edge that tilts toward your finger and bounces when you click, in every cookie design. Golden cookies, the background cookies and all icons have a 3D look too (turn it off under **Settings → Display**).
+### Version 56
+- **Simpler saving:** your account and the save file are the two ways to take your bakery along. The transfer code and the save text are gone.
+- **Safer server:** the database cleans up old data on its own, an encrypted copy of the weekly backup is kept outside the game server, and unrealistic save jumps are checked. Events and announcements can now be planned ahead, even every week.
 
-Also new since version 54: club levels, a feedback button and the [privacy info](https://destinyx350.github.io/Cookie-Factory/privacy.html).
+Also new since version 55: a new soundtrack with 7 tracks and 3D graphics.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Ein neuer Soundtrack. 7 Stücke mit echten Instrumenten (E-Piano, Streicher, Blech, Glocken, Kontrabass, Schlagzeug), Hall und Echo: Morgenbäckerei, Fabrik-Groove, Nachtschicht, Großes Abenteuer, Showdown, Sternenaufstieg und Keks-Fest. Die Musik wird voller bei Combos und Boosts, spielt nachts Jazz und im Kampf den Showdown.
-- **Neu:** 3D-Grafik. Der große Keks ist ein echtes 3D-Modell mit Licht, Schokostücken und knusprigem Rand, das sich zum Finger neigt und beim Klicken hüpft, in jedem Keks-Design. Goldkekse, die Kekse im Hintergrund und alle Symbole haben ebenfalls einen 3D-Look (abschaltbar unter **Einstellungen → Anzeige**).
+- **Einfacher speichern:** Dein Konto und die Spielstand-Datei sind die zwei Wege, deine Bäckerei mitzunehmen. Transfer-Code und Spielstand-Text gibt es nicht mehr.
+- **Sicherer Server:** Die Datenbank räumt alte Daten von selbst auf, eine verschlüsselte Kopie des wöchentlichen Backups liegt außerhalb des Spielservers, und unrealistische Sprünge im Spielstand werden geprüft. Events und Ankündigungen lassen sich jetzt im Voraus planen, auch jede Woche.
 
-Außerdem neu seit Version 54: Club-Stufen, ein Feedback-Knopf und die [Datenschutz-Info](https://destinyx350.github.io/Cookie-Factory/privacy.html).
+Außerdem neu seit Version 55: ein neuer Soundtrack mit 7 Stücken und 3D-Grafik.
 
 </details>
 
