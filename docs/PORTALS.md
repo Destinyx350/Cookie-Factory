@@ -1,5 +1,7 @@
 # Put Cookie Factory on game portals
 
+**Live:** itch.io → https://destinyx350.itch.io/cookie-factory (upload `cookie-factory-portal` there again after each update: *Edit game* → *Uploads* → replace the zip).
+
 Game portals like itch.io, CrazyGames, GameDistribution and Newgrounds show the game to many new players.
 Each one wants a zip with `index.html` at the top level. The game builds that zip by itself.
 

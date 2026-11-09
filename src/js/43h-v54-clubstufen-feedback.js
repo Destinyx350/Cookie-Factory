@@ -46,13 +46,16 @@ function fbOpen(){
     }
   });
 }
+const ITCH_URL='https://destinyx350.itch.io/cookie-factory';
 const PRIVACY_URL=window.KF_PORTAL?'https://destinyx350.github.io/Cookie-Factory/privacy.html':'privacy.html';
 (function(){
   const row=$id('helpSetBtn')&&$id('helpSetBtn').parentElement;if(!row) return;
   const fb=document.createElement('button');fb.type='button';fb.className='btn';fb.id='fbSetBtn';row.appendChild(fb);
   const pv=document.createElement('a');pv.className='btn';pv.id='privSetBtn';pv.href=PRIVACY_URL;pv.target='_blank';pv.rel='noopener';row.appendChild(pv);
   fb.addEventListener('click',()=>{closeSettings();fbOpen();});
+  /* V60: the itch.io page (not inside portal builds: players there are already on a portal) */
+  if(!window.KF_PORTAL){const it=document.createElement('a');it.className='btn';it.id='itchSetBtn';it.href=ITCH_URL;it.target='_blank';it.rel='noopener';row.appendChild(it);}
 })();
-function updV54Txt(){set$('fbSetBtn',tt('💬 Feedback senden','💬 Send feedback'));set$('privSetBtn',tt('🔒 Datenschutz','🔒 Privacy'));}
+function updV54Txt(){set$('fbSetBtn',tt('💬 Feedback senden','💬 Send feedback'));set$('privSetBtn',tt('🔒 Datenschutz','🔒 Privacy'));set$('itchSetBtn',tt('⭐ Auf itch.io bewerten','⭐ Rate us on itch.io'));}
 updV54Txt();
 v54Ready=true;
