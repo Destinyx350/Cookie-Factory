@@ -68,6 +68,7 @@ Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.
 12. [`community-v13.sql`](community-v13.sql): club levels, player feedback, and push alerts for the owner and moderators (the alerts also need the updated `kf-push` edge function, which opens admin.html when you tap an alert).
 13. [`server-v14.sql`](server-v14.sql): automatic cleanup of old data, the database usage card, checks for unrealistic account-save jumps, planned events and announcements, the off-site backup function, and removes the transfer codes.
 14. [`stats-v15.sql`](stats-v15.sql): the live dashboard (players, new players, accounts and crashes per day; languages, devices, where people play) and the automatic weekly report with a push every Monday.
+15. [`backend-v16.sql`](backend-v16.sql): indexes and fixes from Supabase's checks, server jobs on the server's own clock (pg_cron), a limit against fake player counts, recovery codes and the device list for accounts, the list of installed server parts, health alarms and the live signal for club chat. From version 58 on, Claude can also apply new server parts for you through the Supabase connector when you approve it in the chat; running the file in the SQL Editor still works the same.
 
 The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password. Since version 52 the admin panel is only in `admin.html` (https://destinyx350.github.io/Cookie-Factory/admin.html), not in the game players get.
 
@@ -76,7 +77,6 @@ The admin panel's **Online**, **Moderation** and **Server** tabs manage everythi
 - Saves changed outside the game (browser tools or edited files) are flagged and can't join.
 - Account saves that jump far beyond what the game allows are flagged in the admin **Moderation** tab (⚠️ Suspicious saves). The save is kept; you decide (OK or ban).
 - The database rejects new entries above 1e15 cookies, and scores that grow more than 10x per 5 minutes (above 100 million). The game sends a score every minute and caps it just under this limit, so honest players are never rejected; their score catches up within minutes.
-- If your project was set up before version 37, run [`leaderboard-anticheat-update.sql`](leaderboard-anticheat-update.sql) once in the **SQL Editor** to add the database check.
 
 ## Removing a fake or rude entry
 

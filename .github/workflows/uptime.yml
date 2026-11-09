@@ -1,0 +1,57 @@
+name: Uptime check
+
+# Every 30 minutes: is the game website up, and does the game database answer? If not twice in a row, this opens a
+# GitHub issue labelled "uptime" (GitHub notifies the owner), and closes it again once everything works.
+# Problems inside a working database (stuck push messages, crash spikes, a full database) are reported by the
+# database itself as a push to the owner (kf_health_check in docs/backend-v16.sql).
+on:
+  schedule:
+    - cron: "11,41 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SITE: https://destinyx350.github.io/Cookie-Factory/
+      API: https://nmmlemtljjvfurlrvuvm.supabase.co/rest/v1/rpc/kf_live
+      KEY: sb_publishable_STHuGWpHxg6efQhuvc_sQQ_xO5AvI5J
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Check the website and the database
+        id: c
+        run: |
+          check() {
+            site=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$SITE?uptime=$(date +%s)" || echo 000)
+            api=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 -X POST "$API" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' || echo 000)
+          }
+          check
+          if [ "$site" != "200" ] || [ "$api" != "200" ]; then echo "First try: site $site, database $api. Trying again in 60 s…"; sleep 60; check; fi
+          echo "Website: $site · Database: $api"
+          echo "site=$site" >> "$GITHUB_OUTPUT"; echo "api=$api" >> "$GITHUB_OUTPUT"
+      - name: Open or close the uptime issue
+        run: |
+          open=$(gh issue list --label uptime --state open --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ "${{ steps.c.outputs.site }}" = "200" ] && [ "${{ steps.c.outputs.api }}" = "200" ]; then
+            if [ -n "$open" ]; then gh issue close "$open" --comment "✅ Back up: website and database answer again ($(date -u '+%Y-%m-%d %H:%M UTC')). This automatic check runs every 30 minutes."; fi
+            exit 0
+          fi
+          body="The automatic uptime check failed twice in a row at $(date -u '+%Y-%m-%d %H:%M UTC').
+
+          - Website (GitHub Pages): HTTP ${{ steps.c.outputs.site }}
+          - Game database (Supabase): HTTP ${{ steps.c.outputs.api }}
+
+          If the database fails: open the Supabase dashboard and check whether the project is paused (then click Restore). If the website fails: check githubstatus.com. This issue closes itself when both answer again."
+          if [ -z "$open" ]; then
+            gh label create uptime --color B60205 --description "Automatic uptime check" 2>/dev/null || true
+            gh issue create --title "⚠️ Cookie Factory is down" --label uptime --body "$body"
+          else
+            gh issue comment "$open" --body "Still down at $(date -u '+%Y-%m-%d %H:%M UTC') (website ${{ steps.c.outputs.site }}, database ${{ steps.c.outputs.api }})."
+          fi
+          exit 1

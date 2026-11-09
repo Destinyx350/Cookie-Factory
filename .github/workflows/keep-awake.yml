@@ -1,9 +1,9 @@
 name: Keep the database awake
 
 # Free Supabase projects pause after about a week without visitors, which stops every online feature.
-# This calls the game's public API every day, which keeps the project active, makes the
-# weekly automatic backup when it is due, sends the "we miss you" push to players away 3+ days,
-# removes old data, starts planned events and makes the weekly report on Mondays. It only uses the public (publishable) key that is in index.html.
+# This calls the game's public API once a day so the project stays active. Since version 58 the server's own clock
+# (pg_cron, docs/backend-v16.sql) runs the backups, reminders, cleanup, planned events and the weekly report, so this
+# job only keeps the project awake. It only uses the public (publishable) key that is in index.html.
 on:
   schedule:
     - cron: "17 15 * * *"
@@ -20,17 +20,11 @@ jobs:
       URL: https://nmmlemtljjvfurlrvuvm.supabase.co/rest/v1/rpc
       KEY: sb_publishable_STHuGWpHxg6efQhuvc_sQQ_xO5AvI5J
     steps:
-      - name: Ping the game database, weekly backup, comeback reminders
+      - name: Ping the game database
         run: |
           set -e
           for i in 1 2 3; do
-            if curl -fsS "$URL/kf_backup_tick" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}'; then echo; break; fi
+            if curl -fsS "$URL/kf_live" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 300; then echo; exit 0; fi
             echo "Try $i failed, waiting…"; sleep 20
           done
-          # Push reminder for players away 3+ days (once per absence). Needs docs/insights-v10.sql; skipped before that.
-          curl -sS "$URL/kf_reminders" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 200; echo
-          # Cleanup of old data and planned events. Need docs/server-v14.sql; skipped before that.
-          curl -sS "$URL/kf_cleanup" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 300; echo
-          curl -sS "$URL/kf_week_report" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 100; echo
-          curl -sS "$URL/kf_schedule_tick" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 100; echo
-          curl -fsS "$URL/kf_live" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 300; echo
+          exit 1
