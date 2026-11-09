@@ -275,3 +275,11 @@
 .dtable{max-height:260px;overflow:auto}.dtable table{width:100%;border-collapse:collapse;font-size:12px}
 .dtable th,.dtable td{padding:3px 6px;text-align:right;border-bottom:1px solid var(--edge)}.dtable th:first-child,.dtable td:first-child{text-align:left}
 .rep{margin-top:8px}.rep>summary{font-weight:600}.reptodo{margin:4px 0;padding-left:4px;list-style:none;font-size:13px}.reptodo li{margin:3px 0}
+/* V58: recovery code, device list, server health */
+.reccode{font:600 22px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:2px;text-align:center;padding:12px;border:1px dashed var(--edge-2,rgba(255,255,255,.25));border-radius:var(--r-md,12px);background:var(--panel-2);user-select:all;word-break:break-all}
+.recwarn{display:inline-block;margin-left:6px;padding:0 7px;border-radius:99px;background:#d9534f;color:#fff;font-size:11px;font-weight:600;vertical-align:1px}
+.devlist{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+.devrow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2)}
+.devrow span{min-width:0}.devrow b{display:block;font-size:13px}.devrow small{color:var(--muted);font-size:11px}
+.devme{font-style:normal;font-weight:500;font-size:11px;color:var(--grn1,#3a9d5d);margin-left:4px}
+.admstats span.hbad{border:1px solid #d9534f}

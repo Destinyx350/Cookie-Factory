@@ -238,7 +238,7 @@ setInterval(()=>{
   const open=!$id('clubOv').hidden;
   if(open){document.querySelectorAll('[data-clleft]').forEach(e=>{const v=clubWeekLeft();if(e.textContent!==v) e.textContent=v;});if(clubArm.k&&Date.now()-clubArm.t>5000){clubArm={k:'',t:0};clubRender();}}
   if(document.hidden||!clubSigned()) return;
-  if(open&&clubTab==='mine'&&Date.now()-clubLast>10000) clubLoad(false);
+  if(open&&clubTab==='mine'&&Date.now()-clubLast>(v58Ready&&clubRT.on?60000:10000)) clubLoad(false); /* V58: with the live signal a slow check is enough */
   else if(!open&&Date.now()-clubLast>120000) clubLoad(false);
   if(Date.now()-socialLast>120000) socialClaim();
 },1000);

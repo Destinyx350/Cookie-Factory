@@ -51,6 +51,14 @@ function accCheckNewer(){
     tt('Konto-Spielstand laden','Load account save'),tt('Dieses Gerät behalten','Keep this device'),
     ()=>accDownload(),()=>{accUpload(false);});
 }
+/* Signed in (by password or, since v58, by recovery code): keep the token, then ask which bakery to keep */
+async function accLoginOk(r){
+  accTok=r.token;lsSet(ACC_KEY,accTok);accMe=r;accBusy=false;
+  if(r.has_save){accAsked=true;accAsk(tt('Willkommen zurück, ','Welcome back, ')+r.username+'!','<p>'+tt('In deinem Konto liegt eine Bäckerei mit ','Your account has a bakery with ')+'<b>'+fmt(r.save_baked||0)+tt(' Keksen',' cookies')+'</b>.</p><p class="small">'+tt('Auf diesem Gerät: ','On this device: ')+fmt(S.all)+tt(' Kekse',' cookies')+'</p>',tt('Konto-Bäckerei laden','Load account bakery'),tt('Dieses Gerät ins Konto','Use this device’s bakery'),()=>accDownload(),()=>accUpload(true));}
+  else await accUpload(false);
+  accMsg=tt('Angemeldet als ','Signed in as ')+escName(r.username)+'.';accMsgOk=true;
+  if(v58Ready) devName();
+}
 function accRender(){
   const box=$id('accBox');if(!box) return;
   const st=$id('stAcc');
@@ -61,13 +69,15 @@ function accRender(){
     const arm=k=>accArm.k===k&&Date.now()-accArm.t<5000;
     h='<div class="accme"><span class="accav" aria-hidden="true">👤</span><span><b>'+escName(accMe.username)+'</b><small>'+(accMe.save_at?tt('Zuletzt gespeichert: ','Last saved: ')+new Date(accMe.save_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):tt('Noch nichts gespeichert','Nothing saved yet'))+' · '+tt('speichert automatisch','saves automatically')+'</small></span></div>'
       +'<div class="btns" style="margin-top:10px"><button type="button" class="btn primary" data-acc="save">'+tt('Jetzt speichern','Save now')+'</button>'+(accMe.has_save?'<button type="button" class="btn'+(arm('load')?' armed':'')+'" data-acc="load">'+(arm('load')?tt('Ersetzt dein Spiel! Nochmal','Replaces your game! Again'):tt('Aus Konto laden','Load from account'))+'</button>':'')+'<button type="button" class="btn" data-acc="logout">'+tt('Abmelden','Sign out')+'</button><button type="button" class="btn" data-acc="logoutall">'+tt('Andere Geräte abmelden','Sign out other devices')+'</button></div>'
+      +(v58Ready?accSecHtml():'')
       +'<details class="fold accfold"><summary>'+tt('Passwort ändern','Change password')+'</summary><form class="coderow" id="accPwF" novalidate><input type="password" class="namein" name="old" autocomplete="current-password" placeholder="'+tt('Altes Passwort','Old password')+'"><input type="password" class="namein" name="new" autocomplete="new-password" placeholder="'+tt('Neues Passwort (mind. 6)','New password (6+)')+'"><button type="submit" class="btn">'+tt('Ändern','Change')+'</button></form></details>'
       +'<details class="fold accfold"><summary>'+tt('Konto löschen','Delete account')+'</summary><p class="small">'+tt('Löscht dein Konto und den Spielstand darin für immer. Dein Spiel auf diesem Gerät bleibt.','Deletes your account and its save forever. Your game on this device stays.')+'</p><form class="coderow" id="accDelF" novalidate><input type="password" class="namein" name="pass" autocomplete="current-password" placeholder="'+tt('Passwort zur Bestätigung','Password to confirm')+'"><button type="submit" class="btn'+(arm('del')?' armed':'')+'">'+(arm('del')?tt('Wirklich löschen? Nochmal','Really delete? Again'):tt('Konto löschen','Delete account'))+'</button></form></details>';
   }else{
     const up=accMode==='signup';
     h='<div class="seg acctabs" role="tablist"><button type="button" data-accm="login" aria-pressed="'+(!up)+'">'+tt('Anmelden','Sign in')+'</button><button type="button" data-accm="signup" aria-pressed="'+up+'">'+tt('Konto erstellen','Create account')+'</button></div>'
       +'<form class="accform" id="accF" novalidate><input class="namein" name="user" maxlength="16" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="'+tt('Benutzername (3–16 Buchstaben, Zahlen oder _)','Username (3–16 letters, numbers or _)')+'" aria-label="'+tt('Benutzername','Username')+'"><input class="namein" name="pass" type="password" maxlength="72" autocomplete="'+(up?'new-password':'current-password')+'" placeholder="'+tt('Passwort','Password')+(up?tt(' (mind. 6 Zeichen)',' (at least 6 characters)'):'')+'" aria-label="'+tt('Passwort','Password')+'"><label class="chk"><input type="checkbox" id="accShow"><span>'+tt('Passwort anzeigen','Show password')+'</span></label><button type="submit" class="btn primary"'+(accBusy?' disabled':'')+'>'+(accBusy?tt('Moment …','One moment …'):up?tt('Konto erstellen','Create account'):tt('Anmelden','Sign in'))+'</button></form>'
-      +'<p class="small" style="margin-top:6px">'+(up?tt('Keine E-Mail nötig. Merk dir dein Passwort gut – wenn du es vergisst, kann der Admin ein neues setzen.','No email needed. Remember your password – if you forget it, the admin can set a new one.'):tt('Mit deinem Konto spielst du auf jedem Gerät mit derselben Bäckerei weiter.','With your account you keep playing the same bakery on every device.'))+'</p>';
+      +'<p class="small" style="margin-top:6px">'+(up?tt('Keine E-Mail nötig. Nach dem Erstellen bekommst du einen Wiederherstellungs-Code – damit setzt du ein neues Passwort, falls du es vergisst.','No email needed. After creating it you get a recovery code – with it you can set a new password if you forget yours.'):tt('Mit deinem Konto spielst du auf jedem Gerät mit derselben Bäckerei weiter.','With your account you keep playing the same bakery on every device.'))+'</p>'
+      +(v58Ready&&!up?accForgotHtml():'');
   }
   if(accMsg) h+='<p class="nameerr'+(accMsgOk?' ok':'')+'">'+accMsg+'</p>';
   if(box._h!==h){
@@ -102,16 +112,11 @@ $id('accBox').addEventListener('submit',async e=>{
       if(accMode==='signup'){
         const r=await lbApi('rpc/acc_signup',{p_user:user,p_pass:pass,p_player:kfId()});accV4=true;
         accTok=r.token;lsSet(ACC_KEY,accTok);accMe={username:r.username,has_save:false};accBusy=false;
-        await accUpload(false);if(v48Ready) refClaim();accMsg=tt('Konto erstellt! Deine Bäckerei ist jetzt in deinem Konto gespeichert.','Account created! Your bakery is now saved in your account.');accMsgOk=true;toast(accMsg,true);
+        await accUpload(false);if(v48Ready) refClaim();accMsg=tt('Konto erstellt! Deine Bäckerei ist jetzt in deinem Konto gespeichert.','Account created! Your bakery is now saved in your account.');accMsgOk=true;toast(accMsg,true);if(v58Ready){devName();setTimeout(()=>recMake(true),600);}
       }else{
         const r=await lbApi('rpc/acc_login',{p_user:user,p_pass:pass});accV4=true;
         if(r&&r.error){if(r.error==='banned') banShow(r,user);accMsg=r.error==='banned'?banTxt(r):r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
-        else{
-          accTok=r.token;lsSet(ACC_KEY,accTok);accMe=r;accBusy=false;
-          if(r.has_save){accAsked=true;accAsk(tt('Willkommen zurück, ','Welcome back, ')+r.username+'!','<p>'+tt('In deinem Konto liegt eine Bäckerei mit ','Your account has a bakery with ')+'<b>'+fmt(r.save_baked||0)+tt(' Keksen',' cookies')+'</b>.</p><p class="small">'+tt('Auf diesem Gerät: ','On this device: ')+fmt(S.all)+tt(' Kekse',' cookies')+'</p>',tt('Konto-Bäckerei laden','Load account bakery'),tt('Dieses Gerät ins Konto','Use this device’s bakery'),()=>accDownload(),()=>accUpload(true));}
-          else await accUpload(false);
-          accMsg=tt('Angemeldet als ','Signed in as ')+escName(r.username)+'.';accMsgOk=true;
-        }
+        else await accLoginOk(r);
       }
     }catch(x){
       const m=String(x&&x.message||'');accMsgOk=false;

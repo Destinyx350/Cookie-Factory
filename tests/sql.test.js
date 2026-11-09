@@ -2,6 +2,8 @@
 const { pool, rpc, asAnon, check, expectError, ADMIN_PASS } = require('./lib');
 const q = (sql, a) => pool.query(sql, a);
 const SAVE = 'x'.repeat(40);
+// Server jobs run on the server's own clock (pg_cron) since v58 and are closed to players, so tests start them directly.
+const job = async f => (await q('select public.' + f + '() as r')).rows[0].r;
 
 module.exports = async function sqlTests() {
   console.log('\nDatabase');
@@ -100,8 +102,8 @@ module.exports = async function sqlTests() {
   check((await rpc('acc_lb_link', { p_token: b.token, p_lb: L1 })).lb_id === null, 'another account cannot take a linked spot');
 
   // Backups
-  check((await rpc('kf_backup_tick', {})).made === true, 'weekly backup is made when due');
-  check((await rpc('kf_backup_tick', {})).made === false, 'and only once a week');
+  check((await job('kf_backup_tick')).made === true, 'weekly backup is made when due');
+  check((await job('kf_backup_tick')).made === false, 'and only once a week');
   const list = await rpc('admin_backup', { p_pass: tok, p_action: 'make' });
   check(list.backups.length === 2, 'admin can back up now', list.backups.length);
   const bid = list.backups[0].id;
@@ -199,8 +201,8 @@ module.exports = async function sqlTests() {
   await q("update kf_accounts set save_at = now() - interval '5 days', last_login = now() - interval '5 days', reminded_at = null where username = 'test_beta'");
   await rpc('push_subscribe', { p_token: b.token, p_sub: { endpoint: 'https://push.example.com/back', keys: { p256dh: 'x', auth: 'y' } } });
   await q('delete from kf_push_queue');
-  check((await rpc('kf_reminders', {})).sent >= 1, 'players away for 3+ days get a comeback reminder');
-  check((await rpc('kf_reminders', {})).sent === 0, 'only one reminder per absence');
+  check((await job('kf_reminders')).sent >= 1, 'players away for 3+ days get a comeback reminder');
+  check((await job('kf_reminders')).sent === 0, 'only one reminder per absence');
   check((await q("select count(*)::int n from kf_push_queue where t_en like '%misses you%'")).rows[0].n >= 1, 'the reminder is queued as a push');
   // chat: reactions and pin
   const own = await rpc('club_mine', { p_token: c2.token });
@@ -407,9 +409,9 @@ module.exports = async function sqlTests() {
   check((await q("select count(*)::int n from kf_news where title = 'Weekly news'")).rows[0].n === 1, 'a weekly plan that is due starts at once');
   check(wk.active && new Date(wk.next_at) > Date.now() + 6.9 * 864e5, 'a weekly plan moves on by a week', wk.next_at);
   await q("update kf_schedule set next_at = now() - interval '1 second' where kind = 'event'");
-  check((await rpc('kf_schedule_tick', {})) === 1, 'the minute tick starts what is due');
+  check((await job('kf_schedule_tick')) === 1, 'the minute tick starts what is due');
   check((await q("select count(*)::int n from kf_events where title = 'Plan test' and kind = 'gold' and mult = 3 and ends_at > now() + interval '119 minutes'")).rows[0].n === 1, 'the planned event runs with its multiplier and length');
-  check((await rpc('kf_schedule_tick', {})) === 0, 'nothing starts twice');
+  check((await job('kf_schedule_tick')) === 0, 'nothing starts twice');
   const lv = await rpc('kf_ping', { p_id: '56565656-5656-5656-5656-565656565656', p_baked: 1 });
   check(lv && 'cfg' in lv, 'the minute ping still works');
   sc = await rpc('admin_schedule', { p_pass: tok, p_action: 'toggle', p_data: { id: wk.id } });
@@ -435,10 +437,10 @@ module.exports = async function sqlTests() {
   await q("insert into kf_rate (kind, key, at) values ('t56', 'k', now() - interval '5 days'), ('t56', 'k', now())");
   await q("insert into kf_presence (id, baked, seen_at) values ('57575757-5757-5757-5757-575757575757', 1, now() - interval '400 days')");
   await q("insert into kf_admin_log (at, action, detail) values (now() - interval '200 days', 'old t56', '')");
-  const cl = await rpc('kf_cleanup', {});
+  const cl = await job('kf_cleanup');
   check(cl.ran && cl.removed.limits >= 1 && cl.removed.players >= 1 && cl.removed.admin_log >= 1, 'the cleanup removes old data', cl);
   check((await q("select count(*)::int n from kf_rate where kind = 't56'")).rows[0].n === 1, 'the cleanup keeps recent data');
-  check((await rpc('kf_cleanup', {})).ran === false, 'the cleanup runs at most every 6 hours');
+  check((await job('kf_cleanup')).ran === false, 'the cleanup runs at most every 6 hours');
   await expectError(rpc('admin_usage', { p_pass: mt }), /wrong admin password/, 'usage is for the owner only');
   const us = await rpc('admin_usage', { p_pass: tok, p_action: 'usage' });
   check(us.db_bytes > 0 && us.limit_bytes === 524288000 && us.tables.length > 0 && typeof us.mau === 'number' && us.cleanup && us.cleanup.at, 'the owner sees database size, players and the last cleanup', Object.keys(us));
@@ -481,9 +483,9 @@ module.exports = async function sqlTests() {
   // weekly report
   await q("delete from kf_week_reports; delete from kf_push_queue where kind = 'week'");
   await rpc('admin_push', { p_pass: tok, p_action: 'subscribe', p_data: { sub: { endpoint: 'https://push.example.com/owner2', keys: { p256dh: 'x', auth: 'y' } }, lang: 'en' } });
-  const wr = await rpc('kf_week_report', {});
+  const wr = await job('kf_week_report');
   check(wr.made === true && /^\d{4}-W\d{2}$/.test(wr.week), 'the weekly report is made once a week', wr);
-  check((await rpc('kf_week_report', {})).made === false, 'it is not made twice in the same week');
+  check((await job('kf_week_report')).made === false, 'it is not made twice in the same week');
   const wp = (await q("select b_en, target from kf_push_queue where kind = 'week'")).rows;
   check(wp.length === 1 && wp[0].target === 'owner' && /players .* new accounts/.test(wp[0].b_en), 'the owner gets the weekly report as a push', wp);
   await expectError(rpc('admin_reports', { p_pass: mt, p_action: 'list' }), /wrong admin password/, 'reports are for the owner only');
@@ -491,5 +493,74 @@ module.exports = async function sqlTests() {
   check(reps.length === 1 && reps[0].data.this && 'players' in reps[0].data.this && reps[0].data.todo && 'db_pct' in reps[0].data.todo, 'the owner reads past weekly reports', reps[0] && Object.keys(reps[0].data));
   check((await rpc('admin_reports', { p_pass: tok, p_action: 'preview' })).data.last, 'the owner can preview the numbers right now');
   await rpc('admin_push', { p_pass: tok, p_action: 'unsubscribe', p_data: { endpoint: 'https://push.example.com/owner2' } });
+  }
+  {
+  // Backend care (v58): closed jobs, indexes, fake-count limit, recovery codes, devices, live chat signal, health
+  for (const f of ['kf_schedule_tick', 'kf_cleanup', 'kf_backup_tick', 'kf_week_report', 'kf_reminders', 'kf_health_check', 'kf_rt_ok'])
+    await expectError(rpc(f, {}), /permission denied/, 'players cannot start the server job ' + f);
+  await expectError(asAnon('select * from public.kf_schema'), /permission denied/, 'players cannot read kf_schema');
+  check((await q("select to_regclass('public.lb_admin') t")).rows[0].t === null, 'the old leaderboard password table is gone');
+  check((await q("select count(*)::int n from pg_indexes where schemaname = 'public' and indexname in ('kf_sessions_account','kf_wars_a','kf_wars_b','kf_gifts_from','kf_club_week_club','kf_presence_seen')")).rows[0].n === 6, 'the missing indexes are there');
+  check((await q("select count(*)::int n from pg_constraint where contype = 'p' and conrelid in ('public.kf_rate'::regclass, 'public.kf_login_fails'::regclass, 'public.kf_admin_fails'::regclass)")).rows[0].n === 3, 'the log tables have primary keys');
+  check((await q("select array_agg(part order by part) a from kf_schema")).rows[0].a.length === 16, 'all 16 server parts are listed');
+  // made-up player ids
+  const crypto = require('crypto');
+  for (let i = 0; i < 30; i++) await rpc('kf_ping', { p_id: crypto.randomUUID(), p_baked: 1 }, '6.6.6.6');
+  const fake = crypto.randomUUID();
+  await rpc('kf_ping', { p_id: fake, p_baked: 1 }, '6.6.6.6');
+  check((await q('select count(*)::int n from kf_presence where id = $1', [fake])).rows[0].n === 0, 'one device cannot add more than 30 new players an hour');
+  check('cfg' in (await rpc('kf_ping', { p_id: crypto.randomUUID(), p_baked: 1 }, '6.6.6.7')), 'other devices still count');
+  // recovery codes
+  const rc = await rpc('acc_signup', { p_user: 'test_rec', p_pass: 'secret123' }, '6.2.2.2');
+  check((await rpc('acc_recovery', { p_token: rc.token, p_action: 'status' })).on === false, 'a new account has no recovery code yet');
+  const code = (await rpc('acc_recovery', { p_token: rc.token, p_action: 'new' })).code;
+  check(/^[A-Z2-7]{16}$/.test(code) && (await rpc('acc_recovery', { p_token: rc.token, p_action: 'status' })).on === true, 'a player gets a 16-letter recovery code once');
+  check((await rpc('acc_recovery', { p_token: rc.token, p_action: 'status' })).code === null, 'the code is never shown again');
+  check((await rpc('acc_recover', { p_user: 'test_rec', p_code: 'AAAAAAAAAAAAAAAA', p_pass: 'newpass123' }, '6.2.2.3')).error === 'wrong username or code', 'a wrong code is refused');
+  check((await rpc('acc_recover', { p_user: 'test_rec', p_code: code, p_pass: 'x' }, '6.2.2.3')).error === 'invalid password', 'the new password needs 6 characters');
+  const pretty = code.toLowerCase().replace(/(.{4})(?!$)/g, '$1-');
+  const rr = await rpc('acc_recover', { p_user: 'TEST_REC', p_code: pretty, p_pass: 'newpass123' }, '6.2.2.3');
+  check(rr.token && rr.recovered && rr.username === 'test_rec', 'the code (with dashes, any case) sets a new password and signs in');
+  await expectError(rpc('acc_me', { p_token: rc.token }), /not signed in/, 'recovering signs out every other device');
+  check((await rpc('acc_login', { p_user: 'test_rec', p_pass: 'newpass123' }, '6.2.2.4')).token, 'the new password works');
+  check((await rpc('acc_recover', { p_user: 'test_rec', p_code: code, p_pass: 'another123' }, '6.2.2.5')).error === 'wrong username or code', 'a recovery code works only once');
+  for (let i = 0; i < 8; i++) await rpc('acc_recover', { p_user: 'test_rec', p_code: 'BBBBBBBBBBBBBBBB', p_pass: 'another123' }, '6.2.3.' + i);
+  check((await rpc('acc_recover', { p_user: 'test_rec', p_code: 'BBBBBBBBBBBBBBBB', p_pass: 'another123' }, '6.2.4.1')).error === 'too many tries', 'guessing codes locks the name like wrong passwords');
+  await q("delete from kf_login_fails where username = 'test_rec'");
+  // devices
+  const d1 = rr.token, d2 = (await rpc('acc_login', { p_user: 'test_rec', p_pass: 'newpass123' }, '6.2.5.1')).token;
+  let dv = await rpc('acc_devices', { p_token: d1, p_action: 'name', p_data: { label: 'Chrome · Android <b>' } });
+  check(dv.length >= 2 && dv[0].current && dv[0].label === 'Chrome · Android b', 'a player sees their devices and names this one (no HTML)', dv);
+  const other = (await rpc('acc_devices', { p_token: d1, p_action: 'list' })).find(x => !x.current);
+  dv = await rpc('acc_devices', { p_token: d1, p_action: 'remove', p_data: { id: dv[0].id } });
+  check(dv.some(x => x.current), 'you cannot remove the device you are using');
+  dv = await rpc('acc_devices', { p_token: d1, p_action: 'remove', p_data: { id: other.id } });
+  check(!dv.some(x => x.id === other.id), 'a player signs out one other device');
+  const stillOk = await rpc('acc_me', { p_token: d2 }).then(() => true, () => false), cnt = (await q("select count(*)::int n from kf_sessions s join kf_accounts a on a.id = s.account where a.username = 'test_rec'")).rows[0].n;
+  check(cnt === dv.length && (dv.length === 1 ? !stillOk : true), 'the removed device is signed out', { cnt, len: dv.length });
+  // live chat signal
+  const rt0 = await rpc('club_rt', { p_token: c2.token });
+  check(/^kf-club-[0-9a-f]{24}$/.test(rt0.topic) && rt0.on === false, 'club members get a secret chat topic (off without Realtime)', rt0);
+  check((await rpc('club_rt', { p_token: d1 })).topic === null, 'players outside a club get no topic');
+  await q("create schema if not exists realtime; create table if not exists public.t_rt (topic text, event text, payload jsonb, at timestamptz default now()); create or replace function realtime.send(payload jsonb, event text, topic text, private boolean default true) returns void language sql as $f$ insert into public.t_rt (topic, event, payload) values (topic, event, payload) $f$; delete from public.t_rt");
+  check((await rpc('club_rt', { p_token: c2.token })).on === true, 'with Realtime the live chat is on');
+  await rpc('club_post', { p_token: c2.token, p_body: 'live hello' });
+  const sig = (await q('select topic, event, payload from public.t_rt')).rows;
+  check(sig.length === 1 && sig[0].topic === rt0.topic && sig[0].event === 'chat' && !JSON.stringify(sig[0].payload).includes('hello'), 'a new message sends only a signal, never the text', sig);
+  // health checks
+  await q("delete from kf_jobs where k like 'alert:%' or k = 'health'; delete from kf_push_queue");
+  await rpc('admin_push', { p_pass: tok, p_action: 'subscribe', p_data: { sub: { endpoint: 'https://push.example.com/owner3', keys: { p256dh: 'x', auth: 'y' } }, lang: 'en' } });
+  await q("insert into kf_push_queue (t_de, t_en, created_at) values ('x', 'x', now() - interval '30 minutes')");
+  const hc = await job('kf_health_check');
+  check(hc.push_stuck === 1 && 'db_pct' in hc && 'crashes_today' in hc, 'the health check finds stuck push messages', hc);
+  check((await q("select count(*)::int n from kf_push_queue where kind = 'health_push' and target = 'owner'")).rows[0].n === 1, 'the owner gets a health alarm');
+  await q("delete from kf_push_queue where kind = 'health_push'");
+  await job('kf_health_check');
+  check((await q("select count(*)::int n from kf_push_queue where kind = 'health_push'")).rows[0].n === 0, 'the same alarm comes at most every 6 hours');
+  await expectError(rpc('admin_health', { p_pass: mt }), /wrong admin password/, 'server health is for the owner only');
+  const ah = await rpc('admin_health', { p_pass: tok });
+  check(ah.schema.length === 16 && ah.cron === false && ah.realtime === true && ah.checks && ah.checks.r.push_stuck === 1 && ah.alerts.some(a => a.k === 'push'), 'the owner sees server parts, jobs, checks and alarms', Object.keys(ah));
+  await q("delete from kf_push_queue");
+  await rpc('admin_push', { p_pass: tok, p_action: 'unsubscribe', p_data: { endpoint: 'https://push.example.com/owner3' } });
   }
 };

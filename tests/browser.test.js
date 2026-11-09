@@ -1,7 +1,7 @@
 // Browser tests: the real game in Chromium, on desktop and phone, talking to the test database.
 const { chromium } = require('playwright');
 const fs = require('fs'), path = require('path');
-const { pool, handle, check, ADMIN_PASS, LB, ROOT } = require('./lib');
+const { pool, handle, check, rpc, ADMIN_PASS, LB, ROOT } = require('./lib');
 const ADM_HASH = /ADM_HASH='([0-9a-f]+)'/.exec(fs.readFileSync(path.join(ROOT, 'admin.html'), 'utf8'))[1];
 const PHONE = { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true };
 
@@ -10,9 +10,20 @@ module.exports = async function browserTests(url) {
   await pool.query("delete from kf_backups; delete from kf_accounts; delete from kf_clubs; delete from leaderboard; delete from lb_period; delete from kf_rate; delete from kf_admin_fails; delete from kf_reports; delete from kf_mail; delete from kf_news; delete from kf_events; delete from kf_errors; delete from kf_steps; delete from kf_days; delete from kf_bans; delete from kf_device_bans; delete from kf_appeals; delete from kf_mods; delete from kf_feedback; delete from kf_admin_push; delete from kf_push_queue; update kf_admin_auth set totp_on = false, totp_secret = null, totp_pending = null; update kf_config set v = '{\"on\":false,\"de\":\"\",\"en\":\"\"}' where k = 'maint'");
   const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
   const errors = [];
+  // A stand-in for Supabase Realtime (v58 live club chat): answers joins and heartbeats; tests push broadcasts with rtPush().
+  const rtSockets = [];
+  const rtPush = () => rtSockets.forEach(s => s.topics.forEach(t => s.ws.send(JSON.stringify({ topic: t, event: 'broadcast', payload: { type: 'broadcast', event: 'chat', payload: { k: 'kf_club_msgs' } } }))));
   async function device(name, ip, opts = {}, admin = false, page = '') {
     const ctx = await browser.newContext(Object.assign({ viewport: { width: 1280, height: 820 }, extraHTTPHeaders: { 'x-test-ip': ip }, acceptDownloads: true }, opts));
     await ctx.route(LB + '/**', handle);
+    await ctx.routeWebSocket(/\/realtime\/v1\/websocket/, ws => {
+      const so = { ws, topics: [] }; rtSockets.push(so);
+      ws.onMessage(m => {
+        let j; try { j = JSON.parse(m); } catch (e) { return; }
+        if (j.event === 'phx_join') { so.topics.push(j.topic); ws.send(JSON.stringify({ topic: j.topic, event: 'phx_reply', payload: { status: 'ok', response: { postgres_changes: [] } }, ref: j.ref })); }
+        else if (j.event === 'heartbeat') ws.send(JSON.stringify({ topic: 'phoenix', event: 'phx_reply', payload: { status: 'ok', response: {} }, ref: j.ref }));
+      });
+    });
     await ctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
     if (admin) await ctx.addInitScript(h => { try { sessionStorage.setItem('keksfabrik-admin', h); } catch (e) {} }, ADM_HASH);
     const p = await ctx.newPage();
@@ -29,7 +40,10 @@ module.exports = async function browserTests(url) {
   const signup = async (p, user) => {
     await settings(p, 'save'); await p.click('[data-accm=signup]');
     await p.fill('#accF [name=user]', user); await p.fill('#accF [name=pass]', 'cookies123'); await p.click('#accF button[type=submit]');
-    await p.waitForSelector('#accBox .accme', { timeout: 8000 }).catch(() => {}); await p.click('#setClose');
+    await p.waitForSelector('#accBox .accme', { timeout: 8000 }).catch(() => {});
+    // v58: a new account shows its recovery code once
+    if (await p.waitForSelector('#recCode', { timeout: 5000 }).then(() => true, () => false)) await p.click('#accYes');
+    await p.click('#setClose');
   };
   const goals = p => p.evaluate(() => document.querySelector('[data-tab="ach"]').click());
   const text = async (p, sel) => ((await p.textContent(sel).catch(() => '')) || '').replace(/\s+/g, ' ').trim();
@@ -428,6 +442,55 @@ module.exports = async function browserTests(url) {
   }
   for (const f of ['docs/trailer.mp4', 'docs/trailer.jpg', 'docs/trailer.gif'])
     check(fs.existsSync(path.join(ROOT, f)) && fs.statSync(path.join(ROOT, f)).size > 50000, f + ' is there');
+
+  // 5l. Recovery codes, devices, live club chat, server health (v58)
+  await settings(a, 'save');
+  await a.click('#accBox details[data-sec="rec"] summary'); await a.waitForSelector('[data-rec="new"]', { timeout: 8000 }).catch(() => {});
+  check(/Set up on/.test(await text(a, '#accBox')), 'a new account already has its recovery code from sign-up');
+  await a.click('[data-rec="new"]'); await a.waitForTimeout(200);
+  check(/Sure\? The old code stops working/.test(await text(a, '#accBox')), 'making a new code asks first');
+  await a.evaluate(() => { const c = document.getElementById('recCode'); if (c) c.remove(); });
+  await a.click('[data-rec="new"]'); await a.waitForSelector('#recCode', { timeout: 8000 }).catch(() => {});
+  const shownCode = await text(a, '#recCode');
+  check(/^[A-Z2-7]{4}(-[A-Z2-7]{4}){3}$/.test(shownCode) && !(await a.isVisible('#accNo')), 'a player creates a recovery code and sees it once', shownCode);
+  await a.click('#accYes'); await a.waitForTimeout(300);
+  check(/Set up on/.test(await text(a, '#accBox')) && await a.isVisible('#accNo') === false, 'the account shows the code is set up');
+  const tmpTok = (await rpc('acc_login', { p_user: 'alpha_ci', p_pass: 'cookies123' }, '10.9.9.9')).token;
+  await rpc('acc_devices', { p_token: tmpTok, p_action: 'name', p_data: { label: 'CI temp device' } });
+  await a.click('#accBox details[data-sec="dev"] summary'); await a.waitForSelector('.devrow', { timeout: 8000 }).catch(() => {});
+  check(/this device/.test(await text(a, '.devlist')) && /CI temp device/.test(await text(a, '.devlist')), 'the account lists the signed-in devices');
+  await a.locator('.devrow', { hasText: 'CI temp device' }).locator('[data-dev]').click(); await a.waitForTimeout(1200);
+  check(!/CI temp device/.test(await text(a, '.devlist')) && await rpc('acc_me', { p_token: tmpTok }).then(() => false, () => true), 'a player signs out one other device');
+  await a.click('#setClose');
+  {
+    const su = await rpc('acc_signup', { p_user: 'recov_ci', p_pass: 'secret123' }, '10.7.7.1');
+    const code = (await rpc('acc_recovery', { p_token: su.token, p_action: 'new' })).code;
+    const r = await device('Recovery Bakery', '10.7.7.2');
+    await settings(r, 'save'); await r.click('#accForgot summary');
+    await r.fill('#accRecF [name=ruser]', 'recov_ci'); await r.fill('#accRecF [name=rcode]', code.toLowerCase().replace(/(.{4})(?!$)/g, '$1 '));
+    await r.fill('#accRecF [name=rpass]', 'brandnew123'); await r.click('#accRecF button[type=submit]');
+    await r.waitForSelector('#accBox .accme', { timeout: 8000 }).catch(() => {});
+    check(/recov_ci/.test(await text(r, '#accBox .accme')), 'a forgotten password is reset with the recovery code from the sign-in page');
+    await r.waitForSelector('#recCode', { timeout: 8000 }).catch(() => {});
+    check(/^[A-Z2-7]{4}(-[A-Z2-7]{4}){3}$/.test(await text(r, '#recCode')) && (await text(r, '#recCode')).replace(/-/g, '') !== code, 'after using it the player gets a new recovery code');
+    check((await rpc('acc_login', { p_user: 'recov_ci', p_pass: 'brandnew123' }, '10.7.7.3')).token, 'the new password works');
+    await r.context().close();
+  }
+  await pool.query("create schema if not exists realtime; create table if not exists public.t_rt (topic text, event text, payload jsonb, at timestamptz default now()); create or replace function realtime.send(payload jsonb, event text, topic text, private boolean default true) returns void language sql as $f$ insert into public.t_rt (topic, event, payload) values (topic, event, payload) $f$");
+  await goals(a); await a.click('#clubBar'); await a.click('#clubBody [data-clt=mine]');
+  await a.waitForSelector('#clubOv[data-rt="1"]', { timeout: 10000 }).catch(() => {});
+  check(await a.evaluate(() => document.getElementById('clubOv').dataset.rt === '1'), 'the club chat connects to the live signal');
+  await a.waitForTimeout(3500);
+  const liveTok = (await rpc('acc_login', { p_user: 'alpha_ci', p_pass: 'cookies123' }, '10.9.9.8')).token;
+  await rpc('club_post', { p_token: liveTok, p_body: 'live via socket' });
+  rtPush(); await a.waitForTimeout(1500);
+  check(/live via socket/.test(await text(a, '#clubBody')), 'a new chat message shows at once through the live signal');
+  await a.click('#clubClose'); await a.waitForTimeout(1800);
+  check(await a.evaluate(() => !document.getElementById('clubOv').dataset.rt), 'closing the club disconnects the live signal');
+  await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
+  await d.waitForSelector('[data-hlth]', { timeout: 10000 }).catch(() => {});
+  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–16 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 16 parts');
+  await d.click('#setClose');
 
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {

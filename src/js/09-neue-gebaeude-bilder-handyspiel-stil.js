@@ -44,8 +44,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=57;
+const NEWS_VER=58;
 const NEWS=[
+  {v:58,sum:['Sicherere Konten und ein Live-Club-Chat','Safer accounts and a live club chat'],items:[
+    ['new','Wiederherstellungs-Code: Mit einem Einmal-Code setzt du ein neues Passwort, falls du es vergisst („Passwort vergessen?“ beim Anmelden). Hast du schon ein Konto? Erstelle ihn unter Einstellungen → Speichern → Konto.','Recovery code: a one-time code lets you set a new password if you forget yours (“Forgot your password?” when signing in). Already have an account? Create one under Settings → Saving → Account.'],
+    ['new','Geräte: Sieh, wo dein Konto angemeldet ist, und melde einzelne Geräte ab.','Devices: see where your account is signed in and sign out single devices.'],
+    ['new','Live-Club-Chat: Neue Nachrichten erscheinen sofort, solange der Club offen ist.','Live club chat: new messages appear right away while the club is open.'],
+    ['change','Schnellerer Server: Geplante Events starten jetzt pünktlich auf die Minute, und der Server meldet Probleme von selbst.','Faster server: planned events now start right on time, and the server reports problems on its own.']]},
   {v:57,sum:['Website, Trailer und Werkzeuge für den Betreiber','A website, a trailer and tools for the owner'],items:[
     ['new','Website: Die Keksfabrik hat jetzt eine eigene Seite mit Trailer, Bildern und einer Anleitung zum Installieren – perfekt zum Teilen: destinyx350.github.io/Cookie-Factory/welcome.html','Website: Cookie Factory now has its own page with a trailer, screenshots and install steps – perfect for sharing: destinyx350.github.io/Cookie-Factory/welcome.html'],
     ['new','Trailer: ein kurzes Gameplay-Video vom 3D-Keks, den Gebäuden und der Welt.','Trailer: a short gameplay video of the 3D cookie, the buildings and the world.'],
