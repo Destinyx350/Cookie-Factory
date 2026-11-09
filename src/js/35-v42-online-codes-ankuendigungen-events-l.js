@@ -59,56 +59,8 @@ function renderLive(){
   ['stLive','lbLive'].forEach(id=>{const e=$id(id);if(!e) return;e.hidden=!t;if(e.textContent!==t) e.textContent=t;});
 }
 
-/* Cloud: Spielstand per Code auf ein anderes Gerät */
-let cloudArm=0;
-const fmtCloud=c=>'KEKS-'+c.slice(0,4)+'-'+c.slice(4,8);
-$id('cloudUp').addEventListener('click',async()=>{
-  const b=$id('cloudUp'),box=$id('cloudCode'),msg=$id('cloudMsg');msg.className='nameerr';msg.textContent='';
-  if(!lbOn()){msg.textContent=tt('Online-Funktionen sind nicht eingerichtet.','Online features aren’t set up.');return;}
-  b.disabled=true;b.textContent=tt('Lädt hoch …','Uploading …');
-  try{
-    save();const r=await lbApi('rpc/save_upload',{p_data:enc(sealJSON(S))});kfV3=true;
-    const code=fmtCloud(r.code),until=new Date(r.expires_at).toLocaleString(LOC[LANG],{weekday:'short',hour:'2-digit',minute:'2-digit'});
-    box.hidden=false;box.innerHTML='<b class="ccode">'+code+'</b><small>'+tt('Gültig bis ','Valid until ')+until+tt('. Gib ihn auf dem anderen Gerät unter Einstellungen → Speichern ein.','. Enter it on your other device under Settings → Saving.')+'</small><button type="button" class="btn sm" id="cloudCopy">'+tt('Kopieren','Copy')+'</button>';
-    box.dataset.code=code;
-  }catch(x){kfNote(x);msg.textContent=lbMissing(x)?tt('Die Datenbank kennt diese Funktion noch nicht.','The database doesn’t have this feature yet.'):/too many requests/.test(String(x&&x.message))?tt('Zu viele Codes von diesem Gerät. Versuch es in einer Stunde nochmal.','Too many codes from this device. Try again in an hour.'):tt('Hochladen hat nicht geklappt. Prüfe dein Internet.','Upload didn’t work. Check your internet.');}
-  b.disabled=false;updV42Txt();
-});
-$id('cloudCode').addEventListener('click',async e=>{
-  if(!e.target.closest('#cloudCopy')) return;
-  const c=$id('cloudCode').dataset.code;try{await navigator.clipboard.writeText(c);toast(tt('Code kopiert!','Code copied!'));}catch(x){toast(c);}
-});
-$id('cloudForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const inp=$id('cloudIn'),msg=$id('cloudMsg'),go=$id('cloudGo');msg.className='nameerr';
-  const raw=inp.value.trim();if(!raw){msg.textContent=tt('Gib zuerst einen Code ein.','Enter a code first.');inp.focus();return;}
-  if(S.opt.ask!==false&&!cloudArm){go.classList.add('armed');go.textContent=tt('Ersetzt dein Spiel! Nochmal','Replaces your game! Again');cloudArm=setTimeout(()=>{cloudArm=0;go.classList.remove('armed');updV42Txt();},5000);return;}
-  clearTimeout(cloudArm);cloudArm=0;go.classList.remove('armed');go.disabled=true;go.textContent=tt('Lädt …','Loading …');
-  try{
-    const t=await lbApi('rpc/save_download',{p_code:raw});kfV3=true;
-    let o=null;try{o=JSON.parse(dec(String(t)));}catch(x){try{o=JSON.parse(String(t));}catch(y){o=null;}}
-    if(!o||typeof o!=='object'||typeof o.cookies!=='number') throw new Error('bad save');
-    try{pushBackup();}catch(x){}
-    const s=sanitize(o);if(!s.name) s.name=S.name;
-    if(s.tamp) setTimeout(tampWarn,400);
-    S=s;S.t=Date.now();LANG=S.opt.lang;els.fx.checked=S.opt.fx;
-    applyLang();rebuildAll();save();slotSig='';inp.value='';
-    msg.className='nameerr ok';msg.textContent=tt('Spielstand geladen','Save loaded')+(S.name?': '+S.name:'')+'.';
-    toast(tt('Spielstand aus der Cloud geladen. Dein altes Spiel liegt unter Backups.','Save loaded from the cloud. Your old game is under Backups.'),true);
-  }catch(x){
-    kfNote(x);const m=String(x&&x.message||'');
-    msg.textContent=/unknown or expired/.test(m)?tt('Diesen Code gibt es nicht oder er ist abgelaufen (Codes gelten 24 Stunden).','That code doesn’t exist or has expired (codes last 24 hours).'):/bad save/.test(m)?tt('Unter diesem Code liegt kein gültiger Spielstand.','There’s no valid save under this code.'):lbMissing(x)?tt('Die Datenbank kennt diese Funktion noch nicht.','The database doesn’t have this feature yet.'):tt('Laden hat nicht geklappt. Prüfe dein Internet.','Loading didn’t work. Check your internet.');
-  }
-  go.disabled=false;updV42Txt();
-});
-
 function updV42Txt(){
   const set=(id,t)=>{const e=$id(id);if(e&&e.textContent!==t) e.textContent=t;};
-  set('cloudT',tt('Auf ein anderes Gerät mitnehmen','Move to another device'));
-  set('cloudP',tt('Erstelle einen Code und gib ihn auf deinem anderen Gerät ein. Der Code gilt 24 Stunden. Beim Laden wird dein aktuelles Spiel ersetzt und vorher als Backup gesichert.','Create a code and enter it on your other device. The code lasts 24 hours. Loading replaces your current game, which is kept as a backup first.'));
-  if(!$id('cloudUp').disabled) set('cloudUp',tt('Transfer-Code erstellen','Create transfer code'));
-  if(!cloudArm&&!$id('cloudGo').disabled) set('cloudGo',tt('Laden','Load'));
-  $id('cloudIn').setAttribute('aria-label',tt('Transfer-Code','Transfer code'));
   renderLive();kfApplyEvents();
 }
 

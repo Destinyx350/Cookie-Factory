@@ -2,7 +2,8 @@ name: Keep the database awake
 
 # Free Supabase projects pause after about a week without visitors, which stops every online feature.
 # This calls the game's public API every day, which keeps the project active, makes the
-# weekly automatic backup when it is due and sends the "we miss you" push to players away 3+ days. It only uses the public (publishable) key that is in index.html.
+# weekly automatic backup when it is due, sends the "we miss you" push to players away 3+ days,
+# removes old data and starts planned events. It only uses the public (publishable) key that is in index.html.
 on:
   schedule:
     - cron: "17 15 * * *"
@@ -28,4 +29,7 @@ jobs:
           done
           # Push reminder for players away 3+ days (once per absence). Needs docs/insights-v10.sql; skipped before that.
           curl -sS "$URL/kf_reminders" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 200; echo
+          # Cleanup of old data and planned events. Need docs/server-v14.sql; skipped before that.
+          curl -sS "$URL/kf_cleanup" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 300; echo
+          curl -sS "$URL/kf_schedule_tick" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 100; echo
           curl -fsS "$URL/kf_live" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" -d '{}' | head -c 300; echo

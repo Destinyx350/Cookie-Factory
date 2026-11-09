@@ -50,19 +50,22 @@ td,th{text-align:left;vertical-align:top;padding:6px 8px;border-top:1px solid va
 <tr><th>What you use</th><th>What is stored</th></tr>
 <tr><td>Every game</td><td>A random player ID (not linked to your name), how many cookies you baked and when you last played (live counter, daily player numbers kept for 120 days), and which first steps you reached (for example "first building"). Anonymous crash reports: the error text, where in the code it happened, the game version and your browser type (the newest 300 are kept).</td></tr>
 <tr><td>Leaderboard</td><td>The bakery name you choose, your score and when it was updated.</td></tr>
-<tr><td>Account</td><td>Your username, your password only as a one-way hash (bcrypt, nobody can read it), your account save, a few public profile numbers (achievements, buildings, title), sign-in sessions (also only as hashes).</td></tr>
+<tr><td>Account</td><td>Your username, your password only as a one-way hash (bcrypt, nobody can read it), your account save, a few public profile numbers (achievements, buildings, title), sign-in sessions (also only as hashes). If your account save grows far faster than the game allows, the old and new cookie totals are noted for the owner to check; your save is kept.</td></tr>
 <tr><td>Clubs, chat, friends, gifts</td><td>Your club membership, chat messages (each club keeps its last 200), reactions, friend list, gifts and messages from the admin, invites.</td></tr>
 <tr><td>Reports, bans, appeals</td><td>Chat reports you send or that concern you, mutes and bans with their reason, and ban appeals you write.</td></tr>
 <tr><td>Feedback</td><td>What you write, the kind (bug, idea, other), the game version, your browser type and – if you're signed in – your username (the newest 500 are kept).</td></tr>
 <tr><td>Push notifications</td><td>Your browser's push address and keys, only if you turn notifications on.</td></tr>
 </table>
 
+<h3>How long things are kept</h3>
+<p>The server deletes old data on its own: player IDs not seen for a year, daily player numbers after 120 days, sign-in sessions unused for 180 days, claimed gifts and messages after 90 days, finished reports after 90 days, crash reports after 60 days. Your account, its save and your leaderboard entry stay until you delete them.</p>
+
 <h3>Your internet address</h3>
 <p>To stop spam and abuse (for example too many new accounts from one device), the game turns your IP address into a one-way code (hash) and stores only that code for a short time. The address itself isn't stored by the game. Our hosting providers keep their own short technical logs (see below).</p>
 
 <h2>Services we use</h2>
 <ul>
-<li><b>GitHub Pages</b> hosts the game files. GitHub can see your IP address when you load the game.</li>
+<li><b>GitHub Pages</b> hosts the game files. GitHub can see your IP address when you load the game. GitHub also keeps an encrypted copy of the weekly server backup for 90 days; only the owner has the key.</li>
 <li><b>Supabase</b> runs the database for all online features.</li>
 <li><b>Google Fonts</b> provides the two fonts, so your browser connects to Google when the game loads.</li>
 <li><b>Push services</b> of your browser maker (Google, Apple, Mozilla, Microsoft) deliver notifications if you turn them on.</li>
@@ -71,7 +74,7 @@ td,th{text-align:left;vertical-align:top;padding:6px 8px;border-top:1px solid va
 
 <h2>Deleting your data</h2>
 <ul>
-<li><b>Account:</b> Settings → Saving → your account → "Delete account". This removes your account, its save, profile, sessions, friends and club membership. Chat messages you wrote stay in the chat under your name until they scroll away; weekly server backups are replaced within about 6 weeks.</li>
+<li><b>Account:</b> Settings → Saving → your account → "Delete account". This removes your account, its save, profile, sessions, friends and club membership. Chat messages you wrote stay in the chat under your name until they scroll away; weekly server backups are replaced within about 6 weeks, and their encrypted copies at GitHub are deleted after 90 days.</li>
 <li><b>Leaderboard entry, chat messages or anything else:</b> ask with "Send feedback" in Settings → Game, or open an issue on <a href="https://github.com/Destinyx350/Cookie-Factory/issues" rel="noopener">GitHub</a>.</li>
 <li><b>Everything on your device:</b> clear this site's data in your browser settings.</li>
 </ul>
@@ -98,19 +101,22 @@ td,th{text-align:left;vertical-align:top;padding:6px 8px;border-top:1px solid va
 <tr><th>Was du nutzt</th><th>Was gespeichert wird</th></tr>
 <tr><td>Jedes Spiel</td><td>Eine zufällige Spieler-ID (nicht mit deinem Namen verbunden), wie viele Kekse du gebacken hast und wann du zuletzt gespielt hast (Live-Zähler, tägliche Spielerzahlen werden 120 Tage aufbewahrt), und welche ersten Schritte du erreicht hast (zum Beispiel „erstes Gebäude“). Anonyme Absturzberichte: Fehlertext, Stelle im Code, Spielversion und Browser-Typ (die neuesten 300 bleiben).</td></tr>
 <tr><td>Bestenliste</td><td>Der Bäckerei-Name, den du wählst, deine Punkte und wann sie aktualisiert wurden.</td></tr>
-<tr><td>Konto</td><td>Dein Benutzername, dein Passwort nur als Einweg-Hash (bcrypt, niemand kann es lesen), dein Konto-Spielstand, ein paar öffentliche Profilzahlen (Erfolge, Gebäude, Titel), Anmelde-Sitzungen (ebenfalls nur als Hash).</td></tr>
+<tr><td>Konto</td><td>Dein Benutzername, dein Passwort nur als Einweg-Hash (bcrypt, niemand kann es lesen), dein Konto-Spielstand, ein paar öffentliche Profilzahlen (Erfolge, Gebäude, Titel), Anmelde-Sitzungen (ebenfalls nur als Hash). Wächst dein Konto-Spielstand viel schneller, als das Spiel erlaubt, werden der alte und der neue Keks-Stand für den Betreiber zur Prüfung notiert; dein Spielstand bleibt erhalten.</td></tr>
 <tr><td>Clubs, Chat, Freunde, Geschenke</td><td>Deine Club-Mitgliedschaft, Chat-Nachrichten (jeder Club behält die letzten 200), Reaktionen, Freundesliste, Geschenke und Nachrichten vom Admin, Einladungen.</td></tr>
 <tr><td>Meldungen, Sperren, Einsprüche</td><td>Chat-Meldungen, die du schickst oder die dich betreffen, Stummschaltungen und Sperren mit Grund, und Einsprüche, die du schreibst.</td></tr>
 <tr><td>Feedback</td><td>Was du schreibst, die Art (Fehler, Idee, Sonstiges), die Spielversion, dein Browser-Typ und – wenn du angemeldet bist – dein Benutzername (die neuesten 500 bleiben).</td></tr>
 <tr><td>Push-Benachrichtigungen</td><td>Die Push-Adresse und Schlüssel deines Browsers, nur wenn du Benachrichtigungen einschaltest.</td></tr>
 </table>
 
+<h3>Wie lange Daten bleiben</h3>
+<p>Der Server löscht alte Daten von selbst: Spieler-IDs, die ein Jahr nicht gesehen wurden, tägliche Spielerzahlen nach 120 Tagen, Anmelde-Sitzungen nach 180 Tagen ohne Nutzung, abgeholte Geschenke und Nachrichten nach 90 Tagen, erledigte Meldungen nach 90 Tagen, Absturzberichte nach 60 Tagen. Dein Konto, sein Spielstand und dein Eintrag in der Bestenliste bleiben, bis du sie löschst.</p>
+
 <h3>Deine Internet-Adresse</h3>
 <p>Gegen Spam und Missbrauch (zum Beispiel zu viele neue Konten von einem Gerät) macht das Spiel aus deiner IP-Adresse einen Einweg-Code (Hash) und speichert nur diesen Code für kurze Zeit. Die Adresse selbst speichert das Spiel nicht. Unsere Hosting-Anbieter führen eigene, kurze technische Protokolle (siehe unten).</p>
 
 <h2>Genutzte Dienste</h2>
 <ul>
-<li><b>GitHub Pages</b> stellt die Spieldateien bereit. GitHub sieht deine IP-Adresse, wenn du das Spiel lädst.</li>
+<li><b>GitHub Pages</b> stellt die Spieldateien bereit. GitHub sieht deine IP-Adresse, wenn du das Spiel lädst. GitHub bewahrt außerdem 90 Tage lang eine verschlüsselte Kopie des wöchentlichen Server-Backups auf; den Schlüssel hat nur der Betreiber.</li>
 <li><b>Supabase</b> betreibt die Datenbank für alle Online-Funktionen.</li>
 <li><b>Google Fonts</b> liefert die zwei Schriftarten, dein Browser verbindet sich also beim Laden mit Google.</li>
 <li><b>Push-Dienste</b> deines Browser-Herstellers (Google, Apple, Mozilla, Microsoft) stellen Benachrichtigungen zu, wenn du sie einschaltest.</li>
@@ -119,7 +125,7 @@ td,th{text-align:left;vertical-align:top;padding:6px 8px;border-top:1px solid va
 
 <h2>Daten löschen</h2>
 <ul>
-<li><b>Konto:</b> Einstellungen → Speichern → dein Konto → „Konto löschen“. Das entfernt Konto, Spielstand, Profil, Sitzungen, Freunde und Club-Mitgliedschaft. Chat-Nachrichten bleiben unter deinem Namen im Chat, bis sie herausrutschen; die wöchentlichen Server-Backups werden innerhalb von etwa 6 Wochen ersetzt.</li>
+<li><b>Konto:</b> Einstellungen → Speichern → dein Konto → „Konto löschen“. Das entfernt Konto, Spielstand, Profil, Sitzungen, Freunde und Club-Mitgliedschaft. Chat-Nachrichten bleiben unter deinem Namen im Chat, bis sie herausrutschen; die wöchentlichen Server-Backups werden innerhalb von etwa 6 Wochen ersetzt, ihre verschlüsselten Kopien bei GitHub nach 90 Tagen gelöscht.</li>
 <li><b>Eintrag in der Bestenliste, Chat-Nachrichten oder anderes:</b> frag über „Feedback senden“ unter Einstellungen → Spiel oder auf <a href="https://github.com/Destinyx350/Cookie-Factory/issues" rel="noopener">GitHub</a>.</li>
 <li><b>Alles auf deinem Gerät:</b> lösche die Website-Daten in den Browser-Einstellungen.</li>
 </ul>

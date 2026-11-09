@@ -53,7 +53,7 @@ Run [`leaderboard-v2.sql`](leaderboard-v2.sql) once in the **SQL Editor** (clear
 
 Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.sql`. All are safe to run again.
 
-1. [`online-v3.sql`](online-v3.sql): admin codes, announcements, global events, the live counter and cloud transfer codes.
+1. [`online-v3.sql`](online-v3.sql): admin codes, announcements, global events, and the live counter (its cloud transfer codes were removed again in part 13).
 2. [`accounts-v4.sql`](accounts-v4.sql): username + password accounts with a cloud save.
 3. [`clubs-v5.sql`](clubs-v5.sql): bakery clubs (up to 30 members, club chat, weekly prizes for the top 3 clubs) and gifts (daily limits: 50 gems, 5 star crumbs and 10 gifts sent; 60 gems and 6 star crumbs received).
 
@@ -66,12 +66,14 @@ Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.
 10. [`admin-v11.sql`](admin-v11.sql): account bans (sign-in and every online feature blocked, with the reason shown; optionally the player's devices too).
 11. [`staff-v12.sql`](staff-v12.sql): moderator logins, ban appeals, two-step sign-in for the server password, and the weekly summary.
 12. [`community-v13.sql`](community-v13.sql): club levels, player feedback, and push alerts for the owner and moderators (the alerts also need the updated `kf-push` edge function, which opens admin.html when you tap an alert).
+13. [`server-v14.sql`](server-v14.sql): automatic cleanup of old data, the database usage card, checks for unrealistic account-save jumps, planned events and announcements, the off-site backup function, and removes the transfer codes.
 
 The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password. Since version 52 the admin panel is only in `admin.html` (https://destinyx350.github.io/Cookie-Factory/admin.html), not in the game players get.
 
 ## Anti-cheat
 
-- Saves changed outside the game (browser tools, edited files or text) are flagged and can't join.
+- Saves changed outside the game (browser tools or edited files) are flagged and can't join.
+- Account saves that jump far beyond what the game allows are flagged in the admin **Moderation** tab (⚠️ Suspicious saves). The save is kept; you decide (OK or ban).
 - The database rejects new entries above 1e15 cookies, and scores that grow more than 10x per 5 minutes (above 100 million). The game sends a score every minute and caps it just under this limit, so honest players are never rejected; their score catches up within minutes.
 - If your project was set up before version 37, run [`leaderboard-anticheat-update.sql`](leaderboard-anticheat-update.sql) once in the **SQL Editor** to add the database check.
 
@@ -88,3 +90,26 @@ The game runs in the browser, so a determined cheater could still send a made-up
   `update public.kf_admin_auth set totp_on = false, totp_secret = null;`
 - **Moderators:** add them in **Online → Moderation → 👮 Moderators** and give them the name and password in person. They open admin.html, go to Settings → Admin and use **Moderator? Sign in here**. They don't need (and shouldn't get) the admin panel password.
 
+
+## Off-site backups (version 56)
+
+Supabase keeps the weekly backups inside the same project. An encrypted copy is also kept at GitHub, so the game survives even if the project is lost.
+
+1. Open admin.html → **Online** → **Server** → **Off-site backups** → **Create key**. The key is shown once.
+2. In GitHub open **Settings → Secrets and variables → Actions → New repository secret**. Name `KF_BACKUP_KEY`, value: the key. Also keep the key in your password manager.
+3. Test it: **Actions → Off-site backup → Run workflow**. It then runs every Monday and keeps each copy for 90 days (download it under the run's **Artifacts**).
+
+Opening a copy: unzip the downloaded artifact, then run
+
+```bash
+KF_BACKUP_KEY=<your key> node tools/decrypt-backup.js kf-backup-YYYY-MM-DD.json.gz.enc
+```
+
+It writes `kf-backup-YYYY-MM-DD.json` with every table's rows (accounts and saves, clubs, the leaderboard …). To restore single players, put the snapshot back into the backups list in the **SQL Editor** and use **Restore account** in the admin **Server** tab:
+
+```sql
+insert into public.kf_backups (kind, counts, data)
+values ('manual', '<the "counts" part of the file>'::jsonb, '<the "data" part of the file>'::jsonb);
+```
+
+A new key (or **Turn off**) stops the old one at once; update the GitHub secret after making a new key. Copies made with an old key still open with that old key.

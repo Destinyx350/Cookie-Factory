@@ -44,8 +44,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=55;
+const NEWS_VER=56;
 const NEWS=[
+  {v:56,sum:['Einfacher speichern und ein sichererer Server','Simpler saving and a safer server'],items:[
+    ['change','Einfacher speichern: Dein Konto und die Spielstand-Datei sind die zwei Wege, deine Bäckerei auf ein anderes Gerät mitzunehmen. Transfer-Code und Spielstand-Text gibt es nicht mehr.','Simpler saving: your account and the save file are the two ways to take your bakery to another device. The transfer code and the save text are gone.'],
+    ['new','Geplante Events: Events und Ankündigungen starten jetzt auch zu festen Zeiten, manche jede Woche – halte Ausschau!','Planned events: events and announcements now also start at set times, some every week – keep an eye out!'],
+    ['new','Sicherer Server: Eine verschlüsselte Kopie des wöchentlichen Backups liegt jetzt außerhalb des Spielservers, und alte Daten werden automatisch gelöscht.','Safer server: an encrypted copy of the weekly backup is now kept outside the game server, and old data is deleted automatically.'],
+    ['change','Fairer: Unrealistische Sprünge in Konto-Spielständen werden geprüft. Dein Spielstand wird dabei nie gelöscht.','Fairer: unrealistic jumps in account saves are checked. Your save is never deleted by this.']]},
   {v:55,sum:['Neuer Soundtrack und 3D-Grafik!','A new soundtrack and 3D graphics!'],items:[
     ['new','Neuer Soundtrack: 7 Stücke mit echten Instrumenten (E-Piano, Streicher, Blech, Glocken, Kontrabass, Schlagzeug), Hall und Echo – Morgenbäckerei, Fabrik-Groove, Nachtschicht, Großes Abenteuer, Showdown, Sternenaufstieg und Keks-Fest.','New soundtrack: 7 tracks with real instruments (electric piano, strings, brass, bells, upright bass, drums), reverb and echo – Morning Bakery, Factory Groove, Night Shift, Great Adventure, Showdown, Starry Ascension and Cookie Festival.'],
     ['new','Die Musik passt sich an: Sie wird voller bei Combos und Boosts, spielt nachts Jazz und im Kampf den Showdown.','The music adapts: it gets fuller during combos and boosts, plays jazz at night and the Showdown in fights.'],
