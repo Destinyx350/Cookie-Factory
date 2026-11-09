@@ -323,6 +323,7 @@ module.exports = async function browserTests(url) {
   // 5h. Privacy page, feedback, club levels, admin feedback and alerts (v54)
   await settings(a, 'game');
   check(await a.isVisible('#fbSetBtn') && (await a.getAttribute('#privSetBtn', 'href')) === 'privacy.html', 'Settings has "Send feedback" and the privacy link');
+  check((await a.getAttribute('#itchSetBtn', 'href')) === 'https://destinyx350.itch.io/cookie-factory' && /itch\.io/.test(await text(a, '#itchSetBtn')), 'Settings links to the itch.io page');
   const pv = await a.context().newPage(); await pv.goto(url + 'privacy.html');
   check(/In short/.test(await text(pv, '#en')) && /Kurz gesagt/.test(await text(pv, '#de')), 'the privacy page has English and German'); await pv.close();
   await a.click('#fbSetBtn'); await a.waitForSelector('#fbF', { timeout: 5000 });
@@ -435,6 +436,7 @@ module.exports = async function browserTests(url) {
     const werr = []; w.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|ERR_FAILED/.test(m.text())) werr.push(m.text()); }); w.on('pageerror', e => werr.push(e.message));
     await w.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
     await w.goto(url + 'welcome.html'); await w.waitForTimeout(500);
+    check(await w.locator('a[href="https://destinyx350.itch.io/cookie-factory"]').count() >= 2, 'the landing page links to itch.io');
     check((await w.getAttribute('.hero .btn.play', 'href')) === './' && await w.isVisible('.video video') && (await w.getAttribute('.video video', 'src')) === 'docs/trailer.mp4', 'the landing page has the trailer and a Play button');
     await w.click('.lang [data-l=de]');
     check(await w.evaluate(() => document.documentElement.lang === 'de' && /Jetzt spielen/.test(document.querySelector('.hero .btn.play').innerText)), 'the landing page switches to German');

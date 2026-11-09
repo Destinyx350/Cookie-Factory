@@ -6,6 +6,7 @@
 *Backe, baue und erobere das Keks-Universum!*
 
 [![Play now](https://img.shields.io/badge/▶%20Play%20now-Jetzt%20spielen-ffb347?style=for-the-badge&labelColor=2a1a04)](https://destinyx350.github.io/Cookie-Factory/)
+[![On itch.io](https://img.shields.io/badge/itch.io-Cookie%20Factory-fa5c5c?style=for-the-badge&logo=itchdotio&logoColor=white&labelColor=2a1a04)](https://destinyx350.itch.io/cookie-factory)
 
 ![Languages: German and English](https://img.shields.io/badge/languages-DE%20%7C%20EN-6c4ad6?style=flat-square)
 ![Runs in your browser](https://img.shields.io/badge/runs%20in-your%20browser-5fd39a?style=flat-square)
@@ -13,7 +14,7 @@
 
 <a href="https://destinyx350.github.io/Cookie-Factory/docs/trailer.mp4"><img src="docs/trailer.gif" alt="Cookie Factory trailer: clicking the 3D cookie, buying buildings and the world map (click for the full video)" width="640"></a>
 
-🎬 [Watch the trailer](https://destinyx350.github.io/Cookie-Factory/docs/trailer.mp4) · 🌐 [Game website](https://destinyx350.github.io/Cookie-Factory/welcome.html)
+🎬 [Watch the trailer](https://destinyx350.github.io/Cookie-Factory/docs/trailer.mp4) · 🌐 [Game website](https://destinyx350.github.io/Cookie-Factory/welcome.html) · 🎮 [itch.io](https://destinyx350.itch.io/cookie-factory)
 
 <img src="docs/start-screen.png" alt="Cookie Factory start screen" width="820">
 
@@ -114,27 +115,17 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 59
-- **New start screen:** a small animated bakery with smoke from the chimney, glowing windows (stars and moon at night) and your bakery's name on the sign.
-- **Your own tab bar:** reorder tabs and hide the ones you don't use under **Settings → Display** (this device only; Build always stays).
-- **Smarter building cards:** a bar shows the way to the next milestone, and a switch shows buildings as a list or a compact grid.
-- **Your history:** **Goals → Statistics** has charts of your cookies and production over 3 days, 30 days or all time, with 👼 marks for ascensions.
-- **Welcome back:** the cookies you baked while away count up, everything that happened slides in, and **Collect all** picks up rewards and finished expeditions in one tap.
-- **Feels better:** tabs fade in, new buildings slide into the list, and phones vibrate softly on taps, golden cookies and achievements (can be turned off under **Settings → Sound**).
+### Version 60
+- **Cookie Factory is on itch.io:** play it at [destinyx350.itch.io/cookie-factory](https://destinyx350.itch.io/cookie-factory). **Settings → Game** has a "Rate us on itch.io" button, and the game website links there too.
 
-Also new since version 58: recovery codes, a device list, live club chat and a faster, safer server.
+Also new since version 59: a new start screen with your bakery, your own tab bar, smarter building cards, a history chart, a better welcome-back screen and vibration on phones.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neuer Startbildschirm:** eine kleine animierte Bäckerei mit Rauch aus dem Schornstein, leuchtenden Fenstern (nachts mit Sternen und Mond) und dem Namen deiner Bäckerei auf dem Schild.
-- **Deine eigene Tab-Leiste:** Tabs umsortieren und nicht genutzte ausblenden unter **Einstellungen → Anzeige** (nur dieses Gerät; Bauen bleibt immer).
-- **Schlauere Gebäude-Karten:** ein Balken zeigt den Weg zum nächsten Meilenstein, und ein Schalter zeigt Gebäude als Liste oder kompaktes Raster.
-- **Dein Verlauf:** **Ziele → Statistik** zeigt Diagramme deiner Kekse und Produktion über 3 Tage, 30 Tage oder alles, mit 👼 für Aufstiege.
-- **Willkommen zurück:** Die Kekse aus deiner Abwesenheit zählen hoch, alles Passierte gleitet herein, und **Alles einsammeln** holt Belohnungen und fertige Expeditionen mit einem Tipp.
-- **Fühlt sich besser an:** Tabs blenden weich ein, neue Gebäude gleiten in die Liste, und Handys vibrieren sanft bei Tipps, Goldkeksen und Erfolgen (abschaltbar unter **Einstellungen → Ton**).
+- **Die Keksfabrik ist auf itch.io:** spiel sie auf [destinyx350.itch.io/cookie-factory](https://destinyx350.itch.io/cookie-factory). Unter **Einstellungen → Spiel** gibt es einen Knopf „Auf itch.io bewerten“, und die Website verlinkt ebenfalls dorthin.
 
-Außerdem neu seit Version 58: Wiederherstellungs-Codes, eine Geräte-Liste, Live-Club-Chat und ein schnellerer, sichererer Server.
+Außerdem neu seit Version 59: ein neuer Startbildschirm mit deiner Bäckerei, eine eigene Tab-Leiste, schlauere Gebäude-Karten, ein Verlaufs-Diagramm, ein besserer Willkommen-zurück-Bildschirm und Vibration auf Handys.
 
 </details>
 

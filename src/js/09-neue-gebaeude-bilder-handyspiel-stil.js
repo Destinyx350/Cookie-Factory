@@ -44,8 +44,10 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=59;
+const NEWS_VER=60;
 const NEWS=[
+  {v:60,sum:['Die Keksfabrik ist auf itch.io!','Cookie Factory is on itch.io!'],items:[
+    ['new','itch.io: Die Keksfabrik hat jetzt eine Seite auf itch.io (destinyx350.itch.io/cookie-factory). Eine Bewertung oder ein Kommentar dort hilft dem Spiel sehr – der Knopf ist unter Einstellungen → Spiel.','itch.io: Cookie Factory now has a page on itch.io (destinyx350.itch.io/cookie-factory). A rating or comment there helps the game a lot – the button is under Settings → Game.']]},
   {v:59,sum:['Neuer Start, eigene Tabs und dein Verlauf','A new start, your own tabs and your history'],items:[
     ['new','Startbildschirm: eine kleine Bäckerei mit rauchendem Schornstein, leuchtenden Fenstern und deinem Bäckerei-Namen auf dem Schild – nachts mit Mond und Sternen.','Start screen: a little bakery with a smoking chimney, glowing windows and your bakery’s name on the sign – with moon and stars at night.'],
     ['new','Tab-Leiste: Sortiere die Tabs um und blende aus, was du nicht brauchst (Einstellungen → Anzeige).','Tab bar: reorder the tabs and hide what you don’t need (Settings → Display).'],
