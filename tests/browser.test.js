@@ -42,7 +42,7 @@ module.exports = async function browserTests(url) {
     await p.fill('#accF [name=user]', user); await p.fill('#accF [name=pass]', 'cookies123'); await p.click('#accF button[type=submit]');
     await p.waitForSelector('#accBox .accme', { timeout: 8000 }).catch(() => {});
     // v58: a new account shows its recovery code once
-    if (await p.waitForSelector('#recCode', { timeout: 5000 }).then(() => true, () => false)) await p.click('#accYes');
+    if (await p.waitForSelector('#accAskOv:not([hidden]) #recCode', { timeout: 15000 }).then(() => true, () => false)) { await p.click('#accYes'); await p.waitForSelector('#accAskOv', { state: 'hidden', timeout: 5000 }).catch(() => {}); }
     await p.click('#setClose');
   };
   const goals = p => p.evaluate(() => document.querySelector('[data-tab="ach"]').click());
@@ -68,7 +68,8 @@ module.exports = async function browserTests(url) {
   check(!!link, 'joining the leaderboard links the spot to the account');
   await a.click('#lbClose');
   await b.reload(); await b.locator('#startOv [data-lang=en]').click(); await b.waitForTimeout(1500);
-  if (await b.isVisible('#accAskOv')) await b.click('#accYes');
+  // the "which bakery" question can come late on slow machines
+  if (await b.waitForSelector('#accAskOv:not([hidden])', { timeout: 6000 }).then(() => true, () => false)) { await b.click('#accYes'); await b.waitForSelector('#accAskOv', { state: 'hidden', timeout: 5000 }).catch(() => {}); }
   await b.click('#stGo'); await b.waitForTimeout(2500);
   if (await b.isVisible('#accAskOv')) await b.click('#accYes');
   await b.waitForTimeout(2000);
