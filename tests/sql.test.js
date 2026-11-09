@@ -500,7 +500,8 @@ module.exports = async function sqlTests() {
     await expectError(rpc(f, {}), /permission denied/, 'players cannot start the server job ' + f);
   await expectError(asAnon('select * from public.kf_schema'), /permission denied/, 'players cannot read kf_schema');
   check((await q("select to_regclass('public.lb_admin') t")).rows[0].t === null, 'the old leaderboard password table is gone');
-  check((await q("select count(*)::int n from pg_indexes where schemaname = 'public' and indexname in ('kf_sessions_account','kf_wars_a','kf_wars_b','kf_gifts_from','kf_club_week_club','kf_presence_seen')")).rows[0].n === 6, 'the missing indexes are there');
+  check((await q("select count(*)::int n from pg_indexes where schemaname = 'public' and indexname in ('kf_sessions_account','kf_wars_club_a_idx','kf_wars_club_b_idx','kf_gifts_from','kf_club_week_club','kf_presence_seen')")).rows[0].n === 6, 'the missing indexes are there');
+  check((await q("select count(*)::int n from pg_indexes where indexname = 'kf_rate_lookup'")).rows[0].n === 0, 'no duplicate index on kf_rate');
   check((await q("select count(*)::int n from pg_constraint where contype = 'p' and conrelid in ('public.kf_rate'::regclass, 'public.kf_login_fails'::regclass, 'public.kf_admin_fails'::regclass)")).rows[0].n === 3, 'the log tables have primary keys');
   check((await q("select array_agg(part order by part) a from kf_schema")).rows[0].a.length === 16, 'all 16 server parts are listed');
   // made-up player ids
