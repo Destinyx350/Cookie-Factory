@@ -11,6 +11,10 @@
 ![Runs in your browser](https://img.shields.io/badge/runs%20in-your%20browser-5fd39a?style=flat-square)
 ![No install needed](https://img.shields.io/badge/install-none%20needed-98a2ad?style=flat-square)
 
+<a href="https://destinyx350.github.io/Cookie-Factory/docs/trailer.mp4"><img src="docs/trailer.gif" alt="Cookie Factory trailer: clicking the 3D cookie, buying buildings and the world map (click for the full video)" width="640"></a>
+
+🎬 [Watch the trailer](https://destinyx350.github.io/Cookie-Factory/docs/trailer.mp4) · 🌐 [Game website](https://destinyx350.github.io/Cookie-Factory/welcome.html)
+
 <img src="docs/start-screen.png" alt="Cookie Factory start screen" width="820">
 
 </div>
@@ -56,7 +60,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. Shared links show a preview card. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
 | 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools or edited files) is flagged, the leaderboard rejects scores that grow too fast, and the server flags account saves that jump unrealistically. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
-| 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries and optional two-step sign-in. Moderators get their own logins that can only handle reports and mutes. The admin can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player, who can appeal), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and player feedback, see how far new players get (day 2 and day 7 return rates), compare each week with the one before, get push alerts for new reports, appeals, feedback, crashes and suspicious saves, plan events and announcements (once or every week), and see how full the database is. Old data is cleaned up automatically and an encrypted copy of the weekly backup is kept outside Supabase. |
+| 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries and optional two-step sign-in. Moderators get their own logins that can only handle reports and mutes. The admin can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player, who can appeal), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and player feedback, see how far new players get (day 2 and day 7 return rates), compare each week with the one before, get push alerts for new reports, appeals, feedback, crashes and suspicious saves, plan events and announcements (once or every week), see how full the database is, follow a live dashboard with charts, and get an automatic weekly report with to-dos every Monday. Old data is cleaned up automatically and an encrypted copy of the weekly backup is kept outside Supabase. |
 | 💬 **Feedback and privacy** | Send bug reports and ideas from Settings → Game. The [privacy info](https://destinyx350.github.io/Cookie-Factory/privacy.html) explains what the game stores. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
@@ -101,7 +105,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit; Wochen- und Monatspreise für die Top 3, Updates jede Minute
 - 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, die Bestenliste lehnt zu schnell wachsende Punkte ab, und der Server meldet unrealistische Sprünge in Konto-Spielständen; dazu Wortfilter, Melde-Knopf im Club-Chat und Limits pro Gerät
-- 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort, eigenem Server-Passwort und Zwei-Schritt-Anmeldung für die Online-Werkzeuge, dazu Moderatoren-Zugänge: Meldungen, Spielersuche, Stummschalten, Sperren mit Einspruch, Wochenbericht, Spieler-Feedback, Push-Alarme, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte, geplante Events und Ankündigungen, verdächtige Spielstände, Datenbank-Füllstand, automatisches Aufräumen und verschlüsselte Backups außerhalb von Supabase und Spieler-Weg
+- 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort, eigenem Server-Passwort und Zwei-Schritt-Anmeldung für die Online-Werkzeuge, dazu Moderatoren-Zugänge: Meldungen, Spielersuche, Stummschalten, Sperren mit Einspruch, Wochenbericht, Spieler-Feedback, Push-Alarme, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte, geplante Events und Ankündigungen, Live-Dashboard mit Diagrammen, Wochenbericht jeden Montag, verdächtige Spielstände, Datenbank-Füllstand, automatisches Aufräumen und verschlüsselte Backups außerhalb von Supabase und Spieler-Weg
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
 **[▶ Jetzt spielen](https://destinyx350.github.io/Cookie-Factory/)**
@@ -110,19 +114,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 56
-- **Simpler saving:** your account and the save file are the two ways to take your bakery along. The transfer code and the save text are gone.
-- **Safer server:** the database cleans up old data on its own, an encrypted copy of the weekly backup is kept outside the game server, and unrealistic save jumps are checked. Events and announcements can now be planned ahead, even every week.
+### Version 57
+- **New:** a [game website](https://destinyx350.github.io/Cookie-Factory/welcome.html) with a gameplay [trailer](https://destinyx350.github.io/Cookie-Factory/docs/trailer.mp4), screenshots and how to install the game as an app. It's in English and German.
+- **Owner tools:** a live dashboard with charts (players, new players, accounts and crashes per day; languages, devices and where people play) and an automatic weekly report with to-dos, sent as a push every Monday.
 
-Also new since version 55: a new soundtrack with 7 tracks and 3D graphics.
+Also new since version 56: simpler saving (account and save file), planned events, and a safer server with cleanup, save checks and off-site backups.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Einfacher speichern:** Dein Konto und die Spielstand-Datei sind die zwei Wege, deine Bäckerei mitzunehmen. Transfer-Code und Spielstand-Text gibt es nicht mehr.
-- **Sicherer Server:** Die Datenbank räumt alte Daten von selbst auf, eine verschlüsselte Kopie des wöchentlichen Backups liegt außerhalb des Spielservers, und unrealistische Sprünge im Spielstand werden geprüft. Events und Ankündigungen lassen sich jetzt im Voraus planen, auch jede Woche.
+- **Neu:** eine [Website zum Spiel](https://destinyx350.github.io/Cookie-Factory/welcome.html) mit [Trailer](https://destinyx350.github.io/Cookie-Factory/docs/trailer.mp4), Bildern und einer Anleitung, wie man das Spiel als App installiert. Auf Deutsch und Englisch.
+- **Für den Betreiber:** ein Live-Dashboard mit Diagrammen (Spieler, neue Spieler, Konten und Abstürze pro Tag; Sprachen, Geräte und wo gespielt wird) und ein automatischer Wochenbericht mit Aufgaben, jeden Montag als Push.
 
-Außerdem neu seit Version 55: ein neuer Soundtrack mit 7 Stücken und 3D-Grafik.
+Außerdem neu seit Version 56: einfacher speichern (Konto und Spielstand-Datei), geplante Events und ein sichererer Server mit Aufräumen, Spielstand-Prüfung und Backups außerhalb.
 
 </details>
 
@@ -139,6 +143,8 @@ python3 -m http.server 8000
 ```
 
 Then open http://localhost:8000.
+
+A gameplay trailer is recorded automatically with `node tools/trailer.js` (writes `docs/trailer.mp4`, `docs/trailer.jpg` and `docs/trailer.gif`; `--phone` makes an upright version for social media). The game website is `welcome.html`.
 
 For game portals (itch.io, CrazyGames, …) `node tools/portal.js` builds an upload folder in `dist/portal/`. GitHub also builds it as a download after every update; see [docs/PORTALS.md](docs/PORTALS.md) for the steps and store texts.
 

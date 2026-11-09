@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-l83ts8JHd+cPBXy86XVrSLZOko62yAKv/67m/WnSAms='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; media-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Cookie Factory · Keksfabrik – free idle game</title>
+<meta name="description" content="Bake, build and explore a whole cookie universe. A free idle game in your browser – no download, works offline, English and German.">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="canonical" href="https://destinyx350.github.io/Cookie-Factory/welcome.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cookie Factory · Keksfabrik">
+<meta property="og:title" content="Cookie Factory · Keksfabrik – free idle game">
+<meta property="og:description" content="Bake, build and conquer the cookie universe! Free in your browser, no install. · Backe, baue und erobere das Keks-Universum!">
+<meta property="og:url" content="https://destinyx350.github.io/Cookie-Factory/welcome.html">
+<meta property="og:image" content="https://destinyx350.github.io/Cookie-Factory/docs/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:video" content="https://destinyx350.github.io/Cookie-Factory/docs/trailer.mp4">
+<meta property="og:video:type" content="video/mp4">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap">
+<style>
+:root{--bg:#120e1f;--bg2:#1b1430;--panel:#231a3b;--panel2:#2c2149;--text:#f5f0ff;--muted:#c3b8de;--gold:#ffc23d;--gold2:#ffd36a;--ink:#2a1a00;--edge:rgba(255,255,255,.12);--r:18px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+html:not([data-l="de"]) [lang="de"],html[data-l="de"] [lang="en"]{display:none!important}
+a{color:var(--gold2)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+h1,h2,h3,.big{font-family:Fredoka,system-ui,sans-serif;line-height:1.15}
+header.top{position:sticky;top:0;z-index:5;background:rgba(18,14,31,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--edge)}
+header.top .wrap{display:flex;align-items:center;gap:10px;height:58px}
+.brand{display:flex;align-items:center;gap:8px;font:600 19px Fredoka,system-ui,sans-serif;color:var(--text);text-decoration:none;margin-right:auto;white-space:nowrap}
+.brand img{width:32px;height:32px;border-radius:9px}
+.lang{display:flex;border:1px solid var(--edge);border-radius:999px;padding:2px}
+.lang button{all:unset;cursor:pointer;padding:3px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--panel2);color:var(--text)}
+.lang button:focus-visible,.btn:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:999px;font:600 17px Fredoka,system-ui,sans-serif;text-decoration:none;border:1px solid var(--edge);color:var(--text);background:var(--panel);transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.play{background:var(--gold);color:var(--ink);border-color:transparent;box-shadow:0 8px 28px rgba(255,194,61,.28)}
+.btn.sm{padding:7px 14px;font-size:15px}
+.hero{position:relative;padding:56px 0 28px;text-align:center;background:radial-gradient(ellipse at 50% 0,#3a2a5e 0,transparent 65%)}
+.hero .logo{width:112px;height:112px;border-radius:28px;filter:drop-shadow(0 14px 32px rgba(0,0,0,.5));animation:pop .8s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{from{transform:scale(.5) rotate(-12deg);opacity:0}}
+.hero h1{font-size:clamp(40px,8vw,72px);margin:14px 0 6px;letter-spacing:.5px}
+.hero .tag{font-size:clamp(18px,3.4vw,24px);color:var(--gold2);margin:0 0 6px;font-family:Fredoka,system-ui,sans-serif}
+.hero .sub{color:var(--muted);margin:0 auto 22px;max-width:560px}
+.ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:18px 0 0;padding:0;list-style:none}
+.chips li{padding:4px 12px;border:1px solid var(--edge);border-radius:999px;font-size:14px;color:var(--muted);background:var(--bg2)}
+.video{margin:30px auto 0;max-width:960px;border-radius:var(--r);overflow:hidden;border:1px solid var(--edge);box-shadow:0 24px 60px rgba(0,0,0,.45);background:#000;aspect-ratio:16/9}
+.video video{display:block;width:100%;height:100%}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:34px 0 8px}
+.stats div{background:var(--bg2);border:1px solid var(--edge);border-radius:14px;padding:14px 8px;text-align:center}
+.stats b{display:block;font:700 30px Fredoka,system-ui,sans-serif;color:var(--gold2)}
+.stats span{font-size:14px;color:var(--muted)}
+section{padding:40px 0}
+section h2{font-size:clamp(26px,4.4vw,36px);margin:0 0 6px;text-align:center}
+section .lead{color:var(--muted);text-align:center;margin:0 auto 24px;max-width:620px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--edge);border-radius:var(--r);padding:18px}
+.card .ic{font-size:30px;line-height:1}
+.card h3{font-size:20px;margin:8px 0 4px}
+.card p{margin:0;color:var(--muted);font-size:15px}
+.shots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.shots figure{margin:0}
+.shots img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--edge)}
+.shots figcaption{font-size:14px;color:var(--muted);margin-top:6px;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:s}
+.steps .card h3::before{counter-increment:s;content:counter(s);display:inline-grid;place-items:center;width:28px;height:28px;margin-right:8px;border-radius:50%;background:var(--gold);color:var(--ink);font-size:16px;vertical-align:2px}
+.faq details{background:var(--panel);border:1px solid var(--edge);border-radius:14px;padding:12px 16px;margin:8px auto;max-width:760px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{color:var(--muted);margin:8px 0 0}
+.final{text-align:center;padding:48px 16px 56px;background:radial-gradient(ellipse at 50% 100%,#3a2a5e 0,transparent 70%)}
+.final h2{font-size:clamp(28px,5vw,42px);margin:0 0 16px}
+footer{border-top:1px solid var(--edge);padding:22px 0 34px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+footer nav{display:flex;gap:14px;flex-wrap:wrap}
+@media (max-width:820px){.grid,.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){
+  .grid,.steps,.shots{grid-template-columns:minmax(0,1fr)}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero{padding-top:36px}.hero .logo{width:88px;height:88px}
+  header.top .btn.sm{padding:6px 12px}
+  .brand span{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="icons/icon-192.png" alt=""><span>Cookie Factory</span></a>
+    <div class="lang" role="group" aria-label="Language · Sprache">
+      <button type="button" data-l="en" aria-pressed="true">EN</button><button type="button" data-l="de" aria-pressed="false">DE</button>
+    </div>
+    <a class="btn sm play" href="./"><span lang="en">Play</span><span lang="de">Spielen</span></a>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="wrap">
+    <img class="logo" src="icons/icon-512.png" alt="" width="112" height="112">
+    <h1><span lang="en">Cookie Factory</span><span lang="de">Keksfabrik</span></h1>
+    <p class="tag"><span lang="en">Bake. Build. Explore.</span><span lang="de">Backen. Bauen. Entdecken.</span></p>
+    <p class="sub"><span lang="en">Click the cookie, build a factory empire and explore a whole cookie universe – with monsters, a garden, helpers, clubs and a weekly leaderboard.</span><span lang="de">Klick den Keks, bau ein Fabrik-Imperium und entdecke ein ganzes Keks-Universum – mit Monstern, Garten, Helfern, Clubs und einer wöchentlichen Bestenliste.</span></p>
+    <div class="ctas">
+      <a class="btn play" href="./">▶ <span lang="en">Play now – free</span><span lang="de">Jetzt spielen – kostenlos</span></a>
+      <a class="btn" href="#trailer">🎬 <span lang="en">Watch the trailer</span><span lang="de">Trailer ansehen</span></a>
+    </div>
+    <ul class="chips">
+      <li><span lang="en">In your browser</span><span lang="de">Im Browser</span></li>
+      <li><span lang="en">No download</span><span lang="de">Ohne Download</span></li>
+      <li><span lang="en">Works offline</span><span lang="de">Läuft offline</span></li>
+      <li>English · Deutsch</li>
+    </ul>
+    <div class="video" id="trailer">
+      <video src="docs/trailer.mp4" poster="docs/trailer.jpg" controls muted playsinline loop preload="metadata" aria-label="Gameplay trailer · Gameplay-Trailer"></video>
+    </div>
+    <div class="stats">
+      <div><b>23</b><span lang="en">buildings</span><span lang="de">Gebäude</span></div>
+      <div><b>349</b><span lang="en">upgrades</span><span lang="de">Upgrades</span></div>
+      <div><b>192</b><span lang="en">achievements</span><span lang="de">Erfolge</span></div>
+      <div><b>7</b><span lang="en">music tracks</span><span lang="de">Musikstücke</span></div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2><span lang="en">What's inside</span><span lang="de">Was dich erwartet</span></h2>
+    <p class="lead"><span lang="en">An idle game that keeps opening up: new tabs, places and systems appear as your bakery grows.</span><span lang="de">Ein Idle-Spiel, das immer weiter aufgeht: Neue Tabs, Orte und Systeme erscheinen, während deine Bäckerei wächst.</span></p>
+    <div class="grid">
+      <div class="card"><div class="ic">🍪</div><h3><span lang="en">A real 3D cookie</span><span lang="de">Ein echter 3D-Keks</span></h3><p><span lang="en">Click it for combos, catch golden cookies for frenzies, and watch the numbers fly.</span><span lang="de">Klick ihn für Combos, fang Goldkekse für Rausch-Phasen und sieh die Zahlen fliegen.</span></p></div>
+      <div class="card"><div class="ic">🏭</div><h3><span lang="en">Build an empire</span><span lang="de">Bau ein Imperium</span></h3><p><span lang="en">23 buildings from the Dough Finger to the Cookie Singularity, upgrades, automation and helpers who level up.</span><span lang="de">23 Gebäude vom Teigfinger bis zur Keks-Singularität, Upgrades, Automatik und Helfer, die aufsteigen.</span></p></div>
+      <div class="card"><div class="ic">🗺️</div><h3><span lang="en">Explore the world</span><span lang="de">Entdecke die Welt</span></h3><p><span lang="en">Fight monsters, grow a garden, send expeditions, trade at the market, hatch pets and cast spells.</span><span lang="de">Kämpf gegen Monster, pflanz einen Garten, schick Expeditionen los, handle am Markt, brüte Haustiere aus und wirke Zauber.</span></p></div>
+      <div class="card"><div class="ic">📜</div><h3><span lang="en">Orders and daily goals</span><span lang="de">Aufträge und Tagesziele</span></h3><p><span lang="en">Customers order cookies, daily tasks and a login streak bring rewards, and a lucky wheel spins every day.</span><span lang="de">Kunden bestellen Kekse, Tagesaufgaben und eine Login-Serie bringen Belohnungen, und das Glücksrad dreht sich jeden Tag.</span></p></div>
+      <div class="card"><div class="ic">👥</div><h3><span lang="en">Clubs and friends</span><span lang="de">Clubs und Freunde</span></h3><p><span lang="en">Join a bakery club, chat, send gifts, and fight a club war every weekend.</span><span lang="de">Tritt einem Bäckerei-Club bei, chatte, verschick Geschenke und kämpf jedes Wochenende im Clubkrieg.</span></p></div>
+      <div class="card"><div class="ic">🏆</div><h3><span lang="en">Leaderboard and events</span><span lang="de">Bestenliste und Events</span></h3><p><span lang="en">Weekly and monthly prizes for the top 3, plus global events like double production for everyone.</span><span lang="de">Wochen- und Monatspreise für die Top 3 und dazu globale Events wie doppelte Produktion für alle.</span></p></div>
+      <div class="card"><div class="ic">👼</div><h3><span lang="en">Ascend and start again</span><span lang="de">Aufsteigen und neu beginnen</span></h3><p><span lang="en">Trade your run for heavenly chips and grow stronger every time with the ascension tree.</span><span lang="de">Tausch deinen Lauf gegen Himmelschips und werde mit dem Aufstiegsbaum jedes Mal stärker.</span></p></div>
+      <div class="card"><div class="ic">🎵</div><h3><span lang="en">A soundtrack that reacts</span><span lang="de">Musik, die mitgeht</span></h3><p><span lang="en">7 tracks with real instruments that get fuller in combos and change at night and in fights.</span><span lang="de">7 Stücke mit echten Instrumenten, die bei Combos voller werden und sich nachts und im Kampf ändern.</span></p></div>
+      <div class="card"><div class="ic">📱</div><h3><span lang="en">Any device</span><span lang="de">Jedes Gerät</span></h3><p><span lang="en">Made for phones, tablets and computers. Make a free account and keep your bakery everywhere.</span><span lang="de">Gemacht für Handy, Tablet und Computer. Mit einem kostenlosen Konto hast du deine Bäckerei überall.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span lang="en">Screenshots</span><span lang="de">Bilder aus dem Spiel</span></h2>
+    <div class="shots">
+      <figure><img src="docs/gameplay.png" alt="The bakery: cookie counter, big cookie, buildings and upgrades" width="1280" height="820" loading="lazy"><figcaption><span lang="en">Your bakery</span><span lang="de">Deine Bäckerei</span></figcaption></figure>
+      <figure><img src="docs/start-screen.png" alt="The start screen with language choice" width="1280" height="820" loading="lazy"><figcaption><span lang="en">Start in English or German</span><span lang="de">Start auf Deutsch oder Englisch</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span lang="en">Play it like an app</span><span lang="de">Spiel es wie eine App</span></h2>
+    <p class="lead"><span lang="en">Install it from the browser: it gets an icon, opens full-screen and works without internet.</span><span lang="de">Installier es direkt aus dem Browser: Es bekommt ein Symbol, öffnet im Vollbild und läuft ohne Internet.</span></p>
+    <div class="steps">
+      <div class="card"><h3><span lang="en">Open the game</span><span lang="de">Spiel öffnen</span></h3><p><span lang="en">Tap <a href="./">Play</a> on your phone, tablet or computer.</span><span lang="de">Tipp auf <a href="./">Spielen</a> – am Handy, Tablet oder Computer.</span></p></div>
+      <div class="card"><h3><span lang="en">Add it</span><span lang="de">Hinzufügen</span></h3><p><span lang="en">iPhone: Share → “Add to Home Screen”. Android and computer: the browser menu or the install icon in the address bar.</span><span lang="de">iPhone: Teilen → „Zum Home-Bildschirm“. Android und Computer: das Browser-Menü oder das Installieren-Symbol in der Adressleiste.</span></p></div>
+      <div class="card"><h3><span lang="en">Bake anywhere</span><span lang="de">Überall backen</span></h3><p><span lang="en">Your bakery keeps baking while you're away. Updates arrive on their own.</span><span lang="de">Deine Bäckerei backt weiter, während du weg bist. Updates kommen von allein.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <h2><span lang="en">Questions</span><span lang="de">Fragen</span></h2>
+    <details><summary><span lang="en">Is it free?</span><span lang="de">Ist es kostenlos?</span></summary><p><span lang="en">Yes. No purchases and no ads on this website.</span><span lang="de">Ja. Keine Käufe und keine Werbung auf dieser Website.</span></p></details>
+    <details><summary><span lang="en">Do I need an account?</span><span lang="de">Brauche ich ein Konto?</span></summary><p><span lang="en">No. Your game is saved in your browser. A free account (just a username and password, no email) keeps your bakery on every device and unlocks clubs and gifts.</span><span lang="de">Nein. Dein Spiel wird im Browser gespeichert. Ein kostenloses Konto (nur Benutzername und Passwort, ohne E-Mail) hält deine Bäckerei auf jedem Gerät und schaltet Clubs und Geschenke frei.</span></p></details>
+    <details><summary><span lang="en">What data does it store?</span><span lang="de">Welche Daten werden gespeichert?</span></summary><p><span lang="en">Only what the game needs. Everything is explained on the <a href="privacy.html">privacy page</a>.</span><span lang="de">Nur, was das Spiel braucht. Alles steht in der <a href="privacy.html">Datenschutz-Info</a>.</span></p></details>
+  </div>
+</section>
+
+<div class="final">
+  <h2><span lang="en">Your bakery is waiting.</span><span lang="de">Deine Bäckerei wartet.</span></h2>
+  <a class="btn play" href="./">▶ <span lang="en">Play now – free</span><span lang="de">Jetzt spielen – kostenlos</span></a>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><span lang="en">Made with 🍪 by</span><span lang="de">Mit 🍪 gemacht von</span> <a href="https://github.com/Destinyx350">Destinyx350</a></span>
+    <nav><a href="./"><span lang="en">Play</span><span lang="de">Spielen</span></a><a href="privacy.html"><span lang="en">Privacy</span><span lang="de">Datenschutz</span></a><a href="https://github.com/Destinyx350/Cookie-Factory">GitHub</a></nav>
+  </div>
+</footer>
+<script>
+(function(){
+  var d=document.documentElement,K='keksfabrik-welcome-lang',l='en';
+  try{l=localStorage.getItem(K)||((navigator.language||'').slice(0,2).toLowerCase()==='de'?'de':'en');}catch(e){}
+  function set(x){l=x==='de'?'de':'en';d.setAttribute('data-l',l);d.lang=l;document.title=l==='de'?'Keksfabrik · Cookie Factory – kostenloses Idle-Spiel':'Cookie Factory · Keksfabrik – free idle game';
+    var b=document.querySelectorAll('.lang button');for(var i=0;i<b.length;i++) b[i].setAttribute('aria-pressed',String(b[i].getAttribute('data-l')===l));}
+  set(l);
+  document.querySelector('.lang').addEventListener('click',function(e){var b=e.target.closest('button');if(!b) return;set(b.getAttribute('data-l'));try{localStorage.setItem(K,l);}catch(x){}});
+  var v=document.querySelector('.video video');
+  if(v&&'IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){var p=v.play();if(p&&p.catch) p.catch(function(){});}else v.pause();});},{threshold:.4}).observe(v);
+  }
+})();
+</script>
+</body>
+</html>

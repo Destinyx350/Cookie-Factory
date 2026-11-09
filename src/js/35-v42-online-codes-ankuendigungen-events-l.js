@@ -49,9 +49,14 @@ async function kfLoadNews(){
 }
 
 /* Live-Zähler */
+var kfPingX=true;
 async function kfPing(){
   if(!kfOk()||document.hidden) return;
-  try{kfLive=await lbApi('rpc/kf_ping',{p_id:kfId(),p_baked:lbCheat()?0:Math.floor(Math.min(S.all,9.9e299))});kfV3=true;if(kfLive&&kfLive.cfg) cfgApply(kfLive.cfg);}catch(x){kfNote(x);}
+  const pb={p_id:kfId(),p_baked:lbCheat()?0:Math.floor(Math.min(S.all,9.9e299))};
+  /* V57: browser language, device and where the game runs, for the owner's dashboard (older servers don't know them yet) */
+  if(kfPingX) Object.assign(pb,{p_lang:String(navigator.language||'').slice(0,2).toLowerCase(),p_dev:document.documentElement.dataset.device||null,p_src:window.KF_PORTAL?'portal':(matchMedia('(display-mode: standalone)').matches||navigator.standalone)?'app':'web'});
+  try{kfLive=await lbApi('rpc/kf_ping',pb);kfV3=true;if(kfLive&&kfLive.cfg) cfgApply(kfLive.cfg);}
+  catch(x){if(kfPingX&&lbMissing(x)){kfPingX=false;return kfPing();}kfNote(x);}
   renderLive();
 }
 function renderLive(){
