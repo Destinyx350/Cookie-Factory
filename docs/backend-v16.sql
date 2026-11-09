@@ -32,10 +32,10 @@ create index if not exists kf_push_queue_account on public.kf_push_queue (accoun
 create index if not exists kf_reports_reporter   on public.kf_reports (reporter);
 create index if not exists kf_save_flags_account on public.kf_save_flags (account);
 create index if not exists kf_sessions_account   on public.kf_sessions (account);
-create index if not exists kf_wars_a             on public.kf_wars (club_a);
-create index if not exists kf_wars_b             on public.kf_wars (club_b);
+create index if not exists kf_wars_club_a_idx    on public.kf_wars (club_a);   -- kf_wars_a/_b (part 8) start with the week
+create index if not exists kf_wars_club_b_idx    on public.kf_wars (club_b);
 create index if not exists kf_presence_seen      on public.kf_presence (seen_at);
-create index if not exists kf_rate_lookup        on public.kf_rate (kind, key, at);
+drop index if exists public.kf_rate_lookup;          -- kf_rate_idx (part 6) already covers (kind, key, at)
 alter table public.kf_login_fails add column if not exists id bigserial;
 alter table public.kf_admin_fails add column if not exists id bigserial;
 alter table public.kf_rate        add column if not exists id bigserial;
