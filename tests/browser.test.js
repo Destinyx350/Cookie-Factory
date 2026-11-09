@@ -493,6 +493,64 @@ module.exports = async function browserTests(url) {
   check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–16 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 16 parts');
   await d.click('#setClose');
 
+  // 5m. Tab bar, building cards, transitions, bakery start screen, vibration, history, welcome back (v59)
+  {
+    const ctx = await browser.newContext(Object.assign({ extraHTTPHeaders: { 'x-test-ip': '10.59.0.1' } }, PHONE));
+    await ctx.route(LB + '/**', handle); await ctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    await ctx.addInitScript(() => {
+      window.__vib = []; navigator.vibrate = p => { window.__vib.push(p); return true; };
+      const off = +(sessionStorage.getItem('dtoff') || 0);
+      if (off) { const D = Date, n = D.now.bind(D); class FD extends D { constructor(...a) { super(...(a.length ? a : [n() + off])); } static now() { return n() + off; } } window.Date = FD; }
+    });
+    const v = await ctx.newPage();
+    v.on('pageerror', e => errors.push('v59: ' + e.message)); v.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|ERR_FAILED/.test(m.text())) errors.push('v59: ' + m.text()); });
+    await v.goto(url); await v.locator('#startOv [data-lang=en]').click();
+    check(await v.isVisible('#stLogo svg.stbake') && (await text(v, '#stSign')) === 'Cookie Factory', 'the start screen shows a bakery with a name sign');
+    await v.click('#stGo'); if (await v.isVisible('#nameOv')) { await v.fill('#nameIn', 'Vibe Bakery'); await v.click('#nameOk'); }
+    await v.addStyleTag({ content: '#introOv,#tutBox{display:none!important}' });
+    const ck = await v.locator('#cookie').boundingBox();
+    for (let k = 0; k < 25; k++) { await v.touchscreen.tap(ck.x + ck.width / 2, ck.y + ck.height / 2); await v.waitForTimeout(80); }
+    check(await v.evaluate(() => window.__vib.length > 0), 'phones vibrate on taps and achievements');
+    await settings(v, 'snd'); await v.uncheck('#vibChk'); await v.click('#setClose');
+    await v.evaluate(() => { window.__vib = []; });
+    for (let k = 0; k < 3; k++) { await v.touchscreen.tap(ck.x + ck.width / 2, ck.y + ck.height / 2); await v.waitForTimeout(90); }
+    check(await v.evaluate(() => window.__vib.length === 0), 'vibration can be turned off');
+    await v.evaluate(() => { const r = document.querySelector('#buildList .row.can'); if (r) r.click(); });
+    await v.waitForTimeout(300);
+    check(await v.evaluate(() => { const i = document.querySelector('#buildList .row.owned .msbar i'); return !!i && parseFloat(i.style.width) > 0; }) && /Milestone 0\/13 → 25 \(\d+ to go\)/.test(await text(v, '#buildList .row.owned')), 'building cards show progress to the next milestone');
+    await v.click('#bviewSeg [data-bv=grid]');
+    check(await v.evaluate(() => document.getElementById('buildList').classList.contains('bgrid')), 'buildings can be shown as a grid');
+    await v.click('#bviewSeg [data-bv=list]');
+    check(await v.evaluate(() => { const t = document.querySelector('.tab[data-tab="ach"]'); t.click(); return document.querySelector('.pane[data-pane="ach"]').classList.contains('panein'); }), 'switching tabs fades the new tab in');
+    await v.evaluate(() => document.querySelector('.tab[data-tab="build"]').click());
+    await settings(v, 'disp'); await v.waitForSelector('#tabCfgList .tabcfg', { timeout: 5000 }).catch(() => {});
+    const ord = () => v.evaluate(() => [...document.querySelectorAll('.tab')].filter(t => !t.hidden).sort((a, b) => (+a.style.order) - (+b.style.order)).map(t => t.dataset.tab).join(','));
+    const before = await ord();
+    await v.click('#tabCfgList [data-tc="ach"] [data-tcm="up"]'); await v.waitForTimeout(200);
+    const after = await ord();
+    check(after !== before && after.indexOf('ach') < before.indexOf('ach'), 'a tab can be moved in the tab bar', { before, after });
+    await v.uncheck('#tabCfgList [data-tc="ach"] [data-tch]'); await v.waitForTimeout(200);
+    check(await v.evaluate(() => document.querySelector('.tab[data-tab="ach"]').classList.contains('tabhid')) && !(await v.$('#tabCfgList [data-tc="build"] [data-tch]')), 'a tab can be hidden, but Build always stays');
+    await v.click('#tabReset'); await v.waitForTimeout(200);
+    check(!(await v.evaluate(() => document.querySelector('.tab[data-tab="ach"]').classList.contains('tabhid'))) && (await ord()) === before, 'the tab bar can be reset');
+    await v.click('#setSeg [data-sp=save]'); await v.click('#saveBtn'); await v.click('#setClose');
+    await v.evaluate(() => sessionStorage.setItem('dtoff', String(3 * 3600e3)));
+    await v.reload(); await v.locator('#startOv [data-lang=en]').click().catch(() => {});
+    check((await text(v, '#stSign')) === 'Vibe Bakery', 'the sign shows the bakery name');
+    await v.click('#stGo'); await v.addStyleTag({ content: '#introOv,#tutBox{display:none!important}' });
+    await v.waitForSelector('#awayOv:not([hidden])', { timeout: 8000 }).catch(() => {});
+    check(await v.isVisible('#awayOv') && /\+\d/.test(await text(v, '#awayBody .awhero b')), 'the welcome-back screen counts up the cookies baked while away');
+    if (await v.isVisible('[data-aw2="all"]')) { await v.click('[data-aw2="all"]'); await v.waitForTimeout(300); check(/Collected/.test(await text(v, '[data-aw2="all"]')), '"Collect all" collects everything that is ready'); }
+    else check(false, 'the welcome-back screen offers "Collect all"');
+    await v.click('#awayClose');
+    await v.evaluate(() => document.querySelector('[data-tab="ach"]').click()); await v.click('button[data-g="stats"]'); await v.waitForTimeout(2500);
+    check(await v.locator('#histBox .hchart').count() === 2 && await v.isVisible('#histBox .hline'), 'statistics show a history chart for cookies and production');
+    await v.click('#histBox [data-hr="a"]'); await v.waitForTimeout(300);
+    check(await v.evaluate(() => document.querySelector('#histBox [data-hr="a"]').getAttribute('aria-pressed') === 'true'), 'the history range can be switched');
+    check(await v.evaluate(() => document.documentElement.scrollWidth - innerWidth) <= 1, 'phone: the history chart fits without sideways scrolling');
+    await ctx.close();
+  }
+
   // 6. Layout: nothing sticks out sideways on a phone
   for (const tab of ['build', 'up', 'ach', 'world', 'shop', 'orders']) {
     await b.evaluate(t => { const e = document.querySelector('[data-tab="' + t + '"]'); if (e) e.click(); }, tab); await b.waitForTimeout(200);

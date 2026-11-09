@@ -155,6 +155,7 @@ const startOv=document.getElementById('startOv');let startDone=false;
 function renderStart(){
   const r=awayRep,has=hadSave&&S.all>0;
   document.getElementById('stLogo').innerHTML=(v55Ready&&g3dStartHtml())||cookieSVG(skinOf(),'stc');
+  if(v59Ready) stBakery();
   document.getElementById('stTitle').textContent=tt('Keksfabrik','Cookie Factory');
   document.getElementById('stSub').textContent=tt('Backe, baue und erobere das Keks-Universum!','Bake, build and conquer the cookie universe!');
   let c='';

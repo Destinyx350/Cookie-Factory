@@ -33,13 +33,13 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 
 | | |
 | --- | --- |
-| 🏭 **23 buildings** | From the Dough Finger to the Cookie Singularity. Each one shows its output and payback time. |
+| 🏭 **23 buildings** | From the Dough Finger to the Cookie Singularity. Each one shows its output, payback time and progress to the next milestone, as a list or a compact grid. |
 | ⬆️ **349 upgrades** | Make buildings and clicks much stronger. Turn on auto upgrades or use *Buy all*. |
 | 🤖 **Automation** | *Best buy* picks the smartest purchase, and you choose how much of your cookies automation may spend. |
 | 🧑‍🍳 **Helpers** | Helpers buy buildings, harvest, fight or trade, and level up with experience. |
 | 🌍 **World** | Adventure, stores, a lucky wheel, titles, a pass and a collection to complete. |
-| 🏆 **192 achievements** | Plus guided *First Steps* goals and detailed statistics. |
-| 📅 **Daily rewards** | A 7-day login streak and three daily tasks with a bonus chest. Coming back after 3+ days brings a welcome-back gift. |
+| 🏆 **192 achievements** | Plus guided *First Steps* goals, detailed statistics and charts of your cookies and production over time. |
+| 📅 **Daily rewards** | A 7-day login streak and three daily tasks with a bonus chest. Coming back shows what happened while you were away, with one **Collect all** button, and after 3+ days a welcome-back gift. |
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
 | 🎵 **Soundtrack and 3D** | 7 music tracks with real instruments that adapt to what you do, and a real 3D cookie with lighting that tilts toward your finger. Golden cookies and icons have a 3D look too. |
 | ☀️ **Living world** | Time of day and weather change while you play. Combos and boosts speed things up. |
@@ -47,7 +47,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🎁 **Secret codes** | Type a code under **Settings → Game** to get cookies, gems or a boost. Each code works once per save. |
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
-| 📐 **Fits every device** | A clean, modern design with separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. Options for high contrast, less motion and bigger text. |
+| 📐 **Fits every device** | A clean, modern design with separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. Reorder or hide tabs, and phones vibrate softly on taps and achievements. Options for high contrast, less motion and bigger text. |
 | 👤 **Accounts** | Create an account with a username and password (no email needed). Your bakery is saved to it automatically, so you can keep playing on any device. A one-time recovery code resets a forgotten password, and you can see and sign out each signed-in device. |
 | 👥 **Bakery clubs** | Start or join a club of up to 30 bakers, chat live with your club (with reactions, a 👋 button and a pinned message), and bake together for weekly prizes for the top 3 clubs. Clubs level up to level 10, and every level gives all members more production and bigger prizes. |
 | 🎁 **Gifts** | Send gems or star crumbs to friends with an account (daily limits keep it fair). |
@@ -78,20 +78,20 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 
 Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Computer und auf dem Handy. Klicke auf den großen Keks, baue deine Fabrik aus, stelle Helfer ein und werde vom *Bäckerlehrling* zum Keks-Tycoon.
 
-- 🏭 **23 Gebäude** mit Ertrag und Amortisationszeit
+- 🏭 **23 Gebäude** mit Ertrag, Amortisationszeit und Fortschritt zum nächsten Meilenstein, als Liste oder Raster
 - ⬆️ **349 Upgrades**, auf Wunsch automatisch gekauft
 - 🤖 **Automatik**: *Bester Kauf* und ein einstellbares Ausgabelimit
 - 🧑‍🍳 **Helfer**, die kaufen, ernten, kämpfen oder handeln und dabei aufsteigen
 - 🌍 **Welt** mit Abenteuer, Läden, Glücksrad, Titeln, Pass und Sammlung
-- 🏆 **192 Erfolge**, Ziele und Statistiken
-- 📅 **Tägliche Belohnungen**: 7-Tage-Serie, drei Tagesaufgaben und ein Willkommensgeschenk nach 3+ Tagen Pause
+- 🏆 **192 Erfolge**, Ziele, Statistiken und Verlaufs-Diagramme deiner Kekse und Produktion
+- 📅 **Tägliche Belohnungen**: 7-Tage-Serie, drei Tagesaufgaben, eine Zusammenfassung mit „Alles einsammeln“ nach jeder Pause und ein Willkommensgeschenk nach 3+ Tagen
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
 - 🎵 **Soundtrack und 3D**: 7 Musikstücke mit echten Instrumenten, die sich anpassen, und ein echter 3D-Keks mit Licht, der sich zum Finger neigt
 - 💾 **Spielstände mit Namen**: 3 Speicherplätze, jedes neue Spiel bekommt einen Namen
 - 🎁 **Geheime Codes** unter **Einstellungen → Spiel**: Kekse, Edelsteine oder ein Schub, einmal pro Spielstand
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
-- 📐 **Passt auf jedes Gerät**: klares, modernes Design mit eigenen Layouts für Handy (hochkant und quer), Tablet und Computer; dazu hoher Kontrast, weniger Bewegung und größere Schrift
+- 📐 **Passt auf jedes Gerät**: klares, modernes Design mit eigenen Layouts für Handy (hochkant und quer), Tablet und Computer; eigene Tab-Reihenfolge, sanfte Vibration auf Handys, dazu hoher Kontrast, weniger Bewegung und größere Schrift
 - 👤 **Konten**: Benutzername und Passwort (ohne E-Mail), deine Bäckerei auf jedem Gerät, Wiederherstellungs-Code bei vergessenem Passwort und eine Liste aller angemeldeten Geräte
 - 👥 **Bäckerei-Clubs** mit bis zu 30 Mitgliedern, Live-Club-Chat mit Reaktionen und angehefteter Nachricht, Wochenpreisen für die Top 3 und Club-Stufen bis 10 mit Bonus für alle Mitglieder
 - 💬 **Feedback senden** unter Einstellungen → Spiel und eine [Datenschutz-Info](https://destinyx350.github.io/Cookie-Factory/privacy.html)
@@ -114,23 +114,27 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 58
-- **New:** recovery codes. When you create an account you get a one-time code to set a new password if you forget yours (**Forgot your password?** when signing in). Existing accounts can make one under **Settings → Saving → Account**.
-- **New:** see every device signed in to your account and sign out a single one.
-- **New:** club chat is live. New messages appear right away while the club is open.
-- **Faster and safer server:** new indexes, server jobs run on the server's own clock so planned events start on time, a limit against fake player counts, and health alarms for the owner.
+### Version 59
+- **New start screen:** a small animated bakery with smoke from the chimney, glowing windows (stars and moon at night) and your bakery's name on the sign.
+- **Your own tab bar:** reorder tabs and hide the ones you don't use under **Settings → Display** (this device only; Build always stays).
+- **Smarter building cards:** a bar shows the way to the next milestone, and a switch shows buildings as a list or a compact grid.
+- **Your history:** **Goals → Statistics** has charts of your cookies and production over 3 days, 30 days or all time, with 👼 marks for ascensions.
+- **Welcome back:** the cookies you baked while away count up, everything that happened slides in, and **Collect all** picks up rewards and finished expeditions in one tap.
+- **Feels better:** tabs fade in, new buildings slide into the list, and phones vibrate softly on taps, golden cookies and achievements (can be turned off under **Settings → Sound**).
 
-Also new since version 57: the [game website](https://destinyx350.github.io/Cookie-Factory/welcome.html) with a trailer, plus a live dashboard and weekly report for the owner.
+Also new since version 58: recovery codes, a device list, live club chat and a faster, safer server.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neu:** Wiederherstellungs-Codes. Beim Erstellen eines Kontos bekommst du einen Einmal-Code, mit dem du ein neues Passwort setzt, falls du es vergisst (**Passwort vergessen?** beim Anmelden). Bestehende Konten erstellen ihn unter **Einstellungen → Speichern → Konto**.
-- **Neu:** Sieh alle Geräte, die in deinem Konto angemeldet sind, und melde einzelne ab.
-- **Neu:** Der Club-Chat ist live. Neue Nachrichten erscheinen sofort, solange der Club offen ist.
-- **Schnellerer und sichererer Server:** neue Indizes, Server-Jobs laufen nach der eigenen Uhr des Servers (geplante Events starten pünktlich), ein Limit gegen gefälschte Spielerzahlen und Gesundheits-Alarme für den Betreiber.
+- **Neuer Startbildschirm:** eine kleine animierte Bäckerei mit Rauch aus dem Schornstein, leuchtenden Fenstern (nachts mit Sternen und Mond) und dem Namen deiner Bäckerei auf dem Schild.
+- **Deine eigene Tab-Leiste:** Tabs umsortieren und nicht genutzte ausblenden unter **Einstellungen → Anzeige** (nur dieses Gerät; Bauen bleibt immer).
+- **Schlauere Gebäude-Karten:** ein Balken zeigt den Weg zum nächsten Meilenstein, und ein Schalter zeigt Gebäude als Liste oder kompaktes Raster.
+- **Dein Verlauf:** **Ziele → Statistik** zeigt Diagramme deiner Kekse und Produktion über 3 Tage, 30 Tage oder alles, mit 👼 für Aufstiege.
+- **Willkommen zurück:** Die Kekse aus deiner Abwesenheit zählen hoch, alles Passierte gleitet herein, und **Alles einsammeln** holt Belohnungen und fertige Expeditionen mit einem Tipp.
+- **Fühlt sich besser an:** Tabs blenden weich ein, neue Gebäude gleiten in die Liste, und Handys vibrieren sanft bei Tipps, Goldkeksen und Erfolgen (abschaltbar unter **Einstellungen → Ton**).
 
-Außerdem neu seit Version 57: die [Website zum Spiel](https://destinyx350.github.io/Cookie-Factory/welcome.html) mit Trailer sowie ein Live-Dashboard und Wochenbericht für den Betreiber.
+Außerdem neu seit Version 58: Wiederherstellungs-Codes, eine Geräte-Liste, Live-Club-Chat und ein schnellerer, sichererer Server.
 
 </details>
 
