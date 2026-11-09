@@ -44,8 +44,15 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=58;
+const NEWS_VER=59;
 const NEWS=[
+  {v:59,sum:['Neuer Start, eigene Tabs und dein Verlauf','A new start, your own tabs and your history'],items:[
+    ['new','Startbildschirm: eine kleine Bäckerei mit rauchendem Schornstein, leuchtenden Fenstern und deinem Bäckerei-Namen auf dem Schild – nachts mit Mond und Sternen.','Start screen: a little bakery with a smoking chimney, glowing windows and your bakery’s name on the sign – with moon and stars at night.'],
+    ['new','Tab-Leiste: Sortiere die Tabs um und blende aus, was du nicht brauchst (Einstellungen → Anzeige).','Tab bar: reorder the tabs and hide what you don’t need (Settings → Display).'],
+    ['new','Gebäude: Ein Balken zeigt den Weg zum nächsten Meilenstein, und ☰/▦ wechselt zwischen Liste und Raster.','Buildings: a bar shows the way to the next milestone, and ☰/▦ switches between list and grid.'],
+    ['new','Dein Verlauf: Ziele → Statistik zeigt Diagramme deiner Kekse und Produktion über die Zeit, mit 👼 für Aufstiege.','Your history: Goals → Statistics shows charts of your cookies and production over time, with 👼 for ascensions.'],
+    ['change','Willkommen zurück: Die Kekse zählen hoch, und „Alles einsammeln“ holt Belohnungen und fertige Expeditionen auf einmal.','Welcome back: the cookies count up, and “Collect all” picks up rewards and finished expeditions at once.'],
+    ['change','Weicher: Tabs blenden ein, neue Gebäude gleiten herein, und Handys vibrieren sanft (abschaltbar unter Einstellungen → Ton).','Smoother: tabs fade in, new buildings slide in, and phones vibrate softly (turn it off under Settings → Sound).']]},
   {v:58,sum:['Sicherere Konten und ein Live-Club-Chat','Safer accounts and a live club chat'],items:[
     ['new','Wiederherstellungs-Code: Mit einem Einmal-Code setzt du ein neues Passwort, falls du es vergisst („Passwort vergessen?“ beim Anmelden). Hast du schon ein Konto? Erstelle ihn unter Einstellungen → Speichern → Konto.','Recovery code: a one-time code lets you set a new password if you forget yours (“Forgot your password?” when signing in). Already have an account? Create one under Settings → Saving → Account.'],
     ['new','Geräte: Sieh, wo dein Konto angemeldet ist, und melde einzelne Geräte ab.','Devices: see where your account is signed in and sign out single devices.'],

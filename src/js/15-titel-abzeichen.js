@@ -214,6 +214,7 @@ function showAway(r){
   document.getElementById('awayT').textContent=tt('Willkommen zurück!','Welcome back!');
   document.getElementById('awayBody').innerHTML=h;
   document.getElementById('awayOv').hidden=false;awayOpen=true;
+  if(v59Ready) awayPlus(r);
   document.getElementById('awayClose').focus();
 }
 document.getElementById('awayBody').addEventListener('click',e=>{

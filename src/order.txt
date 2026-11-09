@@ -69,6 +69,7 @@ admin src/js/43k-admin-server-pflege.js
 admin src/js/43l-admin-dashboard.js
 src/js/43m-v58-konto-sicherheit-chat-live.js
 admin src/js/43n-admin-gesundheit.js
+src/js/43o-v59-oberflaeche-plus.js
 admin src/js/44-v40-admin-bestenliste-verwalten.js
 src/js/45-v40-shop-navigation-welt-uebergaenge.js
 src/js/46-v39-geraet-layout.js

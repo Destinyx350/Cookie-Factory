@@ -4,7 +4,7 @@ const SUF={
   en:[[1e24,'septillion'],[1e21,'sextillion'],[1e18,'quintillion'],[1e15,'quadrillion'],[1e12,'trillion'],[1e9,'billion'],[1e6,'million']]
 };
 function group(n){return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,LANG==='de'?'.':',');}
-const DEFOPT=()=>({num:'short',fs:1,acc:'orange',title:false,eco:false,ask:true,as:30,sn:{click:true,buy:true,gold:true,ach:true,other:true,ui:true},mus:1,trk:'auto',bgm:true,m24:1,ntf:'all',ntfT:5,ntfB:true,motion:'on',start:true,upc:true,shake:true});
+const DEFOPT=()=>({num:'short',fs:1,acc:'orange',title:false,eco:false,ask:true,as:30,sn:{click:true,buy:true,gold:true,ach:true,other:true,ui:true},mus:1,trk:'auto',bgm:true,m24:1,ntf:'all',ntfT:5,ntfB:true,motion:'on',start:true,upc:true,shake:true,vib:true});
 let numMode='short';
 const TRK_OK=['bake','market','night','adv','boss','stars','fest'];
 /* Zahlenformate einmal bauen und wiederverwenden: toLocaleString mit Optionen baut sonst jedes Mal ein neues. */

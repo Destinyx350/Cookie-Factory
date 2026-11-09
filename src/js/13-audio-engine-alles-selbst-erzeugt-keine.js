@@ -57,6 +57,7 @@ const SFX={
   nope(o,t,v){tone(o,170,t,.09,{type:'square',amp:v*.11,lp:900});tone(o,140,t+.1,.12,{type:'square',amp:v*.11,lp:900});}
 };
 function snd(kind,x){
+  if(v59Ready) vibFor(kind);
   const v=[0,.4,.85][S.opt.vol|0];if(!v) return;
   const grp=SNG[kind]||'other';if(S.opt.sn[grp]===false) return;
   if(document.hidden&&S.opt.bgm) return;

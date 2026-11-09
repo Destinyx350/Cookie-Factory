@@ -11,6 +11,7 @@ function selectTab(id){
   if(S.seen&&!S.seen[id]){S.seen[id]=1;}
   tabs.forEach(t=>{const on=t.dataset.tab===id;t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;});
   Object.keys(panes).forEach(k=>{panes[k].hidden=k!==id;});
+  if(v59Ready) paneIn(panes[id]);
   render();
 }
 tabs.forEach(t=>t.addEventListener('click',()=>{selectTab(t.dataset.tab);if(innerWidth<=720){const st=document.querySelector('.store'),r=st.getBoundingClientRect();if(r.top>innerHeight*.45||r.bottom<120) st.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});}}));
@@ -890,7 +891,7 @@ function startEvent(id){
 function chalProgress(c){return Math.min(1,S.run/c.goal);}
 function resetRun(gain,chalId){
   const oldUp=S.up;
-  const keep={name:S.name,codes:S.codes,lb:S.lb,adm:S.adm,tamp:S.tamp,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
+  const keep={hist:S.hist,name:S.name,codes:S.codes,lb:S.lb,adm:S.adm,tamp:S.tamp,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
   S=Object.assign(fresh(),keep);
   S.orders.slots=[null,null,null];S.orders.heat=0;
   if(gain>0){S.eg.ascT++;if(egHas('c_keep')) S.up=oldUp;}
@@ -1380,6 +1381,7 @@ function updBuild(){
   B.forEach((b,i)=>{
     const r=rows[i];
     if(i>known){r.el.hidden=true;return;}
+    if(r.el.hidden&&v59Ready) rowIn(r.el);
     r.el.hidden=false;
     const locked=i===known;
     r.el.classList.toggle('locked',locked);
@@ -1397,10 +1399,11 @@ function updBuild(){
     let st=tr('each_ps',{x:fmtRate(C.per[i])});
     if(S.b[i]>0&&C.kps>0) st+=tr('total_part',{x:fmtRate(C.per[i]*S.b[i]),p:Math.round(C.per[i]*S.b[i]/C.kps*100)});
     const mk=msCount(i);
-    if(mk) st+=' · '+tt('Meilenstein ','Milestone ')+mk+'/'+MS.length;
+    if(mk&&!v59Ready) st+=' · '+tt('Meilenstein ','Milestone ')+mk+'/'+MS.length;
     r.el.classList.toggle('evo',!!(S.eg&&S.eg.evo[i]));r.el.classList.toggle('ms-b',mk>=1&&mk<3);r.el.classList.toggle('ms-s',mk>=3&&mk<6);r.el.classList.toggle('ms-g',mk>=6);
     if(C.per[i]>0) st+=' · '+tt('Rückzahlung ','Payback ')+fmtWait(cost/(C.per[i]*n));
     r.st.textContent=st;
+    if(v59Ready) bldMs(r,i);
     r.pv.textContent=fmt(cost);
     {const wt=S.cookies<cost&&C.kps>0?tt('in ','in ')+fmtWait((cost-S.cookies)/C.kps):'';const pt=[n>1?tr('for_n',{n}):'',wt].filter(Boolean).join(' · ');if(r.pq.textContent!==pt) r.pq.textContent=pt;}
   });
