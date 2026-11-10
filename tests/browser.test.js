@@ -520,10 +520,15 @@ module.exports = async function browserTests(url) {
   check(await d.locator('#admSrv .dchart[data-chart=players] .dcols i').count() === 30, 'the dashboard shows 30 days');
   await d.click('[data-dash="7"]'); await d.waitForTimeout(1200);
   check(await d.locator('#admSrv .dchart[data-chart=players] .dcols i').count() === 7, 'the dashboard switches to 7 days');
-  const plot = await d.locator('#admSrv .dchart[data-chart=players] .dplot').boundingBox();
-  if (plot) await d.mouse.move(plot.x + plot.width - 3, plot.y + plot.height - 10);
-  await d.waitForTimeout(200);
-  check(await d.isVisible('#admSrv .dchart[data-chart=players] .dtip'), 'hovering a day shows its number');
+  // the Server tab redraws every few seconds, so measure and hover again if a redraw came in between
+  let tipOk = false;
+  for (let k = 0; k < 5 && !tipOk; k++) {
+    const plot = await d.locator('#admSrv .dchart[data-chart=players] .dplot').boundingBox();
+    if (plot) { await d.mouse.move(plot.x + plot.width - 6, plot.y + plot.height - 12); await d.mouse.move(plot.x + plot.width - 3, plot.y + plot.height - 10); }
+    await d.waitForTimeout(200);
+    tipOk = await d.isVisible('#admSrv .dchart[data-chart=players] .dtip');
+  }
+  check(tipOk, 'hovering a day shows its number');
   check(/Weekly report/.test(await text(d, '#admSrv')) && await d.locator('#admSrv .rep').count() >= 1, 'the Server tab lists weekly reports');
   await d.click('[data-repa="prev"]'); await d.waitForTimeout(1200);
   check(/Right now/.test(await text(d, '#admSrv')) && /To do/.test(await text(d, '#admSrv')), 'the owner sees this week\'s numbers and to-dos right now');
