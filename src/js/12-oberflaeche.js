@@ -246,13 +246,23 @@ function doClick(x,y){
   floater(x,y,(crit?tt('KRIT! +','CRIT! +'):'+')+fmtRate(g),crit?'crit':'');clickBurst(x,y,crit);ripple(x,y);squish();snd('click');
   if(fxOk()) anim(els.count,[{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:170,easing:'ease-out'});
 }
+/* V63: Nur echte Klicks zählen, höchstens 20 pro Sekunde (Menschen schaffen etwa 15) */
+const CLICK_MAX=20;let clkTs=[];
+function clickOk(e){
+  if(e&&e.isTrusted===false) return false;
+  const n=performance.now();clkTs=clkTs.filter(t=>n-t<1000);
+  if(clkTs.length>=CLICK_MAX) return false;
+  clkTs.push(n);return true;
+}
 els.cookie.addEventListener('pointerdown',e=>{
   if(e.pointerType==='mouse'&&e.button!==0) return;
+  if(!clickOk(e)) return;
   doClick(e.clientX,e.clientY);
 });
 els.cookie.addEventListener('keydown',e=>{
   if((e.key===' '||e.key==='Enter')&&!e.repeat){
     e.preventDefault();
+    if(!clickOk(e)) return;
     const r=els.cookie.getBoundingClientRect();
     doClick(r.left+r.width/2+rand(-30,30),r.top+r.height/2+rand(-30,30));
   }
@@ -269,12 +279,12 @@ function addBuff(id,tm){
 function applyGold(kind){
   const pw=C.goldPower;
   if(kind==='build'){
-    const mx=Math.max(...S.b),v=Math.round((1+mx/25)*10)/10,t0=Math.round(30*pw*C.buffTime);
+    const mx=Math.max(...S.b),v=Math.min(RUSH_MAX,Math.round((1+mx/RUSH_PER)*10)/10),t0=Math.round(30*pw*C.buffTime);
     addBuff('g_build',t0);const bf=S.buffs.find(f=>f.id==='g_build');if(bf) bf.v=v;recalc();
     toast(tt('Gebäude-Rausch! Produktion ×','Building rush! Production ×')+v.toLocaleString(LOC[LANG])+tt(' für ',' for ')+t0+' s',true);return;
   }
   if(kind==='rain'){
-    const gain=C.kps0*600*pw*C.luck;addCk(gain);toast(tt('Keks-Regen! +','Cookie rain! +')+fmt(gain),true);
+    const gain=(Math.min(S.cookies*.15,C.kps0*600)+13)*pw*C.luck;addCk(gain);toast(tt('Keks-Regen! +','Cookie rain! +')+fmt(gain),true);
     if(fxOk()) for(let i=0;i<14;i++) setTimeout(()=>crumbs(Math.random()*innerWidth,Math.random()*innerHeight*.5,4),i*70);
     return;
   }

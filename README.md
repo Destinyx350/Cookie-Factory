@@ -115,17 +115,23 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 62
-- **New accounts join the leaderboard right away:** when you create an account, your bakery is on the leaderboard at once, including the boards for clicks, golden cookies, ascensions and the fastest billion. If your bakery name is already taken, it uses your username. You can leave any time with **Leave** in the leaderboard.
+### Version 63
+- **Big balance update.** The strongest click upgrades are weaker (for example ×10 → ×3 and ×100 → ×10). The part of a click that comes from your production gets at most ×10 from click upgrades, and all click boosts together give at most ×300.
+- **Fair clicking:** only real clicks count, at most 20 a second, so auto-clickers no longer help.
+- **Offline income is at most 100%.** The higher offline upgrades now give more offline time (up to 7 days) instead of more than 100%.
+- **Golden cookies:** Building Rush gives at most ×5, Cookie Rain at most 15% of your cookies (like Lucky), and all production boosts together give at most ×100.
 
-Also new since version 61: more leaderboards (clicks, golden cookies, ascensions, fastest billion) and your own profile with an avatar, a color, a motto and favourite achievements.
+Also new since version 62: new accounts join the leaderboard right away.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Neue Konten sind gleich in der Bestenliste:** wer ein Konto erstellt, ist mit seiner Bäckerei sofort in der Bestenliste, auch in den Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde. Ist der Bäckerei-Name schon vergeben, nimmt sie den Benutzernamen. Mit **Austreten** in der Bestenliste kannst du jederzeit wieder raus.
+- **Großes Balance-Update.** Die stärksten Klick-Upgrades sind schwächer (zum Beispiel ×10 → ×3 und ×100 → ×10). Der Teil eines Klicks, der aus deiner Produktion kommt, bekommt von Klick-Upgrades höchstens ×10, und alle Klick-Boosts zusammen geben höchstens ×300.
+- **Faires Klicken:** nur echte Klicks zählen, höchstens 20 pro Sekunde, Auto-Klicker bringen also nichts mehr.
+- **Offline-Ertrag höchstens 100 %.** Die höheren Offline-Upgrades geben jetzt mehr Offline-Zeit (bis zu 7 Tage) statt mehr als 100 %.
+- **Goldkekse:** Gebäude-Rausch höchstens ×5, Keks-Regen höchstens 15 % deiner Kekse (wie Glückstreffer), und alle Produktions-Boosts zusammen höchstens ×100.
 
-Außerdem neu seit Version 61: mehr Bestenlisten (Klicks, Goldkekse, Aufstiege, schnellste Milliarde) und dein eigenes Profil mit Avatar, Farbe, Motto und Lieblings-Erfolgen.
+Außerdem neu seit Version 62: neue Konten sind gleich in der Bestenliste.
 
 </details>
 

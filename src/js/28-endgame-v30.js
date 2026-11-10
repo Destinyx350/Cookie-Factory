@@ -12,7 +12,7 @@ function endgameMods(){
   const E=S.eg;
   r.bm=B.map((b,i)=>E.evo[i]?10:1);
   r.prod*=1+.3*E.cos.sh;
-  if(egHas('c_prod')) r.prod*=3;if(egHas('c_click')) r.click*=10;if(egHas('c_gold')) r.gold*=2;if(egHas('c_start')) r.start+=1e12;if(egHas('c_chip')) r.chip*=2;
+  if(egHas('c_prod')) r.prod*=3;if(egHas('c_click')) r.click*=3;if(egHas('c_gold')) r.gold*=2;if(egHas('c_start')) r.start+=1e12;if(egHas('c_chip')) r.chip*=2;
   const P=E.par.pts,pv=k=>P[k]||0;r.prod*=1+.04*pv('prod');r.click*=1+.08*pv('click');r.gold*=1+.03*pv('gold');r.cost*=Math.max(.75,1-.01*pv('cost'));
   r.off=.02*pv('off');r.goldf=Math.max(.7,1-.01*pv('goldf'));r.buff=1+.02*pv('buff');r.chip*=1+.01*pv('chip');r.hero=1+.03*pv('hero');r.work=1+.04*pv('work');r.fr=1+.03*pv('fr');r.combo=.1*pv('combo');
   r.prod*=1+.05*rankIdx();

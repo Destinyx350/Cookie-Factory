@@ -44,8 +44,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=62;
+const NEWS_VER=63;
 const NEWS=[
+  {v:63,sum:['Großes Balance-Update','Big balance update'],items:[
+    ['change','Klicks: Die stärksten Klick-Upgrades sind schwächer (zum Beispiel ×10 → ×3, ×100 → ×10). Für den Teil eines Klicks, der aus deiner Produktion kommt, zählen Klick-Multiplikatoren höchstens ×10. Alle Klick-Boosts zusammen geben höchstens ×300.','Clicks: the strongest click upgrades are weaker (for example ×10 → ×3, ×100 → ×10). For the part of a click that comes from your production, click multipliers count at most ×10. All click boosts together give at most ×300.'],
+    ['change','Nur echte Klicks zählen, höchstens 20 pro Sekunde – Auto-Klicker bringen nichts mehr.','Only real clicks count, at most 20 a second – auto-clickers no longer help.'],
+    ['change','Offline: Du bekommst höchstens 100 % deiner Produktion. Die höheren Offline-Upgrades geben dafür mehr Zeit (bis zu 7 Tage).','Offline: you get at most 100% of your production. The higher offline upgrades give more time instead (up to 7 days).'],
+    ['change','Goldkekse: Gebäude-Rausch höchstens ×5, Keks-Regen höchstens 15 % deiner Kekse (wie Glückstreffer), und alle Produktions-Boosts zusammen höchstens ×100.','Golden cookies: Building Rush at most ×5, Cookie Rain at most 15% of your cookies (like Lucky), and all production boosts together at most ×100.']]},
   {v:62,sum:['Neue Konten sind gleich in der Bestenliste','New accounts join the leaderboard right away'],items:[
     ['new','Wer ein Konto erstellt, ist mit seiner Bäckerei sofort in der Bestenliste – auch in den Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde. Ist der Bäckerei-Name schon vergeben, nimmt sie den Benutzernamen.','When you create an account, your bakery joins the leaderboard right away – including the boards for clicks, golden cookies, ascensions and the fastest billion. If the bakery name is taken, it uses your username.'],
     ['change','Du willst nicht in der Bestenliste sein? Tippe dort auf „Austreten“; danach kommst du nicht von selbst wieder hinein.','Don’t want to be on the leaderboard? Tap "Leave" there; you won’t be added again by yourself.']]},

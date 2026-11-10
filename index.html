@@ -2486,8 +2486,8 @@ B.forEach((b,i)=>TIER_REQ.forEach((req,k)=>UP.push({
   G('co2','click',1e9,'hand','Combo',['Combo-Meister','Combo Master'],['Die Klick-Combo geht bis ×5.','The click combo goes up to ×5.'],{comboCap:1});
   G('co3','click',1e5,'timer','Combo',['Ausdauernde Finger','Enduring Fingers'],['Die Combo fällt 40 % langsamer ab.','The combo drops 40% slower.'],{comboDecay:.6});
   G('co4','click',1e8,'timer','Combo',['Eiserne Finger','Iron Fingers'],['Die Combo fällt nochmal 40 % langsamer ab.','The combo drops another 40% slower.'],{comboDecay:.6});
-  [['gx1','build',40,1e12,'b5',['Gebäude-Rausch','Building Rush'],['Goldkekse können einen Gebäude-Rausch auslösen: Produktion steigt mit deinem größten Gebäude.','Golden cookies can trigger a building rush: production grows with your biggest building.']],
-   ['gx2','rain',60,1e14,'drop',['Keks-Regen','Cookie Rain'],['Goldkekse können einen Keks-Regen auslösen: sofort 10 Minuten Produktion.','Golden cookies can trigger cookie rain: 10 minutes of production at once.']],
+  [['gx1','build',40,1e12,'b5',['Gebäude-Rausch','Building Rush'],['Goldkekse können einen Gebäude-Rausch auslösen: Produktion steigt mit deinem größten Gebäude (bis ×5).','Golden cookies can trigger a building rush: production grows with your biggest building (up to ×5).']],
+   ['gx2','rain',60,1e14,'drop',['Keks-Regen','Cookie Rain'],['Goldkekse können einen Keks-Regen auslösen: sofort bis zu 10 Minuten Produktion (höchstens 15 % deiner Kekse).','Golden cookies can trigger cookie rain: up to 10 minutes of production at once (at most 15% of your cookies).']],
    ['gx3','gift',90,1e16,'box',['Glücks-Geschenk','Lucky Gift'],['Goldkekse können ein Geschenk bringen: Edelsteine und vielleicht einen Gegenstand.','Golden cookies can bring a gift: gems and maybe an item.']]
   ].forEach(([id,fx,req,cost,art,name,d])=>UP.push({id,kind:'goldfx',fx,req,cost,art,tag:()=>tr('tag_gold'),name,desc:()=>tx(d)}));
   G('wu1','world',1e8,'drop','Welt',['Gartenerde','Garden Soil'],['Pflanzen wachsen 15 % schneller.','Plants grow 15% faster.'],{grow:.85});
@@ -2516,7 +2516,7 @@ B.forEach((b,i)=>TIER_REQ.forEach((req,k)=>UP.push({
   G('env2','special',1e14,'spark','Wetter',['Klimaforscher','Climate Scientist'],['Wetter und Tageszeit wirken nochmal 50 % stärker.','Weather and time of day are another 50% stronger.'],{wxMul:.5});
   G('msu1','special',1e12,'layers','+5 %',['Meisterbetrieb','Master Business'],['Jeder Meilenstein gibt 5 % mehr.','Every milestone gives 5% more.'],{msAdd:.05});
   G('msu2','special',1e18,'layers','+5 %',['Legendärer Betrieb','Legendary Business'],['Jeder Meilenstein gibt nochmal 5 % mehr.','Every milestone gives another 5% more.'],{msAdd:.05});
-  G('mg1','special',1e23,'hand','×10',['Hand Gottes','Hand of God'],['Klicks ×10.','Clicks ×10.'],{click:10},{mega:1});
+  G('mg1','special',1e23,'hand','×3',['Hand Gottes','Hand of God'],['Klicks ×3.','Clicks ×3.'],{click:3},{mega:1});
   G('mg2','special',1e24,'infinity','×10',['Keks-Singularität','Cookie Singularity'],['Produktion ×10.','Production ×10.'],{prod:10},{mega:1});
   G('mg3','special',1e25,'gold','×2',['Goldene Ära','Golden Era'],['Goldkeks-Effekte doppelt so stark.','Golden cookie effects twice as strong.'],{goldPower:2},{mega:1});
   G('mg4','special',1e26,'tag','−25 %',['Ewiger Ausverkauf','Eternal Clearance'],['Alle Gebäude 25 % billiger.','All buildings 25% cheaper.'],{costMult:.75},{mega:1});
@@ -2628,7 +2628,7 @@ const TREE=[];
       N('c3',['Klickstrom','Click Stream'],80,'hand',['Jeder Klick bringt zusätzlich 2 % deiner Kekse pro Sekunde.','Each click adds another 2% of your cookies per second.'],{clickPct:.02}),
       N('c4',['Sternenfinger','Star Fingers'],150,'star',['Klicks ×5.','Clicks ×5.'],{click:5}),
       N('c5',['Klickflut','Click Flood'],300,'drop',['Jeder Klick bringt zusätzlich 3 % deiner Kekse pro Sekunde.','Each click adds another 3% of your cookies per second.'],{clickPct:.03}),
-      N('c6',['Göttlicher Klick','Divine Click'],600,'crown',['Klicks ×10.','Clicks ×10.'],{click:10}),
+      N('c6',['Göttlicher Klick','Divine Click'],600,'crown',['Klicks ×3.','Clicks ×3.'],{click:3}),
       N('c7',['Ewiger Klick','Eternal Click'],1500,'infinity',['Jeder Klick bringt zusätzlich 5 % deiner Kekse pro Sekunde.','Each click adds another 5% of your cookies per second.'],{clickPct:.05})
     ]},
     {a:45,build:1,nodes:[]},
@@ -2648,8 +2648,8 @@ const TREE=[];
       N('x1',['Ewiger Ofen','Eternal Oven'],22,'moon',['Offline-Erträge steigen auf 80 %, maximal 12 Stunden.','Offline gains rise to 80%, up to 12 hours.'],{offline:.8,offCap:12}),
       N('o2',['Schlafender Bäcker','Sleeping Baker'],100,'b1',['Offline-Erträge steigen auf 90 %, maximal 16 Stunden.','Offline gains rise to 90%, up to 16 hours.'],{offline:.9,offCap:16}),
       N('e6',['Zeitreisender Opa','Time Travel Grandpa'],300,'b1',['Offline-Erträge steigen auf 100 %, maximal 24 Stunden.','Offline gains rise to 100%, up to 24 hours.'],{offline:1,offCap:24}),
-      N('o3',['Traumschicht','Dream Shift'],800,'b18',['Offline-Erträge steigen auf 125 %, maximal 36 Stunden.','Offline gains rise to 125%, up to 36 hours.'],{offline:1.25,offCap:36}),
-      N('o4',['Ewige Nacht','Eternal Night'],2000,'moon',['Offline-Erträge steigen auf 150 %, maximal 48 Stunden.','Offline gains rise to 150%, up to 48 hours.'],{offline:1.5,offCap:48})
+      N('o3',['Traumschicht','Dream Shift'],800,'b18',['Offline-Erträge 100 %, maximal 36 Stunden.','Offline gains 100%, up to 36 hours.'],{offline:1,offCap:36}),
+      N('o4',['Ewige Nacht','Eternal Night'],2000,'moon',['Offline-Erträge 100 %, maximal 48 Stunden.','Offline gains 100%, up to 48 hours.'],{offline:1,offCap:48})
     ]},
     {a:180,nodes:[
       N('k1',['Schnelle Öfen','Quick Ovens'],8,'fridge',['Boosts laden 10 % schneller.','Boosts recharge 10% faster.'],{cdRed:.1}),
@@ -2673,9 +2673,9 @@ const TREE=[];
   ];
   ARMS[0].nodes.push(N('p9',['Urknall-Rezept','Big Bang Recipe'],12000,'b19',['Produktion ×3.','Production ×3.'],{prod:3}),N('p10',['Unendlicher Ofen','Infinite Oven'],30000,'infinity',['Produktion ×5.','Production ×5.'],{prod:5}));
   ARMS[1].nodes.push(N('g9',['Goldader-Gott','Gold Vein God'],6000,'gold',['Goldkeks-Effekte 50 % stärker.','Golden cookie effects 50% stronger.'],{goldPower:1.5}),N('g10',['Goldene Ewigkeit','Golden Eternity'],12000,'hourglass',['Goldkekse bleiben 15 Sekunden länger.','Golden cookies stay 15 seconds longer.'],{goldLife:15}),N('g11',['Glückskaiser','Luck Emperor'],25000,'lucky',['Glückstreffer bringen 50 % mehr.','Lucky hits give 50% more.'],{luck:1.5}),N('g12',['Goldene Galaxie','Golden Galaxy'],50000,'spark',['Goldkekse erscheinen 25 % häufiger.','Golden cookies appear 25% more often.'],{goldRate:.75}));
-  ARMS[2].nodes.push(N('c8',['Klick-Galaxie','Click Galaxy'],3000,'b15',['Klicks ×10.','Clicks ×10.'],{click:10}),N('c9',['Klick-Universum','Click Universe'],6000,'spark',['Jeder Klick bringt zusätzlich 5 % deiner Kekse pro Sekunde.','Each click adds another 5% of your cookies per second.'],{clickPct:.05}),N('c10',['Allmachtsklick','Almighty Click'],12000,'crown',['Klicks ×20.','Clicks ×20.'],{click:20}),N('c11',['Klick der Ewigkeit','Click of Eternity'],25000,'hourglass',['Jeder Klick bringt zusätzlich 8 % deiner Kekse pro Sekunde.','Each click adds another 8% of your cookies per second.'],{clickPct:.08}),N('c12',['Urknall-Klick','Big Bang Click'],50000,'b19',['Klicks ×50.','Clicks ×50.'],{click:50}),N('c13',['Der letzte Klick','The Last Click'],100000,'infinity',['Klicks ×100.','Clicks ×100.'],{click:100}));
+  ARMS[2].nodes.push(N('c8',['Klick-Galaxie','Click Galaxy'],3000,'b15',['Klicks ×3.','Clicks ×3.'],{click:3}),N('c9',['Klick-Universum','Click Universe'],6000,'spark',['Jeder Klick bringt zusätzlich 5 % deiner Kekse pro Sekunde.','Each click adds another 5% of your cookies per second.'],{clickPct:.05}),N('c10',['Allmachtsklick','Almighty Click'],12000,'crown',['Klicks ×4.','Clicks ×4.'],{click:4}),N('c11',['Klick der Ewigkeit','Click of Eternity'],25000,'hourglass',['Jeder Klick bringt zusätzlich 8 % deiner Kekse pro Sekunde.','Each click adds another 8% of your cookies per second.'],{clickPct:.08}),N('c12',['Urknall-Klick','Big Bang Click'],50000,'b19',['Klicks ×5.','Clicks ×5.'],{click:5}),N('c13',['Der letzte Klick','The Last Click'],100000,'infinity',['Klicks ×10.','Clicks ×10.'],{click:10}));
   ARMS[4].nodes.push(N('w6',['Himmlische Großbank','Heavenly Bank'],5000,'b6',['Nach jedem Aufstieg startest du mit 1 Billiarde Keksen.','After every ascension you start with 1 quadrillion cookies.'],{start:1e15}),N('w7',['Kosmischer Rabatt','Cosmic Discount'],10000,'tag',['Gebäude kosten 10 % weniger.','Buildings cost 10% less.'],{costMult:.9}),N('w8',['Goldener Tresor','Golden Vault'],25000,'gold',['Nach jedem Aufstieg startest du mit 1 Trillion Keksen.','After every ascension you start with 1 quintillion cookies.'],{start:1e18}),N('w9',['Ewiger Ausverkauf','Eternal Sale'],50000,'coin',['Gebäude kosten 15 % weniger.','Buildings cost 15% less.'],{costMult:.85}));
-  ARMS[5].nodes.push(N('o5',['Schlummerofen','Slumber Oven'],4000,'b18',['Offline-Erträge 175 %, maximal 72 Stunden.','Offline gains 175%, up to 72 hours.'],{offline:1.75,offCap:72}),N('o6',['Winterschlaf','Hibernation'],10000,'moon',['Offline-Erträge 200 %, maximal 96 Stunden.','Offline gains 200%, up to 96 hours.'],{offline:2,offCap:96}),N('o7',['Zeitloser Schlaf','Timeless Sleep'],25000,'b12',['Offline-Erträge 250 %, maximal 7 Tage.','Offline gains 250%, up to 7 days.'],{offline:2.5,offCap:168}),N('o8',['Ewiger Traum','Eternal Dream'],60000,'infinity',['Offline-Erträge 300 %, maximal 14 Tage.','Offline gains 300%, up to 14 days.'],{offline:3,offCap:336}));
+  ARMS[5].nodes.push(N('o5',['Schlummerofen','Slumber Oven'],4000,'b18',['Offline-Erträge 100 %, maximal 72 Stunden.','Offline gains 100%, up to 72 hours.'],{offline:1,offCap:72}),N('o6',['Winterschlaf','Hibernation'],10000,'moon',['Offline-Erträge 100 %, maximal 96 Stunden.','Offline gains 100%, up to 96 hours.'],{offline:1,offCap:96}),N('o7',['Zeitloser Schlaf','Timeless Sleep'],25000,'b12',['Offline-Erträge 100 %, maximal 7 Tage.','Offline gains 100%, up to 7 days.'],{offline:1,offCap:168}),N('o8',['Ewiger Traum','Eternal Dream'],60000,'infinity',['Offline-Erträge 300 %, maximal 14 Tage.','Offline gains 300%, up to 14 days.'],{offline:3,offCap:336}));
   ARMS[6].nodes.push(N('k7',['Blitz-Ofen','Flash Oven'],2500,'flame',['Boosts laden 10 % schneller.','Boosts recharge 10% faster.'],{cdRed:.1}),N('k8',['Dauerbrenner','Long Burner'],6000,'hourglass',['Boosts halten 50 % länger.','Boosts last 50% longer.'],{durM:1.5}),N('k9',['Sofort-Kühlung','Instant Cooling'],15000,'fridge',['Boosts laden 10 % schneller.','Boosts recharge 10% faster.'],{cdRed:.1}),N('k10',['Zeitlose Boosts','Timeless Boosts'],40000,'infinity',['Boosts halten doppelt so lange.','Boosts last twice as long.'],{durM:2}));
   ARMS[7].nodes.push(N('h8',['Ruhmestempel','Temple of Fame'],8000,'b7',['Erfolge bringen 50 % mehr Produktion.','Achievements give 50% more production.'],{achMul:1.5}),N('h9',['Chip-Galaxie','Chip Galaxy'],15000,'spark',['Jeder Himmelschip bringt +5 % Produktion.','Each heavenly chip gives +5% production.'],{chip:.05}),N('h10',['Ewiger Ruhm','Eternal Fame'],35000,'album',['Erfolge bringen doppelt so viel Produktion.','Achievements give twice as much production.'],{achMul:2}),N('h11',['Chip-Universum','Chip Universe'],80000,'infinity',['Jeder Himmelschip bringt +6 % Produktion.','Each heavenly chip gives +6% production.'],{chip:.06}));
   B.forEach((b,i)=>ARMS[3].nodes.push(N('hb'+i,[b.name[0]+' im Himmel',b.name[1]+' in Heaven'],Math.round(3*Math.pow(1.5,i)),'b'+i,[b.plural[0]+' produzieren doppelt so viel.',b.plural[1]+' produce twice as much.'],{bi:i,bmul:2})));
@@ -2887,7 +2887,7 @@ const REB=[
   {id:'r_gold2',c:5,n:['Goldregen','Gold Rain'],d:['Goldkekse 25 % stärker.','Golden cookies 25% stronger.']},
   {id:'r_hero',c:5,n:['Heldenrezept','Hero Recipe'],d:['Der Held hat 25 % mehr Angriff und Leben.','The hero has 25% more attack and health.']},
   {id:'r_work',c:5,n:['Lehrwerkstatt','Training Workshop'],d:['Helfer bekommen 50 % mehr Erfahrung.','Helpers get 50% more experience.']},
-  {id:'r_click2',c:6,n:['Teigmeister','Dough Master'],d:['Klicks ×5.','Clicks ×5.']},
+  {id:'r_click2',c:6,n:['Teigmeister','Dough Master'],d:['Klicks ×3.','Clicks ×3.']},
   {id:'r_build',c:6,n:['Bauboom','Building Boom'],d:['Gebäude 10 % billiger.','Buildings 10% cheaper.']},
   {id:'r_off2',c:6,n:['Nachtbäckerei','Night Bakery'],d:['Offline-Grenze +8 Stunden.','Offline limit +8 hours.']},
   {id:'r_gem',c:7,n:['Edelsteinofen','Gem Oven'],d:['50 % mehr Edelsteine.','50% more gems.']},
@@ -2946,7 +2946,7 @@ ITEMS.push(
 var RANKS=[[0,'Ohne Rang','Unranked','#7d8794'],[5,'Bronze','Bronze','#c98a4b'],[20,'Silber','Silver','#c7d0d9'],[50,'Gold','Gold','#f1b24a'],[120,'Platin','Platinum','#7fe0e0'],[250,'Diamant','Diamond','#8fd3ff'],[500,'Meister','Master','#c38bff'],[1000,'Großmeister','Grandmaster','#ff6b8a'],[2000,'Legende','Legend','#ffd700'],[4000,'Mythisch','Mythic','#ff5ad8'],[8000,'Kosmisch','Cosmic','#7a5cff'],[15000,'Göttlich','Divine','#fff3b0'],[30000,'Ewig','Eternal','#5affd8'],[60000,'Unendlich','Infinite','#ffffff']];
 var COSN=[
   {id:'c_prod',c:1,ic:'spark',n:['Sternenstaub','Stardust'],d:['Produktion ×3.','Production ×3.']},
-  {id:'c_click',c:1,ic:'hand',n:['Sternenfinger','Star Fingers'],d:['Klicks ×10.','Clicks ×10.']},
+  {id:'c_click',c:1,ic:'hand',n:['Sternenfinger','Star Fingers'],d:['Klicks ×3.','Clicks ×3.']},
   {id:'c_chip',c:2,ic:'star',n:['Himmelsnebel','Heaven Nebula'],d:['Himmelschips wirken doppelt.','Heavenly chips work twice as well.']},
   {id:'c_pages',c:2,ic:'book',n:['Kosmisches Rezept','Cosmic Recipe'],d:['Rezeptseiten wirken doppelt.','Recipe pages work twice as well.']},
   {id:'c_start',c:2,ic:'pantry',n:['Urknall-Start','Big Bang Start'],d:['Jeder Aufstieg startet mit 1 Bio Keksen.','Every ascension starts with 1 trillion cookies.']},
@@ -3040,8 +3040,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=62;
+const NEWS_VER=63;
 const NEWS=[
+  {v:63,sum:['Großes Balance-Update','Big balance update'],items:[
+    ['change','Klicks: Die stärksten Klick-Upgrades sind schwächer (zum Beispiel ×10 → ×3, ×100 → ×10). Für den Teil eines Klicks, der aus deiner Produktion kommt, zählen Klick-Multiplikatoren höchstens ×10. Alle Klick-Boosts zusammen geben höchstens ×300.','Clicks: the strongest click upgrades are weaker (for example ×10 → ×3, ×100 → ×10). For the part of a click that comes from your production, click multipliers count at most ×10. All click boosts together give at most ×300.'],
+    ['change','Nur echte Klicks zählen, höchstens 20 pro Sekunde – Auto-Klicker bringen nichts mehr.','Only real clicks count, at most 20 a second – auto-clickers no longer help.'],
+    ['change','Offline: Du bekommst höchstens 100 % deiner Produktion. Die höheren Offline-Upgrades geben dafür mehr Zeit (bis zu 7 Tage).','Offline: you get at most 100% of your production. The higher offline upgrades give more time instead (up to 7 days).'],
+    ['change','Goldkekse: Gebäude-Rausch höchstens ×5, Keks-Regen höchstens 15 % deiner Kekse (wie Glückstreffer), und alle Produktions-Boosts zusammen höchstens ×100.','Golden cookies: Building Rush at most ×5, Cookie Rain at most 15% of your cookies (like Lucky), and all production boosts together at most ×100.']]},
   {v:62,sum:['Neue Konten sind gleich in der Bestenliste','New accounts join the leaderboard right away'],items:[
     ['new','Wer ein Konto erstellt, ist mit seiner Bäckerei sofort in der Bestenliste – auch in den Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde. Ist der Bäckerei-Name schon vergeben, nimmt sie den Benutzernamen.','When you create an account, your bakery joins the leaderboard right away – including the boards for clicks, golden cookies, ascensions and the fastest billion. If the bakery name is taken, it uses your username.'],
     ['change','Du willst nicht in der Bestenliste sein? Tippe dort auf „Austreten“; danach kommst du nicht von selbst wieder hinein.','Don’t want to be on the leaderboard? Tap "Leave" there; you won’t be added again by yourself.']]},
@@ -3792,6 +3797,7 @@ const envV=v=>v===undefined?1:v>=1?1+(v-1)*UE.wxMul:Math.max(.3,1-(1-v)*UE.wxMul
 const staMax=()=>5+UE.sta;
 const baseCost=i=>(S.admin.b[i]&&S.admin.b[i].cost)||B[i].base;
 const baseCps=i=>(S.admin.b[i]&&S.admin.b[i].cps)||B[i].cps;
+const CLICKBUFF_MAX=300,BUFFM_MAX=100,CLICKPCT_MAX=10,RUSH_MAX=5,RUSH_PER=25;
 let C={kps:0,kps0:0,boxM:1,cdM:1,durM:1,click:1,per:B.map(()=>0),chipRate:.01,goldRate:1,goldLife:13,goldPower:1,luck:1,buffTime:1,startCookies:0,costMult:1,offEff:.5,offCap:8};
 function recalc(){
   const AD=S.admin;
@@ -3876,7 +3882,7 @@ function recalc(){
   if(RT.r_gold){goldRate*=.9;goldPower*=1.1;}
   if(RT.r_cost) costMult*=.95;
   if(RT.r_off) offEff=Math.min(1.5,offEff+.25);
-  if(RT.r_gold2) goldPower*=1.25;if(RT.r_hero){UE.heroAtk*=1.25;UE.heroHp*=1.25;}if(RT.r_work) UE.wkXP*=1.5;if(RT.r_click2) clickT*=5;if(RT.r_build) costMult*=.9;if(RT.r_off2) offCap+=8;if(RT.r_chip2) chipRate*=1.5;if(RT.r_prod) gm*=3;
+  if(RT.r_gold2) goldPower*=1.25;if(RT.r_hero){UE.heroAtk*=1.25;UE.heroHp*=1.25;}if(RT.r_work) UE.wkXP*=1.5;if(RT.r_click2) clickT*=3;if(RT.r_build) costMult*=.9;if(RT.r_off2) offCap+=8;if(RT.r_chip2) chipRate*=1.5;if(RT.r_prod) gm*=3;
   const achN=Object.keys(S.ach).length;
   gm*=1+0.005*achN*achMul;
   gm*=1+chipRate*S.chips*EGM.chip;
@@ -3893,16 +3899,20 @@ function recalc(){
   WFX=calcWFX();gm*=WFX.prod;clickT*=WFX.click;goldRate*=WFX.gold;costMult*=WFX.cost;
   let frenzy=1,clickBuff=1,sugarM=1,spellM=1;
   for(const f of S.buffs){if(f.id==='frenzy') frenzy=7;if(f.id==='clickfrenzy') clickBuff=150;if(f.id==='b_sugar') sugarM=2;if(f.id==='b_turbo') clickBuff*=3;if(f.id==='b_sale') costMult*=.85;if(f.id==='b_magnet') goldRate*=.5;if(f.id==='s_click') clickBuff*=10;if(f.id==='s_sale') costMult*=.8;if(f.id==='s_time') spellM=5;}
+  /* V63: Klick-Boosts zusammen höchstens ×300 */
+  clickBuff=Math.min(CLICKBUFF_MAX,clickBuff);
   goldRate=Math.max(.35,goldRate);costMult=Math.max(.5,costMult)*WFX.costPost;
   gm*=EGM.prod;clickT*=EGM.click;goldPower*=EGM.gold;costMult*=EGM.cost;startCookies+=EGM.start;offEff+=EGM.off;goldRate*=EGM.goldf;buffTime*=EGM.buff;UE.heroAtk*=EGM.hero;UE.heroHp*=EGM.hero;UE.wkXP*=EGM.work;UE.frSell*=EGM.fr;UE.comboCap+=EGM.combo;if(EGM.bm) EGM.bm.forEach((m,i)=>{bm[i]*=m;});
   gm*=1+.01*badgeTiers();
   let bldM=1;for(const f of S.buffs) if(f.id==='g_build') bldM*=f.v||1.5;
-  const buffM=frenzy*sugarM*spellM*bldM;
+  const buffM=Math.min(BUFFM_MAX,frenzy*sugarM*spellM*bldM);   /* V63: Produktions-Boosts zusammen höchstens ×100 */
+  offEff=Math.min(1,offEff);   /* V63: offline nie mehr als online */
   const per=B.map((b,i)=>baseCps(i)*bm[i]*gm*buffM);
   let kps=0;
   B.forEach((b,i)=>{kps+=per[i]*S.b[i];});
   C={kps,kps0:kps/buffM,per,achN,chipRate,goldRate,goldLife,goldPower,luck,buffTime,startCookies,costMult,offEff,offCap,boxM,cdM:Math.max(.4,1-cdRed),durM,
-     click:(Math.pow(2,fingerUps)*clickU+clickPct*kps/buffM)*clickBuff*clickT*AD.click*(WFX.click0?0:1)};
+     /* V63: Klick-Multiplikatoren zählen voll für den Grund-Klick, für den Anteil an der Produktion höchstens ×10 (Events zählen extra) */
+     click:(Math.pow(2,fingerUps)*clickU*clickT+clickPct*(kps/buffM)*Math.min(CLICKPCT_MAX,clickT/GEV.click)*GEV.click)*clickBuff*AD.click*(WFX.click0?0:1)};
 }
 function buyCost(i,n){const g=S.admin.growth;return Math.ceil(baseCost(i)*C.costMult*Math.pow(g,S.b[i])*(Math.pow(g,n)-1)/(g-1));}
 function maxN(i){
@@ -4165,13 +4175,23 @@ function doClick(x,y){
   floater(x,y,(crit?tt('KRIT! +','CRIT! +'):'+')+fmtRate(g),crit?'crit':'');clickBurst(x,y,crit);ripple(x,y);squish();snd('click');
   if(fxOk()) anim(els.count,[{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:170,easing:'ease-out'});
 }
+/* V63: Nur echte Klicks zählen, höchstens 20 pro Sekunde (Menschen schaffen etwa 15) */
+const CLICK_MAX=20;let clkTs=[];
+function clickOk(e){
+  if(e&&e.isTrusted===false) return false;
+  const n=performance.now();clkTs=clkTs.filter(t=>n-t<1000);
+  if(clkTs.length>=CLICK_MAX) return false;
+  clkTs.push(n);return true;
+}
 els.cookie.addEventListener('pointerdown',e=>{
   if(e.pointerType==='mouse'&&e.button!==0) return;
+  if(!clickOk(e)) return;
   doClick(e.clientX,e.clientY);
 });
 els.cookie.addEventListener('keydown',e=>{
   if((e.key===' '||e.key==='Enter')&&!e.repeat){
     e.preventDefault();
+    if(!clickOk(e)) return;
     const r=els.cookie.getBoundingClientRect();
     doClick(r.left+r.width/2+rand(-30,30),r.top+r.height/2+rand(-30,30));
   }
@@ -4188,12 +4208,12 @@ function addBuff(id,tm){
 function applyGold(kind){
   const pw=C.goldPower;
   if(kind==='build'){
-    const mx=Math.max(...S.b),v=Math.round((1+mx/25)*10)/10,t0=Math.round(30*pw*C.buffTime);
+    const mx=Math.max(...S.b),v=Math.min(RUSH_MAX,Math.round((1+mx/RUSH_PER)*10)/10),t0=Math.round(30*pw*C.buffTime);
     addBuff('g_build',t0);const bf=S.buffs.find(f=>f.id==='g_build');if(bf) bf.v=v;recalc();
     toast(tt('Gebäude-Rausch! Produktion ×','Building rush! Production ×')+v.toLocaleString(LOC[LANG])+tt(' für ',' for ')+t0+' s',true);return;
   }
   if(kind==='rain'){
-    const gain=C.kps0*600*pw*C.luck;addCk(gain);toast(tt('Keks-Regen! +','Cookie rain! +')+fmt(gain),true);
+    const gain=(Math.min(S.cookies*.15,C.kps0*600)+13)*pw*C.luck;addCk(gain);toast(tt('Keks-Regen! +','Cookie rain! +')+fmt(gain),true);
     if(fxOk()) for(let i=0;i<14;i++) setTimeout(()=>crumbs(Math.random()*innerWidth,Math.random()*innerHeight*.5,4),i*70);
     return;
   }
@@ -7653,7 +7673,7 @@ function endgameMods(){
   const E=S.eg;
   r.bm=B.map((b,i)=>E.evo[i]?10:1);
   r.prod*=1+.3*E.cos.sh;
-  if(egHas('c_prod')) r.prod*=3;if(egHas('c_click')) r.click*=10;if(egHas('c_gold')) r.gold*=2;if(egHas('c_start')) r.start+=1e12;if(egHas('c_chip')) r.chip*=2;
+  if(egHas('c_prod')) r.prod*=3;if(egHas('c_click')) r.click*=3;if(egHas('c_gold')) r.gold*=2;if(egHas('c_start')) r.start+=1e12;if(egHas('c_chip')) r.chip*=2;
   const P=E.par.pts,pv=k=>P[k]||0;r.prod*=1+.04*pv('prod');r.click*=1+.08*pv('click');r.gold*=1+.03*pv('gold');r.cost*=Math.max(.75,1-.01*pv('cost'));
   r.off=.02*pv('off');r.goldf=Math.max(.7,1-.01*pv('goldf'));r.buff=1+.02*pv('buff');r.chip*=1+.01*pv('chip');r.hero=1+.03*pv('hero');r.work=1+.04*pv('work');r.fr=1+.03*pv('fr');r.combo=.1*pv('combo');
   r.prod*=1+.05*rankIdx();
