@@ -3044,8 +3044,11 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=61;
+const NEWS_VER=62;
 const NEWS=[
+  {v:62,sum:['Neue Konten sind gleich in der Bestenliste','New accounts join the leaderboard right away'],items:[
+    ['new','Wer ein Konto erstellt, ist mit seiner Bäckerei sofort in der Bestenliste – auch in den Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde. Ist der Bäckerei-Name schon vergeben, nimmt sie den Benutzernamen.','When you create an account, your bakery joins the leaderboard right away – including the boards for clicks, golden cookies, ascensions and the fastest billion. If the bakery name is taken, it uses your username.'],
+    ['change','Du willst nicht in der Bestenliste sein? Tippe dort auf „Austreten“; danach kommst du nicht von selbst wieder hinein.','Don’t want to be on the leaderboard? Tap "Leave" there; you won’t be added again by yourself.']]},
   {v:61,sum:['Neue Bestenlisten und dein eigenes Profil','New leaderboards and your own profile'],items:[
     ['new','Mehr Bestenlisten: die meisten Klicks, die meisten Goldkekse, die meisten Aufstiege und die schnellste Milliarde (dein schnellster Lauf von 0 bis 1 Milliarde Kekse diese Woche). Oben in der Bestenliste wechselst du zwischen ihnen.','More leaderboards: most clicks, most golden cookies, most ascensions and the fastest billion (your quickest run from 0 to 1 billion cookies this week). Switch between them at the top of the leaderboard.'],
     ['new','Dein Profil: Mit einem Konto wählst du Avatar, Farbe, Motto und bis zu 3 Lieblings-Erfolge. Öffne dein Profil über deinen Namen in der Bestenliste und tippe auf „Profil bearbeiten“.','Your profile: with an account, pick an avatar, a color, a motto and up to 3 favourite achievements. Open your profile from your name on the leaderboard and tap "Edit profile".'],
@@ -9018,7 +9021,7 @@ function accRender(){
     const up=accMode==='signup';
     h='<div class="seg acctabs" role="tablist"><button type="button" data-accm="login" aria-pressed="'+(!up)+'">'+tt('Anmelden','Sign in')+'</button><button type="button" data-accm="signup" aria-pressed="'+up+'">'+tt('Konto erstellen','Create account')+'</button></div>'
       +'<form class="accform" id="accF" novalidate><input class="namein" name="user" maxlength="16" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="'+tt('Benutzername (3–16 Buchstaben, Zahlen oder _)','Username (3–16 letters, numbers or _)')+'" aria-label="'+tt('Benutzername','Username')+'"><input class="namein" name="pass" type="password" maxlength="72" autocomplete="'+(up?'new-password':'current-password')+'" placeholder="'+tt('Passwort','Password')+(up?tt(' (mind. 6 Zeichen)',' (at least 6 characters)'):'')+'" aria-label="'+tt('Passwort','Password')+'"><label class="chk"><input type="checkbox" id="accShow"><span>'+tt('Passwort anzeigen','Show password')+'</span></label><button type="submit" class="btn primary"'+(accBusy?' disabled':'')+'>'+(accBusy?tt('Moment …','One moment …'):up?tt('Konto erstellen','Create account'):tt('Anmelden','Sign in'))+'</button></form>'
-      +'<p class="small" style="margin-top:6px">'+(up?tt('Keine E-Mail nötig. Nach dem Erstellen bekommst du einen Wiederherstellungs-Code – damit setzt du ein neues Passwort, falls du es vergisst.','No email needed. After creating it you get a recovery code – with it you can set a new password if you forget yours.'):tt('Mit deinem Konto spielst du auf jedem Gerät mit derselben Bäckerei weiter.','With your account you keep playing the same bakery on every device.'))+'</p>'
+      +'<p class="small" style="margin-top:6px">'+(up?tt('Keine E-Mail nötig. Nach dem Erstellen bekommst du einen Wiederherstellungs-Code – damit setzt du ein neues Passwort, falls du es vergisst. Deine Bäckerei kommt dabei in die Bestenliste; austreten kannst du dort jederzeit.','No email needed. After creating it you get a recovery code – with it you can set a new password if you forget yours. Your bakery also joins the leaderboard; you can leave it there any time.'):tt('Mit deinem Konto spielst du auf jedem Gerät mit derselben Bäckerei weiter.','With your account you keep playing the same bakery on every device.'))+'</p>'
       +(v58Ready&&!up?accForgotHtml():'');
   }
   if(accMsg) h+='<p class="nameerr'+(accMsgOk?' ok':'')+'">'+accMsg+'</p>';
@@ -9054,7 +9057,7 @@ $id('accBox').addEventListener('submit',async e=>{
       if(accMode==='signup'){
         const r=await lbApi('rpc/acc_signup',{p_user:user,p_pass:pass,p_player:kfId()});accV4=true;
         accTok=r.token;lsSet(ACC_KEY,accTok);accMe={username:r.username,has_save:false};accBusy=false;
-        await accUpload(false);if(v48Ready) refClaim();accMsg=tt('Konto erstellt! Deine Bäckerei ist jetzt in deinem Konto gespeichert.','Account created! Your bakery is now saved in your account.');accMsgOk=true;toast(accMsg,true);if(v58Ready){devName();setTimeout(()=>recMake(true),600);}
+        await accUpload(false);if(v48Ready) refClaim();if(v62Ready) await lbAutoJoin();accMsg=tt('Konto erstellt! Deine Bäckerei ist jetzt in deinem Konto gespeichert.','Account created! Your bakery is now saved in your account.');accMsgOk=true;toast(accMsg,true);if(v58Ready){devName();setTimeout(()=>recMake(true),600);}
       }else{
         const r=await lbApi('rpc/acc_login',{p_user:user,p_pass:pass});accV4=true;
         if(r&&r.error){if(r.error==='banned') banShow(r,user);accMsg=r.error==='banned'?banTxt(r):r.error==='too many tries'?tt('Zu viele falsche Versuche. Warte 15 Minuten.','Too many wrong tries. Wait 15 minutes.'):tt('Benutzername oder Passwort stimmt nicht.','Wrong username or password.');accMsgOk=false;}
@@ -11513,6 +11516,38 @@ $id('profOv').addEventListener('submit',async e=>{
 
 v61Ready=true;
 rrTick();setInterval(rrTick,1000);
+
+/* ======================= V62: Neue Konten kommen von selbst in die Bestenliste ======================= */
+var v62Ready=false;
+/* Nach "Konto erstellen": die Bäckerei tritt der Bestenliste bei. Ist der Name schon vergeben oder nicht erlaubt,
+   nimmt sie den Benutzernamen (und notfalls den Benutzernamen mit einer Zahl). Wer austreten will, kann das jederzeit. */
+async function lbAutoJoin(){
+  if(!lbOn()||!accTok||!accMe||S.lb.on||S.lb.ban||lbCheat()) return false;
+  const u=String(accMe.username||'').slice(0,16),okN=n=>typeof n==='string'&&/^[^<>]{2,20}$/.test(n.trim());
+  const names=[];
+  if(okN(S.name)) names.push(S.name.trim());
+  if(okN(u)) names.push(u);
+  for(let i=0;i<3&&u.length>=2;i++) names.push(u+' '+(10+Math.floor(Math.random()*990)));
+  const was=S.name;
+  if(!S.lb.id) S.lb.id=lbUUID();
+  for(const nm of names){
+    S.name=nm;S.lb.on=1;S.lb.t=0;
+    try{
+      await lbSubmit(true);
+      save();showName();
+      toast(nm===was?tt('Deine Bäckerei ist jetzt in der Bestenliste!','Your bakery joined the leaderboard!'):tt('Deine Bäckerei ist jetzt als „','Your bakery joined the leaderboard as “')+nm+tt('“ in der Bestenliste.','”.'),true);
+      if(v46Ready) setTimeout(()=>lbAccSync(true),1500);
+      lbLast=0;return true;
+    }catch(x){
+      const m=String(x&&x.message||'');
+      if(/name taken|name not allowed|invalid name/.test(m)) continue;
+      // Netz weg oder Server gerade nicht da: dabei bleiben, der Minuten-Takt schickt es später.
+      save();showName();return true;
+    }
+  }
+  S.name=was;S.lb.on=0;save();showName();return false;
+}
+v62Ready=true;
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};

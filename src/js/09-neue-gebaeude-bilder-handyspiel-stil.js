@@ -44,8 +44,11 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=61;
+const NEWS_VER=62;
 const NEWS=[
+  {v:62,sum:['Neue Konten sind gleich in der Bestenliste','New accounts join the leaderboard right away'],items:[
+    ['new','Wer ein Konto erstellt, ist mit seiner Bäckerei sofort in der Bestenliste – auch in den Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde. Ist der Bäckerei-Name schon vergeben, nimmt sie den Benutzernamen.','When you create an account, your bakery joins the leaderboard right away – including the boards for clicks, golden cookies, ascensions and the fastest billion. If the bakery name is taken, it uses your username.'],
+    ['change','Du willst nicht in der Bestenliste sein? Tippe dort auf „Austreten“; danach kommst du nicht von selbst wieder hinein.','Don’t want to be on the leaderboard? Tap "Leave" there; you won’t be added again by yourself.']]},
   {v:61,sum:['Neue Bestenlisten und dein eigenes Profil','New leaderboards and your own profile'],items:[
     ['new','Mehr Bestenlisten: die meisten Klicks, die meisten Goldkekse, die meisten Aufstiege und die schnellste Milliarde (dein schnellster Lauf von 0 bis 1 Milliarde Kekse diese Woche). Oben in der Bestenliste wechselst du zwischen ihnen.','More leaderboards: most clicks, most golden cookies, most ascensions and the fastest billion (your quickest run from 0 to 1 billion cookies this week). Switch between them at the top of the leaderboard.'],
     ['new','Dein Profil: Mit einem Konto wählst du Avatar, Farbe, Motto und bis zu 3 Lieblings-Erfolge. Öffne dein Profil über deinen Namen in der Bestenliste und tippe auf „Profil bearbeiten“.','Your profile: with an account, pick an avatar, a color, a motto and up to 3 favourite achievements. Open your profile from your name on the leaderboard and tap "Edit profile".'],
