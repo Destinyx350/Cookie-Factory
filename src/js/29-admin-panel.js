@@ -15,9 +15,9 @@ function chkList(g,list){
 function unlockSec(g,titleKey,list){
   return '<details class="adm"><summary>'+tr('adm_unlock')+': '+tr(titleKey)+'</summary><div class="adm-body"><div class="btns"><button type="button" class="btn sm" data-act="all:'+g+'">'+tr('adm_all_on')+'</button><button type="button" class="btn sm" data-act="none:'+g+'">'+tr('adm_all_off')+'</button></div>'+chkList(g,list)+'</div></details>';
 }
-const ADM_TABS=[['lb','Bestenliste','Leaderboard'],['online','Online','Online'],['mod','Moderation','Moderation'],['srv','Server','Server'],['quick','Schnell','Quick'],['val','Werte','Values'],['bld','Gebäude','Buildings'],['unl','Freischalten','Unlock'],['world','Welt & Held','World & hero'],['end','Endgame','Endgame'],['tool','Werkzeuge','Tools']];
+const ADM_TABS=[['todo','Zu erledigen','To-do'],['pl','Spieler','Players'],['lb','Bestenliste','Leaderboard'],['online','Online','Online'],['mod','Moderation','Moderation'],['srv','Server','Server'],['quick','Schnell','Quick'],['val','Werte','Values'],['bld','Gebäude','Buildings'],['unl','Freischalten','Unlock'],['world','Welt & Held','World & hero'],['end','Endgame','Endgame'],['tool','Werkzeuge','Tools']];
 let admTab='quick',admPass='';
-const ADM_ONLINE=['lb','online','mod','srv'];
+const ADM_ONLINE=['todo','pl','lb','online','mod','srv'];
 function admXV(){
   const X={};
   MATS.forEach(m=>{X['mat_'+m.id]=[()=>S.w.mat[m.id],v=>{S.w.mat[m.id]=Math.floor(v);},m.n];});
@@ -114,14 +114,14 @@ function buildAdmin(){
     +admCard(tt('Speichern','Saving'),'<div class="btns">'+admBtn('savenow',tt('Jetzt speichern','Save now'))+admBtn('backup',tt('Backup anlegen','Create backup'))+'</div>')
     +admCard(tt('Spielstand-Daten','Save data'),'<div class="btns">'+admBtn('json',tt('Daten anzeigen','Show data'))+'</div><textarea id="admJson" readonly hidden></textarea><p class="small" id="admJsonN"></p>',tt('json export','json export'))
     +admCard(tr('adm_reset'),'<div class="btns">'+admBtn('reset:admin',tr('adm_reset_btn'))+'</div>');
-  P.lb='<div id="admLb" class="admlb"></div>';P.online='<div id="admOn" class="admlb"></div><div id="admAcc" class="admlb" style="margin-top:10px"></div><div id="admClub" class="admlb" style="margin-top:10px"></div>';P.mod='<div id="admMod" class="admlb"></div>';P.srv='<div id="admSrv" class="admlb"></div>';
+  P.todo='<div id="admTodo" class="admlb"></div>';P.pl='<div id="admPl" class="admlb"></div>';P.lb='<div id="admLb" class="admlb"></div>';P.online='<div id="admOn" class="admlb"></div><div id="admAcc" class="admlb" style="margin-top:10px"></div><div id="admClub" class="admlb" style="margin-top:10px"></div>';P.mod='<div id="admMod" class="admlb"></div>';P.srv='<div id="admSrv" class="admlb"></div>';
   let h='<div class="admlockbar"><button type="button" class="btn sm" id="admLockBtn">'+tt('Admin sperren','Lock admin')+'</button></div><div class="admhead"><div class="admstats">'+[['ck',tt('Kekse','Cookies')],['kps',tt('pro Sek.','per sec')],['clk',tt('pro Klick','per click')],['chips',tt('Chips','Chips')],['spd',tt('Tempo','Speed')]].map(([k,l])=>'<span><small>'+l+'</small><b data-al="'+k+'"></b></span>').join('')+'</div>'
     +'<input type="search" class="setq" id="admQ" autocomplete="off" placeholder="'+tt('Admin durchsuchen …','Search admin …')+'"><div class="seg admgrp" id="admGrp" role="group"><button type="button" data-ag="game">'+tt('Spiel','Game')+'</button><button type="button" data-ag="online">'+tt('Online','Online')+'</button></div><div class="seg admseg" id="admSeg">'+ADM_TABS.map(t=>'<button type="button" data-ap="'+t[0]+'" data-g="'+(ADM_ONLINE.includes(t[0])?'online':'game')+'" aria-pressed="'+(t[0]===admTab)+'">'+tt(t[1],t[2])+'</button>').join('')+'</div></div>'
     +ADM_TABS.map(t=>'<div class="admpane" data-ap="'+t[0]+'">'+P[t[0]]+'</div>').join('')+'<p class="small" id="admNone" hidden>'+tt('Nichts gefunden.','Nothing found.')+'</p>';
   els.admin.innerHTML=h;
   admShow();
   fillAdmin();
-  admLbRender();admOnRender();admAccRender();if(v45Ready){admModRender();admSrvRender();}
+  admLbRender();admOnRender();admAccRender();if(v45Ready){admModRender();admSrvRender();}if(v64aReady) admV64Render();
 }
 function admShow(){
   const q=(document.getElementById('admQ')||{value:''}).value.trim().toLowerCase();let n=0;

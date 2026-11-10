@@ -58,6 +58,7 @@ async function accLoginOk(r){
   else await accUpload(false);
   accMsg=tt('Angemeldet als ','Signed in as ')+escName(r.username)+'.';accMsgOk=true;
   if(v58Ready) devName();
+  if(v64Ready) setTimeout(accNoticeCheck,1500);
 }
 function accRender(){
   const box=$id('accBox');if(!box) return;
@@ -69,7 +70,7 @@ function accRender(){
     const arm=k=>accArm.k===k&&Date.now()-accArm.t<5000;
     h='<div class="accme"><span class="accav" aria-hidden="true">👤</span><span><b>'+escName(accMe.username)+'</b><small>'+(accMe.save_at?tt('Zuletzt gespeichert: ','Last saved: ')+new Date(accMe.save_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):tt('Noch nichts gespeichert','Nothing saved yet'))+' · '+tt('speichert automatisch','saves automatically')+'</small></span></div>'
       +'<div class="btns" style="margin-top:10px"><button type="button" class="btn primary" data-acc="save">'+tt('Jetzt speichern','Save now')+'</button>'+(accMe.has_save?'<button type="button" class="btn'+(arm('load')?' armed':'')+'" data-acc="load">'+(arm('load')?tt('Ersetzt dein Spiel! Nochmal','Replaces your game! Again'):tt('Aus Konto laden','Load from account'))+'</button>':'')+'<button type="button" class="btn" data-acc="logout">'+tt('Abmelden','Sign out')+'</button><button type="button" class="btn" data-acc="logoutall">'+tt('Andere Geräte abmelden','Sign out other devices')+'</button></div>'
-      +(v58Ready?accSecHtml():'')
+      +(v58Ready?accSecHtml():'')+(v64Ready?accNameHtml():'')
       +'<details class="fold accfold"><summary>'+tt('Passwort ändern','Change password')+'</summary><form class="coderow" id="accPwF" novalidate><input type="password" class="namein" name="old" autocomplete="current-password" placeholder="'+tt('Altes Passwort','Old password')+'"><input type="password" class="namein" name="new" autocomplete="new-password" placeholder="'+tt('Neues Passwort (mind. 6)','New password (6+)')+'"><button type="submit" class="btn">'+tt('Ändern','Change')+'</button></form></details>'
       +'<details class="fold accfold"><summary>'+tt('Konto löschen','Delete account')+'</summary><p class="small">'+tt('Löscht dein Konto und den Spielstand darin für immer. Dein Spiel auf diesem Gerät bleibt.','Deletes your account and its save forever. Your game on this device stays.')+'</p><form class="coderow" id="accDelF" novalidate><input type="password" class="namein" name="pass" autocomplete="current-password" placeholder="'+tt('Passwort zur Bestätigung','Password to confirm')+'"><button type="submit" class="btn'+(arm('del')?' armed':'')+'">'+(arm('del')?tt('Wirklich löschen? Nochmal','Really delete? Again'):tt('Konto löschen','Delete account'))+'</button></form></details>';
   }else{

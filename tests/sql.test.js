@@ -91,11 +91,13 @@ module.exports = async function sqlTests() {
 
   // Leaderboard: unique names, growth limit, account link
   const L1 = '11111111-1111-1111-1111-111111111111', L2 = '22222222-2222-2222-2222-222222222222';
-  await rpc('submit_score', { p_id: L1, p_name: 'Test Bakery', p_score: 1e9 });
-  await expectError(rpc('submit_score', { p_id: L2, p_name: 'test bakery', p_score: 5 }), /name taken/, 'leaderboard names are unique');
+  // v64: the leaderboard is for accounts only and always shows the username
+  await expectError(rpc('submit_score', { p_id: L2, p_name: 'Guest Bakery', p_score: 5 }), /account needed/, 'guests cannot join the leaderboard');
+  await rpc('submit_score', { p_id: L1, p_name: 'Test Bakery', p_score: 1e9, p_token: a.token });
+  check((await q('select name from leaderboard where id = $1', [L1])).rows[0].name === 'test_alpha', 'the leaderboard shows the username, not the bakery name');
+  await expectError(rpc('submit_score', { p_id: L2, p_name: 'Other', p_score: 5, p_token: a.token }), /another spot/, 'one leaderboard spot per account');
   await q("update leaderboard set updated_at = now() - interval '5 minutes' where id = $1", [L1]);
   await expectError(rpc('submit_score', { p_id: L1, p_name: 'Test Bakery', p_score: 1e12 }), /grew too fast/, 'scores cannot jump too fast');
-  await expectError(rpc('submit_score', { p_id: L2, p_name: 'Hitler', p_score: 5 }), /not allowed/, 'rude leaderboard names are blocked');
   const link = await rpc('acc_lb_link', { p_token: a.token, p_lb: L1 });
   check(link.lb_id === L1 && link.score === 1e9, 'leaderboard spot is linked to the account');
   check((await rpc('acc_lb_link', { p_token: a.token, p_lb: L2 })).lb_id === L1, 'a second device gets the same spot');
@@ -119,7 +121,7 @@ module.exports = async function sqlTests() {
   await rpc('acc_profile', { p_token: c1.token, p_data: { ach: 12, asc: 2, title: 'Baker <b>', bakery: 'Gamma Bakes', evil: 'x' } });
   const pr = await rpc('player_profile', { p_name: 'TEST_GAMMA' });
   check(pr.username === 'test_gamma' && pr.stats.ach === 12 && !pr.stats.evil && !pr.stats.title, 'profile shows only safe public numbers', pr.stats);
-  check((await rpc('player_profile', { p_name: 'Test Bakery' })).rank === 1, 'profile works by leaderboard name');
+  check((await rpc('player_profile', { p_name: 'test_alpha' })).rank === 1, 'the profile shows the leaderboard place');
   await expectError(rpc('player_profile', { p_name: 'nobody_here' }), /player not found/, 'unknown profile');
   const fl = await rpc('friend_request', { p_token: c1.token, p_user: 'test_beta' });
   check(fl.outgoing[0] === 'test_beta', 'send a friend request');
@@ -570,7 +572,8 @@ module.exports = async function sqlTests() {
   await expectError(asAnon('select * from public.lb_stats limit 1'), /permission denied/, 'players cannot read lb_stats');
   const u1 = crypto.randomUUID(), u2 = crypto.randomUUID(), u3 = crypto.randomUUID();
   await expectError(rpc('submit_stats', { p_id: u1, p_clicks: 5, p_gold: 1, p_asc: 0 }), /not on the leaderboard/, 'category numbers need a leaderboard spot');
-  for (const [u, n] of [[u1, 'Board One'], [u2, 'Board Two'], [u3, 'Board Three']]) await rpc('submit_score', { p_id: u, p_name: n, p_score: 1000 });
+  await q("insert into kf_accounts (username, pass_hash, lb_id) values ('Board_One', 'x', $1), ('Board_Two', 'x', $2), ('Board_Three', 'x', $3)", [u1, u2, u3]);
+  for (const u of [u1, u2, u3]) await rpc('submit_score', { p_id: u, p_name: 'ignored', p_score: 1000 });
   let r1 = await rpc('submit_stats', { p_id: u1, p_clicks: 5e8, p_gold: 5e6, p_asc: 3 });
   check(r1.clicks === 1e8 && r1.gold === 1e6 && r1.asc === 3, 'the first numbers are capped to sensible maximums', r1);
   r1 = await rpc('submit_stats', { p_id: u1, p_clicks: 1e9, p_gold: 2e6, p_asc: 500 });
@@ -586,15 +589,15 @@ module.exports = async function sqlTests() {
   check(r2.fast === 10, 'the fastest run counts from 10 seconds and only gets better', r2);
   await rpc('submit_stats', { p_id: u1, p_clicks: 1e8 + 50000, p_gold: 1e6 + 100, p_asc: 20, p_fast: 60 });
   const bc = await rpc('lb_board', { p_kind: 'clicks', p_id: u3 });
-  check(bc.top[0].name === 'Board One' && bc.top[1].name === 'Board Three' && bc.me.rank === 2 && bc.me.v === 800, 'the clicks board is sorted and shows your place', bc);
+  check(bc.top[0].name === 'Board_One' && bc.top[1].name === 'Board_Three' && bc.me.rank === 2 && bc.me.v === 800, 'the clicks board is sorted and shows your place', bc);
   const bf = await rpc('lb_board', { p_kind: 'fast', p_id: u1 });
-  check(bf.top.map(x => x.name).join() === 'Board Two,Board One,Board Three' && bf.me.rank === 2 && bf.me.v === 60, 'the fastest-to-a-billion board is sorted from fastest', bf);
+  check(bf.top.map(x => x.name).join() === 'Board_Two,Board_One,Board_Three' && bf.me.rank === 2 && bf.me.v === 60, 'the fastest-to-a-billion board is sorted from fastest', bf);
   check((await rpc('lb_board', { p_kind: 'asc', p_id: null })).top[0].v === 20, 'the ascension board works');
   await q("update lb_stats set fast_wk = '2000-W01' where id = $1", [u2]);
-  check(!(await rpc('lb_board', { p_kind: 'fast' })).top.some(x => x.name === 'Board Two'), 'the fastest board only shows this week');
+  check(!(await rpc('lb_board', { p_kind: 'fast' })).top.some(x => x.name === 'Board_Two'), 'the fastest board only shows this week');
   await expectError(rpc('lb_board', { p_kind: 'cookies' }), /unknown board/, 'unknown boards are refused');
-  await q('insert into lb_banned (id, name) values ($1, $2)', [u3, 'Board Three']);
-  check(!(await rpc('lb_board', { p_kind: 'clicks' })).top.some(x => x.name === 'Board Three'), 'banned spots are not shown');
+  await q('insert into lb_banned (id, name) values ($1, $2)', [u3, 'Board_Three']);
+  check(!(await rpc('lb_board', { p_kind: 'clicks' })).top.some(x => x.name === 'Board_Three'), 'banned spots are not shown');
   await expectError(rpc('submit_stats', { p_id: u3, p_clicks: 900, p_gold: 2, p_asc: 0 }), /banned/, 'banned spots cannot send numbers');
   await q('delete from leaderboard where id = $1', [u2]);
   check((await q('select count(*)::int n from lb_stats where id = $1', [u2])).rows[0].n === 0, 'leaving the leaderboard removes the numbers too');
@@ -605,10 +608,76 @@ module.exports = async function sqlTests() {
   check(sty.av === '🦊' && sty.col === 'teal' && sty.motto === 'Baking since breakfast' && JSON.stringify(sty.show) === '["clk100","all1000","gold1"]', 'a player sets avatar, color, motto and up to 3 showcase achievements', sty);
   check(!('av' in (await rpc('acc_style', { p_token: c2.token, p_data: { av: '<b>', col: 'neon' } }))), 'only known avatars and colors are stored');
   await rpc('acc_style', { p_token: c2.token, p_data: { av: '🦊', col: 'teal', motto: 'Baking since breakfast', show: ['clk100'] } });
+  await q('update kf_accounts set lb_id = null where lb_id = $1', [u1]);
   await rpc('acc_lb_link', { p_token: c2.token, p_lb: u1 }).catch(() => null);
   const pr = await rpc('player_profile', { p_name: 'test_delta' });
   check(pr.style.av === '🦊' && pr.style.motto === 'Baking since breakfast', 'profiles show the style', pr.style);
   check(pr.ranks && pr.ranks.clicks === 1 && pr.ranks.asc === 1 && pr.ranks.fast >= 1 && pr.ranks.fast_s === 60, 'profiles show the place in every board', pr.ranks);
   check((await q("select count(*)::int n from kf_schema where part = 17")).rows[0].n === 1, 'server part 17 is listed');
+  }
+  {
+  // One name, warnings with strikes, player history, player card, to-do list (v64)
+  const crypto = require('crypto');
+  for (const t of ['kf_name_hist', 'kf_player_log']) await expectError(asAnon('select * from public.' + t + ' limit 1'), /permission denied/, 'players cannot read ' + t);
+  for (const [f, b] of [['kf_name_apply', { p_acc: '00000000-0000-0000-0000-000000000000', p_new: 'x' }], ['kf_name_free', { p_name: 'x', p_acc: null }], ['kf_strikes', { p_acc: '00000000-0000-0000-0000-000000000000' }]])
+    await expectError(rpc(f, b), /permission denied|not exist|Could not find/, 'players cannot call ' + f);
+  const n1 = await rpc('acc_signup', { p_user: 'name_old', p_pass: 'secret123' }, '6.4.0.1');
+  const s1 = crypto.randomUUID();
+  await rpc('submit_score', { p_id: s1, p_name: 'Fancy Bakery', p_score: 500, p_token: n1.token });
+  check((await q('select lb_id from kf_accounts where username = $1', ['name_old'])).rows[0].lb_id === s1, 'the first score with a token links the spot to the account');
+  const ri = await rpc('acc_rename', { p_token: n1.token, p_new: 'name_new' }, '6.4.0.1');
+  check(ri.username === 'name_new' && ri.old[0] === 'name_old' && new Date(ri.next_at) - Date.now() > 29 * 86400e3, 'a player changes the username and waits 30 days for the next change', ri);
+  check((await q('select name from leaderboard where id = $1', [s1])).rows[0].name === 'name_new', 'the leaderboard shows the new name');
+  await expectError(rpc('acc_rename', { p_token: n1.token, p_new: 'name_third' }, '6.4.0.1'), /rename wait/, 'only one username change every 30 days');
+  check((await rpc('acc_rename', { p_token: n1.token, p_new: 'Name_New' }, '6.4.0.1')).username === 'Name_New', 'changing only upper and lower case is always allowed');
+  await expectError(rpc('acc_rename', { p_token: n1.token, p_new: 'a b' }, '6.4.0.1'), /invalid username/, 'usernames keep their rules');
+  await expectError(rpc('acc_rename', { p_token: 'not-a-session', p_new: 'zz_zz' }), /session|token|sign/i, 'renaming needs a session');
+  const n2 = await rpc('acc_signup', { p_user: 'name_other', p_pass: 'secret123' }, '6.4.0.3');
+  await q("update kf_accounts set renamed_at = null where username = 'name_other'");
+  await expectError(rpc('acc_rename', { p_token: n2.token, p_new: 'name_old' }, '6.4.0.3'), /username taken/, 'a given-up name stays reserved for 90 days');
+  const lg = await rpc('acc_login', { p_user: 'name_old', p_pass: 'secret123' }, '6.4.0.1');
+  check(lg.token && lg.username === 'Name_New', 'signing in with the old name still works and gives the new name', lg);
+  check((await rpc('player_profile', { p_name: 'name_old' })).username === 'Name_New', 'old names still open the profile');
+  // warnings and strikes
+  await expectError(rpc('admin_players', { p_pass: 'nope', p_action: 'find', p_data: { q: 'name' } }), /wrong admin password/, 'the player tools are for the owner');
+  const fd = await rpc('admin_players', { p_pass: tok, p_action: 'find', p_data: { q: 'name_old' } });
+  check(fd.length === 1 && fd[0].username === 'Name_New' && fd[0].old.includes('name_old'), 'the admin finds a player by an old name', fd);
+  await expectError(rpc('admin_players', { p_pass: tok, p_action: 'warn', p_data: { user: 'Name_New', reason: '' } }), /reason needed/, 'a warning needs a reason');
+  let w = await rpc('admin_players', { p_pass: tok, p_action: 'warn', p_data: { user: 'Name_New', reason: 'Rude chat' } });
+  check(w.strike === 1 && w.hours === null && (await q("select count(*)::int n from kf_bans b join kf_accounts a on a.id = b.account where a.username = 'Name_New'")).rows[0].n === 0, 'the first strike is only a warning', w);
+  const nt = await rpc('acc_notices', { p_token: n1.token });
+  check(nt.notices.length === 1 && nt.notices[0].kind === 'warn' && nt.notices[0].reason === 'Rude chat' && nt.notices[0].strike === 1, 'the player sees the warning', nt);
+  check((await rpc('acc_notices', { p_token: n1.token })).notices.length === 0, 'each warning is shown only once');
+  w = await rpc('admin_players', { p_pass: tok, p_action: 'warn', p_data: { user: 'Name_New', reason: 'Spam' } });
+  const b2 = (await q("select until from kf_bans b join kf_accounts a on a.id = b.account where a.username = 'Name_New'")).rows[0];
+  check(w.strike === 2 && w.hours === 24 && b2 && Math.abs(new Date(b2.until) - Date.now() - 24 * 3600e3) < 120e3, 'the second strike bans for 24 hours', w);
+  w = await rpc('admin_players', { p_pass: tok, p_action: 'warn', p_data: { user: 'name_old', reason: 'Spam again' } });
+  check(w.strike === 3 && w.hours === 168, 'the third strike bans for 7 days', w);
+  w = await rpc('admin_players', { p_pass: tok, p_action: 'warn', p_data: { user: 'Name_New', reason: 'Cheating' } });
+  const b4 = (await q("select until from kf_bans b join kf_accounts a on a.id = b.account where a.username = 'Name_New'")).rows[0];
+  check(w.strike === 4 && w.hours === 0 && b4 && b4.until === null, 'the fourth strike bans forever', w);
+  const lgk = (await q("select string_agg(l.kind, ',' order by l.id) k from kf_player_log l join kf_accounts a on a.id = l.account where a.username = 'Name_New'")).rows[0].k;
+  check(lgk === 'warn,warn,ban,warn,ban,warn,ban', 'the history lists every warning and ban, without fake unbans between bans', lgk);
+  await rpc('admin_bans', { p_pass: tok, p_action: 'unban', p_data: { user: 'Name_New' } });
+  await rpc('admin_mod', { p_pass: tok, p_action: 'mute', p_data: { user: 'Name_New', hours: 2 } });
+  const card = await rpc('admin_players', { p_pass: tok, p_action: 'card', p_data: { user: 'name_old' } });
+  check(card.account.username === 'Name_New' && card.names.some(x => x.name === 'name_old') && card.strikes === 4 && card.lb && card.lb.score === 500
+    && card.log[0].kind === 'mute' && card.log[1].kind === 'unban' && card.mute && !card.ban, 'the player card shows names, strikes, leaderboard and the full history', { names: card.names, log: card.log.map(x => x.kind) });
+  // forced rename
+  const fr = await rpc('admin_players', { p_pass: tok, p_action: 'rename', p_data: { user: 'name_other', reason: 'Bad name' } });
+  check(/^baker_\d{5}$/.test(fr.username) && fr.old === 'name_other', 'the admin can force a new name', fr);
+  const nt2 = await rpc('acc_notices', { p_token: n2.token });
+  check(nt2.username === fr.username && nt2.notices[0].kind === 'rename' && nt2.notices[0].reason === 'Bad name', 'the player is told about the new name', nt2);
+  check((await rpc('acc_rename', { p_token: n2.token, p_new: 'nice_name' }, '6.4.0.3')).username === 'nice_name', 'after a forced rename the player may choose a name right away');
+  await expectError(rpc('acc_rename', { p_token: n2.token, p_new: 'nice_name2' }, '6.4.0.3'), /rename wait/, 'then the 30-day wait applies again');
+  // to-do list
+  await expectError(rpc('admin_todo', { p_pass: 'nope' }), /wrong admin password/, 'the to-do list is for the owner');
+  await q("insert into kf_reports (reported, body, reporter_name, status) values ('Name_New', 'bad words', 'ci', 'open')");
+  const td = await rpc('admin_todo', { p_pass: tok });
+  check(td.reports.n >= 1 && td.reports.top[0].who === 'Name_New' && 'appeals' in td && 'flags' in td && 'feedback' in td && 'crashes' in td && Array.isArray(td.alarms), 'the to-do list collects reports, appeals, suspicious saves, feedback, crashes and alarms', Object.keys(td));
+  check((await rpc('admin_players', { p_pass: tok, p_action: 'card', p_data: { user: 'Name_New' } })).reports.open >= 1, 'the card counts reports under every name');
+  await q("delete from kf_accounts where username = 'Name_New'");
+  check((await q("select count(*)::int n from kf_accounts where username = 'Name_New'")).rows[0].n === 0, 'an account with a mute and history can still be deleted');
+  check((await q("select count(*)::int n from kf_schema where part = 18")).rows[0].n === 1, 'server part 18 is listed');
   }
 };

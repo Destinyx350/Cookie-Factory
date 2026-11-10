@@ -49,7 +49,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
 | 📐 **Fits every device** | A clean, modern design with separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. Reorder or hide tabs, and phones vibrate softly on taps and achievements. Options for high contrast, less motion and bigger text. |
-| 👤 **Accounts** | Create an account with a username and password (no email needed). Your bakery is saved to it automatically, so you can keep playing on any device. A one-time recovery code resets a forgotten password, and you can see and sign out each signed-in device. |
+| 👤 **Accounts** | Create an account with a username and password (no email needed). Your username is your name everywhere (leaderboard, chat, clubs, gifts) and can be changed every 30 days. Your bakery is saved to it automatically, so you can keep playing on any device. A one-time recovery code resets a forgotten password, and you can see and sign out each signed-in device. |
 | 👥 **Bakery clubs** | Start or join a club of up to 30 bakers, chat live with your club (with reactions, a 👋 button and a pinned message), and bake together for weekly prizes for the top 3 clubs. Clubs level up to level 10, and every level gives all members more production and bigger prizes. |
 | 🎁 **Gifts** | Send gems or star crumbs to friends with an account (daily limits keep it fair). |
 | 🤝 **Friends and profiles** | Add friends, see who's online, and tap any name to see that player's profile. Style your own profile with an avatar, color, motto and favourite achievements, and share it with a link. |
@@ -59,9 +59,9 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🔔 **Push notifications** | Get notified about gifts, friend requests, club prizes and events, even when the game is closed, and get a reminder after 3 days away. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. Shared links show a preview card. |
-| 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank (creating an account joins automatically). Extra boards for most clicks, golden cookies, ascensions and the fastest billion this week. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
+| 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your account and see your rank under your username (creating an account joins automatically). Extra boards for most clicks, golden cookies, ascensions and the fastest billion this week. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
 | 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools or edited files) is flagged, the leaderboard rejects scores that grow too fast, and the server flags account saves that jump unrealistically. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
-| 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries and optional two-step sign-in. Moderators get their own logins that can only handle reports and mutes. The admin can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player, who can appeal), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and player feedback, see how far new players get (day 2 and day 7 return rates), compare each week with the one before, get push alerts for new reports, appeals, feedback, crashes and suspicious saves, plan events and announcements (once or every week), see how full the database is, follow a live dashboard with charts, get an automatic weekly report with to-dos every Monday, and see server health (installed server parts, server jobs, alarms for stuck push messages, crash spikes and a full database, plus an uptime check every 30 minutes). Old data is cleaned up automatically and an encrypted copy of the weekly backup is kept outside Supabase. |
+| 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries and optional two-step sign-in. Moderators get their own logins that can only handle reports and mutes. The admin starts on a To-do tab with everything that waits, has one card per player (all names, leaderboard, club, devices, warnings, bans and history), warns players with strikes (warning → 24 h → 7 days → forever) or uses one-tap ban presets, and can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player, who can appeal), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and player feedback, see how far new players get (day 2 and day 7 return rates), compare each week with the one before, get push alerts for new reports, appeals, feedback, crashes and suspicious saves, plan events and announcements (once or every week), see how full the database is, follow a live dashboard with charts, get an automatic weekly report with to-dos every Monday, and see server health (installed server parts, server jobs, alarms for stuck push messages, crash spikes and a full database, plus an uptime check every 30 minutes). Old data is cleaned up automatically and an encrypted copy of the weekly backup is kept outside Supabase. |
 | 💬 **Feedback and privacy** | Send bug reports and ideas from Settings → Game. The [privacy info](https://destinyx350.github.io/Cookie-Factory/privacy.html) explains what the game stores. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
@@ -104,9 +104,9 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🔔 **Push-Benachrichtigungen** für Geschenke, Freundschaftsanfragen, Club-Preise, Events und eine Erinnerung nach 3 Tagen Pause
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
-- 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit (mit einem neuen Konto bist du automatisch dabei); eigene Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde der Woche; Wochen- und Monatspreise für die Top 3, Updates jede Minute
+- 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Konto mit, unter deinem Benutzernamen (mit einem neuen Konto bist du automatisch dabei); eigene Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde der Woche; Wochen- und Monatspreise für die Top 3, Updates jede Minute
 - 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, die Bestenliste lehnt zu schnell wachsende Punkte ab, und der Server meldet unrealistische Sprünge in Konto-Spielständen; dazu Wortfilter, Melde-Knopf im Club-Chat und Limits pro Gerät
-- 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort, eigenem Server-Passwort und Zwei-Schritt-Anmeldung für die Online-Werkzeuge, dazu Moderatoren-Zugänge: Meldungen, Spielersuche, Stummschalten, Sperren mit Einspruch, Wochenbericht, Spieler-Feedback, Push-Alarme, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte, geplante Events und Ankündigungen, Live-Dashboard mit Diagrammen, Wochenbericht jeden Montag, Server-Gesundheit mit Alarmen und Uptime-Check, verdächtige Spielstände, Datenbank-Füllstand, automatisches Aufräumen und verschlüsselte Backups außerhalb von Supabase und Spieler-Weg
+- 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort, eigenem Server-Passwort und Zwei-Schritt-Anmeldung für die Online-Werkzeuge, dazu Moderatoren-Zugänge, ein Tab „Zu erledigen“, eine Karte pro Spieler mit Verlauf, Verwarnungen mit Stufen und Sperr-Vorlagen: Meldungen, Spielersuche, Stummschalten, Sperren mit Einspruch, Wochenbericht, Spieler-Feedback, Push-Alarme, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte, geplante Events und Ankündigungen, Live-Dashboard mit Diagrammen, Wochenbericht jeden Montag, Server-Gesundheit mit Alarmen und Uptime-Check, verdächtige Spielstände, Datenbank-Füllstand, automatisches Aufräumen und verschlüsselte Backups außerhalb von Supabase und Spieler-Weg
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
 **[▶ Jetzt spielen](https://destinyx350.github.io/Cookie-Factory/)**
@@ -115,23 +115,23 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 63
-- **Big balance update.** The strongest click upgrades are weaker (for example ×10 → ×3 and ×100 → ×10). The part of a click that comes from your production gets at most ×10 from click upgrades, and all click boosts together give at most ×300.
-- **Fair clicking:** only real clicks count, at most 20 a second, so auto-clickers no longer help.
-- **Offline income is at most 100%.** The higher offline upgrades now give more offline time (up to 7 days) instead of more than 100%.
-- **Golden cookies:** Building Rush gives at most ×5, Cookie Rain at most 15% of your cookies (like Lucky), and all production boosts together give at most ×100.
+### Version 64
+- **One name for everything:** your username is now your name on the leaderboard, in chat, in clubs, with friends and gifts. The bakery name stays as decoration in your game and profile.
+- **The leaderboard is for accounts:** create a free account (no email needed) to join. Change your username every 30 days under **Settings → Saving**; signing in also works with the old name for 90 days.
+- **Fair rules:** breaking the rules first gets you a warning, then bans of 24 hours, 7 days and forever. Warnings show up in the game.
+- **For the admin:** a **To-do** tab with everything that waits, a **Players** tab with one card per player (all names, leaderboard, club, devices, history), warnings with strikes, one-tap ban presets, and the long Moderation and Server tabs split into sections.
 
-Also new since version 62: new accounts join the leaderboard right away.
+Also new since version 63: a big balance update (weaker late click upgrades, offline income at most 100%, capped golden cookie bursts) and a limit of 20 clicks a second.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Großes Balance-Update.** Die stärksten Klick-Upgrades sind schwächer (zum Beispiel ×10 → ×3 und ×100 → ×10). Der Teil eines Klicks, der aus deiner Produktion kommt, bekommt von Klick-Upgrades höchstens ×10, und alle Klick-Boosts zusammen geben höchstens ×300.
-- **Faires Klicken:** nur echte Klicks zählen, höchstens 20 pro Sekunde, Auto-Klicker bringen also nichts mehr.
-- **Offline-Ertrag höchstens 100 %.** Die höheren Offline-Upgrades geben jetzt mehr Offline-Zeit (bis zu 7 Tage) statt mehr als 100 %.
-- **Goldkekse:** Gebäude-Rausch höchstens ×5, Keks-Regen höchstens 15 % deiner Kekse (wie Glückstreffer), und alle Produktions-Boosts zusammen höchstens ×100.
+- **Ein Name für alles:** dein Benutzername ist jetzt dein Name in der Bestenliste, im Chat, in Clubs, bei Freunden und Geschenken. Der Bäckerei-Name bleibt als Deko in deinem Spiel und Profil.
+- **Die Bestenliste ist für Konten:** erstell dir gratis ein Konto (ohne E-Mail), um mitzumachen. Deinen Benutzernamen kannst du alle 30 Tage unter **Einstellungen → Speichern** ändern; anmelden geht 90 Tage lang auch noch mit dem alten Namen.
+- **Faire Regeln:** wer gegen die Regeln verstößt, bekommt erst eine Verwarnung, danach Sperren von 24 Stunden, 7 Tagen und für immer. Verwarnungen erscheinen im Spiel.
+- **Für den Admin:** ein Tab **Zu erledigen** mit allem, was wartet, ein Tab **Spieler** mit einer Karte pro Spieler (alle Namen, Bestenliste, Club, Geräte, Verlauf), Verwarnungen mit Stufen, Sperr-Vorlagen mit einem Tipp, und die langen Tabs Moderation und Server sind in Bereiche aufgeteilt.
 
-Außerdem neu seit Version 62: neue Konten sind gleich in der Bestenliste.
+Außerdem neu seit Version 63: ein großes Balance-Update (schwächere späte Klick-Upgrades, Offline-Ertrag höchstens 100 %, begrenzte Goldkeks-Räusche) und höchstens 20 Klicks pro Sekunde.
 
 </details>
 

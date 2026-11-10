@@ -1815,6 +1815,37 @@ html{-webkit-tap-highlight-color:transparent}
 .pcols .pc-orange{background:#e07a2f}.pcols .pc-gold{background:#d9a520}.pcols .pc-red{background:#d6453d}.pcols .pc-pink{background:#d9559d}.pcols .pc-purple{background:#8a5ad6}.pcols .pc-blue{background:#3f7fd6}.pcols .pc-teal{background:#23a39b}.pcols .pc-green{background:#3e9e4e}
 .pshowsel{display:grid;gap:6px}.pshowsel .namein{width:100%}
 
+/* ===== V64: Spieler-Karte, Zu erledigen, Bereiche, Platzhalter ===== */
+.pcl{all:unset;cursor:pointer;font-weight:700;color:inherit;border-bottom:1px dashed currentColor;line-height:1.2}
+.pcl:hover,.pcl:focus-visible{color:var(--gold1,#ffc23d);outline:none}
+.admqp{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin:6px 0 2px}
+.admqp[hidden]{display:none}
+.admsecbar{display:flex;margin:0 0 10px}
+.admsecbar button{flex:1 1 0}
+.admtodohead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
+.todon{display:inline-block;min-width:20px;padding:1px 7px;margin-left:6px;border-radius:999px;background:var(--gold1,#ffc23d);color:#2a1a00;font-size:12px;text-align:center}
+.plhead{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.plhead b{font-size:18px}.plhead small{display:block;color:var(--muted)}
+.plav{position:relative;display:grid;place-items:center;width:46px;height:46px;border-radius:var(--r-md,14px);background:var(--panel-2);font-size:24px;flex:0 0 auto}
+.plchips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.plchip{padding:3px 9px;border-radius:999px;font-size:12px;border:1px solid var(--edge);background:var(--panel-2)}
+.plchip.warn{border-color:#d9a23a}.plchip.bad{border-color:#e0566a;color:#ffb3bd}.plchip.ok{border-color:#4f9e63}
+.plfacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-bottom:6px}
+.plfacts span{padding:6px 9px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2);min-width:0}
+.plfacts small{display:block;color:var(--muted);font-size:11px}.plfacts b{font-size:13px;overflow-wrap:anywhere}
+.plh{margin:12px 0 6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.plpresets{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.plpresets .btn{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;height:auto;padding:8px 10px}
+.plpresets .btn small{font-size:11px;color:var(--muted);font-weight:500}
+.plpresets .btn.armed{border-color:#e0566a;background:rgba(224,86,106,.16)}
+.skel{display:flex;flex-direction:column;gap:8px;padding:4px 0}
+.skrow{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:var(--r-sm,10px);background:var(--panel-2)}
+.skrow i,.skrow b{display:block;height:12px;border-radius:6px;background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.16),rgba(255,255,255,.06));background-size:200% 100%;animation:skel 1.3s linear infinite}
+.skrow i{width:22px;height:22px;border-radius:50%}
+@keyframes skel{from{background-position:100% 0}to{background-position:-100% 0}}
+[data-motion="off"] .skrow i,[data-motion="off"] .skrow b{animation:none}
+@media (prefers-reduced-motion:reduce){.skrow i,.skrow b{animation:none}}
+
 </style>
 
 <div class="wrap">
@@ -3040,8 +3071,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=63;
+const NEWS_VER=64;
 const NEWS=[
+  {v:64,sum:['Ein Name für alles','One name for everything'],items:[
+    ['new','Dein Benutzername ist jetzt dein Name überall: in der Bestenliste, im Chat, in Clubs, bei Freunden und Geschenken. Der Bäckerei-Name bleibt als Deko in deinem Spiel und Profil.','Your username is now your name everywhere: on the leaderboard, in chat, in clubs, with friends and gifts. The bakery name stays as decoration in your game and profile.'],
+    ['change','Die Bestenliste ist jetzt für Spieler mit Konto. Ein Konto ist gratis und braucht keine E-Mail.','The leaderboard is now for players with an account. An account is free and needs no email.'],
+    ['new','Benutzernamen ändern: alle 30 Tage unter Einstellungen → Speichern. Anmelden geht 90 Tage lang auch noch mit dem alten Namen.','Change your username: every 30 days under Settings → Saving. Signing in also works with the old name for 90 days.'],
+    ['change','Faire Regeln: Wer gegen die Regeln verstößt, bekommt erst eine Verwarnung. Danach folgen Sperren von 24 Stunden, 7 Tagen und für immer.','Fair rules: breaking the rules first gets you a warning. After that come bans of 24 hours, 7 days and forever.']]},
   {v:63,sum:['Großes Balance-Update','Big balance update'],items:[
     ['change','Klicks: Die stärksten Klick-Upgrades sind schwächer (zum Beispiel ×10 → ×3, ×100 → ×10). Für den Teil eines Klicks, der aus deiner Produktion kommt, zählen Klick-Multiplikatoren höchstens ×10. Alle Klick-Boosts zusammen geben höchstens ×300.','Clicks: the strongest click upgrades are weaker (for example ×10 → ×3, ×100 → ×10). For the part of a click that comes from your production, click multipliers count at most ×10. All click boosts together give at most ×300.'],
     ['change','Nur echte Klicks zählen, höchstens 20 pro Sekunde – Auto-Klicker bringen nichts mehr.','Only real clicks count, at most 20 a second – auto-clickers no longer help.'],
@@ -8363,12 +8399,19 @@ function lbCapped(){
   return Math.floor(Math.min(sc,Math.max(S.lb.ls,1e8)*Math.pow(10,Math.min(12*hrs,12))*.98));
 }
 async function lbSubmit(force){
-  if(!lbOn()||!S.lb.on||!S.name||lbCheat()) return;
+  if(!lbOn()||!S.lb.on||!lbMyName()||lbCheat()) return;
   if(!force&&Date.now()-(S.lb.t||0)<LB_EVERY) return;
   if(!S.lb.id){S.lb.id=lbUUID();save();}
   const sc=lbCapped(),prev=S.lb.ls||0;
-  try{await lbApi('rpc/submit_score',{p_id:S.lb.id,p_name:S.name,p_score:sc});}
-  catch(x){if(/banned/.test(String(x.message))) lbBanned();throw x;}
+  /* V64: mit Konto schickt das Spiel das Sitzungs-Token; der Server nimmt dann den Benutzernamen */
+  const body={p_id:S.lb.id,p_name:lbMyName(),p_score:sc};if(v64Ready&&accTok&&lbTokOk) body.p_token=accTok;
+  try{await lbApi('rpc/submit_score',body);}
+  catch(x){
+    if(body.p_token&&lbMissing(x)){lbTokOk=false;return lbSubmit(true);}
+    if(/banned/.test(String(x.message))) lbBanned();
+    if(v64Ready&&lbAccErr(x)) return;
+    throw x;
+  }
   ['W','M'].forEach(k=>{const id=lbPid(k);if(!S.lb.pb||S.lb.pb[k+'id']!==id){S.lb.pb=S.lb.pb||{};S.lb.pb[k+'id']=id;S.lb.pb[k]=prev||sc;}});
   S.lb.ls=Math.max(prev,sc);lbSent=S.lb.t=Date.now();
   if(v61Ready) lbStatsSend();
@@ -8401,6 +8444,7 @@ async function lbRefresh(){
 }
 function lbJoin(){
   if(lbCheat()) return;
+  if(v64Ready&&!accTok){lbAccGo();return;}
   if(!S.name){askName({text:tt('Unter diesem Namen erscheint deine Bäckerei in der Bestenliste.','Your bakery shows up on the leaderboard under this name.')},nm=>{S.name=nm;save();showName();lbJoin();});return;}
   S.lb.on=1;S.lb.t=0;if(!S.lb.id) S.lb.id=lbUUID();save();
   toast(tt('Du bist jetzt in der Bestenliste!','You joined the leaderboard!'),true);
@@ -8451,7 +8495,7 @@ $id('rwOv').addEventListener('click',e=>{if(e.target===$id('rwOv')) $id('rwOv').
 
 function lbRowsHtml(rows,valKey,myRank){
   return '<div class="lblist">'+rows.map((r,i)=>{
-    const mine=S.lb.on&&r.name===S.name&&myRank===i+1;
+    const mine=S.lb.on&&r.name===lbMyName()&&myRank===i+1;
     return '<div class="lbrow'+(mine?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(String(r.name||''))+'">'+escName(String(r.name||''))+'</button><span class="sc">'+(valKey==='gain'?'+':'')+fmt(+r[valKey]||0)+'</span></div>';
   }).join('')+'</div>';
 }
@@ -8483,10 +8527,11 @@ function renderLb(){
   let me='<div class="lbme">';
   if(S.tamp) me+='<p class="small" style="margin:0">'+tt('Dieser Spielstand wurde außerhalb des Spiels verändert (z. B. mit Browser-Werkzeugen oder einer bearbeiteten Datei). Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save was changed outside the game (for example with browser tools or an edited file). To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
   else if(lbCheat()) me+='<p class="small" style="margin:0">'+tt('In diesem Spielstand wurde das Admin-Panel benutzt. Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save used the admin panel. To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
-  else if(!S.lb.on) me+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+(S.lb.ban?tt('Der Admin hat dich entfernt. Du kannst es später nochmal versuchen.','The admin removed you. You can try again later.'):tt('Dein Bäckerei-Name und deine gebackenen Kekse sind dann für alle sichtbar.','Your bakery name and cookies baked will be visible to everyone.'))+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
+  else if(!S.lb.on&&v64Ready&&!accTok) me+=lbGuestBox();
+  else if(!S.lb.on) me+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+(S.lb.ban?tt('Der Admin hat dich entfernt. Du kannst es später nochmal versuchen.','The admin removed you. You can try again later.'):tt('Dein Benutzername und deine gebackenen Kekse sind dann für alle sichtbar.','Your username and cookies baked will be visible to everyone.'))+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
   else{
     const r=k?lbPerRank[k]:lbRank,v=k?'+'+fmt(lbGain(k)):fmt(lbScore());
-    me+='<div class="row"><span><span class="sub" style="display:block">'+escName(S.name||'')+'</span><span class="big">'+(r?tt('Platz ','#')+fmt(r):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+(k?(k==='W'?tt('Diese Woche gebacken','Baked this week'):tt('Diesen Monat gebacken','Baked this month')):tt('Kekse gebacken','Cookies baked'))+'</span><b>'+v+'</b></span></div>';
+    me+='<div class="row"><span><span class="sub" style="display:block">'+escName(lbMyName())+'</span><span class="big">'+(r?tt('Platz ','#')+fmt(r):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+(k?(k==='W'?tt('Diese Woche gebacken','Baked this week'):tt('Diesen Monat gebacken','Baked this month')):tt('Kekse gebacken','Cookies baked'))+'</span><b>'+v+'</b></span></div>';
   }
   if(lbNote) me+='<p class="lbnote">'+(/name taken/.test(lbNote)?tt('Diesen Bäckerei-Namen hat schon jemand anderes in der Bestenliste. Gib deiner Bäckerei unter Einstellungen einen anderen Namen – oder melde dich mit deinem Konto an, wenn das dein Platz ist.','Someone else already has this bakery name on the leaderboard. Give your bakery another name in Settings – or sign in to your account if that spot is yours.'):/not allowed/.test(lbNote)?tt('Dein Bäckerei-Name ist in der Bestenliste nicht erlaubt. Gib deiner Bäckerei unter Einstellungen einen anderen Namen.','Your bakery name isn’t allowed on the leaderboard. Give your bakery a different name in Settings.'):/too high/.test(lbNote)?tt('Dein Punktestand ist für einen neuen Eintrag zu hoch. Melde dich beim Besitzer des Spiels.','Your score is too high for a new entry. Please contact the game’s owner.'):tt('Dein neuer Punktestand wurde nicht gespeichert, weil er schneller gewachsen ist, als das Spiel es erlaubt. Später versucht es das Spiel nochmal.','Your new score wasn’t saved because it grew faster than the game allows. The game will try again later.'))+'</p>';
   me+='</div>';
@@ -8668,6 +8713,7 @@ async function accLoginOk(r){
   else await accUpload(false);
   accMsg=tt('Angemeldet als ','Signed in as ')+escName(r.username)+'.';accMsgOk=true;
   if(v58Ready) devName();
+  if(v64Ready) setTimeout(accNoticeCheck,1500);
 }
 function accRender(){
   const box=$id('accBox');if(!box) return;
@@ -8679,7 +8725,7 @@ function accRender(){
     const arm=k=>accArm.k===k&&Date.now()-accArm.t<5000;
     h='<div class="accme"><span class="accav" aria-hidden="true">👤</span><span><b>'+escName(accMe.username)+'</b><small>'+(accMe.save_at?tt('Zuletzt gespeichert: ','Last saved: ')+new Date(accMe.save_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):tt('Noch nichts gespeichert','Nothing saved yet'))+' · '+tt('speichert automatisch','saves automatically')+'</small></span></div>'
       +'<div class="btns" style="margin-top:10px"><button type="button" class="btn primary" data-acc="save">'+tt('Jetzt speichern','Save now')+'</button>'+(accMe.has_save?'<button type="button" class="btn'+(arm('load')?' armed':'')+'" data-acc="load">'+(arm('load')?tt('Ersetzt dein Spiel! Nochmal','Replaces your game! Again'):tt('Aus Konto laden','Load from account'))+'</button>':'')+'<button type="button" class="btn" data-acc="logout">'+tt('Abmelden','Sign out')+'</button><button type="button" class="btn" data-acc="logoutall">'+tt('Andere Geräte abmelden','Sign out other devices')+'</button></div>'
-      +(v58Ready?accSecHtml():'')
+      +(v58Ready?accSecHtml():'')+(v64Ready?accNameHtml():'')
       +'<details class="fold accfold"><summary>'+tt('Passwort ändern','Change password')+'</summary><form class="coderow" id="accPwF" novalidate><input type="password" class="namein" name="old" autocomplete="current-password" placeholder="'+tt('Altes Passwort','Old password')+'"><input type="password" class="namein" name="new" autocomplete="new-password" placeholder="'+tt('Neues Passwort (mind. 6)','New password (6+)')+'"><button type="submit" class="btn">'+tt('Ändern','Change')+'</button></form></details>'
       +'<details class="fold accfold"><summary>'+tt('Konto löschen','Delete account')+'</summary><p class="small">'+tt('Löscht dein Konto und den Spielstand darin für immer. Dein Spiel auf diesem Gerät bleibt.','Deletes your account and its save forever. Your game on this device stays.')+'</p><form class="coderow" id="accDelF" novalidate><input type="password" class="namein" name="pass" autocomplete="current-password" placeholder="'+tt('Passwort zur Bestätigung','Password to confirm')+'"><button type="submit" class="btn'+(arm('del')?' armed':'')+'">'+(arm('del')?tt('Wirklich löschen? Nochmal','Really delete? Again'):tt('Konto löschen','Delete account'))+'</button></form></details>';
   }else{
@@ -9114,8 +9160,8 @@ async function openProfile(name){
   const st=P.stats||{},me=accMe&&P.username&&accMe.username.toLowerCase()===String(P.username).toLowerCase();
   const tile=(ic,l,v)=>v==null||v===''?'':'<span class="ptile"><span aria-hidden="true">'+ic+'</span><small>'+l+'</small><b>'+v+'</b></span>';
   $id('profT').textContent=P.username||P.bakery||name;
-  let h='<div class="phead"><span class="pav'+(v61Ready?profCol(P):'')+'" aria-hidden="true">'+(v61Ready?profAv(P):(P.username?'👤':'🍪'))+'<i class="pdot'+(P.online?' on':'')+'"></i></span><span><b>'+escName(P.bakery||P.username||name)+'</b>'
-    +(P.username?'<small>@'+escName(P.username)+(st.title?' · '+escName(st.title):'')+'</small>':'<small>'+tt('Ohne Konto','No account')+'</small>')
+  let h='<div class="phead"><span class="pav'+(v61Ready?profCol(P):'')+'" aria-hidden="true">'+(v61Ready?profAv(P):(P.username?'👤':'🍪'))+'<i class="pdot'+(P.online?' on':'')+'"></i></span><span><b>'+escName(P.username||P.bakery||name)+'</b>'
+    +(P.username?((st.bakery&&st.bakery!==P.username)||st.title?'<small>'+[st.bakery&&st.bakery!==P.username?'🏠 '+escName(st.bakery):'',st.title?escName(st.title):''].filter(Boolean).join(' · ')+'</small>':''):'<small>'+tt('Ohne Konto','No account')+'</small>')
     +'<small>'+(P.online?tt('🟢 Gerade online','🟢 Online now'):P.since?tt('Dabei seit ','Playing since ')+new Date(P.since).toLocaleDateString(LOC[LANG],{month:'long',year:'numeric'}):'')+'</small></span></div>';
   h+='<div class="ptiles">'+tile('🍪',tt('Gebacken','Baked'),fmt(+P.baked||0))+tile('🏆',tt('Platz','Rank'),P.rank?'#'+fmt(P.rank):null)+tile('🥇',tt('Wochen-/Monatssiege','Weekly/monthly wins'),P.wins?fmt(P.wins):null)
     +tile('⭐',tt('Erfolge','Achievements'),st.ach!=null?fmt(st.ach):null)+tile('👼',tt('Aufstiege','Ascensions'),st.asc?fmt(st.asc):null)+tile('🏭',tt('Gebäude','Buildings'),st.bld!=null?fmt(st.bld):null)
@@ -10142,10 +10188,11 @@ function lbCatHtml(){
   const c=LBCATS.find(x=>x[0]===k);
   let h='<p class="small lbcatd">'+tx(LBCAT_TXT[k])+'</p><div class="lbme">';
   if(lbCheat()) h+='<p class="small" style="margin:0">'+tt('Mit diesem Spielstand kannst du nicht in die Bestenliste.','This save can’t join the leaderboard.')+'</p>';
+  else if(!S.lb.on&&v64Ready&&!accTok) h+=lbGuestBox();
   else if(!S.lb.on) h+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+tt('Tritt der Bestenliste bei, dann zählen auch deine Klicks, Goldkekse und Aufstiege.','Join the leaderboard and your clicks, golden cookies and ascensions count too.')+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
   else{
     const me=D&&D.me,mine=k==='fast'?rrFast():k==='clicks'?S.clicks:k==='gold'?S.gold:S.asc;
-    h+='<div class="row"><span><span class="sub" style="display:block">'+escName(S.name||'')+'</span><span class="big">'+(me&&me.rank?tt('Platz ','#')+fmt(me.rank):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+c[1]+' '+tt(c[2],c[3])+'</span><span class="big">'+(mine?lbCatVal(k,mine):k==='fast'?tt('noch nicht','not yet'):'0')+'</span></span></div>';
+    h+='<div class="row"><span><span class="sub" style="display:block">'+escName(lbMyName())+'</span><span class="big">'+(me&&me.rank?tt('Platz ','#')+fmt(me.rank):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+c[1]+' '+tt(c[2],c[3])+'</span><span class="big">'+(mine?lbCatVal(k,mine):k==='fast'?tt('noch nicht','not yet'):'0')+'</span></span></div>';
     if(k==='fast'&&!rrFast()) h+='<p class="small" style="margin:6px 0 0">'+(S.rr&&S.rr.f<0?tt('Dein jetziger Lauf hat schon vor dem Start der Messung begonnen. Nach deinem nächsten Aufstieg läuft die Uhr.','Your current run began before timing started. The clock runs after your next ascension.'):tt('Back in diesem Lauf 1 Milliarde Kekse, dann zählt deine Zeit.','Bake 1 billion cookies in this run and your time counts.'))+'</p>';
   }
   h+='</div>';
@@ -10153,7 +10200,7 @@ function lbCatHtml(){
   if(lbCatErr&&!rows) h+='<p class="lbmsg">'+lbCatErr+'</p>';
   else if(!rows) h+='<p class="lbmsg">'+tt('Lädt …','Loading …')+'</p>';
   else if(!rows.length) h+='<p class="lbmsg">'+tt('Noch niemand hier. Hol dir Platz 1!','Nobody here yet. Grab #1!')+'</p>';
-  else h+='<div class="lblist">'+rows.map((r,i)=>'<div class="lbrow'+(S.lb.on&&r.name===S.name&&myR===i+1?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(String(r.name||''))+'">'+escName(String(r.name||''))+'</button><span class="sc">'+lbCatVal(k,r.v)+'</span></div>').join('')+'</div>';
+  else h+='<div class="lblist">'+rows.map((r,i)=>'<div class="lbrow'+(S.lb.on&&r.name===lbMyName()&&myR===i+1?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(String(r.name||''))+'">'+escName(String(r.name||''))+'</button><span class="sc">'+lbCatVal(k,r.v)+'</span></div>').join('')+'</div>';
   return h;
 }
 $id('lbOv').addEventListener('click',e=>{const b=e.target.closest('[data-lbc]');if(!b) return;lbCat=b.dataset.lbc;lbCatErr='';$id('lbBody')._h='';renderLb();});
@@ -10234,6 +10281,16 @@ var v62Ready=false;
    nimmt sie den Benutzernamen (und notfalls den Benutzernamen mit einer Zahl). Wer austreten will, kann das jederzeit. */
 async function lbAutoJoin(){
   if(!lbOn()||!accTok||!accMe||S.lb.on||S.lb.ban||lbCheat()) return false;
+  /* V64: der Server nimmt immer den Benutzernamen, der Bäckerei-Name bleibt unverändert */
+  if(v64Ready&&lbTokOk){
+    if(!S.lb.id) S.lb.id=lbUUID();
+    S.lb.on=1;S.lb.t=0;
+    try{await lbSubmit(true);}catch(x){}
+    if(!S.lb.on) return false;
+    save();toast(tt('Deine Bäckerei ist jetzt als „','You joined the leaderboard as “')+accMe.username+tt('“ in der Bestenliste.','”.'),true);
+    if(v46Ready) setTimeout(()=>lbAccSync(true),1500);
+    lbLast=0;return true;
+  }
   const u=String(accMe.username||'').slice(0,16),okN=n=>typeof n==='string'&&/^[^<>]{2,20}$/.test(n.trim());
   const names=[];
   if(okN(S.name)) names.push(S.name.trim());
@@ -10259,6 +10316,101 @@ async function lbAutoJoin(){
   S.name=was;S.lb.on=0;save();showName();return false;
 }
 v62Ready=true;
+
+/* ======================= V64: Ein Name für alles, Verwarnungen ======================= */
+var v64Ready=false,lbTokOk=true;
+/* Graue Platzhalter-Zeilen statt „Lädt …“ (damit nichts springt, wenn die Daten kommen) */
+function skelRows(n){let h='<div class="skel" aria-busy="true" aria-label="'+tt('Lädt …','Loading …')+'">';for(let i=0;i<(n||3);i++) h+='<div class="skrow"><i></i><b style="width:'+(45+((i*37)%40))+'%"></b></div>';return h+'</div>';}
+/* Der Benutzername ist der Name überall (Bestenliste, Chat, Clubs, Geschenke). Der Bäckerei-Name ist nur Deko im eigenen Spiel. */
+function lbMyName(){return (v64Ready&&accMe&&accMe.username)||S.name||'';}
+/* Antworten des Servers zur Bestenliste ohne Konto */
+function lbAccErr(x){
+  const m=String(x&&x.message||'');
+  if(/account needed/.test(m)){S.lb.on=0;save();return true;}
+  if(/another spot/.test(m)){if(v46Ready&&accTok) lbAccSync(true);return true;}
+  return false;
+}
+function lbGuestBox(){
+  return '<div class="row"><span><b>'+tt('Mit Konto mitmachen','Join with an account')+'</b><span class="sub" style="display:block">'
+    +tt('Die Bestenliste ist für Spieler mit Konto. Erstell dir gratis eines – dann erscheinst du dort mit deinem Benutzernamen.','The leaderboard is for players with an account. Create a free one – then you show up there under your username.')
+    +'</span></span><button type="button" class="btn primary" data-lb="acc">'+tt('Konto erstellen','Create account')+'</button></div>';
+}
+function lbAccGo(){
+  closeLb();
+  if($id('setOv').hidden) $id('setBtn').click();
+  const sp=document.querySelector('#setSeg [data-sp=save]');if(sp) sp.click();
+  accMode='signup';accMsg='';accRender();
+  setTimeout(()=>{const u=document.querySelector('#accF [name=user]');if(u) u.focus();},120);
+}
+$id('lbOv').addEventListener('click',e=>{if(e.target.closest('[data-lb="acc"]')) lbAccGo();});
+
+/* Benutzernamen ändern (alle 30 Tage, nach einer erzwungenen Umbenennung sofort) */
+let accNI=null,accNIt=0,accNIfor='',accNIbusy=false,accNIok=true;
+async function accNameLoad(){
+  if(!accTok||!accMe||accNIbusy||!accNIok) return;
+  accNIbusy=true;
+  try{accNI=await lbApi('rpc/acc_name_info',{p_token:accTok});accNIt=Date.now();accNIfor=accMe.username;}
+  catch(x){if(lbMissing(x)) accNIok=false;}
+  accNIbusy=false;accRender();
+}
+function accNameHtml(){
+  if(!accTok||!accMe||!accNIok) return '';
+  if(accNIfor!==accMe.username||Date.now()-accNIt>120000) setTimeout(accNameLoad,0);
+  const I=accNI;let st='';
+  if(I){
+    if(I.free) st=tt('Du darfst jetzt sofort einen neuen Namen wählen.','You may choose a new name right now.');
+    else if(I.next_at&&Date.parse(I.next_at)>Date.now()) st=tt('Nächste Änderung ab ','Next change from ')+new Date(I.next_at).toLocaleDateString(LOC[LANG],{day:'numeric',month:'long'})+'.';
+    else st=tt('Du kannst deinen Namen alle 30 Tage ändern.','You can change your name every 30 days.');
+  }
+  return '<details class="fold accfold" data-sec="name"><summary>✏️ '+tt('Benutzernamen ändern','Change username')+'</summary>'
+    +'<p class="small">'+tt('Dein Benutzername ist dein Name überall: in der Bestenliste, im Chat, in Clubs und bei Geschenken. ','Your username is your name everywhere: on the leaderboard, in chat, in clubs and for gifts. ')+st+'</p>'
+    +'<form class="coderow" id="accRenF" novalidate><input class="namein" name="nu" maxlength="16" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="'+tt('Neuer Benutzername','New username')+'" aria-label="'+tt('Neuer Benutzername','New username')+'"><button type="submit" class="btn sm">'+tt('Ändern','Change')+'</button></form>'
+    +(I&&I.old&&I.old.length?'<p class="small" style="margin-top:6px">'+tt('Frühere Namen: ','Earlier names: ')+I.old.map(n=>escName(n)).join(', ')+'</p>':'')+'</details>';
+}
+$id('accBox').addEventListener('submit',async e=>{
+  const f=e.target;if(f.getAttribute('id')!=='accRenF') return;
+  e.preventDefault();
+  const nu=String(new FormData(f).get('nu')||'').trim();
+  if(!/^[A-Za-z0-9_]{3,16}$/.test(nu)){accMsg=tt('Benutzername: 3–16 Buchstaben, Zahlen oder _.','Username: 3–16 letters, numbers or _.');accMsgOk=false;accRender();return;}
+  try{
+    const r=await lbApi('rpc/acc_rename',{p_token:accTok,p_new:nu});
+    accNI=r;accNIt=Date.now();accMe.username=r.username;accNIfor=r.username;f.reset();
+    accMsg=tt('Dein Name ist jetzt ','Your name is now ')+escName(r.username)+'.';accMsgOk=true;toast(accMsg,true);
+    lbLast=0;if(v61Ready) lbCatData={};
+  }catch(x){
+    const m=String(x&&x.message||'');accMsgOk=false;
+    accMsg=/rename wait/.test(m)?tt('Du kannst deinen Namen nur alle 30 Tage ändern.','You can only change your name every 30 days.')
+      :/username taken/.test(m)?tt('Diesen Namen gibt es schon (oder er wurde vor Kurzem abgegeben).','That name is taken (or was given up recently).')
+      :/blocked word/.test(m)?tt('Dieser Name ist nicht erlaubt.','That name isn’t allowed.')
+      :/same name/.test(m)?tt('Das ist schon dein Name.','That’s already your name.')
+      :/too many/.test(m)?tt('Zu viele Versuche. Versuch es morgen nochmal.','Too many tries. Try again tomorrow.')
+      :lbMissing(x)?tt('Das kann der Server noch nicht.','The server can’t do this yet.'):tt('Hat nicht geklappt.','Didn’t work.');
+  }
+  accRender();
+});
+
+/* Verwarnungen und erzwungene Umbenennungen: einmal anzeigen */
+let accNtOk=true,accNtBusy=false;
+const STRIKE_TXT=[
+  ['Das ist eine Verwarnung. Beim nächsten Mal wird dein Konto 24 Stunden gesperrt.','This is a warning. Next time your account is banned for 24 hours.'],
+  ['Dein Konto ist 24 Stunden gesperrt. Beim nächsten Mal sind es 7 Tage.','Your account is banned for 24 hours. Next time it is 7 days.'],
+  ['Dein Konto ist 7 Tage gesperrt. Beim nächsten Mal ist es für immer.','Your account is banned for 7 days. Next time it is forever.'],
+  ['Dein Konto ist für immer gesperrt.','Your account is banned forever.']];
+async function accNoticeCheck(){
+  if(!accTok||!accMe||!accNtOk||accNtBusy||!lbOn()) return;
+  accNtBusy=true;let r=null;
+  try{r=await lbApi('rpc/acc_notices',{p_token:accTok});}catch(x){if(lbMissing(x)) accNtOk=false;}
+  accNtBusy=false;
+  if(!r) return;
+  if(r.username&&accMe&&r.username!==accMe.username){accMe.username=r.username;accRender();}
+  const n=(r.notices||[]).slice(-1)[0];if(!n) return;
+  if(n.kind==='rename') lbShowMsg(tt('Dein Name wurde geändert','Your name was changed'),'<p>'+tt('Dein neuer Benutzername ist ','Your new username is ')+'<b>'+escName(r.username||'')+'</b>.</p>'
+    +(n.reason?'<p class="small">'+tt('Grund: ','Reason: ')+escName(n.reason)+'</p>':'')+'<p class="small">'+tt('Du kannst dir jetzt sofort einen neuen Namen aussuchen: Einstellungen → Speichern → Benutzernamen ändern. Anmelden geht 90 Tage lang auch noch mit dem alten Namen.','You can pick a new name right away: Settings → Saving → Change username. Signing in also works with the old name for 90 days.')+'</p>','✏️');
+  else lbShowMsg(tt('Verwarnung','Warning'),'<p><b>'+escName(n.reason||'')+'</b></p><p class="small">'+tt('Verwarnung ','Strike ')+Math.min(4,n.strike||1)+tt(' von 4. ',' of 4. ')+tx(STRIKE_TXT[Math.min(4,n.strike||1)-1])+'</p><p class="small">'+tt('Verwarnungen zählen 180 Tage lang.','Strikes count for 180 days.')+'</p>','⚠️');
+}
+setInterval(accNoticeCheck,120000);setTimeout(accNoticeCheck,6000);
+
+v64Ready=true;
 
 /* ======================= V40: Shop-Navigation & Welt-Übergänge ======================= */
 const SHOPK=[['starShop','⭐','Sterne','Stars'],['artSec','⚒️','Schmiede','Forge'],['cardSec','🃏','Karten','Cards'],['boostList','⚡','Boosts','Boosts'],['boostListW','🌍','Welt','World'],['boxBtn','🎁','Keksbox','Cookie box'],['itemGrid','🎒','Gegenstände','Items'],['skinRow','🍪','Designs','Designs']];

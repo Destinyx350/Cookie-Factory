@@ -45,10 +45,11 @@ function lbCatHtml(){
   const c=LBCATS.find(x=>x[0]===k);
   let h='<p class="small lbcatd">'+tx(LBCAT_TXT[k])+'</p><div class="lbme">';
   if(lbCheat()) h+='<p class="small" style="margin:0">'+tt('Mit diesem Spielstand kannst du nicht in die Bestenliste.','This save can’t join the leaderboard.')+'</p>';
+  else if(!S.lb.on&&v64Ready&&!accTok) h+=lbGuestBox();
   else if(!S.lb.on) h+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+tt('Tritt der Bestenliste bei, dann zählen auch deine Klicks, Goldkekse und Aufstiege.','Join the leaderboard and your clicks, golden cookies and ascensions count too.')+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
   else{
     const me=D&&D.me,mine=k==='fast'?rrFast():k==='clicks'?S.clicks:k==='gold'?S.gold:S.asc;
-    h+='<div class="row"><span><span class="sub" style="display:block">'+escName(S.name||'')+'</span><span class="big">'+(me&&me.rank?tt('Platz ','#')+fmt(me.rank):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+c[1]+' '+tt(c[2],c[3])+'</span><span class="big">'+(mine?lbCatVal(k,mine):k==='fast'?tt('noch nicht','not yet'):'0')+'</span></span></div>';
+    h+='<div class="row"><span><span class="sub" style="display:block">'+escName(lbMyName())+'</span><span class="big">'+(me&&me.rank?tt('Platz ','#')+fmt(me.rank):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+c[1]+' '+tt(c[2],c[3])+'</span><span class="big">'+(mine?lbCatVal(k,mine):k==='fast'?tt('noch nicht','not yet'):'0')+'</span></span></div>';
     if(k==='fast'&&!rrFast()) h+='<p class="small" style="margin:6px 0 0">'+(S.rr&&S.rr.f<0?tt('Dein jetziger Lauf hat schon vor dem Start der Messung begonnen. Nach deinem nächsten Aufstieg läuft die Uhr.','Your current run began before timing started. The clock runs after your next ascension.'):tt('Back in diesem Lauf 1 Milliarde Kekse, dann zählt deine Zeit.','Bake 1 billion cookies in this run and your time counts.'))+'</p>';
   }
   h+='</div>';
@@ -56,7 +57,7 @@ function lbCatHtml(){
   if(lbCatErr&&!rows) h+='<p class="lbmsg">'+lbCatErr+'</p>';
   else if(!rows) h+='<p class="lbmsg">'+tt('Lädt …','Loading …')+'</p>';
   else if(!rows.length) h+='<p class="lbmsg">'+tt('Noch niemand hier. Hol dir Platz 1!','Nobody here yet. Grab #1!')+'</p>';
-  else h+='<div class="lblist">'+rows.map((r,i)=>'<div class="lbrow'+(S.lb.on&&r.name===S.name&&myR===i+1?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(String(r.name||''))+'">'+escName(String(r.name||''))+'</button><span class="sc">'+lbCatVal(k,r.v)+'</span></div>').join('')+'</div>';
+  else h+='<div class="lblist">'+rows.map((r,i)=>'<div class="lbrow'+(S.lb.on&&r.name===lbMyName()&&myR===i+1?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(String(r.name||''))+'">'+escName(String(r.name||''))+'</button><span class="sc">'+lbCatVal(k,r.v)+'</span></div>').join('')+'</div>';
   return h;
 }
 $id('lbOv').addEventListener('click',e=>{const b=e.target.closest('[data-lbc]');if(!b) return;lbCat=b.dataset.lbc;lbCatErr='';$id('lbBody')._h='';renderLb();});
