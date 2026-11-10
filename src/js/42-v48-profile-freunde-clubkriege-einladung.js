@@ -13,12 +13,13 @@ async function openProfile(name){
   const st=P.stats||{},me=accMe&&P.username&&accMe.username.toLowerCase()===String(P.username).toLowerCase();
   const tile=(ic,l,v)=>v==null||v===''?'':'<span class="ptile"><span aria-hidden="true">'+ic+'</span><small>'+l+'</small><b>'+v+'</b></span>';
   $id('profT').textContent=P.username||P.bakery||name;
-  let h='<div class="phead"><span class="pav" aria-hidden="true">'+(P.username?'👤':'🍪')+'<i class="pdot'+(P.online?' on':'')+'"></i></span><span><b>'+escName(P.bakery||P.username||name)+'</b>'
+  let h='<div class="phead"><span class="pav'+(v61Ready?profCol(P):'')+'" aria-hidden="true">'+(v61Ready?profAv(P):(P.username?'👤':'🍪'))+'<i class="pdot'+(P.online?' on':'')+'"></i></span><span><b>'+escName(P.bakery||P.username||name)+'</b>'
     +(P.username?'<small>@'+escName(P.username)+(st.title?' · '+escName(st.title):'')+'</small>':'<small>'+tt('Ohne Konto','No account')+'</small>')
     +'<small>'+(P.online?tt('🟢 Gerade online','🟢 Online now'):P.since?tt('Dabei seit ','Playing since ')+new Date(P.since).toLocaleDateString(LOC[LANG],{month:'long',year:'numeric'}):'')+'</small></span></div>';
   h+='<div class="ptiles">'+tile('🍪',tt('Gebacken','Baked'),fmt(+P.baked||0))+tile('🏆',tt('Platz','Rank'),P.rank?'#'+fmt(P.rank):null)+tile('🥇',tt('Wochen-/Monatssiege','Weekly/monthly wins'),P.wins?fmt(P.wins):null)
     +tile('⭐',tt('Erfolge','Achievements'),st.ach!=null?fmt(st.ach):null)+tile('👼',tt('Aufstiege','Ascensions'),st.asc?fmt(st.asc):null)+tile('🏭',tt('Gebäude','Buildings'),st.bld!=null?fmt(st.bld):null)
     +tile('🤝',tt('Freunde','Friends'),P.username?fmt(P.friends||0):null)+'</div>';
+  if(v61Ready) h+=profExtra(P,me);
   if(P.club) h+='<p class="pclub">'+escName(P.club.emoji)+' <b>'+escName(P.club.name)+'</b>'+(P.club.trophies?' · 🏆 ×'+P.club.trophies:'')+'</p>';
   const isFr=frData&&frData.friends&&frData.friends.some(f=>String(f.username).toLowerCase()===String(P.username||'').toLowerCase());
   if(P.username&&clubSigned()&&!me) h+='<div class="btns" style="margin-top:12px">'+(isFr?'<span class="small" style="align-self:center">🤝 '+tt('Ihr seid Freunde','You’re friends')+'</span>':'<button type="button" class="btn primary" data-pf="add:'+escName(P.username)+'">'+tt('Als Freund hinzufügen','Add friend')+'</button>')+'<button type="button" class="btn" data-pf="gift:'+escName(P.username)+'">'+tt('Geschenk senden','Send a gift')+'</button></div>';

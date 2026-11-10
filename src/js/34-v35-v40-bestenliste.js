@@ -45,6 +45,7 @@ async function lbSubmit(force){
   catch(x){if(/banned/.test(String(x.message))) lbBanned();throw x;}
   ['W','M'].forEach(k=>{const id=lbPid(k);if(!S.lb.pb||S.lb.pb[k+'id']!==id){S.lb.pb=S.lb.pb||{};S.lb.pb[k+'id']=id;S.lb.pb[k]=prev||sc;}});
   S.lb.ls=Math.max(prev,sc);lbSent=S.lb.t=Date.now();
+  if(v61Ready) lbStatsSend();
 }
 const lbGain=k=>S.lb.pb&&S.lb.pb[k+'id']===lbPid(k)?Math.max(0,(S.lb.ls||0)-(S.lb.pb[k]||0)):0;
 async function lbRefresh(){
@@ -171,7 +172,7 @@ function renderLb(){
   else list=lbRowsHtml(rows||[],k?'gain':'score',myRank);
   const when=lbLast?tt('Stand: ','Updated ')+new Date(lbLast).toLocaleTimeString(LOC[LANG],{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
   const foot='<div class="lbfoot"><span class="small">'+(lbErr&&rows?tt('Aktualisieren hat nicht geklappt. ','Couldn’t refresh. '):'')+when+'</span><span class="btns">'+(S.lb.on&&!lbCheat()?'<button type="button" class="btn sm" data-lb="leave">'+tt('Verlassen','Leave')+'</button>':'')+'<button type="button" class="btn sm" data-lb="refresh"'+(lbBusy?' disabled':'')+'>'+(lbBusy?tt('Lädt …','Loading …'):tt('Aktualisieren','Refresh'))+'</button></span></div>';
-  const html=h+me+list+(k?'':lbSeasonsHtml())+foot;
+  const html=(v61Ready?lbCatSeg():'')+(v61Ready&&lbCat!=='ck'?lbCatHtml():h+me+list+(k?'':lbSeasonsHtml()))+foot;
   const body=$id('lbBody');if(body._h!==html){body._h=html;body.innerHTML=html;}
 }
 function openLb(){lbFrom=document.activeElement;$id('lbOv').hidden=false;renderLb();lbLoadSeasons();if(Date.now()-lbLast>10000) lbRefresh();$id('lbClose').focus();}

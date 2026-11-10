@@ -1,7 +1,7 @@
 /* Nur in admin.html (nicht im Spiel für Spieler). */
 /* ======================= V58: Server-Gesundheit (installierte Teile, Server-Jobs, Prüfungen, Alarme) ======================= */
 var v58aReady=false;
-const KF_SCHEMA_NEED=16;   /* the newest server part this admin version expects (docs/backend-v16.sql) */
+const KF_SCHEMA_NEED=17;   /* the newest server part this admin version expects (docs/boards-v17.sql) */
 var admHealth=null,admHealthErr='';
 async function admHealthLoad(){
   if(!admPass) return;

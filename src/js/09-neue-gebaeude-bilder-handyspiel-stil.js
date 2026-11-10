@@ -44,8 +44,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=60;
+const NEWS_VER=61;
 const NEWS=[
+  {v:61,sum:['Neue Bestenlisten und dein eigenes Profil','New leaderboards and your own profile'],items:[
+    ['new','Mehr Bestenlisten: die meisten Klicks, die meisten Goldkekse, die meisten Aufstiege und die schnellste Milliarde (dein schnellster Lauf von 0 bis 1 Milliarde Kekse diese Woche). Oben in der Bestenliste wechselst du zwischen ihnen.','More leaderboards: most clicks, most golden cookies, most ascensions and the fastest billion (your quickest run from 0 to 1 billion cookies this week). Switch between them at the top of the leaderboard.'],
+    ['new','Dein Profil: Mit einem Konto wählst du Avatar, Farbe, Motto und bis zu 3 Lieblings-Erfolge. Öffne dein Profil über deinen Namen in der Bestenliste und tippe auf „Profil bearbeiten“.','Your profile: with an account, pick an avatar, a color, a motto and up to 3 favourite achievements. Open your profile from your name on the leaderboard and tap "Edit profile".'],
+    ['new','Profile zeigen jetzt den Platz in jeder Bestenliste, und mit „Profil teilen“ schickst du einen Link zu deinem Profil.','Profiles now show the place in every leaderboard, and "Share profile" sends a link to your profile.']]},
   {v:60,sum:['Die Keksfabrik ist auf itch.io!','Cookie Factory is on itch.io!'],items:[
     ['new','itch.io: Die Keksfabrik hat jetzt eine Seite auf itch.io (destinyx350.itch.io/cookie-factory). Eine Bewertung oder ein Kommentar dort hilft dem Spiel sehr – der Knopf ist unter Einstellungen → Spiel.','itch.io: Cookie Factory now has a page on itch.io (destinyx350.itch.io/cookie-factory). A rating or comment there helps the game a lot – the button is under Settings → Game.']]},
   {v:59,sum:['Neuer Start, eigene Tabs und dein Verlauf','A new start, your own tabs and your history'],items:[
