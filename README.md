@@ -59,7 +59,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🔔 **Push notifications** | Get notified about gifts, friend requests, club prizes and events, even when the game is closed, and get a reminder after 3 days away. |
 | 🔄 **Instant updates** | New versions load right away, and a notice at the top lets you update while playing. |
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. Shared links show a preview card. |
-| 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank. Extra boards for most clicks, golden cookies, ascensions and the fastest billion this week. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
+| 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your bakery name and see your rank (creating an account joins automatically). Extra boards for most clicks, golden cookies, ascensions and the fastest billion this week. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
 | 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools or edited files) is flagged, the leaderboard rejects scores that grow too fast, and the server flags account saves that jump unrealistically. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
 | 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries and optional two-step sign-in. Moderators get their own logins that can only handle reports and mutes. The admin can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player, who can appeal), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and player feedback, see how far new players get (day 2 and day 7 return rates), compare each week with the one before, get push alerts for new reports, appeals, feedback, crashes and suspicious saves, plan events and announcements (once or every week), see how full the database is, follow a live dashboard with charts, get an automatic weekly report with to-dos every Monday, and see server health (installed server parts, server jobs, alarms for stuck push messages, crash spikes and a full database, plus an uptime check every 30 minutes). Old data is cleaned up automatically and an encrypted copy of the weekly backup is kept outside Supabase. |
 | 💬 **Feedback and privacy** | Send bug reports and ideas from Settings → Game. The [privacy info](https://destinyx350.github.io/Cookie-Factory/privacy.html) explains what the game stores. |
@@ -104,7 +104,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🔔 **Push-Benachrichtigungen** für Geschenke, Freundschaftsanfragen, Club-Preise, Events und eine Erinnerung nach 3 Tagen Pause
 - 🔄 **Sofortige Updates**: neue Versionen kommen gleich an, oben erscheint ein Hinweis zum Aktualisieren
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
-- 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit; eigene Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde der Woche; Wochen- und Monatspreise für die Top 3, Updates jede Minute
+- 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Bäckerei-Namen mit (mit einem neuen Konto bist du automatisch dabei); eigene Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde der Woche; Wochen- und Monatspreise für die Top 3, Updates jede Minute
 - 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, die Bestenliste lehnt zu schnell wachsende Punkte ab, und der Server meldet unrealistische Sprünge in Konto-Spielständen; dazu Wortfilter, Melde-Knopf im Club-Chat und Limits pro Gerät
 - 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort, eigenem Server-Passwort und Zwei-Schritt-Anmeldung für die Online-Werkzeuge, dazu Moderatoren-Zugänge: Meldungen, Spielersuche, Stummschalten, Sperren mit Einspruch, Wochenbericht, Spieler-Feedback, Push-Alarme, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte, geplante Events und Ankündigungen, Live-Dashboard mit Diagrammen, Wochenbericht jeden Montag, Server-Gesundheit mit Alarmen und Uptime-Check, verdächtige Spielstände, Datenbank-Füllstand, automatisches Aufräumen und verschlüsselte Backups außerhalb von Supabase und Spieler-Weg
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
@@ -115,21 +115,17 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 61
-- **More leaderboards:** besides cookies there are now boards for **most clicks**, **most golden cookies**, **most ascensions** and the **fastest billion** (your quickest run from 0 to 1 billion cookies this week; starts over every Monday). Switch between them at the top of the leaderboard.
-- **Your own profile:** with an account, pick an avatar, a color, a motto and up to 3 favourite achievements. Your profile also shows your place in every leaderboard.
-- **Share your profile:** "Share profile" makes a link that opens your profile for anyone.
+### Version 62
+- **New accounts join the leaderboard right away:** when you create an account, your bakery is on the leaderboard at once, including the boards for clicks, golden cookies, ascensions and the fastest billion. If your bakery name is already taken, it uses your username. You can leave any time with **Leave** in the leaderboard.
 
-Also new since version 60: Cookie Factory is on [itch.io](https://destinyx350.itch.io/cookie-factory).
+Also new since version 61: more leaderboards (clicks, golden cookies, ascensions, fastest billion) and your own profile with an avatar, a color, a motto and favourite achievements.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Mehr Bestenlisten:** neben Keksen gibt es jetzt Listen für **die meisten Klicks**, **die meisten Goldkekse**, **die meisten Aufstiege** und **die schnellste Milliarde** (dein schnellster Lauf von 0 bis 1 Milliarde Kekse diese Woche; startet jeden Montag neu). Oben in der Bestenliste wechselst du zwischen ihnen.
-- **Dein eigenes Profil:** mit einem Konto wählst du Avatar, Farbe, Motto und bis zu 3 Lieblings-Erfolge. Dein Profil zeigt auch deinen Platz in jeder Bestenliste.
-- **Profil teilen:** „Profil teilen“ macht einen Link, der dein Profil für alle öffnet.
+- **Neue Konten sind gleich in der Bestenliste:** wer ein Konto erstellt, ist mit seiner Bäckerei sofort in der Bestenliste, auch in den Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde. Ist der Bäckerei-Name schon vergeben, nimmt sie den Benutzernamen. Mit **Austreten** in der Bestenliste kannst du jederzeit wieder raus.
 
-Außerdem neu seit Version 60: die Keksfabrik ist auf [itch.io](https://destinyx350.itch.io/cookie-factory).
+Außerdem neu seit Version 61: mehr Bestenlisten (Klicks, Goldkekse, Aufstiege, schnellste Milliarde) und dein eigenes Profil mit Avatar, Farbe, Motto und Lieblings-Erfolgen.
 
 </details>
 

@@ -230,6 +230,11 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - **Run timer:** `S.rr = {t, a, f, w}` in the save (`fresh()`, hoisted `sanRR()` in `sanitize`): a new run starts when `S.asc` changes; `f = -1` if the run already had 1e6+ cookies when timing began (old saves), else seconds to 1e9 once reached, `w` its week (`lbWeekId`). `rrFast()` only returns this week's time.
 - Client is `src/js/43p-v61-bestenlisten-profile.js` (`v61Ready`); hooks in `34-…` (`lbStatsSend`, `lbCatSeg()`/`lbCatHtml()` in `renderLb`) and `42-…` (`profAv`, `profCol`, `profExtra`). `?p=<name>` opens a profile once the start screen is closed and is removed from the URL (`profShareUrl`).
 
+## Automatic leaderboard join for new accounts (version 62)
+
+- Player file `43q-v62-bestenliste-automatisch.js` (`v62Ready`, `lbAutoJoin()`), called from the sign-up branch in `37-…` after `accUpload`. It joins only when the leaderboard is on, the player is signed in, not already on it, not removed by the admin (`S.lb.ban`) and not `lbCheat()`. It tries `S.name`, then the username, then the username plus a number, using `lbSubmit(true)`; on `name taken`/`name not allowed`/`invalid name` it tries the next one, and on any other error it stays joined so the minute send retries. A changed name is written to `S.name`. Then `lbAccSync(true)` links the spot to the account.
+- Only sign-up joins automatically: signing in, loading a save or leaving the board never re-joins. Keep the note in the sign-up form and in `privacy.html`.
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass (including the GitHub `Tests` check). After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

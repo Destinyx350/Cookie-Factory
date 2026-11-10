@@ -63,9 +63,11 @@ module.exports = async function browserTests(url) {
   await b.click('#setClose');
 
   // 2. Leaderboard spot follows the account
-  await goals(a); await a.click('#lbBar'); await a.click('[data-lb=join]'); await a.waitForTimeout(3500);
+  // v62: creating an account puts the bakery on the leaderboard by itself
+  await goals(a); await a.click('#lbBar'); await a.waitForTimeout(3500);
   const link = (await pool.query("select lb_id from kf_accounts where username = 'alpha_ci'")).rows[0].lb_id;
-  check(!!link, 'joining the leaderboard links the spot to the account');
+  check(!!link && (await pool.query('select name from leaderboard where id = $1', [link])).rows.map(r => r.name).join() === 'Alpha Bakery', 'a new account joins the leaderboard by itself and links the spot to the account');
+  check(await a.isVisible('[data-lb=leave]') && !(await a.isVisible('[data-lb=join]')), 'the leaderboard shows the new account as joined, with a Leave button');
   await a.click('#lbClose');
   await b.reload(); await b.locator('#startOv [data-lang=en]').click(); await b.waitForTimeout(1500);
   // the "which bakery" question can come late on slow machines
@@ -210,6 +212,18 @@ module.exports = async function browserTests(url) {
   await e.addStyleTag({ content: '#introOv{display:none!important}' });
   await signup(e, 'epsilon_ci'); await e.waitForTimeout(1200);
   check((await pool.query("select count(*)::int n from kf_referrals r join kf_accounts a on a.id = r.inviter where a.username = 'alpha_ci'")).rows[0].n === 1, 'signing up through an invite link records the invite');
+  // v62: a taken bakery name falls back to the username
+  {
+    const tk = await device('Alpha Bakery', '10.0.62.1');
+    await signup(tk, 'taken_ci'); await tk.waitForTimeout(1500);
+    const tr = (await pool.query("select l.name from kf_accounts k join leaderboard l on l.id = k.lb_id where k.username = 'taken_ci'")).rows;
+    check(tr.length === 1 && tr[0].name === 'taken_ci' && (await text(tk, '#plName')) === 'taken_ci', 'when the bakery name is taken, the new account joins as its username', tr);
+    await settings(tk, 'save'); await tk.click('#setClose');
+    await goals(tk); await tk.click('#lbBar'); await tk.waitForSelector('[data-lb=leave]', { timeout: 8000 }).catch(() => {});
+    await tk.click('[data-lb=leave]'); await tk.waitForTimeout(1500);
+    check((await pool.query("select count(*)::int n from leaderboard where name = 'taken_ci'")).rows[0].n === 0 && await tk.isVisible('[data-lb=join]'), 'a player can still leave the leaderboard after joining automatically');
+    await tk.context().close();
+  }
   await ectx.close();
 
   // 5d. Push setting (v49)
