@@ -1,7 +1,7 @@
 /* ======================= Spielstand ======================= */
 const defAdmin=()=>({prod:1,click:1,cost:1,speed:1,gold:1,goldPow:1,growth:1.15,ac:0,b:{}});
 function fresh(){
-  return {hist:{h:[],d:[],a:[],ac:0},name:'',codes:{},lb:{on:0,id:'',t:0,ls:0,pb:null,ban:0},adm:0,tamp:0,cb:0,clv:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
+  return {rr:null,hist:{h:[],d:[],a:[],ac:0},name:'',codes:{},lb:{on:0,id:'',t:0,ls:0,pb:null,ban:0},adm:0,tamp:0,cb:0,clv:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
 }
 function sanitize(o){
   const s=fresh();
@@ -115,6 +115,7 @@ function sanitize(o){
   s.tamp=o.tamp||seal!=='ok'?1:0;
   if(o.codes&&typeof o.codes==='object') Object.keys(o.codes).slice(0,200).forEach(k=>{if(/^[0-9a-f]{12}$/.test(k)) s.codes[k]=num(o.codes[k],1)||1;});
   s.hist=sanHist(o.hist);
+  s.rr=sanRR(o.rr);
   return s;
 }
 let storageOK=true;

@@ -503,7 +503,7 @@ module.exports = async function sqlTests() {
   check((await q("select count(*)::int n from pg_indexes where schemaname = 'public' and indexname in ('kf_sessions_account','kf_wars_club_a_idx','kf_wars_club_b_idx','kf_gifts_from','kf_club_week_club','kf_presence_seen')")).rows[0].n === 6, 'the missing indexes are there');
   check((await q("select count(*)::int n from pg_indexes where indexname = 'kf_rate_lookup'")).rows[0].n === 0, 'no duplicate index on kf_rate');
   check((await q("select count(*)::int n from pg_constraint where contype = 'p' and conrelid in ('public.kf_rate'::regclass, 'public.kf_login_fails'::regclass, 'public.kf_admin_fails'::regclass)")).rows[0].n === 3, 'the log tables have primary keys');
-  check((await q("select array_agg(part order by part) a from kf_schema")).rows[0].a.length === 16, 'all 16 server parts are listed');
+  check((await q("select array_agg(part order by part) a from kf_schema")).rows[0].a.slice(0, 16).join() === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16', 'server parts 1–16 are listed');
   // made-up player ids
   const crypto = require('crypto');
   for (let i = 0; i < 30; i++) await rpc('kf_ping', { p_id: crypto.randomUUID(), p_baked: 1 }, '6.6.6.6');
@@ -560,8 +560,55 @@ module.exports = async function sqlTests() {
   check((await q("select count(*)::int n from kf_push_queue where kind = 'health_push'")).rows[0].n === 0, 'the same alarm comes at most every 6 hours');
   await expectError(rpc('admin_health', { p_pass: mt }), /wrong admin password/, 'server health is for the owner only');
   const ah = await rpc('admin_health', { p_pass: tok });
-  check(ah.schema.length === 16 && ah.cron === false && ah.realtime === true && ah.checks && ah.checks.r.push_stuck === 1 && ah.alerts.some(a => a.k === 'push'), 'the owner sees server parts, jobs, checks and alarms', Object.keys(ah));
+  check(ah.schema.length >= 16 && ah.cron === false && ah.realtime === true && ah.checks && ah.checks.r.push_stuck === 1 && ah.alerts.some(a => a.k === 'push'), 'the owner sees server parts, jobs, checks and alarms', Object.keys(ah));
   await q("delete from kf_push_queue");
   await rpc('admin_push', { p_pass: tok, p_action: 'unsubscribe', p_data: { endpoint: 'https://push.example.com/owner3' } });
+  }
+  {
+  // Category leaderboards and profile style (v61)
+  const crypto = require('crypto');
+  await expectError(asAnon('select * from public.lb_stats limit 1'), /permission denied/, 'players cannot read lb_stats');
+  const u1 = crypto.randomUUID(), u2 = crypto.randomUUID(), u3 = crypto.randomUUID();
+  await expectError(rpc('submit_stats', { p_id: u1, p_clicks: 5, p_gold: 1, p_asc: 0 }), /not on the leaderboard/, 'category numbers need a leaderboard spot');
+  for (const [u, n] of [[u1, 'Board One'], [u2, 'Board Two'], [u3, 'Board Three']]) await rpc('submit_score', { p_id: u, p_name: n, p_score: 1000 });
+  let r1 = await rpc('submit_stats', { p_id: u1, p_clicks: 5e8, p_gold: 5e6, p_asc: 3 });
+  check(r1.clicks === 1e8 && r1.gold === 1e6 && r1.asc === 3, 'the first numbers are capped to sensible maximums', r1);
+  r1 = await rpc('submit_stats', { p_id: u1, p_clicks: 1e9, p_gold: 2e6, p_asc: 500 });
+  check(r1.clicks < 1e8 + 2000 && r1.gold < 1e6 + 10 && r1.asc < 6, 'numbers can only grow at a human speed', r1);
+  await q("update lb_stats set updated_at = now() - interval '1 hour' where id = $1", [u1]);
+  r1 = await rpc('submit_stats', { p_id: u1, p_clicks: 1e8 + 50000, p_gold: 1e6 + 100, p_asc: 20 });
+  check(r1.clicks === 1e8 + 50000 && r1.gold === 1e6 + 100 && r1.asc === 20, 'honest growth over time counts in full', r1);
+  r1 = await rpc('submit_stats', { p_id: u1, p_clicks: 10, p_gold: 1, p_asc: 1 });
+  check(r1.clicks === 1e8 + 50000, 'numbers never go down');
+  await rpc('submit_stats', { p_id: u2, p_clicks: 500, p_gold: 40, p_asc: 1, p_fast: 3 });
+  await rpc('submit_stats', { p_id: u3, p_clicks: 800, p_gold: 2, p_asc: 0, p_fast: 95 });
+  let r2 = await rpc('submit_stats', { p_id: u2, p_clicks: 500, p_gold: 40, p_asc: 1, p_fast: 200 });
+  check(r2.fast === 10, 'the fastest run counts from 10 seconds and only gets better', r2);
+  await rpc('submit_stats', { p_id: u1, p_clicks: 1e8 + 50000, p_gold: 1e6 + 100, p_asc: 20, p_fast: 60 });
+  const bc = await rpc('lb_board', { p_kind: 'clicks', p_id: u3 });
+  check(bc.top[0].name === 'Board One' && bc.top[1].name === 'Board Three' && bc.me.rank === 2 && bc.me.v === 800, 'the clicks board is sorted and shows your place', bc);
+  const bf = await rpc('lb_board', { p_kind: 'fast', p_id: u1 });
+  check(bf.top.map(x => x.name).join() === 'Board Two,Board One,Board Three' && bf.me.rank === 2 && bf.me.v === 60, 'the fastest-to-a-billion board is sorted from fastest', bf);
+  check((await rpc('lb_board', { p_kind: 'asc', p_id: null })).top[0].v === 20, 'the ascension board works');
+  await q("update lb_stats set fast_wk = '2000-W01' where id = $1", [u2]);
+  check(!(await rpc('lb_board', { p_kind: 'fast' })).top.some(x => x.name === 'Board Two'), 'the fastest board only shows this week');
+  await expectError(rpc('lb_board', { p_kind: 'cookies' }), /unknown board/, 'unknown boards are refused');
+  await q('insert into lb_banned (id, name) values ($1, $2)', [u3, 'Board Three']);
+  check(!(await rpc('lb_board', { p_kind: 'clicks' })).top.some(x => x.name === 'Board Three'), 'banned spots are not shown');
+  await expectError(rpc('submit_stats', { p_id: u3, p_clicks: 900, p_gold: 2, p_asc: 0 }), /banned/, 'banned spots cannot send numbers');
+  await q('delete from leaderboard where id = $1', [u2]);
+  check((await q('select count(*)::int n from lb_stats where id = $1', [u2])).rows[0].n === 0, 'leaving the leaderboard removes the numbers too');
+  // profile style
+  await expectError(rpc('acc_style', { p_token: c2.token, p_data: { motto: 'du arschloch' } }), /blocked word/, 'mottos go through the word filter');
+  await expectError(rpc('acc_style', { p_token: c2.token, p_data: { motto: 'x'.repeat(61) } }), /invalid motto/, 'mottos are at most 60 characters');
+  const sty = await rpc('acc_style', { p_token: c2.token, p_data: { av: '🦊', col: 'teal', motto: 'Baking since breakfast', show: ['clk100', 'all1000', 'clk100', 'bad id!', 'gold1', 'own0'] } });
+  check(sty.av === '🦊' && sty.col === 'teal' && sty.motto === 'Baking since breakfast' && JSON.stringify(sty.show) === '["clk100","all1000","gold1"]', 'a player sets avatar, color, motto and up to 3 showcase achievements', sty);
+  check(!('av' in (await rpc('acc_style', { p_token: c2.token, p_data: { av: '<b>', col: 'neon' } }))), 'only known avatars and colors are stored');
+  await rpc('acc_style', { p_token: c2.token, p_data: { av: '🦊', col: 'teal', motto: 'Baking since breakfast', show: ['clk100'] } });
+  await rpc('acc_lb_link', { p_token: c2.token, p_lb: u1 }).catch(() => null);
+  const pr = await rpc('player_profile', { p_name: 'test_delta' });
+  check(pr.style.av === '🦊' && pr.style.motto === 'Baking since breakfast', 'profiles show the style', pr.style);
+  check(pr.ranks && pr.ranks.clicks === 1 && pr.ranks.asc === 1 && pr.ranks.fast >= 1 && pr.ranks.fast_s === 60, 'profiles show the place in every board', pr.ranks);
+  check((await q("select count(*)::int n from kf_schema where part = 17")).rows[0].n === 1, 'server part 17 is listed');
   }
 };

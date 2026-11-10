@@ -151,6 +151,40 @@ module.exports = async function browserTests(url) {
   await a.waitForSelector('#profOv:not([hidden]) .phead', { timeout: 8000 }).catch(() => {});
   check(/Alpha/.test(await text(a, '#profOv')), 'tapping a leaderboard name opens the player profile', await text(a, '#profOv'));
   await a.click('#profClose'); await a.click('#lbClose');
+
+  // 5c2. Category leaderboards and profile style (v61)
+  const st = (await pool.query("select s.clicks, s.id from lb_stats s join kf_accounts k on k.lb_id = s.id where k.username = 'alpha_ci'")).rows;
+  check(st.length === 1 && st[0].clicks >= 40, 'the score send also sends clicks, golden cookies and ascensions', st);
+  await pool.query("update lb_stats set fast = 125, fast_wk = kf_week_key(), fast_at = now() where id = $1", [st[0] && st[0].id]);
+  await goals(a); await a.click('#lbBar'); await a.waitForSelector('#lbBody [data-lbc="clicks"]', { timeout: 8000 }).catch(() => {});
+  check(await a.locator('#lbBody [data-lbc]').count() === 5, 'the leaderboard has five categories');
+  await a.click('#lbBody [data-lbc="clicks"]'); await a.waitForSelector('#lbBody [data-prof]', { timeout: 8000 }).catch(() => {});
+  check(/clicked the big cookie/.test(await text(a, '#lbBody')) && /Alpha/.test(await text(a, '#lbBody .lblist')) && await a.evaluate(() => document.querySelector('#lbBody [data-lbc="clicks"]').getAttribute('aria-pressed') === 'true'), 'the clicks board lists players', await text(a, '#lbBody'));
+  await a.click('#lbBody [data-lbc="fast"]'); await a.waitForTimeout(1200);
+  check(/2 min 5 s/.test(await text(a, '#lbBody')), 'the fastest-billion board shows run times', await text(a, '#lbBody'));
+  await a.locator('#lbBody .lblist [data-prof]').first().click();
+  await a.waitForSelector('#profOv:not([hidden]) [data-pe="edit"]', { timeout: 8000 }).catch(() => {});
+  check(/#1/.test(await text(a, '#profOv .pranks')) && /Fastest billion · 2 min 5 s/.test(await text(a, '#profOv .pranks')), 'the profile shows the player\'s place in each board', await text(a, '#profOv'));
+  await a.click('[data-pe="edit"]'); await a.click('[data-pav="🦊"]'); await a.click('[data-pcol="teal"]');
+  await a.fill('#profEditF [name=motto]', 'Baking since breakfast');
+  await a.evaluate(() => { const s = document.querySelector('[data-pes="0"]'); if (s && s.options.length > 1) s.selectedIndex = 1; });
+  await a.click('#profEditF button[type=submit]'); await a.waitForTimeout(1500);
+  const ps = (await pool.query("select pstyle from kf_accounts where username = 'alpha_ci'")).rows[0].pstyle;
+  check(ps.av === '🦊' && ps.col === 'teal' && ps.motto === 'Baking since breakfast' && Array.isArray(ps.show) && ps.show.length === 1, 'players choose an avatar, color, motto and favourite achievement', ps);
+  check(/🦊/.test(await text(a, '#profOv .pav')) && await a.evaluate(() => document.querySelector('#profOv .pav').classList.contains('pc-teal')) && /Baking since breakfast/.test(await text(a, '#profOv .pmotto')) && await a.isVisible('#profOv .pach'), 'the profile shows the new style');
+  await a.click('[data-pe="edit"]'); await a.fill('#profEditF [name=motto]', '<b>hi</b>'); await a.click('#profEditF button[type=submit]'); await a.waitForTimeout(1000);
+  check(/no < or >/.test(await text(a, '#profEditErr')), 'a motto with < or > is refused');
+  await a.click('[data-pe="cancel"]');
+  await a.evaluate(() => { window.__shared = ''; navigator.share = undefined; navigator.clipboard.writeText = t => { window.__shared = t; return Promise.resolve(); }; });
+  await a.click('[data-pe="share"]'); await a.waitForTimeout(300);
+  check(await a.evaluate(() => /\?p=alpha_ci$/.test(window.__shared)), 'sharing copies a link to the profile');
+  await a.click('#profClose'); await a.click('#lbClose');
+  {
+    const pv = await device('Profile Viewer', '10.0.61.1', {}, false, '?p=alpha_ci');
+    await pv.waitForSelector('#profOv:not([hidden]) .phead', { timeout: 8000 }).catch(() => {});
+    check(/alpha_ci/.test(await text(pv, '#profOv')) && /Baking since breakfast/.test(await text(pv, '#profOv')) && !(await pv.isVisible('[data-pe="edit"]')) && !/\?p=/.test(pv.url()), 'a shared ?p= link opens that profile');
+    await pv.context().close();
+  }
   if (await c.isVisible('#rwOv')) await c.click('#rwClose');
   if (await c.isVisible('#clubOv')) await c.click('#clubClose');
   await goals(c); await c.click('#clubBar'); await c.click('#clubBody [data-clt=friends]');
@@ -409,6 +443,8 @@ module.exports = async function browserTests(url) {
   const pl = (await pool.query("select kind, repeat, hours, next_at from kf_schedule where title = 'CI weekly news'")).rows;
   check(pl.length === 1 && pl[0].kind === 'news' && pl[0].repeat === 'weekly' && pl[0].hours === 24 && new Date(pl[0].next_at) > Date.now(), 'the owner plans a weekly announcement', pl);
   check(/CI weekly news/.test(await text(d, '#admOn')) && /every week/.test(await text(d, '#admOn')), 'planned items are listed');
+  // the form's default start is the next full hour: move it out so it can't pop up over later tests when a run crosses the hour
+  await pool.query("update kf_schedule set next_at = now() + interval '1 day' where title = 'CI weekly news'");
   await d.click('#setClose');
 
   // 5k. Live dashboard, weekly report and landing page (v57)
@@ -492,7 +528,7 @@ module.exports = async function browserTests(url) {
   check(await a.evaluate(() => !document.getElementById('clubOv').dataset.rt), 'closing the club disconnects the live signal');
   await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
   await d.waitForSelector('[data-hlth]', { timeout: 10000 }).catch(() => {});
-  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–16 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 16 parts');
+  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–17 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 17 parts');
   await d.click('#setClose');
 
   // 5m. Tab bar, building cards, transitions, bakery start screen, vibration, history, welcome back (v59)
