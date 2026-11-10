@@ -528,7 +528,7 @@ module.exports = async function browserTests(url) {
     await d.waitForTimeout(200);
     tipOk = await d.isVisible('#admSrv .dchart[data-chart=players] .dtip');
   }
-  check(tipOk, 'hovering a day shows its number');
+  check(tipOk, 'hovering a day shows its number', tipOk ? '' : await d.evaluate(() => { const c = document.querySelector('#admSrv .dchart[data-chart=players]'), pl = c && c.querySelector('.dplot'), r = pl && pl.getBoundingClientRect(), card = c && c.closest('.admcard'); return { sec: (document.getElementById('admSrv') || {}).dataset, ic: card && card.dataset.ic, disp: card && getComputedStyle(card).display, rect: r && [r.x, r.y, r.width, r.height].map(Math.round), vh: innerHeight, tips: c && c.querySelectorAll('.dtip').length, tipHidden: c && c.querySelector('.dtip') && c.querySelector('.dtip').hidden, pane: (document.querySelector('.admpane[data-ap=srv]') || {}).hidden, tab: document.querySelector('#admSeg [aria-pressed=true]') && document.querySelector('#admSeg [aria-pressed=true]').dataset.ap }; }));
   check(/Weekly report/.test(await text(d, '#admSrv')) && await d.locator('#admSrv .rep').count() >= 1, 'the Server tab lists weekly reports');
   await d.click('[data-repa="prev"]'); await d.waitForTimeout(1200);
   check(/Right now/.test(await text(d, '#admSrv')) && /To do/.test(await text(d, '#admSrv')), 'the owner sees this week\'s numbers and to-dos right now');
