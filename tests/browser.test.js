@@ -523,8 +523,10 @@ module.exports = async function browserTests(url) {
   // the Server tab redraws every few seconds, so measure and hover again if a redraw came in between
   let tipOk = false;
   for (let k = 0; k < 5 && !tipOk; k++) {
-    const plot = await d.locator('#admSrv .dchart[data-chart=players] .dplot').boundingBox();
-    if (plot) { await d.mouse.move(plot.x + plot.width - 6, plot.y + plot.height - 12); await d.mouse.move(plot.x + plot.width - 3, plot.y + plot.height - 10); }
+    // Playwright's hover waits until nothing (like a toast) covers the chart
+    const pl = d.locator('#admSrv .dchart[data-chart=players] .dplot');
+    const plot = await pl.boundingBox();
+    if (plot) { await d.mouse.move(plot.x + 5, plot.y + 5); await pl.hover({ position: { x: Math.max(1, plot.width - 3), y: Math.max(1, plot.height - 10) }, timeout: 6000 }).catch(() => {}); }
     await d.waitForTimeout(200);
     tipOk = await d.isVisible('#admSrv .dchart[data-chart=players] .dtip');
   }
