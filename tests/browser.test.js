@@ -156,7 +156,7 @@ module.exports = async function browserTests(url) {
 
   // 5c2. Category leaderboards and profile style (v61)
   const st = (await pool.query("select s.clicks, s.id from lb_stats s join kf_accounts k on k.lb_id = s.id where k.username = 'alpha_ci'")).rows;
-  check(st.length === 1 && st[0].clicks >= 40, 'the score send also sends clicks, golden cookies and ascensions', st);
+  check(st.length === 1 && st[0].clicks >= 20, 'the score send also sends clicks, golden cookies and ascensions', st);
   await pool.query("update lb_stats set fast = 125, fast_wk = kf_week_key(), fast_at = now() where id = $1", [st[0] && st[0].id]);
   await goals(a); await a.click('#lbBar'); await a.waitForSelector('#lbBody [data-lbc="clicks"]', { timeout: 8000 }).catch(() => {});
   check(await a.locator('#lbBody [data-lbc]').count() === 5, 'the leaderboard has five categories');
@@ -601,6 +601,21 @@ module.exports = async function browserTests(url) {
     check(await v.evaluate(() => document.querySelector('#histBox [data-hr="a"]').getAttribute('aria-pressed') === 'true'), 'the history range can be switched');
     check(await v.evaluate(() => document.documentElement.scrollWidth - innerWidth) <= 1, 'phone: the history chart fits without sideways scrolling');
     await ctx.close();
+  }
+
+  // 5n. Balance and anti-cheat (v63): only real clicks count, at most 20 a second
+  {
+    const k = await device('Click Bakery', '10.0.63.1');
+    await k.addStyleTag({ content: '#tutBox,#rwOv{display:none!important}' });
+    const clicks = async () => { await goals(k); await k.click('button[data-g="stats"]'); await k.waitForTimeout(400); const t = await text(k, '[data-l="s_clicks"]'); await k.evaluate(() => document.querySelector('.tab[data-tab="build"]').click()); return +t.replace(/\D/g, '') || 0; };
+    const c0 = await clicks();
+    await k.evaluate(() => { const ck = document.getElementById('cookie'); for (let i = 0; i < 30; i++) ck.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'mouse', button: 0 })); });
+    check((await clicks()) === c0, 'clicks made by a script don\'t count');
+    const box = await k.locator('#cookie').boundingBox(), t0 = Date.now();
+    for (let i = 0; i < 80; i++) await k.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    const secs = (Date.now() - t0) / 1000, n = (await clicks()) - c0;
+    check(n > 0 && n <= 20 * (Math.ceil(secs) + 1) && (secs > 3 || n < 80), 'clicks are limited to 20 a second', { n, secs });
+    await k.context().close();
   }
 
   // 6. Layout: nothing sticks out sideways on a phone

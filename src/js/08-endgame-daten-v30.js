@@ -9,7 +9,7 @@ ITEMS.push(
 var RANKS=[[0,'Ohne Rang','Unranked','#7d8794'],[5,'Bronze','Bronze','#c98a4b'],[20,'Silber','Silver','#c7d0d9'],[50,'Gold','Gold','#f1b24a'],[120,'Platin','Platinum','#7fe0e0'],[250,'Diamant','Diamond','#8fd3ff'],[500,'Meister','Master','#c38bff'],[1000,'Großmeister','Grandmaster','#ff6b8a'],[2000,'Legende','Legend','#ffd700'],[4000,'Mythisch','Mythic','#ff5ad8'],[8000,'Kosmisch','Cosmic','#7a5cff'],[15000,'Göttlich','Divine','#fff3b0'],[30000,'Ewig','Eternal','#5affd8'],[60000,'Unendlich','Infinite','#ffffff']];
 var COSN=[
   {id:'c_prod',c:1,ic:'spark',n:['Sternenstaub','Stardust'],d:['Produktion ×3.','Production ×3.']},
-  {id:'c_click',c:1,ic:'hand',n:['Sternenfinger','Star Fingers'],d:['Klicks ×10.','Clicks ×10.']},
+  {id:'c_click',c:1,ic:'hand',n:['Sternenfinger','Star Fingers'],d:['Klicks ×3.','Clicks ×3.']},
   {id:'c_chip',c:2,ic:'star',n:['Himmelsnebel','Heaven Nebula'],d:['Himmelschips wirken doppelt.','Heavenly chips work twice as well.']},
   {id:'c_pages',c:2,ic:'book',n:['Kosmisches Rezept','Cosmic Recipe'],d:['Rezeptseiten wirken doppelt.','Recipe pages work twice as well.']},
   {id:'c_start',c:2,ic:'pantry',n:['Urknall-Start','Big Bang Start'],d:['Jeder Aufstieg startet mit 1 Bio Keksen.','Every ascension starts with 1 trillion cookies.']},

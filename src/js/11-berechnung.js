@@ -5,6 +5,7 @@ const envV=v=>v===undefined?1:v>=1?1+(v-1)*UE.wxMul:Math.max(.3,1-(1-v)*UE.wxMul
 const staMax=()=>5+UE.sta;
 const baseCost=i=>(S.admin.b[i]&&S.admin.b[i].cost)||B[i].base;
 const baseCps=i=>(S.admin.b[i]&&S.admin.b[i].cps)||B[i].cps;
+const CLICKBUFF_MAX=300,BUFFM_MAX=100,CLICKPCT_MAX=10,RUSH_MAX=5,RUSH_PER=25;
 let C={kps:0,kps0:0,boxM:1,cdM:1,durM:1,click:1,per:B.map(()=>0),chipRate:.01,goldRate:1,goldLife:13,goldPower:1,luck:1,buffTime:1,startCookies:0,costMult:1,offEff:.5,offCap:8};
 function recalc(){
   const AD=S.admin;
@@ -89,7 +90,7 @@ function recalc(){
   if(RT.r_gold){goldRate*=.9;goldPower*=1.1;}
   if(RT.r_cost) costMult*=.95;
   if(RT.r_off) offEff=Math.min(1.5,offEff+.25);
-  if(RT.r_gold2) goldPower*=1.25;if(RT.r_hero){UE.heroAtk*=1.25;UE.heroHp*=1.25;}if(RT.r_work) UE.wkXP*=1.5;if(RT.r_click2) clickT*=5;if(RT.r_build) costMult*=.9;if(RT.r_off2) offCap+=8;if(RT.r_chip2) chipRate*=1.5;if(RT.r_prod) gm*=3;
+  if(RT.r_gold2) goldPower*=1.25;if(RT.r_hero){UE.heroAtk*=1.25;UE.heroHp*=1.25;}if(RT.r_work) UE.wkXP*=1.5;if(RT.r_click2) clickT*=3;if(RT.r_build) costMult*=.9;if(RT.r_off2) offCap+=8;if(RT.r_chip2) chipRate*=1.5;if(RT.r_prod) gm*=3;
   const achN=Object.keys(S.ach).length;
   gm*=1+0.005*achN*achMul;
   gm*=1+chipRate*S.chips*EGM.chip;
@@ -106,16 +107,20 @@ function recalc(){
   WFX=calcWFX();gm*=WFX.prod;clickT*=WFX.click;goldRate*=WFX.gold;costMult*=WFX.cost;
   let frenzy=1,clickBuff=1,sugarM=1,spellM=1;
   for(const f of S.buffs){if(f.id==='frenzy') frenzy=7;if(f.id==='clickfrenzy') clickBuff=150;if(f.id==='b_sugar') sugarM=2;if(f.id==='b_turbo') clickBuff*=3;if(f.id==='b_sale') costMult*=.85;if(f.id==='b_magnet') goldRate*=.5;if(f.id==='s_click') clickBuff*=10;if(f.id==='s_sale') costMult*=.8;if(f.id==='s_time') spellM=5;}
+  /* V63: Klick-Boosts zusammen höchstens ×300 */
+  clickBuff=Math.min(CLICKBUFF_MAX,clickBuff);
   goldRate=Math.max(.35,goldRate);costMult=Math.max(.5,costMult)*WFX.costPost;
   gm*=EGM.prod;clickT*=EGM.click;goldPower*=EGM.gold;costMult*=EGM.cost;startCookies+=EGM.start;offEff+=EGM.off;goldRate*=EGM.goldf;buffTime*=EGM.buff;UE.heroAtk*=EGM.hero;UE.heroHp*=EGM.hero;UE.wkXP*=EGM.work;UE.frSell*=EGM.fr;UE.comboCap+=EGM.combo;if(EGM.bm) EGM.bm.forEach((m,i)=>{bm[i]*=m;});
   gm*=1+.01*badgeTiers();
   let bldM=1;for(const f of S.buffs) if(f.id==='g_build') bldM*=f.v||1.5;
-  const buffM=frenzy*sugarM*spellM*bldM;
+  const buffM=Math.min(BUFFM_MAX,frenzy*sugarM*spellM*bldM);   /* V63: Produktions-Boosts zusammen höchstens ×100 */
+  offEff=Math.min(1,offEff);   /* V63: offline nie mehr als online */
   const per=B.map((b,i)=>baseCps(i)*bm[i]*gm*buffM);
   let kps=0;
   B.forEach((b,i)=>{kps+=per[i]*S.b[i];});
   C={kps,kps0:kps/buffM,per,achN,chipRate,goldRate,goldLife,goldPower,luck,buffTime,startCookies,costMult,offEff,offCap,boxM,cdM:Math.max(.4,1-cdRed),durM,
-     click:(Math.pow(2,fingerUps)*clickU+clickPct*kps/buffM)*clickBuff*clickT*AD.click*(WFX.click0?0:1)};
+     /* V63: Klick-Multiplikatoren zählen voll für den Grund-Klick, für den Anteil an der Produktion höchstens ×10 (Events zählen extra) */
+     click:(Math.pow(2,fingerUps)*clickU*clickT+clickPct*(kps/buffM)*Math.min(CLICKPCT_MAX,clickT/GEV.click)*GEV.click)*clickBuff*AD.click*(WFX.click0?0:1)};
 }
 function buyCost(i,n){const g=S.admin.growth;return Math.ceil(baseCost(i)*C.costMult*Math.pow(g,S.b[i])*(Math.pow(g,n)-1)/(g-1));}
 function maxN(i){

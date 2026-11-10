@@ -235,6 +235,14 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - Player file `43q-v62-bestenliste-automatisch.js` (`v62Ready`, `lbAutoJoin()`), called from the sign-up branch in `37-…` after `accUpload`. It joins only when the leaderboard is on, the player is signed in, not already on it, not removed by the admin (`S.lb.ban`) and not `lbCheat()`. It tries `S.name`, then the username, then the username plus a number, using `lbSubmit(true)`; on `name taken`/`name not allowed`/`invalid name` it tries the next one, and on any other error it stays joined so the minute send retries. A changed name is written to `S.name`. Then `lbAccSync(true)` links the spot to the account.
 - Only sign-up joins automatically: signing in, loading a save or leaving the board never re-joins. Keep the note in the sign-up form and in `privacy.html`.
 
+## Balance caps and fair clicking (version 63)
+
+- Caps live in `11-berechnung.js`: `CLICKBUFF_MAX` (300, all click boosts together), `BUFFM_MAX` (100, all production boosts together: frenzy, sugar, Time Whirl, Building Rush), `CLICKPCT_MAX` (10: click multipliers count fully for the flat click but at most ×10 for the `clickPct × kps0` part; `GEV.click` events count on top), `RUSH_MAX`/`RUSH_PER` (Building Rush `min(5, 1 + biggest/25)`), and `offEff` at most 1 (offline never pays more than online; the high offline nodes give only time).
+- Cookie Rain pays like Lucky: `(min(15 % of cookies, 600 s of kps0) + 13) × goldPower × luck`.
+- Click upgrades were lowered (c6/c8 ×3, c10 ×4, c12 ×5, c13 ×10, mg1 ×3, `r_click2` ×3, `c_click` ×3). Change the descriptions with the numbers.
+- **Fair clicking:** `clickOk(e)` in `12-…` ignores untrusted events and allows at most `CLICK_MAX` (20) cookie clicks per second from pointer and keyboard. Code that calls `doClick` directly (admin auto-clicker, endgame auto-click) is not limited.
+- Start cookies after ascending (`w4`, `w6`, `w8`, `c_start`) were checked and left alone: at the chip counts they need, they are a tiny share of a run.
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass (including the GitHub `Tests` check). After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

@@ -193,7 +193,7 @@ const REB=[
   {id:'r_gold2',c:5,n:['Goldregen','Gold Rain'],d:['Goldkekse 25 % stärker.','Golden cookies 25% stronger.']},
   {id:'r_hero',c:5,n:['Heldenrezept','Hero Recipe'],d:['Der Held hat 25 % mehr Angriff und Leben.','The hero has 25% more attack and health.']},
   {id:'r_work',c:5,n:['Lehrwerkstatt','Training Workshop'],d:['Helfer bekommen 50 % mehr Erfahrung.','Helpers get 50% more experience.']},
-  {id:'r_click2',c:6,n:['Teigmeister','Dough Master'],d:['Klicks ×5.','Clicks ×5.']},
+  {id:'r_click2',c:6,n:['Teigmeister','Dough Master'],d:['Klicks ×3.','Clicks ×3.']},
   {id:'r_build',c:6,n:['Bauboom','Building Boom'],d:['Gebäude 10 % billiger.','Buildings 10% cheaper.']},
   {id:'r_off2',c:6,n:['Nachtbäckerei','Night Bakery'],d:['Offline-Grenze +8 Stunden.','Offline limit +8 hours.']},
   {id:'r_gem',c:7,n:['Edelsteinofen','Gem Oven'],d:['50 % mehr Edelsteine.','50% more gems.']},
