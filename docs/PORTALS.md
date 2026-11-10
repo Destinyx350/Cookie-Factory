@@ -1,6 +1,15 @@
 # Put Cookie Factory on game portals
 
-**Live:** itch.io → https://destinyx350.itch.io/cookie-factory (upload `cookie-factory-portal` there again after each update: *Edit game* → *Uploads* → replace the zip).
+**Live:** itch.io → https://destinyx350.itch.io/cookie-factory.
+
+**Automatic itch.io updates:** the *Portal package* workflow pushes every new version to itch.io by itself once the repository has the secret `BUTLER_API_KEY`:
+
+1. On itch.io open *Settings → API keys* (https://itch.io/user/settings/api-keys) and click **Generate new API key**. Copy it. Never paste it into a chat, an issue or a file in this repository.
+2. On GitHub open the repository's *Settings → Secrets and variables → Actions → New repository secret*. Name: `BUTLER_API_KEY`, value: the key.
+3. Run the workflow once by hand: *Actions → Portal package → Run workflow*. It uploads the game as a new file on the itch.io channel `html5`.
+4. Only the first time: on itch.io open *Edit game → Uploads*, tick **This file will be played in the browser** on the new upload and delete the old zip you uploaded by hand. Save.
+
+From then on every merge into `main` updates the itch.io game. Without the secret the step is skipped and you can still upload `cookie-factory-portal` by hand (*Edit game* → *Uploads* → replace the zip).
 
 Game portals like itch.io, CrazyGames, GameDistribution and Newgrounds show the game to many new players.
 Each one wants a zip with `index.html` at the top level. The game builds that zip by itself.

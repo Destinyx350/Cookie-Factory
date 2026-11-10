@@ -4,6 +4,8 @@ name: Portal package
 # Download a zip from the workflow run's Artifacts section: cookie-factory-portal (no ads, itch.io etc.),
 # cookie-factory-crazygames and cookie-factory-gamedistribution (optional rewarded ads). Each zip is the upload file.
 # For GameDistribution, add the repository variable GD_GAME_ID (Settings → Secrets and variables → Actions → Variables). Steps and store texts: docs/PORTALS.md
+# itch.io: with the repository secret BUTLER_API_KEY (an itch.io API key) the plain portal zip is also pushed to
+# destinyx350/cookie-factory (channel html5) with butler on every push to main. Without the secret that step is skipped.
 on:
   push:
     branches: [main]
@@ -43,3 +45,12 @@ jobs:
           name: cookie-factory-gamedistribution
           path: dist/portal-gamedistribution/
           retention-days: 90
+      - name: Upload to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          if [ -z "$BUTLER_API_KEY" ]; then echo "No BUTLER_API_KEY secret: skipping the itch.io upload."; exit 0; fi
+          curl -fsSL -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip -q butler.zip -d butler && chmod +x butler/butler
+          V=$(node -p "require('./version.json').v")
+          ./butler/butler push dist/portal destinyx350/cookie-factory:html5 --userversion "$V"
