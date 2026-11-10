@@ -44,8 +44,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=63;
+const NEWS_VER=64;
 const NEWS=[
+  {v:64,sum:['Ein Name für alles','One name for everything'],items:[
+    ['new','Dein Benutzername ist jetzt dein Name überall: in der Bestenliste, im Chat, in Clubs, bei Freunden und Geschenken. Der Bäckerei-Name bleibt als Deko in deinem Spiel und Profil.','Your username is now your name everywhere: on the leaderboard, in chat, in clubs, with friends and gifts. The bakery name stays as decoration in your game and profile.'],
+    ['change','Die Bestenliste ist jetzt für Spieler mit Konto. Ein Konto ist gratis und braucht keine E-Mail.','The leaderboard is now for players with an account. An account is free and needs no email.'],
+    ['new','Benutzernamen ändern: alle 30 Tage unter Einstellungen → Speichern. Anmelden geht 90 Tage lang auch noch mit dem alten Namen.','Change your username: every 30 days under Settings → Saving. Signing in also works with the old name for 90 days.'],
+    ['change','Faire Regeln: Wer gegen die Regeln verstößt, bekommt erst eine Verwarnung. Danach folgen Sperren von 24 Stunden, 7 Tagen und für immer.','Fair rules: breaking the rules first gets you a warning. After that come bans of 24 hours, 7 days and forever.']]},
   {v:63,sum:['Großes Balance-Update','Big balance update'],items:[
     ['change','Klicks: Die stärksten Klick-Upgrades sind schwächer (zum Beispiel ×10 → ×3, ×100 → ×10). Für den Teil eines Klicks, der aus deiner Produktion kommt, zählen Klick-Multiplikatoren höchstens ×10. Alle Klick-Boosts zusammen geben höchstens ×300.','Clicks: the strongest click upgrades are weaker (for example ×10 → ×3, ×100 → ×10). For the part of a click that comes from your production, click multipliers count at most ×10. All click boosts together give at most ×300.'],
     ['change','Nur echte Klicks zählen, höchstens 20 pro Sekunde – Auto-Klicker bringen nichts mehr.','Only real clicks count, at most 20 a second – auto-clickers no longer help.'],

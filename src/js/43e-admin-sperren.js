@@ -19,7 +19,7 @@ function admBanHtml(){
     +'<label class="chk" style="grid-column:1/-1"><input type="checkbox" name="wipe"><span>'+tt('Seine Chat-Nachrichten löschen','Delete their chat messages')+'</span></label>'
     +'<button type="submit" class="btn warn'+(armed?' armed':'')+'">'+(armed?tt('Wirklich sperren?','Really ban?'):tt('Konto sperren','Ban account'))+'</button></form>'
     +(admBanErr?'<p class="nameerr">'+admBanErr+'</p>':'')
-    +(L.length?'<div class="admlbl" style="margin-top:8px">'+L.map(b=>'<div class="admlbr"><span class="rk">⛔</span><span class="who"><b>'+escName(b.username)+'</b><small>'+(b.until?tt('bis ','until ')+admDT(b.until):tt('für immer','forever'))+(b.devices?' · '+b.devices+' '+tt('Gerät(e)','device(s)'):'')+' · '+tt('seit ','since ')+admDT(b.created_at)+'</small>'+(b.reason?'<small>„'+escName(b.reason)+'“</small>':'')+'</span><span class="btns"><button type="button" class="btn sm" data-ban="unban:'+escName(b.username)+'">'+tt('Entsperren','Unban')+'</button></span></div>').join('')+'</div>':''));
+    +(L.length?'<div class="admlbl" style="margin-top:8px">'+L.map(b=>'<div class="admlbr"><span class="rk">⛔</span><span class="who"><b>'+pcl(b.username)+'</b><small>'+(b.until?tt('bis ','until ')+admDT(b.until):tt('für immer','forever'))+(b.devices?' · '+b.devices+' '+tt('Gerät(e)','device(s)'):'')+' · '+tt('seit ','since ')+admDT(b.created_at)+'</small>'+(b.reason?'<small>„'+escName(b.reason)+'“</small>':'')+'</span><span class="btns"><button type="button" class="btn sm" data-ban="unban:'+escName(b.username)+'">'+tt('Entsperren','Unban')+'</button></span></div>').join('')+'</div>':''));
 }
 els.admin.addEventListener('submit',e=>{
   const f=e.target;if(f.getAttribute('id')!=='admBanF') return;

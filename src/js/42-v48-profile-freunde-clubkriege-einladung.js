@@ -13,8 +13,8 @@ async function openProfile(name){
   const st=P.stats||{},me=accMe&&P.username&&accMe.username.toLowerCase()===String(P.username).toLowerCase();
   const tile=(ic,l,v)=>v==null||v===''?'':'<span class="ptile"><span aria-hidden="true">'+ic+'</span><small>'+l+'</small><b>'+v+'</b></span>';
   $id('profT').textContent=P.username||P.bakery||name;
-  let h='<div class="phead"><span class="pav'+(v61Ready?profCol(P):'')+'" aria-hidden="true">'+(v61Ready?profAv(P):(P.username?'👤':'🍪'))+'<i class="pdot'+(P.online?' on':'')+'"></i></span><span><b>'+escName(P.bakery||P.username||name)+'</b>'
-    +(P.username?'<small>@'+escName(P.username)+(st.title?' · '+escName(st.title):'')+'</small>':'<small>'+tt('Ohne Konto','No account')+'</small>')
+  let h='<div class="phead"><span class="pav'+(v61Ready?profCol(P):'')+'" aria-hidden="true">'+(v61Ready?profAv(P):(P.username?'👤':'🍪'))+'<i class="pdot'+(P.online?' on':'')+'"></i></span><span><b>'+escName(P.username||P.bakery||name)+'</b>'
+    +(P.username?((st.bakery&&st.bakery!==P.username)||st.title?'<small>'+[st.bakery&&st.bakery!==P.username?'🏠 '+escName(st.bakery):'',st.title?escName(st.title):''].filter(Boolean).join(' · ')+'</small>':''):'<small>'+tt('Ohne Konto','No account')+'</small>')
     +'<small>'+(P.online?tt('🟢 Gerade online','🟢 Online now'):P.since?tt('Dabei seit ','Playing since ')+new Date(P.since).toLocaleDateString(LOC[LANG],{month:'long',year:'numeric'}):'')+'</small></span></div>';
   h+='<div class="ptiles">'+tile('🍪',tt('Gebacken','Baked'),fmt(+P.baked||0))+tile('🏆',tt('Platz','Rank'),P.rank?'#'+fmt(P.rank):null)+tile('🥇',tt('Wochen-/Monatssiege','Weekly/monthly wins'),P.wins?fmt(P.wins):null)
     +tile('⭐',tt('Erfolge','Achievements'),st.ach!=null?fmt(st.ach):null)+tile('👼',tt('Aufstiege','Ascensions'),st.asc?fmt(st.asc):null)+tile('🏭',tt('Gebäude','Buildings'),st.bld!=null?fmt(st.bld):null)

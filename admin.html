@@ -1816,6 +1816,37 @@ html{-webkit-tap-highlight-color:transparent}
 .pcols .pc-orange{background:#e07a2f}.pcols .pc-gold{background:#d9a520}.pcols .pc-red{background:#d6453d}.pcols .pc-pink{background:#d9559d}.pcols .pc-purple{background:#8a5ad6}.pcols .pc-blue{background:#3f7fd6}.pcols .pc-teal{background:#23a39b}.pcols .pc-green{background:#3e9e4e}
 .pshowsel{display:grid;gap:6px}.pshowsel .namein{width:100%}
 
+/* ===== V64: Spieler-Karte, Zu erledigen, Bereiche, Platzhalter ===== */
+.pcl{all:unset;cursor:pointer;font-weight:700;color:inherit;border-bottom:1px dashed currentColor;line-height:1.2}
+.pcl:hover,.pcl:focus-visible{color:var(--gold1,#ffc23d);outline:none}
+.admqp{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin:6px 0 2px}
+.admqp[hidden]{display:none}
+.admsecbar{display:flex;margin:0 0 10px}
+.admsecbar button{flex:1 1 0}
+.admtodohead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
+.todon{display:inline-block;min-width:20px;padding:1px 7px;margin-left:6px;border-radius:999px;background:var(--gold1,#ffc23d);color:#2a1a00;font-size:12px;text-align:center}
+.plhead{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.plhead b{font-size:18px}.plhead small{display:block;color:var(--muted)}
+.plav{position:relative;display:grid;place-items:center;width:46px;height:46px;border-radius:var(--r-md,14px);background:var(--panel-2);font-size:24px;flex:0 0 auto}
+.plchips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.plchip{padding:3px 9px;border-radius:999px;font-size:12px;border:1px solid var(--edge);background:var(--panel-2)}
+.plchip.warn{border-color:#d9a23a}.plchip.bad{border-color:#e0566a;color:#ffb3bd}.plchip.ok{border-color:#4f9e63}
+.plfacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-bottom:6px}
+.plfacts span{padding:6px 9px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2);min-width:0}
+.plfacts small{display:block;color:var(--muted);font-size:11px}.plfacts b{font-size:13px;overflow-wrap:anywhere}
+.plh{margin:12px 0 6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.plpresets{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.plpresets .btn{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;height:auto;padding:8px 10px}
+.plpresets .btn small{font-size:11px;color:var(--muted);font-weight:500}
+.plpresets .btn.armed{border-color:#e0566a;background:rgba(224,86,106,.16)}
+.skel{display:flex;flex-direction:column;gap:8px;padding:4px 0}
+.skrow{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:var(--r-sm,10px);background:var(--panel-2)}
+.skrow i,.skrow b{display:block;height:12px;border-radius:6px;background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.16),rgba(255,255,255,.06));background-size:200% 100%;animation:skel 1.3s linear infinite}
+.skrow i{width:22px;height:22px;border-radius:50%}
+@keyframes skel{from{background-position:100% 0}to{background-position:-100% 0}}
+[data-motion="off"] .skrow i,[data-motion="off"] .skrow b{animation:none}
+@media (prefers-reduced-motion:reduce){.skrow i,.skrow b{animation:none}}
+
 </style>
 
 <div class="wrap">
@@ -3044,8 +3075,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=63;
+const NEWS_VER=64;
 const NEWS=[
+  {v:64,sum:['Ein Name für alles','One name for everything'],items:[
+    ['new','Dein Benutzername ist jetzt dein Name überall: in der Bestenliste, im Chat, in Clubs, bei Freunden und Geschenken. Der Bäckerei-Name bleibt als Deko in deinem Spiel und Profil.','Your username is now your name everywhere: on the leaderboard, in chat, in clubs, with friends and gifts. The bakery name stays as decoration in your game and profile.'],
+    ['change','Die Bestenliste ist jetzt für Spieler mit Konto. Ein Konto ist gratis und braucht keine E-Mail.','The leaderboard is now for players with an account. An account is free and needs no email.'],
+    ['new','Benutzernamen ändern: alle 30 Tage unter Einstellungen → Speichern. Anmelden geht 90 Tage lang auch noch mit dem alten Namen.','Change your username: every 30 days under Settings → Saving. Signing in also works with the old name for 90 days.'],
+    ['change','Faire Regeln: Wer gegen die Regeln verstößt, bekommt erst eine Verwarnung. Danach folgen Sperren von 24 Stunden, 7 Tagen und für immer.','Fair rules: breaking the rules first gets you a warning. After that come bans of 24 hours, 7 days and forever.']]},
   {v:63,sum:['Großes Balance-Update','Big balance update'],items:[
     ['change','Klicks: Die stärksten Klick-Upgrades sind schwächer (zum Beispiel ×10 → ×3, ×100 → ×10). Für den Teil eines Klicks, der aus deiner Produktion kommt, zählen Klick-Multiplikatoren höchstens ×10. Alle Klick-Boosts zusammen geben höchstens ×300.','Clicks: the strongest click upgrades are weaker (for example ×10 → ×3, ×100 → ×10). For the part of a click that comes from your production, click multipliers count at most ×10. All click boosts together give at most ×300.'],
     ['change','Nur echte Klicks zählen, höchstens 20 pro Sekunde – Auto-Klicker bringen nichts mehr.','Only real clicks count, at most 20 a second – auto-clickers no longer help.'],
@@ -7902,9 +7938,9 @@ function chkList(g,list){
 function unlockSec(g,titleKey,list){
   return '<details class="adm"><summary>'+tr('adm_unlock')+': '+tr(titleKey)+'</summary><div class="adm-body"><div class="btns"><button type="button" class="btn sm" data-act="all:'+g+'">'+tr('adm_all_on')+'</button><button type="button" class="btn sm" data-act="none:'+g+'">'+tr('adm_all_off')+'</button></div>'+chkList(g,list)+'</div></details>';
 }
-const ADM_TABS=[['lb','Bestenliste','Leaderboard'],['online','Online','Online'],['mod','Moderation','Moderation'],['srv','Server','Server'],['quick','Schnell','Quick'],['val','Werte','Values'],['bld','Gebäude','Buildings'],['unl','Freischalten','Unlock'],['world','Welt & Held','World & hero'],['end','Endgame','Endgame'],['tool','Werkzeuge','Tools']];
+const ADM_TABS=[['todo','Zu erledigen','To-do'],['pl','Spieler','Players'],['lb','Bestenliste','Leaderboard'],['online','Online','Online'],['mod','Moderation','Moderation'],['srv','Server','Server'],['quick','Schnell','Quick'],['val','Werte','Values'],['bld','Gebäude','Buildings'],['unl','Freischalten','Unlock'],['world','Welt & Held','World & hero'],['end','Endgame','Endgame'],['tool','Werkzeuge','Tools']];
 let admTab='quick',admPass='';
-const ADM_ONLINE=['lb','online','mod','srv'];
+const ADM_ONLINE=['todo','pl','lb','online','mod','srv'];
 function admXV(){
   const X={};
   MATS.forEach(m=>{X['mat_'+m.id]=[()=>S.w.mat[m.id],v=>{S.w.mat[m.id]=Math.floor(v);},m.n];});
@@ -8001,14 +8037,14 @@ function buildAdmin(){
     +admCard(tt('Speichern','Saving'),'<div class="btns">'+admBtn('savenow',tt('Jetzt speichern','Save now'))+admBtn('backup',tt('Backup anlegen','Create backup'))+'</div>')
     +admCard(tt('Spielstand-Daten','Save data'),'<div class="btns">'+admBtn('json',tt('Daten anzeigen','Show data'))+'</div><textarea id="admJson" readonly hidden></textarea><p class="small" id="admJsonN"></p>',tt('json export','json export'))
     +admCard(tr('adm_reset'),'<div class="btns">'+admBtn('reset:admin',tr('adm_reset_btn'))+'</div>');
-  P.lb='<div id="admLb" class="admlb"></div>';P.online='<div id="admOn" class="admlb"></div><div id="admAcc" class="admlb" style="margin-top:10px"></div><div id="admClub" class="admlb" style="margin-top:10px"></div>';P.mod='<div id="admMod" class="admlb"></div>';P.srv='<div id="admSrv" class="admlb"></div>';
+  P.todo='<div id="admTodo" class="admlb"></div>';P.pl='<div id="admPl" class="admlb"></div>';P.lb='<div id="admLb" class="admlb"></div>';P.online='<div id="admOn" class="admlb"></div><div id="admAcc" class="admlb" style="margin-top:10px"></div><div id="admClub" class="admlb" style="margin-top:10px"></div>';P.mod='<div id="admMod" class="admlb"></div>';P.srv='<div id="admSrv" class="admlb"></div>';
   let h='<div class="admlockbar"><button type="button" class="btn sm" id="admLockBtn">'+tt('Admin sperren','Lock admin')+'</button></div><div class="admhead"><div class="admstats">'+[['ck',tt('Kekse','Cookies')],['kps',tt('pro Sek.','per sec')],['clk',tt('pro Klick','per click')],['chips',tt('Chips','Chips')],['spd',tt('Tempo','Speed')]].map(([k,l])=>'<span><small>'+l+'</small><b data-al="'+k+'"></b></span>').join('')+'</div>'
     +'<input type="search" class="setq" id="admQ" autocomplete="off" placeholder="'+tt('Admin durchsuchen …','Search admin …')+'"><div class="seg admgrp" id="admGrp" role="group"><button type="button" data-ag="game">'+tt('Spiel','Game')+'</button><button type="button" data-ag="online">'+tt('Online','Online')+'</button></div><div class="seg admseg" id="admSeg">'+ADM_TABS.map(t=>'<button type="button" data-ap="'+t[0]+'" data-g="'+(ADM_ONLINE.includes(t[0])?'online':'game')+'" aria-pressed="'+(t[0]===admTab)+'">'+tt(t[1],t[2])+'</button>').join('')+'</div></div>'
     +ADM_TABS.map(t=>'<div class="admpane" data-ap="'+t[0]+'">'+P[t[0]]+'</div>').join('')+'<p class="small" id="admNone" hidden>'+tt('Nichts gefunden.','Nothing found.')+'</p>';
   els.admin.innerHTML=h;
   admShow();
   fillAdmin();
-  admLbRender();admOnRender();admAccRender();if(v45Ready){admModRender();admSrvRender();}
+  admLbRender();admOnRender();admAccRender();if(v45Ready){admModRender();admSrvRender();}if(v64aReady) admV64Render();
 }
 function admShow(){
   const q=(document.getElementById('admQ')||{value:''}).value.trim().toLowerCase();let n=0;
@@ -8654,12 +8690,19 @@ function lbCapped(){
   return Math.floor(Math.min(sc,Math.max(S.lb.ls,1e8)*Math.pow(10,Math.min(12*hrs,12))*.98));
 }
 async function lbSubmit(force){
-  if(!lbOn()||!S.lb.on||!S.name||lbCheat()) return;
+  if(!lbOn()||!S.lb.on||!lbMyName()||lbCheat()) return;
   if(!force&&Date.now()-(S.lb.t||0)<LB_EVERY) return;
   if(!S.lb.id){S.lb.id=lbUUID();save();}
   const sc=lbCapped(),prev=S.lb.ls||0;
-  try{await lbApi('rpc/submit_score',{p_id:S.lb.id,p_name:S.name,p_score:sc});}
-  catch(x){if(/banned/.test(String(x.message))) lbBanned();throw x;}
+  /* V64: mit Konto schickt das Spiel das Sitzungs-Token; der Server nimmt dann den Benutzernamen */
+  const body={p_id:S.lb.id,p_name:lbMyName(),p_score:sc};if(v64Ready&&accTok&&lbTokOk) body.p_token=accTok;
+  try{await lbApi('rpc/submit_score',body);}
+  catch(x){
+    if(body.p_token&&lbMissing(x)){lbTokOk=false;return lbSubmit(true);}
+    if(/banned/.test(String(x.message))) lbBanned();
+    if(v64Ready&&lbAccErr(x)) return;
+    throw x;
+  }
   ['W','M'].forEach(k=>{const id=lbPid(k);if(!S.lb.pb||S.lb.pb[k+'id']!==id){S.lb.pb=S.lb.pb||{};S.lb.pb[k+'id']=id;S.lb.pb[k]=prev||sc;}});
   S.lb.ls=Math.max(prev,sc);lbSent=S.lb.t=Date.now();
   if(v61Ready) lbStatsSend();
@@ -8692,6 +8735,7 @@ async function lbRefresh(){
 }
 function lbJoin(){
   if(lbCheat()) return;
+  if(v64Ready&&!accTok){lbAccGo();return;}
   if(!S.name){askName({text:tt('Unter diesem Namen erscheint deine Bäckerei in der Bestenliste.','Your bakery shows up on the leaderboard under this name.')},nm=>{S.name=nm;save();showName();lbJoin();});return;}
   S.lb.on=1;S.lb.t=0;if(!S.lb.id) S.lb.id=lbUUID();save();
   toast(tt('Du bist jetzt in der Bestenliste!','You joined the leaderboard!'),true);
@@ -8742,7 +8786,7 @@ $id('rwOv').addEventListener('click',e=>{if(e.target===$id('rwOv')) $id('rwOv').
 
 function lbRowsHtml(rows,valKey,myRank){
   return '<div class="lblist">'+rows.map((r,i)=>{
-    const mine=S.lb.on&&r.name===S.name&&myRank===i+1;
+    const mine=S.lb.on&&r.name===lbMyName()&&myRank===i+1;
     return '<div class="lbrow'+(mine?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(String(r.name||''))+'">'+escName(String(r.name||''))+'</button><span class="sc">'+(valKey==='gain'?'+':'')+fmt(+r[valKey]||0)+'</span></div>';
   }).join('')+'</div>';
 }
@@ -8774,10 +8818,11 @@ function renderLb(){
   let me='<div class="lbme">';
   if(S.tamp) me+='<p class="small" style="margin:0">'+tt('Dieser Spielstand wurde außerhalb des Spiels verändert (z. B. mit Browser-Werkzeugen oder einer bearbeiteten Datei). Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save was changed outside the game (for example with browser tools or an edited file). To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
   else if(lbCheat()) me+='<p class="small" style="margin:0">'+tt('In diesem Spielstand wurde das Admin-Panel benutzt. Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save used the admin panel. To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
-  else if(!S.lb.on) me+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+(S.lb.ban?tt('Der Admin hat dich entfernt. Du kannst es später nochmal versuchen.','The admin removed you. You can try again later.'):tt('Dein Bäckerei-Name und deine gebackenen Kekse sind dann für alle sichtbar.','Your bakery name and cookies baked will be visible to everyone.'))+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
+  else if(!S.lb.on&&v64Ready&&!accTok) me+=lbGuestBox();
+  else if(!S.lb.on) me+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+(S.lb.ban?tt('Der Admin hat dich entfernt. Du kannst es später nochmal versuchen.','The admin removed you. You can try again later.'):tt('Dein Benutzername und deine gebackenen Kekse sind dann für alle sichtbar.','Your username and cookies baked will be visible to everyone.'))+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
   else{
     const r=k?lbPerRank[k]:lbRank,v=k?'+'+fmt(lbGain(k)):fmt(lbScore());
-    me+='<div class="row"><span><span class="sub" style="display:block">'+escName(S.name||'')+'</span><span class="big">'+(r?tt('Platz ','#')+fmt(r):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+(k?(k==='W'?tt('Diese Woche gebacken','Baked this week'):tt('Diesen Monat gebacken','Baked this month')):tt('Kekse gebacken','Cookies baked'))+'</span><b>'+v+'</b></span></div>';
+    me+='<div class="row"><span><span class="sub" style="display:block">'+escName(lbMyName())+'</span><span class="big">'+(r?tt('Platz ','#')+fmt(r):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+(k?(k==='W'?tt('Diese Woche gebacken','Baked this week'):tt('Diesen Monat gebacken','Baked this month')):tt('Kekse gebacken','Cookies baked'))+'</span><b>'+v+'</b></span></div>';
   }
   if(lbNote) me+='<p class="lbnote">'+(/name taken/.test(lbNote)?tt('Diesen Bäckerei-Namen hat schon jemand anderes in der Bestenliste. Gib deiner Bäckerei unter Einstellungen einen anderen Namen – oder melde dich mit deinem Konto an, wenn das dein Platz ist.','Someone else already has this bakery name on the leaderboard. Give your bakery another name in Settings – or sign in to your account if that spot is yours.'):/not allowed/.test(lbNote)?tt('Dein Bäckerei-Name ist in der Bestenliste nicht erlaubt. Gib deiner Bäckerei unter Einstellungen einen anderen Namen.','Your bakery name isn’t allowed on the leaderboard. Give your bakery a different name in Settings.'):/too high/.test(lbNote)?tt('Dein Punktestand ist für einen neuen Eintrag zu hoch. Melde dich beim Besitzer des Spiels.','Your score is too high for a new entry. Please contact the game’s owner.'):tt('Dein neuer Punktestand wurde nicht gespeichert, weil er schneller gewachsen ist, als das Spiel es erlaubt. Später versucht es das Spiel nochmal.','Your new score wasn’t saved because it grew faster than the game allows. The game will try again later.'))+'</p>';
   me+='</div>';
@@ -9023,6 +9068,7 @@ async function accLoginOk(r){
   else await accUpload(false);
   accMsg=tt('Angemeldet als ','Signed in as ')+escName(r.username)+'.';accMsgOk=true;
   if(v58Ready) devName();
+  if(v64Ready) setTimeout(accNoticeCheck,1500);
 }
 function accRender(){
   const box=$id('accBox');if(!box) return;
@@ -9034,7 +9080,7 @@ function accRender(){
     const arm=k=>accArm.k===k&&Date.now()-accArm.t<5000;
     h='<div class="accme"><span class="accav" aria-hidden="true">👤</span><span><b>'+escName(accMe.username)+'</b><small>'+(accMe.save_at?tt('Zuletzt gespeichert: ','Last saved: ')+new Date(accMe.save_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):tt('Noch nichts gespeichert','Nothing saved yet'))+' · '+tt('speichert automatisch','saves automatically')+'</small></span></div>'
       +'<div class="btns" style="margin-top:10px"><button type="button" class="btn primary" data-acc="save">'+tt('Jetzt speichern','Save now')+'</button>'+(accMe.has_save?'<button type="button" class="btn'+(arm('load')?' armed':'')+'" data-acc="load">'+(arm('load')?tt('Ersetzt dein Spiel! Nochmal','Replaces your game! Again'):tt('Aus Konto laden','Load from account'))+'</button>':'')+'<button type="button" class="btn" data-acc="logout">'+tt('Abmelden','Sign out')+'</button><button type="button" class="btn" data-acc="logoutall">'+tt('Andere Geräte abmelden','Sign out other devices')+'</button></div>'
-      +(v58Ready?accSecHtml():'')
+      +(v58Ready?accSecHtml():'')+(v64Ready?accNameHtml():'')
       +'<details class="fold accfold"><summary>'+tt('Passwort ändern','Change password')+'</summary><form class="coderow" id="accPwF" novalidate><input type="password" class="namein" name="old" autocomplete="current-password" placeholder="'+tt('Altes Passwort','Old password')+'"><input type="password" class="namein" name="new" autocomplete="new-password" placeholder="'+tt('Neues Passwort (mind. 6)','New password (6+)')+'"><button type="submit" class="btn">'+tt('Ändern','Change')+'</button></form></details>'
       +'<details class="fold accfold"><summary>'+tt('Konto löschen','Delete account')+'</summary><p class="small">'+tt('Löscht dein Konto und den Spielstand darin für immer. Dein Spiel auf diesem Gerät bleibt.','Deletes your account and its save forever. Your game on this device stays.')+'</p><form class="coderow" id="accDelF" novalidate><input type="password" class="namein" name="pass" autocomplete="current-password" placeholder="'+tt('Passwort zur Bestätigung','Password to confirm')+'"><button type="submit" class="btn'+(arm('del')?' armed':'')+'">'+(arm('del')?tt('Wirklich löschen? Nochmal','Really delete? Again'):tt('Konto löschen','Delete account'))+'</button></form></details>';
   }else{
@@ -9484,8 +9530,8 @@ async function admSrvLogin(pw,where){
   admPass=r.token;try{sessionStorage.setItem(ADM_TOK,JSON.stringify({t:r.token,e:Date.parse(r.expires_at)||Date.now()+11*3600e3}));}catch(x){}
   toast(tt('Server-Werkzeuge entsperrt.','Server tools unlocked.'));admSrvAfter();
 }
-function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();if(v56aReady) admCareLoad();if(v57aReady) admV57Load();if(v58aReady) admHealthLoad();}
-function admSrvRerender(){admLbRender();admOnRender();admModRender();admSrvRender();}
+function admSrvAfter(){admLbErr='';admOnErr='';admModErr='';admLbCall('list');admOnCall('list');admAccCall('list');admClubCall('list');admModLoad();admSrvLoad();if(v52Ready) admBanCall('list');if(v53Ready) admTeamLoad();if(v56aReady) admCareLoad();if(v57aReady) admV57Load();if(v58aReady) admHealthLoad();if(v64aReady) admV64Load();}
+function admSrvRerender(){admLbRender();admOnRender();admModRender();admSrvRender();if(v64aReady) admV64Render();}
 const admSrvForm=(id,note)=>(admNeedCode?'<form class="coderow" id="'+id+'" novalidate><input type="text" class="namein" name="spw" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="'+tt('6-stelliger Code','6-digit code')+'" aria-label="'+tt('Code aus der Authenticator-App','Code from your authenticator app')+'"><button type="submit" class="btn primary">'+tt('Bestätigen','Confirm')+'</button><button type="button" class="btn" data-sva="codeback">'+tt('Zurück','Back')+'</button></form><p class="small" style="margin-top:6px">'+tt('Zwei-Schritt-Anmeldung ist an. Gib den Code aus deiner Authenticator-App ein.','Two-step sign-in is on. Enter the code from your authenticator app.')+'</p>':'<form class="coderow" id="'+id+'" novalidate><input type="password" class="namein" name="spw" autocomplete="current-password" placeholder="'+tt('Server-Passwort','Server password')+'" aria-label="'+tt('Server-Passwort','Server password')+'"><button type="submit" class="btn primary">'+tt('Entsperren','Unlock')+'</button></form>')+'<p class="small" style="margin-top:6px">'+(note||tt('Die Server-Werkzeuge haben ein eigenes Passwort. Nach 5 falschen Versuchen sind sie 15 Minuten gesperrt.','The server tools have their own password. After 5 wrong tries they lock for 15 minutes.'))+'</p>';
 els.admin.addEventListener('submit',e=>{
   const id=e.target.getAttribute('id');if(!['admModPwF','admSrvPwF'].includes(id)) return;
@@ -9495,7 +9541,8 @@ els.admin.addEventListener('click',e=>{if(e.target.closest('#admLockBtn')&&admPa
 
 /* Gemeinsame Bausteine */
 const admDT=v=>v?new Date(v).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'–';
-const admCardH=(t,b)=>'<div class="admcard"><h4>'+t+'</h4>'+b+'</div>';
+/* data-ic: das Symbol am Titelanfang, damit die Bereiche (V64) Karten per CSS ausblenden können */
+const admCardH=(t,b)=>'<div class="admcard" data-ic="'+([...String(t).replace(/<[^>]*>/g,'').trim()][0]||'')+'"><h4>'+t+'</h4>'+b+'</div>';
 function admErrTxt(x){
   const m=String(x&&x.message||'');
   if(/wrong admin password/.test(m)){admSrvDrop();return tt('Deine Server-Sitzung ist abgelaufen. Bitte entsperre sie neu.','Your server session ended. Please unlock again.');}
@@ -9530,7 +9577,7 @@ function admModRender(){
   else{
     if(admModErr) h+='<p class="nameerr">'+admModErr+'</p>';
     const R=admReports||[],open=R.filter(r=>r.status==='open');
-    const repRow=r=>'<div class="admlbr'+(r.status==='open'?'':' done')+'"><span class="rk">'+(r.status==='open'?'🚩':'✓')+'</span><span class="who"><b>'+escName(r.reported)+' · '+escName(r.club)+'</b><small>„'+escName(r.body)+'“</small><small>'+tt('Gemeldet von ','Reported by ')+escName(r.reporter)+' · '+admDT(r.created_at)+(r.msg_exists?'':' · '+tt('Nachricht schon gelöscht','message already deleted'))+'</small></span><span class="btns">'+(r.status==='open'?(r.msg_exists?'<button type="button" class="btn sm warn" data-mda="repdel:'+r.id+'">'+tt('Nachricht löschen','Delete message')+'</button>':'')+'<button type="button" class="btn sm" data-mda="repok:'+r.id+'">'+tt('Erledigt','Done')+'</button><button type="button" class="btn sm" data-mda="mute24:'+escName(r.reported)+'">'+tt('24 Std stumm','Mute 24 h')+'</button>':'')+'</span></div>';
+    const repRow=r=>'<div class="admlbr'+(r.status==='open'?'':' done')+'"><span class="rk">'+(r.status==='open'?'🚩':'✓')+'</span><span class="who"><b>'+pcl(r.reported)+' · '+escName(r.club)+'</b><small>„'+escName(r.body)+'“</small><small>'+tt('Gemeldet von ','Reported by ')+escName(r.reporter)+' · '+admDT(r.created_at)+(r.msg_exists?'':' · '+tt('Nachricht schon gelöscht','message already deleted'))+'</small></span><span class="btns">'+(r.status==='open'?(r.msg_exists?'<button type="button" class="btn sm warn" data-mda="repdel:'+r.id+'">'+tt('Nachricht löschen','Delete message')+'</button>':'')+'<button type="button" class="btn sm" data-mda="repok:'+r.id+'">'+tt('Erledigt','Done')+'</button><button type="button" class="btn sm" data-mda="mute24:'+escName(r.reported)+'">'+tt('24 Std stumm','Mute 24 h')+'</button>':'')+'</span></div>';
     h+=admCardH('🚩 '+tt('Meldungen','Reports')+' <small class="muted">('+(admReports?open.length+' '+tt('offen','open'):'…')+')</small>',
       (admReports?(open.length?'<div class="admlbl">'+open.map(repRow).join('')+'</div>':'<p class="small">'+tt('Keine offenen Meldungen. 🎉','No open reports. 🎉')+'</p>')
         +(R.length>open.length?'<details class="fold"><summary>'+tt('Erledigte Meldungen','Handled reports')+' ('+(R.length-open.length)+')</summary><div class="admlbl">'+R.filter(r=>r.status!=='open').map(repRow).join('')+'</div></details>':''):'<p class="small">'+tt('Lädt …','Loading …')+'</p>')
@@ -9542,7 +9589,7 @@ function admModRender(){
       if(!A.length&&!Sc.length&&!Cl.length) f+='<p class="small">'+tt('Nichts gefunden.','Nothing found.')+'</p>';
       if(A.length) f+='<h5 class="admh5">👤 '+tt('Konten','Accounts')+'</h5><div class="admlbl">'+A.map(a=>{
         const on=a.online&&Date.now()-Date.parse(a.online)<180000;
-        return '<div class="admlbr"><span class="rk">'+(on?'🟢':'👤')+'</span><span class="who"><b>'+escName(a.username)+(a.muted?' · 🔇':'')+'</b><small>'+fmt(+a.save_baked||0)+tt(' Kekse',' cookies')+' · '+(a.club?'👥 '+escName(a.club)+' · ':'')+tt('dabei seit ','joined ')+new Date(a.created_at).toLocaleDateString(LOC[LANG])+'</small><small>'+tt('Zuletzt: ','Last seen: ')+admDT(a.online||a.save_at||a.last_login)+' · 🎁 '+a.gifts_sent+' '+tt('gesendet','sent')+' / '+a.gifts_got+' '+tt('bekommen','got')+' (30 '+tt('Tage','days')+') · 🚩 '+a.reports+(a.muted?' · '+tt('stumm bis ','muted until ')+admDT(a.muted):'')+'</small></span><span class="btns"><button type="button" class="btn sm primary" data-mda="mailto:'+escName(a.username)+'">'+tt('Senden','Send')+'</button>'+(a.muted?'<button type="button" class="btn sm" data-mda="unmute:'+escName(a.username)+'">'+tt('Stumm aus','Unmute')+'</button>':'<button type="button" class="btn sm" data-mda="mute24:'+escName(a.username)+'">'+tt('24 Std stumm','Mute 24 h')+'</button>')+'<button type="button" class="btn sm" data-mda="ren:account:'+a.id+':'+escName(a.username)+'">'+tt('Umbenennen','Rename')+'</button>'+(v52Ready?'<button type="button" class="btn sm warn" data-ban="pick:'+escName(a.username)+'">'+tt('Sperren …','Ban …')+'</button>':'')+'</span></div>';}).join('')+'</div>';
+        return '<div class="admlbr"><span class="rk">'+(on?'🟢':'👤')+'</span><span class="who"><b>'+pcl(a.username)+(a.muted?' · 🔇':'')+'</b><small>'+fmt(+a.save_baked||0)+tt(' Kekse',' cookies')+' · '+(a.club?'👥 '+escName(a.club)+' · ':'')+tt('dabei seit ','joined ')+new Date(a.created_at).toLocaleDateString(LOC[LANG])+'</small><small>'+tt('Zuletzt: ','Last seen: ')+admDT(a.online||a.save_at||a.last_login)+' · 🎁 '+a.gifts_sent+' '+tt('gesendet','sent')+' / '+a.gifts_got+' '+tt('bekommen','got')+' (30 '+tt('Tage','days')+') · 🚩 '+a.reports+(a.muted?' · '+tt('stumm bis ','muted until ')+admDT(a.muted):'')+'</small></span><span class="btns"><button type="button" class="btn sm primary" data-mda="mailto:'+escName(a.username)+'">'+tt('Senden','Send')+'</button>'+(a.muted?'<button type="button" class="btn sm" data-mda="unmute:'+escName(a.username)+'">'+tt('Stumm aus','Unmute')+'</button>':'<button type="button" class="btn sm" data-mda="mute24:'+escName(a.username)+'">'+tt('24 Std stumm','Mute 24 h')+'</button>')+'<button type="button" class="btn sm" data-mda="ren:account:'+a.id+':'+escName(a.username)+'">'+tt('Umbenennen','Rename')+'</button>'+(v52Ready?'<button type="button" class="btn sm warn" data-ban="pick:'+escName(a.username)+'">'+tt('Sperren …','Ban …')+'</button>':'')+'</span></div>';}).join('')+'</div>';
       if(Sc.length) f+='<h5 class="admh5">🏆 '+tt('Bestenliste','Leaderboard')+'</h5><div class="admlbl">'+Sc.map(s=>'<div class="admlbr"><span class="rk">'+(s.banned?'⛔':'🏆')+'</span><span class="who"><b>'+escName(s.name)+'</b><small>'+fmt(+s.score||0)+tt(' Kekse',' cookies')+' · '+admDT(s.updated_at)+'</small></span><span class="btns"><button type="button" class="btn sm" data-mda="ren:score:'+s.id+':'+escName(s.name)+'">'+tt('Umbenennen','Rename')+'</button><button type="button" class="btn sm warn'+(admModArmed('ban:'+s.id)?' armed':'')+'" data-mda="ban:'+s.id+'">'+(admModArmed('ban:'+s.id)?tt('Sicher?','Sure?'):tt('Sperren','Ban'))+'</button></span></div>').join('')+'</div>';
       if(Cl.length) f+='<h5 class="admh5">👥 '+tt('Clubs','Clubs')+'</h5><div class="admlbl">'+Cl.map(c=>'<div class="admlbr"><span class="rk">'+escName(c.emoji)+'</span><span class="who"><b>'+escName(c.name)+'</b><small>'+c.members+tt(' Mitglieder',' members')+'</small></span><span class="btns"><button type="button" class="btn sm primary" data-mda="mailclub:'+c.id+':'+escName(c.name)+'">'+tt('Nachricht','Message')+'</button><button type="button" class="btn sm" data-mda="ren:club:'+c.id+':'+escName(c.name)+'">'+tt('Umbenennen','Rename')+'</button></span></div>').join('')+'</div>';
     }
@@ -9805,8 +9852,8 @@ async function openProfile(name){
   const st=P.stats||{},me=accMe&&P.username&&accMe.username.toLowerCase()===String(P.username).toLowerCase();
   const tile=(ic,l,v)=>v==null||v===''?'':'<span class="ptile"><span aria-hidden="true">'+ic+'</span><small>'+l+'</small><b>'+v+'</b></span>';
   $id('profT').textContent=P.username||P.bakery||name;
-  let h='<div class="phead"><span class="pav'+(v61Ready?profCol(P):'')+'" aria-hidden="true">'+(v61Ready?profAv(P):(P.username?'👤':'🍪'))+'<i class="pdot'+(P.online?' on':'')+'"></i></span><span><b>'+escName(P.bakery||P.username||name)+'</b>'
-    +(P.username?'<small>@'+escName(P.username)+(st.title?' · '+escName(st.title):'')+'</small>':'<small>'+tt('Ohne Konto','No account')+'</small>')
+  let h='<div class="phead"><span class="pav'+(v61Ready?profCol(P):'')+'" aria-hidden="true">'+(v61Ready?profAv(P):(P.username?'👤':'🍪'))+'<i class="pdot'+(P.online?' on':'')+'"></i></span><span><b>'+escName(P.username||P.bakery||name)+'</b>'
+    +(P.username?((st.bakery&&st.bakery!==P.username)||st.title?'<small>'+[st.bakery&&st.bakery!==P.username?'🏠 '+escName(st.bakery):'',st.title?escName(st.title):''].filter(Boolean).join(' · ')+'</small>':''):'<small>'+tt('Ohne Konto','No account')+'</small>')
     +'<small>'+(P.online?tt('🟢 Gerade online','🟢 Online now'):P.since?tt('Dabei seit ','Playing since ')+new Date(P.since).toLocaleDateString(LOC[LANG],{month:'long',year:'numeric'}):'')+'</small></span></div>';
   h+='<div class="ptiles">'+tile('🍪',tt('Gebacken','Baked'),fmt(+P.baked||0))+tile('🏆',tt('Platz','Rank'),P.rank?'#'+fmt(P.rank):null)+tile('🥇',tt('Wochen-/Monatssiege','Weekly/monthly wins'),P.wins?fmt(P.wins):null)
     +tile('⭐',tt('Erfolge','Achievements'),st.ach!=null?fmt(st.ach):null)+tile('👼',tt('Aufstiege','Ascensions'),st.asc?fmt(st.asc):null)+tile('🏭',tt('Gebäude','Buildings'),st.bld!=null?fmt(st.bld):null)
@@ -10158,7 +10205,7 @@ function admBanHtml(){
     +'<label class="chk" style="grid-column:1/-1"><input type="checkbox" name="wipe"><span>'+tt('Seine Chat-Nachrichten löschen','Delete their chat messages')+'</span></label>'
     +'<button type="submit" class="btn warn'+(armed?' armed':'')+'">'+(armed?tt('Wirklich sperren?','Really ban?'):tt('Konto sperren','Ban account'))+'</button></form>'
     +(admBanErr?'<p class="nameerr">'+admBanErr+'</p>':'')
-    +(L.length?'<div class="admlbl" style="margin-top:8px">'+L.map(b=>'<div class="admlbr"><span class="rk">⛔</span><span class="who"><b>'+escName(b.username)+'</b><small>'+(b.until?tt('bis ','until ')+admDT(b.until):tt('für immer','forever'))+(b.devices?' · '+b.devices+' '+tt('Gerät(e)','device(s)'):'')+' · '+tt('seit ','since ')+admDT(b.created_at)+'</small>'+(b.reason?'<small>„'+escName(b.reason)+'“</small>':'')+'</span><span class="btns"><button type="button" class="btn sm" data-ban="unban:'+escName(b.username)+'">'+tt('Entsperren','Unban')+'</button></span></div>').join('')+'</div>':''));
+    +(L.length?'<div class="admlbl" style="margin-top:8px">'+L.map(b=>'<div class="admlbr"><span class="rk">⛔</span><span class="who"><b>'+pcl(b.username)+'</b><small>'+(b.until?tt('bis ','until ')+admDT(b.until):tt('für immer','forever'))+(b.devices?' · '+b.devices+' '+tt('Gerät(e)','device(s)'):'')+' · '+tt('seit ','since ')+admDT(b.created_at)+'</small>'+(b.reason?'<small>„'+escName(b.reason)+'“</small>':'')+'</span><span class="btns"><button type="button" class="btn sm" data-ban="unban:'+escName(b.username)+'">'+tt('Entsperren','Unban')+'</button></span></div>').join('')+'</div>':''));
 }
 els.admin.addEventListener('submit',e=>{
   const f=e.target;if(f.getAttribute('id')!=='admBanF') return;
@@ -10238,7 +10285,7 @@ function modRender(){
   const R=modData.reports||[],open=R.filter(r=>r.status==='open'),M=modData.mutes||[],F=modData.find;
   let h=modErr?'<p class="nameerr">'+modErr+'</p>':'';
   h+=admCardH('🚩 '+tt('Meldungen','Reports')+' <small class="muted">('+(modData.reports?open.length+' '+tt('offen','open'):'…')+')</small>',
-    (modData.reports?(open.length?'<div class="admlbl">'+open.map(r=>'<div class="admlbr"><span class="rk">🚩</span><span class="who"><b>'+escName(r.reported)+' · '+escName(r.club)+'</b><small>„'+escName(r.body)+'“</small><small>'+tt('Gemeldet von ','Reported by ')+escName(r.reporter)+' · '+admDT(r.created_at)+'</small></span><span class="btns">'+(r.msg_exists?'<button type="button" class="btn sm warn" data-moda="del:'+r.id+'">'+tt('Löschen','Delete')+'</button>':'')+'<button type="button" class="btn sm" data-moda="ok:'+r.id+'">'+tt('Erledigt','Done')+'</button><button type="button" class="btn sm" data-moda="mute:'+escName(r.reported)+'">'+tt('24 Std stumm','Mute 24 h')+'</button></span></div>').join('')+'</div>':'<p class="small">'+tt('Keine offenen Meldungen. 🎉','No open reports. 🎉')+'</p>'):'<p class="small">'+tt('Lädt …','Loading …')+'</p>')
+    (modData.reports?(open.length?'<div class="admlbl">'+open.map(r=>'<div class="admlbr"><span class="rk">🚩</span><span class="who"><b>'+pcl(r.reported)+' · '+escName(r.club)+'</b><small>„'+escName(r.body)+'“</small><small>'+tt('Gemeldet von ','Reported by ')+escName(r.reporter)+' · '+admDT(r.created_at)+'</small></span><span class="btns">'+(r.msg_exists?'<button type="button" class="btn sm warn" data-moda="del:'+r.id+'">'+tt('Löschen','Delete')+'</button>':'')+'<button type="button" class="btn sm" data-moda="ok:'+r.id+'">'+tt('Erledigt','Done')+'</button><button type="button" class="btn sm" data-moda="mute:'+escName(r.reported)+'">'+tt('24 Std stumm','Mute 24 h')+'</button></span></div>').join('')+'</div>':'<p class="small">'+tt('Keine offenen Meldungen. 🎉','No open reports. 🎉')+'</p>'):'<p class="small">'+tt('Lädt …','Loading …')+'</p>')
     +'<div class="btns" style="margin-top:8px"><button type="button" class="btn sm" data-moda="reload">'+tt('Aktualisieren','Refresh')+'</button></div>');
   let f='<form class="coderow" id="modFindF" novalidate><input class="namein" name="q" maxlength="24" autocomplete="off" value="'+escName(modData.q)+'" placeholder="'+tt('Benutzername','Username')+'"><button type="submit" class="btn primary">'+tt('Suchen','Search')+'</button></form>';
   if(F) f+=F.length?'<div class="admlbl">'+F.map(a=>'<div class="admlbr"><span class="rk">'+(a.banned?'⛔':a.muted?'🔇':'👤')+'</span><span class="who"><b>'+escName(a.username)+'</b><small>'+(a.club?'👥 '+escName(a.club)+' · ':'')+'🚩 '+a.reports+' · '+tt('Zuletzt: ','Last seen: ')+admDT(a.last_seen)+(a.muted?' · '+tt('stumm bis ','muted until ')+admDT(a.muted):'')+'</small></span><span class="btns">'+(a.muted?'<button type="button" class="btn sm" data-moda="unmute:'+escName(a.username)+'">'+tt('Stumm aus','Unmute')+'</button>':'<button type="button" class="btn sm" data-moda="mute:'+escName(a.username)+'">'+tt('24 Std stumm','Mute 24 h')+'</button>')+'</span></div>').join('')+'</div>':'<p class="small">'+tt('Nichts gefunden.','Nothing found.')+'</p>';
@@ -10287,7 +10334,7 @@ function admTeamHtml(){
   const M=admMods||[],A=admAppeals||[],openA=A.filter(a=>a.status==='open'),arm=k=>admTeamArm.k===k&&Date.now()-admTeamArm.t<5000;
   let h=admCardH('📨 '+tt('Einsprüche gegen Sperren','Ban appeals')+' <small class="muted">('+(admAppeals?openA.length+' '+tt('offen','open'):'…')+')</small>',
     '<p class="small">'+tt('Gesperrte Spieler können einmal am Tag um eine Prüfung bitten. Annehmen hebt die Sperre auf. Deine Antwort sehen sie beim nächsten Anmeldeversuch.','Banned players can ask for a review once a day. Accepting lifts the ban. They see your answer the next time they try to sign in.')+'</p>'
-    +(openA.length?'<div class="admlbl">'+openA.map(a=>'<div class="admlbr appeal"><span class="rk">📨</span><span class="who"><b>'+escName(a.username)+'</b><small>„'+escName(a.body)+'“</small><small>'+admDT(a.created_at)+(a.ban?' · ⛔ '+(a.ban.reason?escName(a.ban.reason):tt('ohne Grund','no reason'))+' · '+(a.ban.until?tt('bis ','until ')+admDT(a.ban.until):tt('für immer','forever')):'')+'</small><input class="namein" data-apans="'+a.id+'" maxlength="300" placeholder="'+tt('Antwort an den Spieler (optional)','Answer to the player (optional)')+'"></span><span class="btns"><button type="button" class="btn sm primary" data-apa="yes:'+a.id+'">'+tt('Annehmen','Accept')+'</button><button type="button" class="btn sm warn" data-apa="no:'+a.id+'">'+tt('Ablehnen','Reject')+'</button></span></div>').join('')+'</div>':'<p class="small">'+(admAppeals?tt('Keine offenen Einsprüche.','No open appeals.'):tt('Lädt …','Loading …'))+'</p>')
+    +(openA.length?'<div class="admlbl">'+openA.map(a=>'<div class="admlbr appeal"><span class="rk">📨</span><span class="who"><b>'+pcl(a.username)+'</b><small>„'+escName(a.body)+'“</small><small>'+admDT(a.created_at)+(a.ban?' · ⛔ '+(a.ban.reason?escName(a.ban.reason):tt('ohne Grund','no reason'))+' · '+(a.ban.until?tt('bis ','until ')+admDT(a.ban.until):tt('für immer','forever')):'')+'</small><input class="namein" data-apans="'+a.id+'" maxlength="300" placeholder="'+tt('Antwort an den Spieler (optional)','Answer to the player (optional)')+'"></span><span class="btns"><button type="button" class="btn sm primary" data-apa="yes:'+a.id+'">'+tt('Annehmen','Accept')+'</button><button type="button" class="btn sm warn" data-apa="no:'+a.id+'">'+tt('Ablehnen','Reject')+'</button></span></div>').join('')+'</div>':'<p class="small">'+(admAppeals?tt('Keine offenen Einsprüche.','No open appeals.'):tt('Lädt …','Loading …'))+'</p>')
     +(A.length>openA.length?'<details class="fold"><summary>'+tt('Beantwortet','Answered')+' ('+(A.length-openA.length)+')</summary><div class="admlbl">'+A.filter(a=>a.status!=='open').map(a=>'<div class="admlbr done"><span class="rk">'+(a.status==='accepted'?'✅':'❌')+'</span><span class="who"><b>'+escName(a.username)+'</b><small>„'+escName(a.body)+'“</small>'+(a.answer?'<small>↳ '+escName(a.answer)+'</small>':'')+'<small>'+admDT(a.answered_at)+'</small></span></div>').join('')+'</div></details>':''));
   h+=admCardH('👮 '+tt('Moderatoren','Moderators')+' <small class="muted">('+M.length+')</small>',
     '<p class="small">'+tt('Moderatoren melden sich in admin.html unter „Moderator? Hier anmelden“ an. Sie sehen nur Meldungen, Stummschaltungen (höchstens 7 Tage) und die Spielersuche – keine Sperren, Geschenke, Einstellungen oder Spiel-Werkzeuge. Alles steht mit ihrem Namen im Admin-Protokoll.','Moderators sign in on admin.html under “Moderator? Sign in here”. They only see reports, mutes (at most 7 days) and player search – no bans, gifts, settings or game tools. Everything they do is in the admin log with their name.')+'</p>'
@@ -10531,7 +10578,7 @@ async function admFbCall(action,data,okTxt){
 const FB_ICON={bug:'🐞',idea:'💡',other:'💬'};
 function admFbHtml(){
   const F=admFb||[],open=F.filter(f=>f.status==='open');
-  const row=f=>'<div class="admlbr'+(f.status==='open'?'':' done')+'"><span class="rk">'+(FB_ICON[f.kind]||'💬')+'</span><span class="who"><b>'+(f.username?escName(f.username):tt('ohne Konto','no account'))+' · v'+f.ver+'</b><small class="fbbody">'+escName(f.body)+'</small><small>'+admDT(f.created_at)+(f.ua?' · '+escName(f.ua.slice(0,80)):'')+'</small></span><span class="btns">'+(f.status==='open'?'<button type="button" class="btn sm" data-fba="done:'+f.id+'">'+tt('Erledigt','Done')+'</button>':'')+'<button type="button" class="btn sm warn" data-fba="delete:'+f.id+'">'+tt('Löschen','Delete')+'</button></span></div>';
+  const row=f=>'<div class="admlbr'+(f.status==='open'?'':' done')+'"><span class="rk">'+(FB_ICON[f.kind]||'💬')+'</span><span class="who"><b>'+(f.username?pcl(f.username):tt('ohne Konto','no account'))+' · v'+f.ver+'</b><small class="fbbody">'+escName(f.body)+'</small><small>'+admDT(f.created_at)+(f.ua?' · '+escName(f.ua.slice(0,80)):'')+'</small></span><span class="btns">'+(f.status==='open'?'<button type="button" class="btn sm" data-fba="done:'+f.id+'">'+tt('Erledigt','Done')+'</button>':'')+'<button type="button" class="btn sm warn" data-fba="delete:'+f.id+'">'+tt('Löschen','Delete')+'</button></span></div>';
   return admCardH('💬 '+tt('Feedback von Spielern','Player feedback')+' <small class="muted">('+(admFb?open.length+' '+tt('offen','open'):'…')+')</small>',
     '<p class="small">'+tt('Was Spieler über „Feedback senden“ in den Einstellungen schicken (höchstens 5 pro Gerät und Tag).','What players send with “Send feedback” in Settings (at most 5 per device a day).')+'</p>'
     +(open.length?'<div class="admlbl">'+open.map(row).join('')+'</div>':'<p class="small">'+(admFb?tt('Kein neues Feedback.','No new feedback.'):tt('Lädt …','Loading …'))+'</p>')
@@ -10753,7 +10800,7 @@ async function admSfDo(action,data,okTxt){
 }
 function admSfHtml(){
   const F=admSf||[];
-  const row=f=>'<div class="admlbr"><span class="rk">⚠️</span><span class="who"><b>'+escName(f.username)+(f.banned?' · ⛔':'')+'</b><small>'+fmt(+f.old||0)+' → '+fmt(+f.new||0)+tt(' Kekse in ',' cookies in ')+(f.hours<1?Math.max(1,Math.round(f.hours*60))+' min':f.hours<48?Math.round(f.hours)+' '+tt('Std','h'):Math.round(f.hours/24)+' '+tt('Tagen','days'))+'</small><small>'+admDT(f.created_at)+'</small></span><span class="btns"><button type="button" class="btn sm" data-sfa="ok:'+f.id+'">'+tt('In Ordnung','OK')+'</button>'+(v52Ready&&!f.banned?'<button type="button" class="btn sm warn" data-ban="pick:'+escName(f.username)+'">'+tt('Sperren …','Ban …')+'</button>':'')+'</span></div>';
+  const row=f=>'<div class="admlbr"><span class="rk">⚠️</span><span class="who"><b>'+pcl(f.username)+(f.banned?' · ⛔':'')+'</b><small>'+fmt(+f.old||0)+' → '+fmt(+f.new||0)+tt(' Kekse in ',' cookies in ')+(f.hours<1?Math.max(1,Math.round(f.hours*60))+' min':f.hours<48?Math.round(f.hours)+' '+tt('Std','h'):Math.round(f.hours/24)+' '+tt('Tagen','days'))+'</small><small>'+admDT(f.created_at)+'</small></span><span class="btns"><button type="button" class="btn sm" data-sfa="ok:'+f.id+'">'+tt('In Ordnung','OK')+'</button>'+(v52Ready&&!f.banned?'<button type="button" class="btn sm warn" data-ban="pick:'+escName(f.username)+'">'+tt('Sperren …','Ban …')+'</button>':'')+'</span></div>';
   return admCardH('⚠️ '+tt('Verdächtige Spielstände','Suspicious saves')+' <small class="muted">('+(admSf?F.length:'…')+')</small>',
     '<p class="small">'+tt('Konto-Spielstände, die viel schneller gewachsen sind, als das Spiel erlaubt. Der Spielstand bleibt erhalten – du entscheidest. Das kann auch ehrlich sein, wenn jemand eine Spielstand-Datei von einem anderen Gerät geladen hat.','Account saves that grew much faster than the game allows. The save is kept – you decide. It can be honest when someone loaded a save file from another device.')+'</p>'
     +(F.length?'<div class="admlbl">'+F.map(row).join('')+'</div>'+(F.length>1?'<div class="btns"><button type="button" class="btn sm" data-sfa="ok_all">'+tt('Alle in Ordnung','All OK')+'</button></div>':''):'<p class="small">'+(admSf?tt('Nichts Verdächtiges. 🎉','Nothing suspicious. 🎉'):tt('Lädt …','Loading …'))+'</p>')
@@ -11132,7 +11179,7 @@ if(accTok&&accMe) accRender();
 /* Nur in admin.html (nicht im Spiel für Spieler). */
 /* ======================= V58: Server-Gesundheit (installierte Teile, Server-Jobs, Prüfungen, Alarme) ======================= */
 var v58aReady=false;
-const KF_SCHEMA_NEED=17;   /* the newest server part this admin version expects (docs/boards-v17.sql) */
+const KF_SCHEMA_NEED=18;   /* the newest server part this admin version expects (docs/players-v18.sql) */
 var admHealth=null,admHealthErr='';
 async function admHealthLoad(){
   if(!admPass) return;
@@ -11451,10 +11498,11 @@ function lbCatHtml(){
   const c=LBCATS.find(x=>x[0]===k);
   let h='<p class="small lbcatd">'+tx(LBCAT_TXT[k])+'</p><div class="lbme">';
   if(lbCheat()) h+='<p class="small" style="margin:0">'+tt('Mit diesem Spielstand kannst du nicht in die Bestenliste.','This save can’t join the leaderboard.')+'</p>';
+  else if(!S.lb.on&&v64Ready&&!accTok) h+=lbGuestBox();
   else if(!S.lb.on) h+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+tt('Tritt der Bestenliste bei, dann zählen auch deine Klicks, Goldkekse und Aufstiege.','Join the leaderboard and your clicks, golden cookies and ascensions count too.')+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
   else{
     const me=D&&D.me,mine=k==='fast'?rrFast():k==='clicks'?S.clicks:k==='gold'?S.gold:S.asc;
-    h+='<div class="row"><span><span class="sub" style="display:block">'+escName(S.name||'')+'</span><span class="big">'+(me&&me.rank?tt('Platz ','#')+fmt(me.rank):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+c[1]+' '+tt(c[2],c[3])+'</span><span class="big">'+(mine?lbCatVal(k,mine):k==='fast'?tt('noch nicht','not yet'):'0')+'</span></span></div>';
+    h+='<div class="row"><span><span class="sub" style="display:block">'+escName(lbMyName())+'</span><span class="big">'+(me&&me.rank?tt('Platz ','#')+fmt(me.rank):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+c[1]+' '+tt(c[2],c[3])+'</span><span class="big">'+(mine?lbCatVal(k,mine):k==='fast'?tt('noch nicht','not yet'):'0')+'</span></span></div>';
     if(k==='fast'&&!rrFast()) h+='<p class="small" style="margin:6px 0 0">'+(S.rr&&S.rr.f<0?tt('Dein jetziger Lauf hat schon vor dem Start der Messung begonnen. Nach deinem nächsten Aufstieg läuft die Uhr.','Your current run began before timing started. The clock runs after your next ascension.'):tt('Back in diesem Lauf 1 Milliarde Kekse, dann zählt deine Zeit.','Bake 1 billion cookies in this run and your time counts.'))+'</p>';
   }
   h+='</div>';
@@ -11462,7 +11510,7 @@ function lbCatHtml(){
   if(lbCatErr&&!rows) h+='<p class="lbmsg">'+lbCatErr+'</p>';
   else if(!rows) h+='<p class="lbmsg">'+tt('Lädt …','Loading …')+'</p>';
   else if(!rows.length) h+='<p class="lbmsg">'+tt('Noch niemand hier. Hol dir Platz 1!','Nobody here yet. Grab #1!')+'</p>';
-  else h+='<div class="lblist">'+rows.map((r,i)=>'<div class="lbrow'+(S.lb.on&&r.name===S.name&&myR===i+1?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(String(r.name||''))+'">'+escName(String(r.name||''))+'</button><span class="sc">'+lbCatVal(k,r.v)+'</span></div>').join('')+'</div>';
+  else h+='<div class="lblist">'+rows.map((r,i)=>'<div class="lbrow'+(S.lb.on&&r.name===lbMyName()&&myR===i+1?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(String(r.name||''))+'">'+escName(String(r.name||''))+'</button><span class="sc">'+lbCatVal(k,r.v)+'</span></div>').join('')+'</div>';
   return h;
 }
 $id('lbOv').addEventListener('click',e=>{const b=e.target.closest('[data-lbc]');if(!b) return;lbCat=b.dataset.lbc;lbCatErr='';$id('lbBody')._h='';renderLb();});
@@ -11543,6 +11591,16 @@ var v62Ready=false;
    nimmt sie den Benutzernamen (und notfalls den Benutzernamen mit einer Zahl). Wer austreten will, kann das jederzeit. */
 async function lbAutoJoin(){
   if(!lbOn()||!accTok||!accMe||S.lb.on||S.lb.ban||lbCheat()) return false;
+  /* V64: der Server nimmt immer den Benutzernamen, der Bäckerei-Name bleibt unverändert */
+  if(v64Ready&&lbTokOk){
+    if(!S.lb.id) S.lb.id=lbUUID();
+    S.lb.on=1;S.lb.t=0;
+    try{await lbSubmit(true);}catch(x){}
+    if(!S.lb.on) return false;
+    save();toast(tt('Deine Bäckerei ist jetzt als „','You joined the leaderboard as “')+accMe.username+tt('“ in der Bestenliste.','”.'),true);
+    if(v46Ready) setTimeout(()=>lbAccSync(true),1500);
+    lbLast=0;return true;
+  }
   const u=String(accMe.username||'').slice(0,16),okN=n=>typeof n==='string'&&/^[^<>]{2,20}$/.test(n.trim());
   const names=[];
   if(okN(S.name)) names.push(S.name.trim());
@@ -11569,6 +11627,305 @@ async function lbAutoJoin(){
 }
 v62Ready=true;
 
+/* ======================= V64: Ein Name für alles, Verwarnungen ======================= */
+var v64Ready=false,lbTokOk=true;
+/* Graue Platzhalter-Zeilen statt „Lädt …“ (damit nichts springt, wenn die Daten kommen) */
+function skelRows(n){let h='<div class="skel" aria-busy="true" aria-label="'+tt('Lädt …','Loading …')+'">';for(let i=0;i<(n||3);i++) h+='<div class="skrow"><i></i><b style="width:'+(45+((i*37)%40))+'%"></b></div>';return h+'</div>';}
+/* Der Benutzername ist der Name überall (Bestenliste, Chat, Clubs, Geschenke). Der Bäckerei-Name ist nur Deko im eigenen Spiel. */
+function lbMyName(){return (v64Ready&&accMe&&accMe.username)||S.name||'';}
+/* Antworten des Servers zur Bestenliste ohne Konto */
+function lbAccErr(x){
+  const m=String(x&&x.message||'');
+  if(/account needed/.test(m)){S.lb.on=0;save();return true;}
+  if(/another spot/.test(m)){if(v46Ready&&accTok) lbAccSync(true);return true;}
+  return false;
+}
+function lbGuestBox(){
+  return '<div class="row"><span><b>'+tt('Mit Konto mitmachen','Join with an account')+'</b><span class="sub" style="display:block">'
+    +tt('Die Bestenliste ist für Spieler mit Konto. Erstell dir gratis eines – dann erscheinst du dort mit deinem Benutzernamen.','The leaderboard is for players with an account. Create a free one – then you show up there under your username.')
+    +'</span></span><button type="button" class="btn primary" data-lb="acc">'+tt('Konto erstellen','Create account')+'</button></div>';
+}
+function lbAccGo(){
+  closeLb();
+  if($id('setOv').hidden) $id('setBtn').click();
+  const sp=document.querySelector('#setSeg [data-sp=save]');if(sp) sp.click();
+  accMode='signup';accMsg='';accRender();
+  setTimeout(()=>{const u=document.querySelector('#accF [name=user]');if(u) u.focus();},120);
+}
+$id('lbOv').addEventListener('click',e=>{if(e.target.closest('[data-lb="acc"]')) lbAccGo();});
+
+/* Benutzernamen ändern (alle 30 Tage, nach einer erzwungenen Umbenennung sofort) */
+let accNI=null,accNIt=0,accNIfor='',accNIbusy=false,accNIok=true;
+async function accNameLoad(){
+  if(!accTok||!accMe||accNIbusy||!accNIok) return;
+  accNIbusy=true;
+  try{accNI=await lbApi('rpc/acc_name_info',{p_token:accTok});accNIt=Date.now();accNIfor=accMe.username;}
+  catch(x){if(lbMissing(x)) accNIok=false;}
+  accNIbusy=false;accRender();
+}
+function accNameHtml(){
+  if(!accTok||!accMe||!accNIok) return '';
+  if(accNIfor!==accMe.username||Date.now()-accNIt>120000) setTimeout(accNameLoad,0);
+  const I=accNI;let st='';
+  if(I){
+    if(I.free) st=tt('Du darfst jetzt sofort einen neuen Namen wählen.','You may choose a new name right now.');
+    else if(I.next_at&&Date.parse(I.next_at)>Date.now()) st=tt('Nächste Änderung ab ','Next change from ')+new Date(I.next_at).toLocaleDateString(LOC[LANG],{day:'numeric',month:'long'})+'.';
+    else st=tt('Du kannst deinen Namen alle 30 Tage ändern.','You can change your name every 30 days.');
+  }
+  return '<details class="fold accfold" data-sec="name"><summary>✏️ '+tt('Benutzernamen ändern','Change username')+'</summary>'
+    +'<p class="small">'+tt('Dein Benutzername ist dein Name überall: in der Bestenliste, im Chat, in Clubs und bei Geschenken. ','Your username is your name everywhere: on the leaderboard, in chat, in clubs and for gifts. ')+st+'</p>'
+    +'<form class="coderow" id="accRenF" novalidate><input class="namein" name="nu" maxlength="16" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="'+tt('Neuer Benutzername','New username')+'" aria-label="'+tt('Neuer Benutzername','New username')+'"><button type="submit" class="btn sm">'+tt('Ändern','Change')+'</button></form>'
+    +(I&&I.old&&I.old.length?'<p class="small" style="margin-top:6px">'+tt('Frühere Namen: ','Earlier names: ')+I.old.map(n=>escName(n)).join(', ')+'</p>':'')+'</details>';
+}
+$id('accBox').addEventListener('submit',async e=>{
+  const f=e.target;if(f.getAttribute('id')!=='accRenF') return;
+  e.preventDefault();
+  const nu=String(new FormData(f).get('nu')||'').trim();
+  if(!/^[A-Za-z0-9_]{3,16}$/.test(nu)){accMsg=tt('Benutzername: 3–16 Buchstaben, Zahlen oder _.','Username: 3–16 letters, numbers or _.');accMsgOk=false;accRender();return;}
+  try{
+    const r=await lbApi('rpc/acc_rename',{p_token:accTok,p_new:nu});
+    accNI=r;accNIt=Date.now();accMe.username=r.username;accNIfor=r.username;f.reset();
+    accMsg=tt('Dein Name ist jetzt ','Your name is now ')+escName(r.username)+'.';accMsgOk=true;toast(accMsg,true);
+    lbLast=0;if(v61Ready) lbCatData={};
+  }catch(x){
+    const m=String(x&&x.message||'');accMsgOk=false;
+    accMsg=/rename wait/.test(m)?tt('Du kannst deinen Namen nur alle 30 Tage ändern.','You can only change your name every 30 days.')
+      :/username taken/.test(m)?tt('Diesen Namen gibt es schon (oder er wurde vor Kurzem abgegeben).','That name is taken (or was given up recently).')
+      :/blocked word/.test(m)?tt('Dieser Name ist nicht erlaubt.','That name isn’t allowed.')
+      :/same name/.test(m)?tt('Das ist schon dein Name.','That’s already your name.')
+      :/too many/.test(m)?tt('Zu viele Versuche. Versuch es morgen nochmal.','Too many tries. Try again tomorrow.')
+      :lbMissing(x)?tt('Das kann der Server noch nicht.','The server can’t do this yet.'):tt('Hat nicht geklappt.','Didn’t work.');
+  }
+  accRender();
+});
+
+/* Verwarnungen und erzwungene Umbenennungen: einmal anzeigen */
+let accNtOk=true,accNtBusy=false;
+const STRIKE_TXT=[
+  ['Das ist eine Verwarnung. Beim nächsten Mal wird dein Konto 24 Stunden gesperrt.','This is a warning. Next time your account is banned for 24 hours.'],
+  ['Dein Konto ist 24 Stunden gesperrt. Beim nächsten Mal sind es 7 Tage.','Your account is banned for 24 hours. Next time it is 7 days.'],
+  ['Dein Konto ist 7 Tage gesperrt. Beim nächsten Mal ist es für immer.','Your account is banned for 7 days. Next time it is forever.'],
+  ['Dein Konto ist für immer gesperrt.','Your account is banned forever.']];
+async function accNoticeCheck(){
+  if(!accTok||!accMe||!accNtOk||accNtBusy||!lbOn()) return;
+  accNtBusy=true;let r=null;
+  try{r=await lbApi('rpc/acc_notices',{p_token:accTok});}catch(x){if(lbMissing(x)) accNtOk=false;}
+  accNtBusy=false;
+  if(!r) return;
+  if(r.username&&accMe&&r.username!==accMe.username){accMe.username=r.username;accRender();}
+  const n=(r.notices||[]).slice(-1)[0];if(!n) return;
+  if(n.kind==='rename') lbShowMsg(tt('Dein Name wurde geändert','Your name was changed'),'<p>'+tt('Dein neuer Benutzername ist ','Your new username is ')+'<b>'+escName(r.username||'')+'</b>.</p>'
+    +(n.reason?'<p class="small">'+tt('Grund: ','Reason: ')+escName(n.reason)+'</p>':'')+'<p class="small">'+tt('Du kannst dir jetzt sofort einen neuen Namen aussuchen: Einstellungen → Speichern → Benutzernamen ändern. Anmelden geht 90 Tage lang auch noch mit dem alten Namen.','You can pick a new name right away: Settings → Saving → Change username. Signing in also works with the old name for 90 days.')+'</p>','✏️');
+  else lbShowMsg(tt('Verwarnung','Warning'),'<p><b>'+escName(n.reason||'')+'</b></p><p class="small">'+tt('Verwarnung ','Strike ')+Math.min(4,n.strike||1)+tt(' von 4. ',' of 4. ')+tx(STRIKE_TXT[Math.min(4,n.strike||1)-1])+'</p><p class="small">'+tt('Verwarnungen zählen 180 Tage lang.','Strikes count for 180 days.')+'</p>','⚠️');
+}
+setInterval(accNoticeCheck,120000);setTimeout(accNoticeCheck,6000);
+
+v64Ready=true;
+
+/* Nur in admin.html (nicht im Spiel für Spieler). */
+/* ======================= V64 (Admin): Zu erledigen, Spieler-Karte, Verwarnungen, Sperr-Vorlagen, Bereiche ======================= */
+var v64aReady=false;
+let admTodo=null,admTodoErr='',admTodoBusy=false;
+let admPlQ='',admPlRes=null,admPlCard=null,admPlUser='',admPlErr='',admPlMsg='',admPlMsgOk=false,admPlBusy=false,admPlArm={k:'',t:0};
+const admPlCall=(a,d)=>lbApi('rpc/admin_players',{p_pass:admPass,p_action:a,p_data:d||{}});
+const admPlMiss=x=>lbMissing(x)?tt('Dafür fehlt Server-Teil 18 (docs/players-v18.sql).','This needs server part 18 (docs/players-v18.sql).'):String(x&&x.message||tt('Hat nicht geklappt.','Didn’t work.'));
+/* Jeder Spielername im Admin-Panel öffnet die Spieler-Karte */
+function pcl(n){n=String(n||'');return n?'<button type="button" class="pcl" data-pcard="'+escName(n)+'">'+escName(n)+'</button>':'';}
+const admSignIn=(id,why)=>admCardH('🔐 '+tt('Server-Werkzeuge','Server tools'),admSrvForm(id,why));
+els.admin.addEventListener('submit',e=>{
+  const id=e.target.getAttribute('id');if(id!=='admTodoPwF'&&id!=='admPlPwF') return;
+  e.preventDefault();const v=e.target.querySelector('[name=spw]').value;if(v) admSrvLogin(v,'mod');
+});
+
+/* ---------- Zu erledigen ---------- */
+async function admTodoLoad(){
+  if(!admPass||admTodoBusy) return;
+  admTodoBusy=true;admTodoRender();
+  try{admTodo=await lbApi('rpc/admin_todo',{p_pass:admPass});admTodoErr='';}catch(x){admTodoErr=admPlMiss(x);}
+  admTodoBusy=false;admTodoRender();
+}
+const TODO_SECS=[
+  ['reports','🚩',['Offene Meldungen','Open reports'],'mod:co',it=>pcl(it.who)+(it.club?' · '+escName(it.club):''),it=>'„'+escName(it.body)+'“'],
+  ['appeals','📨',['Einsprüche gegen Sperren','Ban appeals'],'mod:pl',it=>pcl(it.who),it=>'„'+escName(it.body)+'“'],
+  ['flags','⚠️',['Verdächtige Spielstände','Suspicious saves'],'mod:pl',it=>pcl(it.who),it=>fmt(+it.old||0)+' → '+fmt(+it.new||0)],
+  ['feedback','💬',['Feedback von Spielern','Player feedback'],'srv:hl',it=>it.who?pcl(it.who):tt('ohne Konto','no account'),it=>'„'+escName(it.body)+'“'],
+  ['crashes','🐞',['Neue Abstürze (24 Std)','New crashes (24 h)'],'srv:hl',it=>escName(it.msg),it=>'×'+fmt(+it.count||1)]];
+function admTodoRender(){
+  const el=$id('admTodo');if(!el) return;
+  if(!admPass){el.innerHTML=admSignIn('admTodoPwF',tt('Melde dich an, dann siehst du hier alles, was auf dich wartet.','Sign in to see everything that waits for you.'));return;}
+  const T=admTodo;
+  if(!T){el.innerHTML=admCardH('📋 '+tt('Zu erledigen','To-do'),admTodoErr?'<p class="small">'+admTodoErr+'</p>':skelRows(4));if(!admTodoErr&&!admTodoBusy) setTimeout(admTodoLoad,0);return;}
+  const al=T.alarms||[];let n=al.length;TODO_SECS.forEach(s=>{n+=(T[s[0]]&&+T[s[0]].n)||0;});
+  let h='<div class="admtodohead"><b>'+(n?tt('Wartet auf dich: ','Waiting for you: ')+n:'✅ '+tt('Alles erledigt – nichts wartet auf dich.','All done – nothing waits for you.'))+'</b><button type="button" class="btn sm" data-todo="reload"'+(admTodoBusy?' disabled':'')+'>'+(admTodoBusy?tt('Lädt …','Loading …'):tt('Aktualisieren','Refresh'))+'</button></div>';
+  if(al.length) h+=admCardH('🩺 '+tt('Server-Alarme','Server alarms')+' <span class="todon">'+al.length+'</span>','<div class="admlbl">'+al.map(a=>'<div class="admlbr"><span class="rk">🩺</span><span class="who"><b>'+escName(a.kind)+'</b><small>'+admDT(a.at)+'</small></span></div>').join('')+'</div><div class="btns" style="margin-top:6px"><button type="button" class="btn sm" data-todogo="srv:hl">'+tt('Server-Zustand öffnen','Open server health')+'</button></div>');
+  TODO_SECS.forEach(([k,ic,t,go,who,what])=>{
+    const S2=T[k]||{n:0,top:[]};if(!+S2.n) return;
+    h+=admCardH(ic+' '+tx(t)+' <span class="todon">'+fmt(+S2.n)+'</span>','<div class="admlbl">'+(S2.top||[]).map(it=>'<div class="admlbr"><span class="rk">'+ic+'</span><span class="who"><b>'+who(it)+'</b><small>'+what(it)+' · '+admDT(it.at)+'</small></span></div>').join('')+'</div>'
+      +'<div class="btns" style="margin-top:6px"><button type="button" class="btn sm" data-todogo="'+go+'">'+tt('Alle ansehen','See all')+(+S2.n>(S2.top||[]).length?' ('+fmt(+S2.n)+')':'')+'</button></div>');
+  });
+  el.innerHTML=h;
+}
+
+/* ---------- Spieler: Suche und Karte ---------- */
+async function admPlFind(q){
+  admPlQ=q;admPlErr='';if(!q){admPlRes=null;admPlRender();return;}
+  admPlBusy=true;admPlRender();
+  try{admPlRes=await admPlCall('find',{q});}catch(x){admPlErr=admPlMiss(x);admPlRes=null;}
+  admPlBusy=false;admPlRender();
+}
+async function admPlLoad(user){
+  admPlUser=user||admPlUser;if(!admPlUser||!admPass) return;
+  admPlBusy=true;admPlRender();
+  try{admPlCard=await admPlCall('card',{user:admPlUser});admPlErr='';admPlUser=admPlCard.account.username;}catch(x){admPlCard=null;admPlErr=admPlMiss(x);}
+  admPlBusy=false;admPlRender();
+}
+function admPlOpen(name){
+  const b=els.admin.querySelector('#admSeg [data-ap="pl"]');if(b&&admTab!=='pl') b.click();
+  admPlCard=null;admPlMsg='';admPlLoad(name);
+  setTimeout(()=>{const c=$id('admPl');if(c) c.scrollIntoView({block:'start',behavior:'smooth'});},60);
+}
+const BAN_PRESETS=[
+  ['cheat','🎭',['Schummeln','Cheating'],0,{device:true},['Für immer + Gerät','Forever + device']],
+  ['rude','🤬',['Unhöflicher Chat','Rude chat'],24,{wipe_chat:true},['24 Std + Chat löschen','24 h + delete chat']],
+  ['spam','📢',['Spam','Spam'],168,{wipe_chat:true},['7 Tage + Chat löschen','7 days + delete chat']],
+  ['name','🏷️',['Unpassender Name','Bad name'],null,{},['Neuen Namen erzwingen','Force a new name']]];
+const STRIKE_NEXT=[['Verwarnung','warning'],['24 Std Sperre','24 h ban'],['7 Tage Sperre','7-day ban'],['Sperre für immer','ban forever']];
+const LOG_IC={warn:'⚠️',ban:'⛔',unban:'✅',ended:'⌛',mute:'🔇',unmute:'🔈',rename:'🏷️'};
+const LOG_TX={warn:['Verwarnung','Warning'],ban:['Gesperrt','Banned'],unban:['Entsperrt','Unbanned'],ended:['Sperre abgelaufen','Ban ended'],mute:['Stummgeschaltet','Muted'],unmute:['Stummschaltung aufgehoben','Unmuted'],rename:['Name erzwungen','Name forced']};
+const admHrs=h=>h===null||h===undefined?'':+h===0?tt('für immer','forever'):+h>=48?fmt(Math.round(h/24))+tt(' Tage',' days'):fmt(+h)+tt(' Std',' h');
+function admPlArmed(k){return admPlArm.k===k&&Date.now()-admPlArm.t<5000;}
+function admPlCardHtml(C){
+  const A=C.account,on=A.seen_at&&Date.now()-Date.parse(A.seen_at)<180000,st=+C.strikes||0;
+  const chip=(c,t)=>'<span class="plchip '+c+'">'+t+'</span>';
+  let h='<div class="plhead"><span class="plav" aria-hidden="true">👤<i class="pdot'+(on?' on':'')+'"></i></span><span><b>'+escName(A.username)+'</b><small>'
+    +(on?tt('🟢 Gerade online','🟢 Online now'):tt('Zuletzt gesehen: ','Last seen: ')+admDT(A.seen_at||A.last_login))+' · '+tt('Konto seit ','Account since ')+new Date(A.created_at).toLocaleDateString(LOC[LANG])+'</small>'
+    +(C.names&&C.names.length?'<small>'+tt('Frühere Namen: ','Earlier names: ')+C.names.map(n=>escName(n.name)).join(', ')+'</small>':'')
+    +(A.bakery&&A.bakery!==A.username?'<small>🏠 '+escName(A.bakery)+'</small>':'')+'</span></div>';
+  h+='<div class="plchips">'
+    +(C.ban?chip('bad','⛔ '+tt('Gesperrt ','Banned ')+(C.ban.until?tt('bis ','until ')+admDT(C.ban.until):tt('für immer','forever'))):'')
+    +(C.mute?chip('warn','🔇 '+tt('Stumm bis ','Muted until ')+admDT(C.mute.until)):'')
+    +chip(st?'warn':'ok','⚠️ '+tt('Verwarnungen: ','Strikes: ')+st+'/4')
+    +(C.reports&&+C.reports.open?chip('warn','🚩 '+fmt(+C.reports.open)+tt(' offene Meldungen',' open reports')):'')
+    +(+C.flags?chip('warn','⚠️ '+fmt(+C.flags)+tt(' verdächtige Spielstände',' suspicious saves')):'')
+    +(C.appeal&&C.appeal.status==='open'?chip('warn','📨 '+tt('Einspruch offen','Appeal open')):'')
+    +(C.lb&&C.lb.banned?chip('bad','🏆 '+tt('Bestenlisten-Sperre','Leaderboard ban')):'')+'</div>';
+  const kv=(l,v)=>'<span><small>'+l+'</small><b>'+v+'</b></span>';
+  h+='<div class="plfacts">'+kv(tt('Bestenliste','Leaderboard'),C.lb?'#'+fmt(+C.lb.rank)+' · '+fmt(+C.lb.score):'–')
+    +kv(tt('Klicks','Clicks'),C.lb&&C.lb.clicks!=null?fmt(+C.lb.clicks):'–')+kv(tt('Goldkekse','Golden cookies'),C.lb&&C.lb.gold!=null?fmt(+C.lb.gold):'–')
+    +kv(tt('Club','Club'),C.club?escName((C.club.emoji||'')+' '+C.club.name)+(C.club.owner?' 👑':''):'–')
+    +kv(tt('Geräte','Devices'),fmt(+A.devices||0))+kv(tt('Geschenke (30 T.)','Gifts (30 d)'),'↑'+fmt(+C.gifts.sent||0)+' ↓'+fmt(+C.gifts.got||0))
+    +kv(tt('Spielstand','Save'),fmt(+A.save_baked||0)+' · '+admDT(A.save_at))+kv(tt('Meldungen','Reports'),fmt(+(C.reports&&C.reports.n)||0)+tt(' gegen, ',' against, ')+fmt(+(C.reports&&C.reports.made)||0)+tt(' gemacht',' made'))+'</div>';
+  const nx=STRIKE_NEXT[Math.min(st,3)];
+  h+='<h5 class="plh">'+tt('Verwarnen','Warn')+'</h5><form class="coderow" id="admPlWarnF" novalidate><input class="namein" name="reason" maxlength="200" placeholder="'+tt('Grund (sieht der Spieler)','Reason (the player sees it)')+'" aria-label="'+tt('Grund','Reason')+'"><button type="submit" class="btn sm primary">⚠️ '+tt('Verwarnen','Warn')+' → '+tx(nx)+'</button></form>'
+    +'<p class="small">'+tt('Stufen: Verwarnung → 24 Std → 7 Tage → für immer. Verwarnungen zählen 180 Tage.','Steps: warning → 24 h → 7 days → forever. Strikes count for 180 days.')+'</p>';
+  h+='<h5 class="plh">'+tt('Schnell-Sperren','Quick bans')+'</h5><div class="plpresets">'+BAN_PRESETS.map(([k,ic,t,,,d])=>'<button type="button" class="btn sm'+(admPlArmed('p:'+k)?' armed':'')+'" data-plp="'+k+'"><span>'+ic+' '+tx(t)+'</span><small>'+(admPlArmed('p:'+k)?tt('Nochmal tippen zum Bestätigen','Tap again to confirm'):tx(d))+'</small></button>').join('')+'</div>';
+  h+='<div class="btns" style="margin-top:8px">'+(C.ban?'<button type="button" class="btn sm" data-pla="unban">✅ '+tt('Entsperren','Unban')+'</button>':'<button type="button" class="btn sm" data-ban="pick:'+escName(A.username)+'">⛔ '+tt('Eigene Sperre …','Custom ban …')+'</button>')
+    +(C.mute?'<button type="button" class="btn sm" data-pla="unmute">🔈 '+tt('Stummschaltung aufheben','Unmute')+'</button>':'<button type="button" class="btn sm" data-pla="mute">🔇 '+tt('24 Std stumm','Mute 24 h')+'</button>')+'</div>';
+  h+='<details class="fold"><summary class="wt">✉️ '+tt('Nachricht schicken','Send a message')+'</summary><form class="admform" id="admPlMailF" novalidate><input class="namein" name="title" maxlength="80" placeholder="'+tt('Titel','Title')+'"><textarea class="namein" name="body" maxlength="600" rows="3" placeholder="'+tt('Text','Text')+'"></textarea><button type="submit" class="btn sm">'+tt('Senden','Send')+'</button></form></details>';
+  h+='<h5 class="plh">'+tt('Verlauf','History')+'</h5>'+(C.log&&C.log.length?'<div class="admlbl">'+C.log.map(l=>'<div class="admlbr"><span class="rk">'+(LOG_IC[l.kind]||'•')+'</span><span class="who"><b>'+tx(LOG_TX[l.kind]||[l.kind,l.kind])+(l.strike?' · '+tt('Stufe ','strike ')+l.strike:'')+(l.hours!=null?' · '+admHrs(l.hours):'')+'</b><small>'+(l.reason?'„'+escName(l.reason)+'“ · ':'')+escName(l.who||'')+' · '+admDT(l.at)+'</small></span></div>').join('')+'</div>':'<p class="small">'+tt('Noch nichts – eine saubere Weste.','Nothing yet – a clean record.')+'</p>');
+  if(C.reports&&C.reports.last&&C.reports.last.length) h+='<h5 class="plh">'+tt('Letzte Meldungen gegen den Spieler','Latest reports against the player')+'</h5><div class="admlbl">'+C.reports.last.map(r=>'<div class="admlbr'+(r.status==='open'?'':' done')+'"><span class="rk">🚩</span><span class="who"><b>„'+escName(r.body)+'“</b><small>'+escName(r.club||'')+' · '+admDT(r.at)+'</small></span></div>').join('')+'</div>';
+  return h;
+}
+function admPlRender(){
+  const el=$id('admPl');if(!el) return;
+  if(!admPass){el.innerHTML=admSignIn('admPlPwF',tt('Melde dich an, um Spieler zu suchen.','Sign in to look up players.'));return;}
+  let h=admCardH('🔎 '+tt('Spieler finden','Find a player'),'<form class="coderow" id="admPlF" novalidate><input type="search" class="namein" name="q" maxlength="30" autocomplete="off" value="'+escName(admPlQ)+'" placeholder="'+tt('Benutzername oder früherer Name','Username or earlier name')+'" aria-label="'+tt('Spieler suchen','Search players')+'"><button type="submit" class="btn sm primary">'+tt('Suchen','Search')+'</button></form>'
+    +(admPlRes?(admPlRes.length?'<div class="admlbl" style="margin-top:8px">'+admPlRes.map(r=>'<div class="admlbr"><span class="rk">'+(r.banned?'⛔':r.muted?'🔇':r.online?'🟢':'👤')+'</span><span class="who"><b>'+pcl(r.username)+(r.strikes?' · ⚠️'+r.strikes:'')+'</b><small>'+(r.old&&r.old.length?tt('früher: ','was: ')+r.old.map(o=>escName(o)).join(', ')+' · ':'')+(r.score!=null?fmt(+r.score)+tt(' Kekse',' cookies'):tt('nicht in der Bestenliste','not on the leaderboard'))+'</small></span></div>').join('')+'</div>':'<p class="small" style="margin-top:6px">'+tt('Niemand gefunden.','Nobody found.')+'</p>'):(admPlBusy&&!admPlUser?skelRows(3):'')));
+  if(admPlMsg) h+='<p class="nameerr'+(admPlMsgOk?' ok':'')+'">'+admPlMsg+'</p>';
+  if(admPlErr) h+='<p class="nameerr">'+admPlErr+'</p>';
+  if(admPlUser) h+='<div class="admcard plcard" id="admPlCard"><h4>👤 '+tt('Spieler-Karte','Player card')+'</h4>'+(admPlCard?admPlCardHtml(admPlCard):skelRows(5))+'</div>';
+  const keep={};el.querySelectorAll('input,textarea').forEach(i=>{if(i.name&&i.closest('form')) keep[i.closest('form').getAttribute('id')+':'+i.name]=i.value;});
+  const open=[...el.querySelectorAll('details')].map(d=>d.open);
+  el.innerHTML=h;
+  el.querySelectorAll('input,textarea').forEach(i=>{const k=i.closest('form')&&i.closest('form').getAttribute('id')+':'+i.name;if(k&&keep[k]!==undefined&&i.type!=='search') i.value=keep[k];});
+  el.querySelectorAll('details').forEach((d,i)=>{if(open[i]) d.open=true;});
+}
+async function admPlDo(fn,okMsg){
+  admPlBusy=true;admPlMsg='';
+  try{const r=await fn();admPlMsg=typeof okMsg==='function'?okMsg(r):okMsg;admPlMsgOk=true;toast(admPlMsg,true);}catch(x){admPlMsg=admPlMiss(x);admPlMsgOk=false;}
+  admPlBusy=false;await admPlLoad();if(typeof admBanCall==='function') admBanCall('list');admTodo=null;
+}
+els.admin.addEventListener('click',e=>{
+  const pc=e.target.closest('[data-pcard]');if(pc){e.preventDefault();admPlOpen(pc.dataset.pcard);return;}
+  if(e.target.closest('#admPl [data-ban^="pick:"]')){admSec.mod='pl';admSecSave();const b=els.admin.querySelector('#admSeg [data-ap="mod"]');if(b) b.click();setTimeout(()=>{admSecApply('mod');const f=$id('admBanF');if(f) f.scrollIntoView({block:'center',behavior:'smooth'});},80);return;}
+  const tg=e.target.closest('[data-todogo]');if(tg){const [tab,sec]=tg.dataset.todogo.split(':');admSec[tab]=sec;admSecSave();const b=els.admin.querySelector('#admSeg [data-ap="'+tab+'"]');if(b) b.click();admSecApply(tab);return;}
+  if(e.target.closest('[data-todo="reload"]')){admTodoLoad();return;}
+  const sb=e.target.closest('[data-asec]');if(sb){const [tab,sec]=sb.dataset.asec.split(':');admSec[tab]=sec;admSecSave();admSecApply(tab);return;}
+  const C=admPlCard;if(!C) return;const u=C.account.username;
+  const pp=e.target.closest('[data-plp]');
+  if(pp){
+    const k=pp.dataset.plp,P=BAN_PRESETS.find(x=>x[0]===k);if(!P) return;
+    if(!admPlArmed('p:'+k)){admPlArm={k:'p:'+k,t:Date.now()};admPlRender();setTimeout(()=>{if(admPlArm.k==='p:'+k){admPlArm={k:'',t:0};admPlRender();}},5100);return;}
+    admPlArm={k:'',t:0};const why=P[2][1]+' / '+P[2][0];
+    if(k==='name') admPlDo(()=>admPlCall('rename',{user:u,reason:why}),tt('Neuer Name erzwungen.','New name forced.'));
+    else admPlDo(()=>lbApi('rpc/admin_bans',{p_pass:admPass,p_action:'ban',p_data:Object.assign({user:u,hours:P[3],reason:why},P[4])}),tt('Gesperrt: ','Banned: ')+u);
+    return;
+  }
+  const pa=e.target.closest('[data-pla]');
+  if(pa){
+    const a=pa.dataset.pla;
+    if(a==='unban') admPlDo(()=>lbApi('rpc/admin_bans',{p_pass:admPass,p_action:'unban',p_data:{user:u}}),tt('Entsperrt: ','Unbanned: ')+u);
+    else if(a==='mute') admPlDo(()=>lbApi('rpc/admin_mod',{p_pass:admPass,p_action:'mute',p_data:{user:u,hours:24}}),tt('24 Std stumm: ','Muted for 24 h: ')+u);
+    else if(a==='unmute') admPlDo(()=>lbApi('rpc/admin_mod',{p_pass:admPass,p_action:'unmute',p_data:{user:u}}),tt('Nicht mehr stumm: ','Unmuted: ')+u);
+  }
+});
+els.admin.addEventListener('submit',e=>{
+  const f=e.target,id=f.getAttribute('id');
+  if(id==='admPlF'){e.preventDefault();admPlUser='';admPlCard=null;admPlFind(String(new FormData(f).get('q')||'').trim());return;}
+  if(!admPlCard) return;const u=admPlCard.account.username,d=Object.fromEntries(new FormData(f).entries());
+  if(id==='admPlWarnF'){e.preventDefault();const r=String(d.reason||'').trim();if(!r){admPlMsg=tt('Schreib einen Grund dazu.','Add a reason.');admPlMsgOk=false;admPlRender();return;}
+    admPlDo(async()=>{const w=await admPlCall('warn',{user:u,reason:r});f.reset();return w;},w=>tt('Verwarnt: ','Warned: ')+u+' · '+tt('Stufe ','strike ')+w.strike+(w.hours!=null?' · '+tt('gesperrt ','banned ')+admHrs(w.hours):''));return;}
+  if(id==='admPlMailF'){e.preventDefault();if(!String(d.title||'').trim()) return;
+    admPlDo(()=>lbApi('rpc/admin_mod',{p_pass:admPass,p_action:'mail',p_data:{to:u,title:d.title,body:d.body||''}}),tt('Nachricht geschickt.','Message sent.'));}
+});
+
+/* ---------- Bereiche in den langen Tabs Moderation und Server ---------- */
+const ADM_SECS={
+  mod:[['pl','👥',['Spieler','Players'],'🔎⛔🔇⚠📨'],['co','💬',['Gemeinschaft','Community'],'🚩✉🚫👮']],
+  srv:[['hl','🩺',['Server-Zustand','Server health'],'🩺📊📈📅🧭🐞🗄💬'],['st','⚙️',['Einstellungen','Settings'],'🎚🛠⬆🏛💾🛰📱🔔📜']]};
+let admSec={mod:'pl',srv:'hl'};
+try{Object.assign(admSec,JSON.parse(sessionStorage.getItem('keksfabrik-admsec')||'{}'));}catch(x){}
+function admSecSave(){try{sessionStorage.setItem('keksfabrik-admsec',JSON.stringify(admSec));}catch(x){}}
+/* Die Leiste steht über dem Inhalt (nicht darin), und ausgeblendet wird per CSS – so flackert nichts, wenn der Tab neu zeichnet. */
+{
+  let css='';
+  Object.entries(ADM_SECS).forEach(([tab,L])=>{const box=tab==='mod'?'#admMod':'#admSrv';
+    L.forEach(s=>L.filter(o=>o!==s).forEach(o=>[...o[3]].forEach(ic=>{css+=box+'[data-sec="'+s[0]+'"] .admcard[data-ic="'+ic+'"]{display:none}';})));});
+  const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+}
+function admSecApply(tab){
+  const box=$id(tab==='mod'?'admMod':'admSrv');if(!box||!box.parentElement) return;
+  let bar=box.parentElement.querySelector(':scope > .admsecbar');
+  if(!bar){bar=document.createElement('div');bar.className='seg admsecbar';bar.setAttribute('role','group');bar.innerHTML=ADM_SECS[tab].map(s=>'<button type="button" data-asec="'+tab+':'+s[0]+'">'+s[1]+' '+tx(s[2])+'</button>').join('')+'<button type="button" data-asec="'+tab+':all">'+tt('Alle','All')+'</button>';box.parentElement.insertBefore(bar,box);}
+  const cur=admSec[tab]==='all'||ADM_SECS[tab].some(s=>s[0]===admSec[tab])?admSec[tab]:ADM_SECS[tab][0][0];
+  if(box.dataset.sec!==cur) box.dataset.sec=cur;
+  bar.querySelectorAll('[data-asec]').forEach(b=>{const v=b.dataset.asec===tab+':'+cur?'true':'false';if(b.getAttribute('aria-pressed')!==v) b.setAttribute('aria-pressed',v);});
+}
+let admSecRaf=0;
+new MutationObserver(()=>{if(admSecRaf) return;admSecRaf=requestAnimationFrame(()=>{admSecRaf=0;admSecApply('mod');admSecApply('srv');});}).observe(els.admin,{childList:true});
+setInterval(()=>{admSecApply('mod');admSecApply('srv');},1000);
+
+/* ---------- Spieler direkt aus der Admin-Suche ---------- */
+let admQPt=0,admQPq='',admQPr=null;
+els.admin.addEventListener('input',e=>{
+  if(e.target.id!=='admQ') return;
+  const q=e.target.value.trim();clearTimeout(admQPt);
+  if(q.length<2||!admPass){admQPr=null;admQPq='';admQPShow();return;}
+  admQPt=setTimeout(async()=>{try{admQPr=await admPlCall('find',{q});admQPq=q;}catch(x){admQPr=null;}admQPShow();},350);
+});
+function admQPShow(){
+  let box=$id('admQP');const qi=$id('admQ');if(!qi) return;
+  if(!box){box=document.createElement('div');box.id='admQP';box.className='admqp';qi.insertAdjacentElement('afterend',box);}
+  const cur=qi.value.trim();
+  box.hidden=!(admQPr&&admQPr.length&&cur===admQPq);
+  if(!box.hidden) box.innerHTML='<span class="small">👥 '+tt('Spieler: ','Players: ')+'</span>'+admQPr.slice(0,8).map(r=>pcl(r.username)).join('');
+}
+
+/* ---------- Einbindung ---------- */
+function admV64Render(){admTodoRender();admPlRender();admSecApply('mod');admSecApply('srv');}
+function admV64Load(){admTodo=null;admTodoLoad();if(admPlUser) admPlLoad();else admPlRender();}
+v64aReady=true;
+
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};
 function admLbRender(){
@@ -11585,7 +11942,7 @@ function admLbRender(){
   if(admPass&&admLbData){
     const E=admLbData.entries||[],B=admLbData.banned||[];
     const btn=(a,id,label,cls)=>{const k=a+':'+id,arm=admLbArm.k===k&&Date.now()-admLbArm.t<5000;return '<button type="button" class="btn sm'+(cls?' '+cls:'')+(arm?' armed':'')+'" data-lba="'+k+'">'+(arm?tt('Sicher?','Sure?'):label)+'</button>';};
-    h+='<div class="admcard"><h4>'+tt('Spieler','Players')+' <small class="muted">('+E.length+')</small></h4>'+(E.length?'<div class="admlbl">'+E.map((r,i)=>'<div class="admlbr"><span class="rk">'+(i+1)+'</span><span class="who"><b>'+escName(r.name)+'</b><small>'+fmt(+r.score||0)+' '+tt('Kekse','cookies')+' · '+new Date(r.updated_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</small></span><span class="btns">'+btn('remove',r.id,tt('Entfernen','Remove'))+btn('ban',r.id,tt('Sperren','Ban'))+btn('reset',r.id,tt('Spiel zurücksetzen','Reset game'),'warn')+'</span></div>').join('')+'</div>':'<p class="small">'+tt('Niemand in der Bestenliste.','Nobody on the leaderboard.')+'</p>')+'</div>';
+    h+='<div class="admcard"><h4>'+tt('Spieler','Players')+' <small class="muted">('+E.length+')</small></h4>'+(E.length?'<div class="admlbl">'+E.map((r,i)=>'<div class="admlbr"><span class="rk">'+(i+1)+'</span><span class="who"><b>'+pcl(r.name)+'</b><small>'+fmt(+r.score||0)+' '+tt('Kekse','cookies')+' · '+new Date(r.updated_at).toLocaleString(LOC[LANG],{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</small></span><span class="btns">'+btn('remove',r.id,tt('Entfernen','Remove'))+btn('ban',r.id,tt('Sperren','Ban'))+btn('reset',r.id,tt('Spiel zurücksetzen','Reset game'),'warn')+'</span></div>').join('')+'</div>':'<p class="small">'+tt('Niemand in der Bestenliste.','Nobody on the leaderboard.')+'</p>')+'</div>';
     h+='<div class="admcard"><h4>'+tt('Gesperrt','Banned')+' <small class="muted">('+B.length+')</small></h4>'+(B.length?'<div class="admlbl">'+B.map(r=>'<div class="admlbr"><span class="rk">⛔</span><span class="who"><b>'+escName(r.name||tt('(ohne Namen)','(no name)'))+'</b><small>'+new Date(r.created_at).toLocaleDateString(LOC[LANG])+'</small></span><span class="btns">'+btn('unban',r.id,tt('Entsperren','Unban'))+'</span></div>').join('')+'</div>':'<p class="small">'+tt('Niemand gesperrt.','Nobody banned.')+'</p>')+(admLbData.resets?'<p class="small" style="margin-top:6px">'+tt('Wartende Zurücksetzungen: ','Resets waiting to happen: ')+admLbData.resets+'</p>':'')+'</div>';
   }
   if(box._h!==h){box._h=h;box.innerHTML=h;}

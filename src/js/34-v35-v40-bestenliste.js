@@ -37,12 +37,19 @@ function lbCapped(){
   return Math.floor(Math.min(sc,Math.max(S.lb.ls,1e8)*Math.pow(10,Math.min(12*hrs,12))*.98));
 }
 async function lbSubmit(force){
-  if(!lbOn()||!S.lb.on||!S.name||lbCheat()) return;
+  if(!lbOn()||!S.lb.on||!lbMyName()||lbCheat()) return;
   if(!force&&Date.now()-(S.lb.t||0)<LB_EVERY) return;
   if(!S.lb.id){S.lb.id=lbUUID();save();}
   const sc=lbCapped(),prev=S.lb.ls||0;
-  try{await lbApi('rpc/submit_score',{p_id:S.lb.id,p_name:S.name,p_score:sc});}
-  catch(x){if(/banned/.test(String(x.message))) lbBanned();throw x;}
+  /* V64: mit Konto schickt das Spiel das Sitzungs-Token; der Server nimmt dann den Benutzernamen */
+  const body={p_id:S.lb.id,p_name:lbMyName(),p_score:sc};if(v64Ready&&accTok&&lbTokOk) body.p_token=accTok;
+  try{await lbApi('rpc/submit_score',body);}
+  catch(x){
+    if(body.p_token&&lbMissing(x)){lbTokOk=false;return lbSubmit(true);}
+    if(/banned/.test(String(x.message))) lbBanned();
+    if(v64Ready&&lbAccErr(x)) return;
+    throw x;
+  }
   ['W','M'].forEach(k=>{const id=lbPid(k);if(!S.lb.pb||S.lb.pb[k+'id']!==id){S.lb.pb=S.lb.pb||{};S.lb.pb[k+'id']=id;S.lb.pb[k]=prev||sc;}});
   S.lb.ls=Math.max(prev,sc);lbSent=S.lb.t=Date.now();
   if(v61Ready) lbStatsSend();
@@ -75,6 +82,7 @@ async function lbRefresh(){
 }
 function lbJoin(){
   if(lbCheat()) return;
+  if(v64Ready&&!accTok){lbAccGo();return;}
   if(!S.name){askName({text:tt('Unter diesem Namen erscheint deine Bäckerei in der Bestenliste.','Your bakery shows up on the leaderboard under this name.')},nm=>{S.name=nm;save();showName();lbJoin();});return;}
   S.lb.on=1;S.lb.t=0;if(!S.lb.id) S.lb.id=lbUUID();save();
   toast(tt('Du bist jetzt in der Bestenliste!','You joined the leaderboard!'),true);
@@ -125,7 +133,7 @@ $id('rwOv').addEventListener('click',e=>{if(e.target===$id('rwOv')) $id('rwOv').
 
 function lbRowsHtml(rows,valKey,myRank){
   return '<div class="lblist">'+rows.map((r,i)=>{
-    const mine=S.lb.on&&r.name===S.name&&myRank===i+1;
+    const mine=S.lb.on&&r.name===lbMyName()&&myRank===i+1;
     return '<div class="lbrow'+(mine?' me':'')+'" style="--i:'+Math.min(i,12)+'"><span class="rk'+(i<3?' m'+(i+1):'')+'">'+(i<3?['🥇','🥈','🥉'][i]:i+1)+'</span><button type="button" class="nm pname" data-prof="'+escName(String(r.name||''))+'">'+escName(String(r.name||''))+'</button><span class="sc">'+(valKey==='gain'?'+':'')+fmt(+r[valKey]||0)+'</span></div>';
   }).join('')+'</div>';
 }
@@ -157,10 +165,11 @@ function renderLb(){
   let me='<div class="lbme">';
   if(S.tamp) me+='<p class="small" style="margin:0">'+tt('Dieser Spielstand wurde außerhalb des Spiels verändert (z. B. mit Browser-Werkzeugen oder einer bearbeiteten Datei). Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save was changed outside the game (for example with browser tools or an edited file). To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
   else if(lbCheat()) me+='<p class="small" style="margin:0">'+tt('In diesem Spielstand wurde das Admin-Panel benutzt. Damit es fair bleibt, kann er nicht in die Bestenliste. Starte ein neues Spiel, um mitzumachen.','This save used the admin panel. To keep things fair, it can’t join the leaderboard. Start a new game to take part.')+'</p>';
-  else if(!S.lb.on) me+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+(S.lb.ban?tt('Der Admin hat dich entfernt. Du kannst es später nochmal versuchen.','The admin removed you. You can try again later.'):tt('Dein Bäckerei-Name und deine gebackenen Kekse sind dann für alle sichtbar.','Your bakery name and cookies baked will be visible to everyone.'))+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
+  else if(!S.lb.on&&v64Ready&&!accTok) me+=lbGuestBox();
+  else if(!S.lb.on) me+='<div class="row"><span><b>'+tt('Mach mit!','Join in!')+'</b><span class="sub" style="display:block">'+(S.lb.ban?tt('Der Admin hat dich entfernt. Du kannst es später nochmal versuchen.','The admin removed you. You can try again later.'):tt('Dein Benutzername und deine gebackenen Kekse sind dann für alle sichtbar.','Your username and cookies baked will be visible to everyone.'))+'</span></span><button type="button" class="btn primary" data-lb="join">'+tt('Mitmachen','Join')+'</button></div>';
   else{
     const r=k?lbPerRank[k]:lbRank,v=k?'+'+fmt(lbGain(k)):fmt(lbScore());
-    me+='<div class="row"><span><span class="sub" style="display:block">'+escName(S.name||'')+'</span><span class="big">'+(r?tt('Platz ','#')+fmt(r):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+(k?(k==='W'?tt('Diese Woche gebacken','Baked this week'):tt('Diesen Monat gebacken','Baked this month')):tt('Kekse gebacken','Cookies baked'))+'</span><b>'+v+'</b></span></div>';
+    me+='<div class="row"><span><span class="sub" style="display:block">'+escName(lbMyName())+'</span><span class="big">'+(r?tt('Platz ','#')+fmt(r):'–')+'</span></span><span style="text-align:right"><span class="sub" style="display:block">'+(k?(k==='W'?tt('Diese Woche gebacken','Baked this week'):tt('Diesen Monat gebacken','Baked this month')):tt('Kekse gebacken','Cookies baked'))+'</span><b>'+v+'</b></span></div>';
   }
   if(lbNote) me+='<p class="lbnote">'+(/name taken/.test(lbNote)?tt('Diesen Bäckerei-Namen hat schon jemand anderes in der Bestenliste. Gib deiner Bäckerei unter Einstellungen einen anderen Namen – oder melde dich mit deinem Konto an, wenn das dein Platz ist.','Someone else already has this bakery name on the leaderboard. Give your bakery another name in Settings – or sign in to your account if that spot is yours.'):/not allowed/.test(lbNote)?tt('Dein Bäckerei-Name ist in der Bestenliste nicht erlaubt. Gib deiner Bäckerei unter Einstellungen einen anderen Namen.','Your bakery name isn’t allowed on the leaderboard. Give your bakery a different name in Settings.'):/too high/.test(lbNote)?tt('Dein Punktestand ist für einen neuen Eintrag zu hoch. Melde dich beim Besitzer des Spiels.','Your score is too high for a new entry. Please contact the game’s owner.'):tt('Dein neuer Punktestand wurde nicht gespeichert, weil er schneller gewachsen ist, als das Spiel es erlaubt. Später versucht es das Spiel nochmal.','Your new score wasn’t saved because it grew faster than the game allows. The game will try again later.'))+'</p>';
   me+='</div>';

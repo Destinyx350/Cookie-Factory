@@ -4,6 +4,16 @@ var v62Ready=false;
    nimmt sie den Benutzernamen (und notfalls den Benutzernamen mit einer Zahl). Wer austreten will, kann das jederzeit. */
 async function lbAutoJoin(){
   if(!lbOn()||!accTok||!accMe||S.lb.on||S.lb.ban||lbCheat()) return false;
+  /* V64: der Server nimmt immer den Benutzernamen, der Bäckerei-Name bleibt unverändert */
+  if(v64Ready&&lbTokOk){
+    if(!S.lb.id) S.lb.id=lbUUID();
+    S.lb.on=1;S.lb.t=0;
+    try{await lbSubmit(true);}catch(x){}
+    if(!S.lb.on) return false;
+    save();toast(tt('Deine Bäckerei ist jetzt als „','You joined the leaderboard as “')+accMe.username+tt('“ in der Bestenliste.','”.'),true);
+    if(v46Ready) setTimeout(()=>lbAccSync(true),1500);
+    lbLast=0;return true;
+  }
   const u=String(accMe.username||'').slice(0,16),okN=n=>typeof n==='string'&&/^[^<>]{2,20}$/.test(n.trim());
   const names=[];
   if(okN(S.name)) names.push(S.name.trim());

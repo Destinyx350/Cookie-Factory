@@ -357,3 +357,34 @@
 .pcols button[aria-checked="true"]{border-color:#fff;box-shadow:0 0 0 2px var(--gold1,#ffc23d)}
 .pcols .pc-orange{background:#e07a2f}.pcols .pc-gold{background:#d9a520}.pcols .pc-red{background:#d6453d}.pcols .pc-pink{background:#d9559d}.pcols .pc-purple{background:#8a5ad6}.pcols .pc-blue{background:#3f7fd6}.pcols .pc-teal{background:#23a39b}.pcols .pc-green{background:#3e9e4e}
 .pshowsel{display:grid;gap:6px}.pshowsel .namein{width:100%}
+
+/* ===== V64: Spieler-Karte, Zu erledigen, Bereiche, Platzhalter ===== */
+.pcl{all:unset;cursor:pointer;font-weight:700;color:inherit;border-bottom:1px dashed currentColor;line-height:1.2}
+.pcl:hover,.pcl:focus-visible{color:var(--gold1,#ffc23d);outline:none}
+.admqp{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin:6px 0 2px}
+.admqp[hidden]{display:none}
+.admsecbar{display:flex;margin:0 0 10px}
+.admsecbar button{flex:1 1 0}
+.admtodohead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
+.todon{display:inline-block;min-width:20px;padding:1px 7px;margin-left:6px;border-radius:999px;background:var(--gold1,#ffc23d);color:#2a1a00;font-size:12px;text-align:center}
+.plhead{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.plhead b{font-size:18px}.plhead small{display:block;color:var(--muted)}
+.plav{position:relative;display:grid;place-items:center;width:46px;height:46px;border-radius:var(--r-md,14px);background:var(--panel-2);font-size:24px;flex:0 0 auto}
+.plchips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.plchip{padding:3px 9px;border-radius:999px;font-size:12px;border:1px solid var(--edge);background:var(--panel-2)}
+.plchip.warn{border-color:#d9a23a}.plchip.bad{border-color:#e0566a;color:#ffb3bd}.plchip.ok{border-color:#4f9e63}
+.plfacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-bottom:6px}
+.plfacts span{padding:6px 9px;border:1px solid var(--edge);border-radius:var(--r-sm,10px);background:var(--panel-2);min-width:0}
+.plfacts small{display:block;color:var(--muted);font-size:11px}.plfacts b{font-size:13px;overflow-wrap:anywhere}
+.plh{margin:12px 0 6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.plpresets{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.plpresets .btn{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;height:auto;padding:8px 10px}
+.plpresets .btn small{font-size:11px;color:var(--muted);font-weight:500}
+.plpresets .btn.armed{border-color:#e0566a;background:rgba(224,86,106,.16)}
+.skel{display:flex;flex-direction:column;gap:8px;padding:4px 0}
+.skrow{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:var(--r-sm,10px);background:var(--panel-2)}
+.skrow i,.skrow b{display:block;height:12px;border-radius:6px;background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(255,255,255,.16),rgba(255,255,255,.06));background-size:200% 100%;animation:skel 1.3s linear infinite}
+.skrow i{width:22px;height:22px;border-radius:50%}
+@keyframes skel{from{background-position:100% 0}to{background-position:-100% 0}}
+[data-motion="off"] .skrow i,[data-motion="off"] .skrow b{animation:none}
+@media (prefers-reduced-motion:reduce){.skrow i,.skrow b{animation:none}}

@@ -25,7 +25,7 @@ module.exports = async function browserTests(url) {
       });
     });
     await ctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
-    if (admin) await ctx.addInitScript(h => { try { sessionStorage.setItem('keksfabrik-admin', h); } catch (e) {} }, ADM_HASH);
+    if (admin) await ctx.addInitScript(h => { try { sessionStorage.setItem('keksfabrik-admin', h); if (!sessionStorage.getItem('keksfabrik-admsec')) sessionStorage.setItem('keksfabrik-admsec', JSON.stringify({ mod: 'all', srv: 'all' })); } catch (e) {} }, ADM_HASH);
     const p = await ctx.newPage();
     p.on('pageerror', e => errors.push(name + ': ' + e.message));
     p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|ERR_FAILED/.test(m.text())) errors.push(name + ': ' + m.text()); });
@@ -66,7 +66,7 @@ module.exports = async function browserTests(url) {
   // v62: creating an account puts the bakery on the leaderboard by itself
   await goals(a); await a.click('#lbBar'); await a.waitForTimeout(3500);
   const link = (await pool.query("select lb_id from kf_accounts where username = 'alpha_ci'")).rows[0].lb_id;
-  check(!!link && (await pool.query('select name from leaderboard where id = $1', [link])).rows.map(r => r.name).join() === 'Alpha Bakery', 'a new account joins the leaderboard by itself and links the spot to the account');
+  check(!!link && (await pool.query('select name from leaderboard where id = $1', [link])).rows.map(r => r.name).join() === 'alpha_ci', 'a new account joins the leaderboard by itself, under its username, and links the spot to the account');
   check(await a.isVisible('[data-lb=leave]') && !(await a.isVisible('[data-lb=join]')), 'the leaderboard shows the new account as joined, with a Leave button');
   await a.click('#lbClose');
   await b.reload(); await b.locator('#startOv [data-lang=en]').click(); await b.waitForTimeout(1500);
@@ -161,7 +161,7 @@ module.exports = async function browserTests(url) {
   await goals(a); await a.click('#lbBar'); await a.waitForSelector('#lbBody [data-lbc="clicks"]', { timeout: 8000 }).catch(() => {});
   check(await a.locator('#lbBody [data-lbc]').count() === 5, 'the leaderboard has five categories');
   await a.click('#lbBody [data-lbc="clicks"]'); await a.waitForSelector('#lbBody [data-prof]', { timeout: 8000 }).catch(() => {});
-  check(/clicked the big cookie/.test(await text(a, '#lbBody')) && /Alpha/.test(await text(a, '#lbBody .lblist')) && await a.evaluate(() => document.querySelector('#lbBody [data-lbc="clicks"]').getAttribute('aria-pressed') === 'true'), 'the clicks board lists players', await text(a, '#lbBody'));
+  check(/clicked the big cookie/.test(await text(a, '#lbBody')) && /alpha_ci/.test(await text(a, '#lbBody .lblist')) && await a.evaluate(() => document.querySelector('#lbBody [data-lbc="clicks"]').getAttribute('aria-pressed') === 'true'), 'the clicks board lists players', await text(a, '#lbBody'));
   await a.click('#lbBody [data-lbc="fast"]'); await a.waitForTimeout(1200);
   check(/2 min 5 s/.test(await text(a, '#lbBody')), 'the fastest-billion board shows run times', await text(a, '#lbBody'));
   await a.locator('#lbBody .lblist [data-prof]').first().click();
@@ -217,12 +217,59 @@ module.exports = async function browserTests(url) {
     const tk = await device('Alpha Bakery', '10.0.62.1');
     await signup(tk, 'taken_ci'); await tk.waitForTimeout(1500);
     const tr = (await pool.query("select l.name from kf_accounts k join leaderboard l on l.id = k.lb_id where k.username = 'taken_ci'")).rows;
-    check(tr.length === 1 && tr[0].name === 'taken_ci' && (await text(tk, '#plName')) === 'taken_ci', 'when the bakery name is taken, the new account joins as its username', tr);
+    check(tr.length === 1 && tr[0].name === 'taken_ci' && (await text(tk, '#plName')) === 'Alpha Bakery', 'the leaderboard always uses the username, and the bakery name stays as it is', tr);
     await settings(tk, 'save'); await tk.click('#setClose');
     await goals(tk); await tk.click('#lbBar'); await tk.waitForSelector('[data-lb=leave]', { timeout: 8000 }).catch(() => {});
     await tk.click('[data-lb=leave]'); await tk.waitForTimeout(1500);
     check((await pool.query("select count(*)::int n from leaderboard where name = 'taken_ci'")).rows[0].n === 0 && await tk.isVisible('[data-lb=join]'), 'a player can still leave the leaderboard after joining automatically');
     await tk.context().close();
+  }
+
+  // v64: one name, guests need an account, change username, warnings, player card, to-do, sections
+  {
+    const g = await device('Guest Bakery', '10.0.64.1');
+    await goals(g); await g.click('#lbBar'); await g.waitForSelector('#lbBody [data-lb=acc]', { timeout: 8000 }).catch(() => {});
+    check(await g.isVisible('#lbBody [data-lb=acc]') && !(await g.isVisible('#lbBody [data-lb=join]')), 'guests are asked to create an account to join the leaderboard');
+    await g.click('#lbBody [data-lb=acc]'); await g.waitForTimeout(400);
+    check(await g.isVisible('#accF') && await g.evaluate(() => document.querySelector('[data-accm=signup]').getAttribute('aria-pressed') === 'true'), '"Create account" opens the sign-up form');
+    await g.context().close();
+    const rn = await device('Rename Bakery', '10.0.64.2');
+    await signup(rn, 'ren_ci'); await rn.waitForTimeout(1500);
+    await settings(rn, 'save'); await rn.evaluate(() => { const d = document.querySelector('#accBox details[data-sec="name"]'); if (d) d.open = true; });
+    await rn.fill('#accRenF [name=nu]', 'ren_new'); await rn.click('#accRenF button[type=submit]'); await rn.waitForTimeout(1500);
+    const rr = (await pool.query("select a.username, l.name from kf_accounts a left join leaderboard l on l.id = a.lb_id where a.username in ('ren_ci', 'ren_new')")).rows;
+    check(rr.length === 1 && rr[0].username === 'ren_new' && rr[0].name === 'ren_new' && /ren_new/.test(await text(rn, '#accBox .accme')), 'a player changes the username, and the leaderboard follows', rr);
+    check(/Next change from/.test(await text(rn, '#accBox details[data-sec="name"]')) && /ren_ci/.test(await text(rn, '#accBox details[data-sec="name"]')), 'the account shows when the next change is possible and the earlier name');
+    await rn.click('#setClose');
+    // the owner finds the player by the old name and warns them
+    await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]');
+    check(await d.evaluate(() => document.querySelector('#admSeg [data-g="online"]').dataset.ap === 'todo'), 'the To-do tab comes first in the Online group');
+    await d.waitForSelector('#admTodo .admtodohead', { timeout: 10000 }).catch(() => {});
+    check(/Waiting for you|All done/.test(await text(d, '#admTodo')), 'the To-do tab lists what waits for the owner');
+    await d.fill('#admQ', 'ren_c'); await d.waitForSelector('#admQP .pcl', { timeout: 8000 }).catch(() => {});
+    check(/ren_new/.test(await text(d, '#admQP')), 'the admin search also finds players by an old name');
+    await d.fill('#admQ', ''); await d.click('#admSeg [data-ap="pl"]');
+    await d.fill('#admPlF [name=q]', 'ren'); await d.click('#admPlF button[type=submit]'); await d.waitForSelector('#admPl [data-pcard="ren_new"]', { timeout: 8000 }).catch(() => {});
+    await d.click('#admPl [data-pcard="ren_new"]'); await d.waitForSelector('#admPlWarnF', { timeout: 8000 }).catch(() => {});
+    check(/ren_new/.test(await text(d, '#admPlCard .plhead')) && /ren_ci/.test(await text(d, '#admPlCard .plhead')) && /Strikes: 0\/4/.test(await text(d, '#admPlCard')), 'the player card shows the name, earlier names and strikes');
+    await d.fill('#admPlWarnF [name=reason]', 'Be nice in chat'); await d.click('#admPlWarnF button[type=submit]'); await d.waitForTimeout(1500);
+    check(/Strikes: 1\/4/.test(await text(d, '#admPlCard')) && /Warning/.test(await text(d, '#admPlCard')) && /Be nice in chat/.test(await text(d, '#admPlCard')), 'warning a player adds a strike and shows it in the history');
+    await rn.reload(); await rn.locator('#startOv [data-lang=en]').click().catch(() => {}); await rn.click('#stGo').catch(() => {});
+    await rn.waitForSelector('#rwOv:not([hidden])', { timeout: 12000 }).catch(() => {});
+    check(/Warning/.test(await text(rn, '#rwT')) && /Be nice in chat/.test(await text(rn, '#rwBody')) && /Strike 1 of 4/.test(await text(rn, '#rwBody')), 'the player sees the warning in the game', await text(rn, '#rwBody'));
+    await rn.click('#rwClose').catch(() => {});
+    await d.click('#admPlCard [data-plp="name"]'); await d.waitForTimeout(200);
+    check(/Tap again to confirm/.test(await text(d, '#admPlCard [data-plp="name"]')), 'quick bans ask for a second tap');
+    await d.click('#admPlCard [data-plp="name"]'); await d.waitForTimeout(1500);
+    const fn = (await pool.query("select username, rename_free from kf_accounts where username like 'baker_%'")).rows;
+    check(fn.length === 1 && fn[0].rename_free === true && /baker_\d{5}/.test(await text(d, '#admPlCard .plhead')), 'the "Bad name" preset forces a new name', fn);
+    // sections in the long tabs
+    await d.click('#admSeg [data-ap="mod"]'); await d.waitForSelector('#admMod .admsecbar', { timeout: 8000 }).catch(() => {});
+    await d.click('[data-asec="mod:pl"]'); await d.waitForTimeout(200);
+    const secs = await d.evaluate(() => [...document.querySelectorAll('#admMod .admcard')].map(c => [c.querySelector('h4').textContent.trim().slice(0, 2), getComputedStyle(c).display !== 'none']));
+    check(secs.some(([t, v]) => t.startsWith('🚩') && !v) && secs.some(([t, v]) => t.startsWith('🔎') && v), 'the Moderation tab is split into Players and Community', secs);
+    await d.click('[data-asec="mod:all"]'); await d.click('#setClose');
+    await rn.context().close();
   }
   await ectx.close();
 
@@ -542,7 +589,7 @@ module.exports = async function browserTests(url) {
   check(await a.evaluate(() => !document.getElementById('clubOv').dataset.rt), 'closing the club disconnects the live signal');
   await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
   await d.waitForSelector('[data-hlth]', { timeout: 10000 }).catch(() => {});
-  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–17 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 17 parts');
+  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–18 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 18 parts');
   await d.click('#setClose');
 
   // 5m. Tab bar, building cards, transitions, bakery start screen, vibration, history, welcome back (v59)
