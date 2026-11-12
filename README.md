@@ -115,23 +115,17 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 64
-- **One name for everything:** your username is now your name on the leaderboard, in chat, in clubs, with friends and gifts. The bakery name stays as decoration in your game and profile.
-- **The leaderboard is for accounts:** create a free account (no email needed) to join. Change your username every 30 days under **Settings → Saving**; signing in also works with the old name for 90 days.
-- **Fair rules:** breaking the rules first gets you a warning, then bans of 24 hours, 7 days and forever. Warnings show up in the game.
-- **For the admin:** a **To-do** tab with everything that waits, a **Players** tab with one card per player (all names, leaderboard, club, devices, history), warnings with strikes, one-tap ban presets, and the long Moderation and Server tabs split into sections.
+### Version 65
+- **Better on itch.io:** the game now always scrolls inside the itch.io frame (also when the page doesn't allow scrolling), so every building is reachable, and the "Update needed" message no longer blocks copies on itch.io.
 
-Also new since version 63: a big balance update (weaker late click upgrades, offline income at most 100%, capped golden cookie bursts) and a limit of 20 clicks a second.
+Also new since version 64: one name for everything (your username), the leaderboard for accounts, username changes every 30 days, fair warnings, and a new To-do and Players tab for the admin.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Ein Name für alles:** dein Benutzername ist jetzt dein Name in der Bestenliste, im Chat, in Clubs, bei Freunden und Geschenken. Der Bäckerei-Name bleibt als Deko in deinem Spiel und Profil.
-- **Die Bestenliste ist für Konten:** erstell dir gratis ein Konto (ohne E-Mail), um mitzumachen. Deinen Benutzernamen kannst du alle 30 Tage unter **Einstellungen → Speichern** ändern; anmelden geht 90 Tage lang auch noch mit dem alten Namen.
-- **Faire Regeln:** wer gegen die Regeln verstößt, bekommt erst eine Verwarnung, danach Sperren von 24 Stunden, 7 Tagen und für immer. Verwarnungen erscheinen im Spiel.
-- **Für den Admin:** ein Tab **Zu erledigen** mit allem, was wartet, ein Tab **Spieler** mit einer Karte pro Spieler (alle Namen, Bestenliste, Club, Geräte, Verlauf), Verwarnungen mit Stufen, Sperr-Vorlagen mit einem Tipp, und die langen Tabs Moderation und Server sind in Bereiche aufgeteilt.
+- **Besser auf itch.io:** das Spiel lässt sich im itch.io-Rahmen jetzt immer scrollen (auch wenn die Seite selbst kein Scrollen erlaubt), so ist jedes Gebäude erreichbar, und die Meldung „Update nötig“ blockiert Kopien auf itch.io nicht mehr.
 
-Außerdem neu seit Version 63: ein großes Balance-Update (schwächere späte Klick-Upgrades, Offline-Ertrag höchstens 100 %, begrenzte Goldkeks-Räusche) und höchstens 20 Klicks pro Sekunde.
+Außerdem neu seit Version 64: ein Name für alles (dein Benutzername), die Bestenliste für Konten, Namensänderung alle 30 Tage, faire Verwarnungen und neue Tabs „Zu erledigen“ und „Spieler“ für den Admin.
 
 </details>
 

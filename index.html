@@ -1846,6 +1846,10 @@ html{-webkit-tap-highlight-color:transparent}
 [data-motion="off"] .skrow i,[data-motion="off"] .skrow b{animation:none}
 @media (prefers-reduced-motion:reduce){.skrow i,.skrow b{animation:none}}
 
+/* ===== V65: im Rahmen (itch.io) scrollt der Spielbereich statt der Seite ===== */
+:root[data-embed="1"],:root[data-embed="1"] body{height:100%;overflow:hidden}
+:root[data-embed="1"] .wrap{height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+
 </style>
 
 <div class="wrap">
@@ -3071,8 +3075,11 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=64;
+const NEWS_VER=65;
 const NEWS=[
+  {v:65,sum:['Besser spielen auf itch.io','Better on itch.io'],items:[
+    ['change','Auf itch.io und anderen Spieleseiten lässt sich das Spiel jetzt immer scrollen – auch bis zum letzten Gebäude.','On itch.io and other game sites the game can now always scroll – all the way down to the last building.'],
+    ['change','Die Meldung „Update nötig“ blockiert das Spiel auf itch.io nicht mehr.','The "Update needed" message no longer blocks the game on itch.io.']]},
   {v:64,sum:['Ein Name für alles','One name for everything'],items:[
     ['new','Dein Benutzername ist jetzt dein Name überall: in der Bestenliste, im Chat, in Clubs, bei Freunden und Geschenken. Der Bäckerei-Name bleibt als Deko in deinem Spiel und Profil.','Your username is now your name everywhere: on the leaderboard, in chat, in clubs, with friends and gifts. The bakery name stays as decoration in your game and profile.'],
     ['change','Die Bestenliste ist jetzt für Spieler mit Konto. Ein Konto ist gratis und braucht keine E-Mail.','The leaderboard is now for players with an account. An account is free and needs no email.'],
@@ -9075,7 +9082,8 @@ function cfgApply(c){
 }
 function maintRender(){
   const ov=$id('maintOv');if(!ov) return;
-  const need=kfCfg.min_ver>NEWS_VER,mt=kfCfg.maint&&kfCfg.maint.on&&!ADMH.on;
+  /* V65: Kopien auf Spieleseiten (itch.io …) kann man nicht per Neuladen aktualisieren – dort nie sperren */
+  const need=kfCfg.min_ver>NEWS_VER&&!window.KF_PORTAL,mt=kfCfg.maint&&kfCfg.maint.on&&!ADMH.on;
   ov.hidden=!(need||mt);if(ov.hidden) return;
   const m=mt?String((LANG==='de'?kfCfg.maint.de:kfCfg.maint.en)||kfCfg.maint.de||kfCfg.maint.en||''):'';
   const h=need?'<div class="mbig" aria-hidden="true">⬆️</div><h2 id="maintT">'+tt('Update nötig','Update needed')+'</h2><p>'+tt('Es gibt eine neue Version der Keksfabrik. Lade neu, um weiterzuspielen. Dein Fortschritt bleibt.','There’s a new version of Cookie Factory. Reload to keep playing. Your progress stays.')+'</p><div class="btns" style="justify-content:center"><button type="button" class="btn primary" id="maintGo">'+tt('Jetzt aktualisieren','Update now')+'</button></div>'
@@ -10411,6 +10419,15 @@ async function accNoticeCheck(){
 setInterval(accNoticeCheck,120000);setTimeout(accNoticeCheck,6000);
 
 v64Ready=true;
+
+/* ======================= V65: Fixes für das Spielen auf itch.io ======================= */
+/* Läuft das Spiel in einem Rahmen (itch.io und andere Seiten), scrollt nicht die Seite, sondern der Spielbereich (.wrap).
+   So geht Scrollen auch dann, wenn der Rahmen selbst nicht scrollen darf (itch.io: "Enable scrollbars" aus). */
+(function(){
+  let framed=false;
+  try{framed=window.self!==window.top;}catch(e){framed=true;}
+  if(framed) document.documentElement.dataset.embed='1';
+})();
 
 /* ======================= V40: Shop-Navigation & Welt-Übergänge ======================= */
 const SHOPK=[['starShop','⭐','Sterne','Stars'],['artSec','⚒️','Schmiede','Forge'],['cardSec','🃏','Karten','Cards'],['boostList','⚡','Boosts','Boosts'],['boostListW','🌍','Welt','World'],['boxBtn','🎁','Keksbox','Cookie box'],['itemGrid','🎒','Gegenstände','Items'],['skinRow','🍪','Designs','Designs']];

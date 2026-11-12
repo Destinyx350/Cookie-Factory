@@ -9,7 +9,9 @@
 3. Run the workflow once by hand: *Actions → Portal package → Run workflow*. It uploads the game as a new file on the itch.io channel `html5`.
 4. Only the first time: on itch.io open *Edit game → Uploads*, tick **This file will be played in the browser** on the new upload and delete the old zip you uploaded by hand. Save.
 
-From then on every merge into `main` updates the itch.io game. Without the secret the step is skipped and you can still upload `cookie-factory-portal` by hand (*Edit game* → *Uploads* → replace the zip).
+From then on every merge into `main` updates the itch.io game.
+
+**Scrolling and updates on itch.io (version 65):** the game scrolls its own area when it runs in a frame, so it works whether *Enable scrollbars* is on or off in itch.io's embed options. A forced update (admin → Server → *Force update*) never locks the itch.io copy, because reloading there can't get a newer version; upload the new zip instead (or let the workflow do it). Without the secret the step is skipped and you can still upload `cookie-factory-portal` by hand (*Edit game* → *Uploads* → replace the zip).
 
 Game portals like itch.io, CrazyGames, GameDistribution and Newgrounds show the game to many new players.
 Each one wants a zip with `index.html` at the top level. The game builds that zip by itself.

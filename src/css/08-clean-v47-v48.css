@@ -388,3 +388,7 @@
 @keyframes skel{from{background-position:100% 0}to{background-position:-100% 0}}
 [data-motion="off"] .skrow i,[data-motion="off"] .skrow b{animation:none}
 @media (prefers-reduced-motion:reduce){.skrow i,.skrow b{animation:none}}
+
+/* ===== V65: im Rahmen (itch.io) scrollt der Spielbereich statt der Seite ===== */
+:root[data-embed="1"],:root[data-embed="1"] body{height:100%;overflow:hidden}
+:root[data-embed="1"] .wrap{height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}

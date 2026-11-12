@@ -12,7 +12,8 @@ function cfgApply(c){
 }
 function maintRender(){
   const ov=$id('maintOv');if(!ov) return;
-  const need=kfCfg.min_ver>NEWS_VER,mt=kfCfg.maint&&kfCfg.maint.on&&!ADMH.on;
+  /* V65: Kopien auf Spieleseiten (itch.io …) kann man nicht per Neuladen aktualisieren – dort nie sperren */
+  const need=kfCfg.min_ver>NEWS_VER&&!window.KF_PORTAL,mt=kfCfg.maint&&kfCfg.maint.on&&!ADMH.on;
   ov.hidden=!(need||mt);if(ov.hidden) return;
   const m=mt?String((LANG==='de'?kfCfg.maint.de:kfCfg.maint.en)||kfCfg.maint.de||kfCfg.maint.en||''):'';
   const h=need?'<div class="mbig" aria-hidden="true">⬆️</div><h2 id="maintT">'+tt('Update nötig','Update needed')+'</h2><p>'+tt('Es gibt eine neue Version der Keksfabrik. Lade neu, um weiterzuspielen. Dein Fortschritt bleibt.','There’s a new version of Cookie Factory. Reload to keep playing. Your progress stays.')+'</p><div class="btns" style="justify-content:center"><button type="button" class="btn primary" id="maintGo">'+tt('Jetzt aktualisieren','Update now')+'</button></div>'
