@@ -320,7 +320,7 @@ function genQuests(){
   return ids.slice(0,3).map((id,d)=>{const q=QUESTS.find(x=>x.id===id);return {id,d,goal:q.rel?Math.max(1000,Math.ceil(C.kps0*q.g[d])):q.g[d],base:q.v(),c:0};});
 }
 function checkDay(silent){
-  const D=S.day,now=Date.now(),today=dayKey(now);
+  const D=S.day,now=tNow(),today=dayKey(now);
   if(D.date===today&&D.last===today) return false;
   if(D.date!==today){D.date=today;D.q=genQuests();D.bonus=0;}
   if(D.last!==today){D.streak=D.last===dayKey(now-864e5)?D.streak+1:1;D.best=Math.max(D.best,D.streak);D.last=today;}
@@ -332,7 +332,7 @@ const qProg=q=>Math.max(0,Math.min(q.goal,qDef(q).v()-q.base));
 const qDone=q=>qProg(q)>=q.goal;
 const qReward=q=>Math.ceil(Math.max(1000,C.kps0*[300,600,1200][q.d]));
 const loginDay=()=>(Math.max(1,S.day.streak)-1)%7;
-const loginGot=()=>S.day.lc===dayKey(Date.now());
+const loginGot=()=>S.day.lc===dayKey(tNow());
 function addCk(g){S.cookies+=g;S.run+=g;S.all+=g;S.day.q.forEach(q=>{if(q.id==='bake'&&!q.c) q.base+=g;});}
 function loginText(r){
   const p=[];
@@ -344,7 +344,7 @@ function loginText(r){
 }
 function claimLogin(){
   if(loginGot()) return false;
-  const r=LOGIN[loginDay()];S.day.lc=dayKey(Date.now());addPP(10);
+  const r=LOGIN[loginDay()];S.day.lc=dayKey(tNow());addPP(10);
   if(r.c) addCk(Math.max(1000,C.kps0*r.c));
   if(r.gem) addMat('gem',r.gem);
   if(r.egg) S.w.pet.eggs++;

@@ -97,9 +97,10 @@ module.exports = async function sqlTests() {
   check((await q('select name from leaderboard where id = $1', [L1])).rows[0].name === 'test_alpha', 'the leaderboard shows the username, not the bakery name');
   await expectError(rpc('submit_score', { p_id: L2, p_name: 'Other', p_score: 5, p_token: a.token }), /another spot/, 'one leaderboard spot per account');
   await q("update leaderboard set updated_at = now() - interval '5 minutes' where id = $1", [L1]);
-  await expectError(rpc('submit_score', { p_id: L1, p_name: 'Test Bakery', p_score: 1e12 }), /grew too fast/, 'scores cannot jump too fast');
+  await rpc('submit_score', { p_id: L1, p_name: 'Test Bakery', p_score: 1e12 });
+  check((await q('select score from leaderboard where id = $1', [L1])).rows[0].score <= 1.0001e9, 'a score that jumps too fast is held back (v67: clamped, not refused)');
   const link = await rpc('acc_lb_link', { p_token: a.token, p_lb: L1 });
-  check(link.lb_id === L1 && link.score === 1e9, 'leaderboard spot is linked to the account');
+  check(link.lb_id === L1 && Math.abs(link.score - 1e9) < 1e7, 'leaderboard spot is linked to the account');
   check((await rpc('acc_lb_link', { p_token: a.token, p_lb: L2 })).lb_id === L1, 'a second device gets the same spot');
   check((await rpc('acc_lb_link', { p_token: b.token, p_lb: L1 })).lb_id === null, 'another account cannot take a linked spot');
 
@@ -679,5 +680,27 @@ module.exports = async function sqlTests() {
   await q("delete from kf_accounts where username = 'Name_New'");
   check((await q("select count(*)::int n from kf_accounts where username = 'Name_New'")).rows[0].n === 0, 'an account with a mute and history can still be deleted');
   check((await q("select count(*)::int n from kf_schema where part = 18")).rows[0].n === 1, 'server part 18 is listed');
+  }
+  {
+  // Fair play: server time, score limit by play time, 20 clicks a second (v67)
+  const crypto = require('crypto');
+  const srv = await rpc('kf_now', {}), db = (await q('select extract(epoch from now()) * 1000 as t')).rows[0].t;
+  check(Math.abs(srv - db) < 5000, 'the game can ask the server for the time', { srv, db });
+  const f1 = await rpc('acc_signup', { p_user: 'fair_new', p_pass: 'secret123' }, '6.7.0.1');
+  const fs = crypto.randomUUID();
+  await rpc('submit_score', { p_id: fs, p_name: 'x', p_score: 1e14, p_token: f1.token });
+  check((await q('select score from leaderboard where id = $1', [fs])).rows[0].score <= 1.0001e9, 'a brand-new spot starts at most at 1 billion');
+  await q("update leaderboard set created_at = now() - interval '2 hours', updated_at = now() - interval '1 hour' where id = $1", [fs]);
+  await rpc('submit_score', { p_id: fs, p_name: 'x', p_score: 1e14 });
+  const sc2 = (await q('select score from leaderboard where id = $1', [fs])).rows[0].score;
+  check(sc2 > 0.9e12 && sc2 < 1.1e12, 'after 2 hours a spot can be at most about 1 trillion', sc2);
+  await q("update leaderboard set created_at = now() - interval '30 days', updated_at = now() - interval '1 hour' where id = $1", [fs]);
+  await rpc('submit_score', { p_id: fs, p_name: 'x', p_score: 1e14 });
+  check((await q('select score from leaderboard where id = $1', [fs])).rows[0].score === 1e14, 'older spots are not held back by their age');
+  await rpc('submit_stats', { p_id: fs, p_clicks: 100, p_gold: 0, p_asc: 0 });
+  await q("update lb_stats set updated_at = now() - interval '10 seconds' where id = $1", [fs]);
+  const cs = await rpc('submit_stats', { p_id: fs, p_clicks: 100000, p_gold: 0, p_asc: 0 });
+  check(cs.clicks <= 100 + 20 * 11 + 200 && cs.clicks > 300, 'the clicks board allows at most 20 clicks a second', cs);
+  check((await q("select count(*)::int n from kf_schema where part = 19")).rows[0].n === 1, 'server part 19 is listed');
   }
 };

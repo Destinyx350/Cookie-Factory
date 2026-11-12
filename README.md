@@ -39,7 +39,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🤖 **Automation** | *Best buy* picks the smartest purchase, and you choose how much of your cookies automation may spend. |
 | 🧑‍🍳 **Helpers** | Helpers buy buildings, harvest, fight or trade, and level up with experience. |
 | 🌍 **World** | Adventure, stores, a lucky wheel, titles, a pass and a collection to complete. |
-| 🏆 **192 achievements** | Plus guided *First Steps* goals with a pointer for new players, detailed statistics and charts of your cookies and production over time. |
+| 🏆 **198 achievements** | Plus guided *First Steps* goals with a pointer for new players, detailed statistics and charts of your cookies and production over time. |
 | 📅 **Daily rewards** | A 7-day login streak and three daily tasks with a bonus chest. Coming back shows what happened while you were away, with one **Collect all** button, and after 3+ days a welcome-back gift. |
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
 | 🎵 **Soundtrack and 3D** | 7 music tracks with real instruments that adapt to what you do, and a real 3D cookie with lighting that tilts toward your finger. Golden cookies and icons have a 3D look too. |
@@ -84,7 +84,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🤖 **Automatik**: *Bester Kauf* und ein einstellbares Ausgabelimit
 - 🧑‍🍳 **Helfer**, die kaufen, ernten, kämpfen oder handeln und dabei aufsteigen
 - 🌍 **Welt** mit Abenteuer, Läden, Glücksrad, Titeln, Pass und Sammlung
-- 🏆 **192 Erfolge**, Ziele mit Zeiger für neue Spieler, Statistiken und Verlaufs-Diagramme deiner Kekse und Produktion
+- 🏆 **198 Erfolge**, Ziele mit Zeiger für neue Spieler, Statistiken und Verlaufs-Diagramme deiner Kekse und Produktion
 - 📅 **Tägliche Belohnungen**: 7-Tage-Serie, drei Tagesaufgaben, eine Zusammenfassung mit „Alles einsammeln“ nach jeder Pause und ein Willkommensgeschenk nach 3+ Tagen
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
 - 🎵 **Soundtrack und 3D**: 7 Musikstücke mit echten Instrumenten, die sich anpassen, und ein echter 3D-Keks mit Licht, der sich zum Finger neigt
@@ -115,25 +115,23 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 66
-- **Smoother:** windows open and close smoothly, buttons give a little when you tap, bars fill softly, numbers in profiles count up, and leaderboard and club tabs fade in.
-- **Calmer messages:** one message at a time, the same message counted (×3), bottom left on computers, tap to dismiss.
-- **Tidy notification bell:** the same messages grouped, "New" and "Earlier", an "Important" filter and **Mark all read**.
-- **Light look polished:** **Settings → Display → Theme → Light**.
-- **Better first minutes:** new players get a pointer on the cookie, the Claim button and the first building, and after the first steps a short card about what a free account gives.
+### Version 67
+- **6 new achievements:** finish all first steps, be on the leaderboard with your account, style your profile, share it, change your username, and reach the top 10 on any leaderboard.
+- **The cookie stays in view on computers** while you scroll the buildings.
+- **Fair play:** moving the device clock forward no longer gives offline cookies or extra daily rewards. New leaderboard spots grow slower in their first hours, so nobody jumps to the top in an hour, and the clicks board counts at most 20 clicks a second.
+- **On itch.io** the game shows what's new once after an update.
 
-Also new since version 65: the game always scrolls on itch.io, and "Update needed" no longer blocks the itch.io copy.
+Also new since version 66: smooth windows, calm one-at-a-time messages, a tidy notification bell, a polished light look and a guided start for new players.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Sanfter:** Fenster öffnen und schließen sanft, Knöpfe geben beim Tippen nach, Balken füllen sich weich, Zahlen im Profil zählen hoch, und die Tabs der Bestenliste und der Clubs blenden ein.
-- **Ruhigere Meldungen:** eine Meldung nach der anderen, gleiche werden gezählt (×3), am Computer unten links, Tippen schließt sie.
-- **Aufgeräumte Glocke:** gleiche Meldungen zusammengefasst, „Neu“ und „Früher“, ein Filter „Wichtig“ und **Alle gelesen**.
-- **Heller Look überarbeitet:** **Einstellungen → Anzeige → Design → Hell**.
-- **Bessere erste Minuten:** neue Spieler bekommen einen Zeiger auf den Keks, den Abholen-Knopf und das erste Gebäude, und nach den ersten Schritten eine kurze Karte, was ein Gratis-Konto bringt.
+- **6 neue Erfolge:** alle ersten Schritte schaffen, mit Konto in der Bestenliste sein, dein Profil gestalten, es teilen, deinen Benutzernamen ändern und in einer Bestenliste unter die ersten 10 kommen.
+- **Am Computer bleibt der Keks stehen**, während du die Gebäude scrollst.
+- **Fair spielen:** die Geräte-Uhr vorzustellen bringt keine Offline-Kekse und keine zusätzlichen Tages-Belohnungen mehr. Neue Plätze in der Bestenliste wachsen in den ersten Stunden langsamer, so springt niemand in einer Stunde nach oben, und die Klick-Liste zählt höchstens 20 Klicks pro Sekunde.
+- **Auf itch.io** zeigt das Spiel nach einem Update einmal, was neu ist.
 
-Außerdem neu seit Version 65: das Spiel scrollt auf itch.io immer, und „Update nötig“ blockiert die itch.io-Kopie nicht mehr.
+Außerdem neu seit Version 66: sanfte Fenster, ruhige Meldungen nacheinander, eine aufgeräumte Glocke, ein überarbeiteter heller Look und ein geführter Start für neue Spieler.
 
 </details>
 

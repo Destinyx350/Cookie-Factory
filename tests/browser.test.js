@@ -181,6 +181,9 @@ module.exports = async function browserTests(url) {
   await a.click('[data-pe="share"]'); await a.waitForTimeout(300);
   check(await a.evaluate(() => /\?p=alpha_ci$/.test(window.__shared)), 'sharing copies a link to the profile');
   await a.click('#profClose'); await a.click('#lbClose');
+  await a.click('#ntfBtn'); await a.waitForTimeout(300);
+  check(/My Style/.test(await text(a, '#ntfBody')) && /Spread the Word/.test(await text(a, '#ntfBody')), 'styling and sharing the profile unlock the new achievements (v67)');
+  await a.click('#ntfClose'); await a.waitForTimeout(250);
   {
     const pv = await device('Profile Viewer', '10.0.61.1', {}, false, '?p=alpha_ci');
     await pv.waitForSelector('#profOv:not([hidden]) .phead', { timeout: 8000 }).catch(() => {});
@@ -320,6 +323,44 @@ module.exports = async function browserTests(url) {
     await a.click('#lbBody [data-lbc="ck"]'); await a.click('#lbClose');
   }
 
+  // v67: clock check, new achievements, cookie stays in view, "What's new" on itch.io
+  {
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, extraHTTPHeaders: { 'x-test-ip': '10.0.67.1' } });
+    await ctx.route(LB + '/**', handle); await ctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    await ctx.addInitScript(() => {
+      const off = +(sessionStorage.getItem('dtoff') || 0);
+      if (off) { const D = Date, n = D.now.bind(D); class FD extends D { constructor(...a) { super(...(a.length ? a : [n() + off])); } static now() { return n() + off; } } window.Date = FD; }
+    });
+    const c = await ctx.newPage(); c.on('pageerror', e => errors.push('v67: ' + e.message));
+    await c.goto(url); await c.locator('#startOv [data-lang=en]').click(); await c.click('#stGo');
+    if (await c.isVisible('#nameOv')) { await c.fill('#nameIn', 'Clock Bakery'); await c.click('#nameOk'); }
+    await c.addStyleTag({ content: '#introOv,#tutBox,#rwOv,#accHint{display:none!important}' });
+    const ck = await c.locator('#cookie').boundingBox();
+    for (let i = 0; i < 20; i++) { await c.mouse.click(ck.x + ck.width / 2, ck.y + ck.height / 2); await c.waitForTimeout(60); }
+    await c.evaluate(() => { const r = document.querySelector('#buildList .row.can'); if (r) r.click(); });
+    await c.waitForTimeout(4000);   // the game asks the server for the time and stamps the save
+    await settings(c, 'save'); await c.click('#saveBtn'); await c.click('#setClose'); await c.waitForTimeout(400);
+    await c.evaluate(() => sessionStorage.setItem('dtoff', String(2 * 86400e3)));   // move the device clock 2 days ahead
+    await c.reload(); await c.locator('#startOv [data-lang=en]').click().catch(() => {}); await c.click('#stGo').catch(() => {});
+    await c.addStyleTag({ content: '#introOv,#tutBox,#rwOv,#accHint{display:none!important}' });
+    await c.waitForTimeout(6000);
+    if (await c.isVisible('#awayOv')) await c.click('#awayClose').catch(() => {});
+    await c.click('#ntfBtn'); await c.waitForTimeout(300);
+    check(/device clock was ahead/.test(await text(c, '#ntfBody')), 'moving the device clock forward no longer gives offline cookies', (await text(c, '#ntfBody')).slice(0, 200));
+    await c.click('#ntfClose');
+    await ctx.close();
+    // the cookie column stays in view on computers
+    const sctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    await sctx.route(LB + '/**', handle); await sctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    await sctx.addInitScript(() => { try { if (!localStorage.getItem('keksfabrik-save-v1')) localStorage.setItem('keksfabrik-save-v1', JSON.stringify({ name: 'Tall', b: [60, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], cookies: 1e13, run: 1e14, all: 1e14, t: Date.now(), opt: { lang: 'en', start: false } })); } catch (e) {} });
+    const st = await sctx.newPage(); await st.goto(url); await st.waitForTimeout(1500);
+    await st.addStyleTag({ content: '#introOv,#tutBox,#rwOv,#awayOv,#accHint{display:none!important}' });
+    await st.mouse.move(900, 500); await st.mouse.wheel(0, 900); await st.waitForTimeout(500);
+    const pos = await st.evaluate(() => [Math.round(document.querySelector('.stage').getBoundingClientRect().top), Math.round(document.querySelector('.store').getBoundingClientRect().top), scrollY]);
+    check(pos[2] > 300 && pos[0] >= 0 && pos[0] < 40 && pos[1] < 0, 'on computers the cookie stays in view while the buildings scroll', pos);
+    await sctx.close();
+  }
+
   // 5d. Push setting (v49)
   await settings(a, 'disp');
   check(await a.isVisible('#pushBtn') && /Push/.test(await text(a, '#pushT')), 'push notification switch shows in Settings → Display');
@@ -391,6 +432,14 @@ module.exports = async function browserTests(url) {
   const plk = await pctx.newPage(); await plk.goto(url + 'dist/portal/'); await plk.waitForTimeout(3000);
   const wl = await pctx.newPage(); await wl.goto(url); await wl.waitForTimeout(3000);
   check(!(await plk.isVisible('#maintOv')) && await wl.isVisible('#maintOv'), 'a forced update locks old web copies but never the itch.io copy');
+  // v67: itch.io copies show "What's new" once after an update (they get no update notice)
+  const nctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  await nctx.route(LB + '/**', handle); await nctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+  await nctx.addInitScript(() => { try { if (!localStorage.getItem('keksfabrik-save-v1')) localStorage.setItem('keksfabrik-save-v1', JSON.stringify({ name: 'Itch', b: [3], cookies: 100, run: 100, all: 100, t: Date.now(), opt: { lang: 'en', news: 60 } })); } catch (e) {} });
+  const np = await nctx.newPage(); await np.goto(url + 'dist/portal/'); await np.click('#stGo').catch(() => {});
+  await np.waitForSelector('#newsOv:not([hidden])', { timeout: 8000 }).catch(() => {});
+  check(await np.isVisible('#newsOv'), 'after an update the itch.io copy shows "What\'s new" once');
+  await nctx.close();
   await pctx.close();
 
   // 5f. Player version has no admin code; account bans (v52)
@@ -663,7 +712,7 @@ module.exports = async function browserTests(url) {
   check(await a.evaluate(() => !document.getElementById('clubOv').dataset.rt), 'closing the club disconnects the live signal');
   await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
   await d.waitForSelector('[data-hlth]', { timeout: 10000 }).catch(() => {});
-  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–18 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 18 parts');
+  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–19 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 19 parts');
   await d.click('#setClose');
 
   // 5m. Tab bar, building cards, transitions, bakery start screen, vibration, history, welcome back (v59)

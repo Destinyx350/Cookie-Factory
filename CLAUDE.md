@@ -55,7 +55,7 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - `sealMigrate()` seals saves that existed before version 37 once per browser (marker `keksfabrik-seal`).
 - The seal secret is inside `sealHash()`. Don't print it in chat, the README or comments.
 - Flagged (`S.tamp`) and admin-used (`S.adm`) saves can never submit leaderboard scores (`lbCheat()`).
-- **Server:** the current `submit_score` lives in `docs/leaderboard-v2.sql`. It rejects new entries above 1e15, growth above 10x per 5 minutes (above 100 million), and banned players. The game sends a score every minute and caps it with the same formula (`lbCapped()`, using `S.lb.ls` and `S.lb.t`) so honest players are never rejected. Changes to it go into a new numbered server part in `docs/` for the owner.
+- **Server:** the current `submit_score` lives in `docs/fair-v19.sql` (since version 67). It refuses banned players and spots without an account, and clamps (no longer rejects) scores to the spot's age limit and to growth of 10x per 5 minutes (above 100 million). The game sends a score every minute and caps it with the same formula (`lbCapped()`, using `S.lb.ls` and `S.lb.t`) so honest players are never rejected. Changes to it go into a new numbered server part in `docs/` for the owner.
 - No browser game can stop someone who edits the game code itself; these checks catch the common tricks and protect the leaderboard.
 
 ## Device layouts
@@ -137,7 +137,7 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 
 ## Late-game content and push (version 49)
 
-- Buildings are data in `B`; tier upgrades, ownership achievements, heavenly nodes and milestones are generated from it. A new building needs a `B` entry and an `ART` icon `b<index>` (outlined style in the `Object.assign(ART,{…})` block). Keep README counts in sync (now 23 buildings, 349 upgrades, 192 achievements; the Goals statistics show the live numbers).
+- Buildings are data in `B`; tier upgrades, ownership achievements, heavenly nodes and milestones are generated from it. A new building needs a `B` entry and an `ART` icon `b<index>` (outlined style in the `Object.assign(ART,{…})` block). Keep README counts in sync (now 23 buildings, 349 upgrades, 198 achievements; the Goals statistics show the live numbers).
 - **Push:** server side is `docs/push-v9.sql` (`kf_push_subs`, `kf_push_queue`, `kf_push_cfg`, triggers on gifts, mail, friend requests, club prizes and events; `push_take`/`push_gone` need the shared secret). The sender is the edge function `supabase/functions/kf-push` (Verify JWT off). It needs no secrets: the SQL creates the shared secret in `kf_push_cfg`, the function reads that table with Supabase's built-in service key and creates the VAPID key pair on its first run. The client gets the public key from `push_pubkey()`. Never put push keys or the secret in the repo or chat. Owner steps: `docs/PUSH.md`.
 - Client: `V49` block (`pushEnable/Disable/State`), switch under Settings → Display. `sw.js` shows notifications (`push`, `notificationclick`).
 
@@ -266,6 +266,16 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - **Lively:** `uiCountUp(el)` counts a shown number up (profile tiles, reward dialog). `.cur.bump` when a currency rises. Button press scale, bar width transitions. `uiSwitchIn(el)` replays `.swin` on `#lbBody`/`#clubBody` after a tab click; admin panes and Goals sub-tabs fade in by CSS.
 - **Light look** (`S.opt.look`, Settings → Display → Theme) already existed; V66 CSS fixes the start title and the newer parts (skeletons, player chips, profile colors). Check new UI in both looks.
 - **First minutes:** `uiCoach()` (every 500 ms) sets `data-coach` = `cookie` (step 1, label `.coach` on the cookie), `claim` (pulses the tutorial Claim button `.coachbtn`), `buy` (glows the wanted building row `.coachrow`, `data-i`), only while `S.tut.i < 4` and `S.all < 20000`; `data-quiet="1"` hides `#hints` and `#curBar` during the first two steps. `uiAccHint()` shows `#accHint` once the guest finished 3 steps or has 5,000 cookies: at most 3 times, 3 days apart (`localStorage['keksfabrik-acchint']`), "Create account" opens sign-up (`lbAccGo`).
+
+## Fair play, new achievements, sticky cookie, itch.io What's New (version 67)
+
+- Server side is `docs/fair-v19.sql` (needs parts 1–18): `kf_now()` (anon, server time in ms), `leaderboard.created_at` (old rows set to 30 days ago), `submit_score` (replaces part 18's) clamps instead of refusing: at most `10^(9 + 1.5 × hours since the spot joined)` and the old growth limit `max(old, 1e8) × 10^(min(12×hrs, 12))`; no more `grew too fast` or `score too high` errors. `submit_stats` allows 20 clicks a second (+200).
+- **Clock check** (`43v-v67-fair.js`, `v67Ready`): `clkSync()` asks `kf_now` (2.5 s after start, every 10 min, when the page becomes visible) and sets `clkSkew`; `tNow()` is the trusted time and is used for the daily login, daily tasks (`checkDay`) and the lucky wheel. `S.tz = {s, l}` stamps server and local time every 30 s. At startup the offline block in `48-…` calls `clkNote()`, which stores `S.ck` (gap, gain, cap, comeback gift); `clkCheck()` compares with the real time once the server answers (also in a later session if offline) and takes back the extra cookies and an early comeback gift if the clock was more than 10 minutes ahead. `S.xf`, `S.tz`, `S.ck` are in the save (`fresh()`, hoisted `sanXF/sanTZ/sanCK` in `sanitize`). Other timers (expeditions, plants) still use the device clock.
+- **Achievements:** the 6 new ones (`x_tut`, `x_lb`, `x_style`, `x_share`, `x_name`, `x_top10`) are in `09b-v67-erfolge.js`, which must stay before `10-spielstand.js`: the save is read there and unknown achievement ids are dropped. Flags go to `S.xf` through `xfSet()` (profile saved, profile shared, username changed, rank 1–10 on any board).
+- **Sticky cookie:** on desktop with a window at least 700 px high, `.game > .stage` is `position: sticky`.
+- **Portal What's New:** in `KF_PORTAL` builds the news dialog opens once when `S.opt.news` is older than `NEWS_VER` (they get no update notice).
+- **Devlog:** after each release give the owner a short English devlog text for itch.io in the chat (title, 3–5 bullet points, a closing line).
+- Workflows use `actions/checkout@v6`, `actions/setup-node@v6` (Node 22) and `actions/upload-artifact@v6`.
 
 ## Shipping changes
 

@@ -449,3 +449,8 @@
 @media (prefers-reduced-motion:reduce){.coach,.row.coachrow{animation:none}}
 .coachbtn{animation:coachG 1.2s ease-in-out infinite}
 [data-motion="off"] .coachbtn{animation:none}
+
+/* ===== V67: am Computer bleibt der Keks beim Scrollen stehen ===== */
+@media (min-height:700px){
+  :root[data-device="desktop"] .game>.stage{position:sticky;top:12px;align-self:start}
+}
