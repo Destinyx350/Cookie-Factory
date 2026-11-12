@@ -162,8 +162,9 @@ applyLook();
 envTick();
 applyLang();
 setInterval(tick,100);
-if(S.opt.start!==false){renderStart();startOv.hidden=false;setTimeout(()=>{const b=document.getElementById('stGo');if(b) b.focus();},60);}
-else if(awayRep){awayShown=true;setTimeout(()=>showAway(awayRep),350);}
+/* V68: beim allerersten Besuch ohne Startbildschirm direkt ins Spiel (außer mit Einladungs-Link: dort steht, wer eingeladen hat) */
+if(S.opt.start!==false&&(hadSave||lsGet(REF_KEY))){renderStart();startOv.hidden=false;setTimeout(()=>{const b=document.getElementById('stGo');if(b) b.focus();},60);}
+else{if(!hadSave) startDone=true;if(awayRep){awayShown=true;setTimeout(()=>showAway(awayRep),350);}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden) save();});
 window.addEventListener('pagehide',save);
 })();

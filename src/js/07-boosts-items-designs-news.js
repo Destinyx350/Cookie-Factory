@@ -118,7 +118,7 @@ const TOPS=[
   {n:['Goldflocken','Gold flakes'],flake:1,cols:['#f1c46a','#e0a030','#fff0b0'],cos:'t_gold'}
 ];
 const TUT=[
-  {n:['Klicke 15-mal auf den großen Keks.','Click the big cookie 15 times.'],art:'hand',p:()=>[S.clicks,15],r:30,w:['Jeder Klick backt einen Keks. So fängt deine Fabrik an.','Every click bakes a cookie. This is how your factory starts.']},
+  {n:['Klicke 10-mal auf den großen Keks.','Click the big cookie 10 times.'],art:'hand',p:()=>[S.clicks,10],r:30,w:['Jeder Klick backt einen Keks. So fängt deine Fabrik an.','Every click bakes a cookie. This is how your factory starts.']},
   {n:['Kaufe deinen ersten Teigfinger.','Buy your first Dough Finger.'],art:'b0',p:()=>[S.b[0],1],r:20,w:['Gebäude backen von allein, auch wenn du nicht klickst.','Buildings bake on their own, even when you do not click.']},
   {n:['Kaufe 5 Teigfinger.','Buy 5 Dough Fingers.'],art:'b0',p:()=>[S.b[0],5],r:80,w:['Jedes Gebäude kostet etwas mehr als das letzte, backt aber immer weiter.','Each building costs a bit more than the last, but keeps on baking.']},
   {n:['Kaufe eine Oma.','Buy a Granny.'],art:'b1',p:()=>[S.b[1],1],r:150,w:['Neue Gebäude-Arten backen viel mehr als die alten.','New kinds of buildings bake much more than the old ones.']},

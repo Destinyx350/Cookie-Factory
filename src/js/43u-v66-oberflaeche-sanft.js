@@ -139,7 +139,7 @@ function uiCoach(){
   if((de.dataset.quiet||'')!==quiet){if(quiet) de.dataset.quiet=quiet;else delete de.dataset.quiet;}
   if(c==='cookie'){
     if(!uiCoachEl){uiCoachEl=document.createElement('div');uiCoachEl.className='coach';uiCoachEl.setAttribute('aria-hidden','true');const ck=$id('cookie');if(ck&&ck.parentElement) ck.parentElement.appendChild(uiCoachEl);}
-    setTxt(uiCoachEl,'👆 '+tt('Tipp auf den Keks!','Tap the cookie!')+' '+Math.min(15,S.clicks)+'/15');
+    const g=TUT[0].p()[1];setTxt(uiCoachEl,'👆 '+tt('Tipp auf den Keks!','Tap the cookie!')+' '+Math.min(g,S.clicks)+'/'+g);
   }else if(uiCoachEl){uiCoachEl.remove();uiCoachEl=null;}
   /* Fertiger Schritt: der „Abholen"-Knopf pulsiert */
   document.querySelectorAll('#tutBox .coachbtn').forEach(b=>{if(c!=='claim') b.classList.remove('coachbtn');});

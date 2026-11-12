@@ -72,6 +72,7 @@ Run these once each in the **SQL Editor**, in this order, after `leaderboard-v2.
 16. [`boards-v17.sql`](boards-v17.sql): the extra leaderboards (most clicks, golden cookies, ascensions and the fastest billion this week) and the profile look (avatar, color, motto, favourite achievements) with the place in every board.
 17. [`players-v18.sql`](players-v18.sql): one name per player (the leaderboard is for accounts and shows the username; usernames can change every 30 days; spots without an account are removed once), warnings with strikes, the history of every ban and mute, the player card and the To-do list in admin.html.
 18. [`fair-v19.sql`](fair-v19.sql): fair play: the server time for the game's clock check (`kf_now`), new leaderboard spots that can only grow as fast as their age allows (1 billion at the start, about ×31 per hour), scores that are held back instead of refused, and at most 20 clicks a second on the clicks board.
+19. [`funnel-v20.sql`](funnel-v20.sql): the new-player funnel: journey steps remember the game version and where the game runs (website, app or game portal), new steps (game screen reached, first steps, welcome chests), and the **🚪 New players** card in the admin Server tab that compares players before and after version 68.
 
 The admin panel's **Online**, **Moderation** and **Server** tabs manage everything online. They need the server password. Since version 52 the admin panel is only in `admin.html` (https://destinyx350.github.io/Cookie-Factory/admin.html), not in the game players get.
 

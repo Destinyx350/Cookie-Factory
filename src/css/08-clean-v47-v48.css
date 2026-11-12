@@ -454,3 +454,39 @@
 @media (min-height:700px){
   :root[data-device="desktop"] .game>.stage{position:sticky;top:12px;align-self:start}
 }
+
+/* ===== V68: schneller Einstieg ===== */
+/* Pfeil am Gebäude, das man als Erstes kaufen soll */
+.row.coachrow[data-ct]::after{content:attr(data-ct);position:absolute;left:10px;top:-11px;z-index:2;padding:2px 10px;border-radius:999px;background:var(--accent);color:var(--accent-ink,#2a1a04);font:800 12px/1.5 var(--font-body);pointer-events:none;box-shadow:var(--soft);animation:v68Nudge 1.1s ease-in-out infinite}
+@keyframes v68Nudge{50%{transform:translateX(4px)}}
+[data-motion="off"] .row.coachrow[data-ct]::after{animation:none}
+@media (prefers-reduced-motion:reduce){.row.coachrow[data-ct]::after{animation:none}}
+/* „Schon ein Konto? Anmelden“ unter den ersten Schritten */
+.v68in{margin:6px 2px 0;font-size:13px;color:var(--muted)}
+.linkbtn{background:none;border:0;padding:0 2px;color:var(--accent);font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+:root[data-look="light"] .linkbtn{color:#a15800}
+.linkbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+/* Name oben antippen zum Umbenennen */
+.plname[role="button"]{cursor:pointer;border-radius:6px}
+.plname[role="button"]:hover{color:var(--fg)}
+.plname[role="button"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* 🎁 Willkommens-Truhe oben */
+:root[data-look] .retchip{height:40px;padding:0 12px;gap:6px;display:inline-flex;align-items:center;border-radius:999px;background:transparent;border:1px solid var(--edge-2);box-shadow:none;color:var(--fg);font:700 13px/1 var(--font-body);white-space:nowrap}
+:root[data-look] .retchip[hidden]{display:none}
+:root[data-look] .retchip span[aria-hidden]{font-size:18px;line-height:1}
+:root[data-look] .retchip .rt{color:var(--muted);font-variant-numeric:tabular-nums}
+:root[data-look] .retchip.ready{background:var(--accent);border-color:var(--accent);animation:coachG 1.2s ease-in-out infinite}
+:root[data-look] .retchip.ready .rt{color:var(--accent-ink,#2a1a04)}
+[data-motion="off"] .retchip.ready{animation:none!important}
+:root[data-device="phone"] .retchip:not(.ready) .rt{display:none}
+:root[data-device="phone"][data-look] .retchip{padding:0 10px;height:36px}
+/* Admin: Einstieg neuer Spieler */
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ftable{overflow-x:auto}.ftable table{width:100%;border-collapse:collapse;font-size:12px;min-width:420px}
+.ftable th,.ftable td{padding:6px 8px;border-bottom:1px solid var(--edge);text-align:left;vertical-align:middle}
+.ftable thead th{font-weight:700}.ftable thead small{display:block;font-weight:400;color:var(--muted)}
+.ftable tbody th{font-weight:500;width:38%}
+.ftable td b{margin-left:8px;font-variant-numeric:tabular-nums}.ftable td small{margin-left:6px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ftable .fbar{display:inline-block;vertical-align:middle;width:70px;height:8px;border-radius:4px;background:var(--edge);overflow:hidden}
+.ftable .fbar i{display:block;height:100%;background:var(--viz-1);border-radius:4px}
+.ftable .fnone{color:var(--muted)}

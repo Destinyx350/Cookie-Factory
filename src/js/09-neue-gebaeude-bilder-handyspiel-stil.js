@@ -44,8 +44,13 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=67;
+const NEWS_VER=68;
 const NEWS=[
+  {v:68,sum:['Schneller loslegen und Willkommens-Truhen','A quicker start and welcome chests'],items:[
+    ['new','Willkommens-Truhen: An deinen ersten 3 Tagen wartet jeden Tag eine Truhe mit Edelsteinen, Keksen, einem Ei und einem Sternenkrümel. Oben zeigt 🎁, wann die nächste aufgeht.','Welcome chests: on your first 3 days a chest waits every day, with gems, cookies, an egg and a star crumb. 🎁 at the top shows when the next one opens.'],
+    ['change','Neue Spieler legen sofort los: kein Namens-Fenster und beim ersten Mal kein Startbildschirm. Deine Bäckerei bekommt gleich einen Namen – tipp ihn oben an, um ihn zu ändern.','New players start right away: no name window and no start screen the first time. Your bakery gets a name by itself – tap it at the top to change it.'],
+    ['change','Die ersten Schritte holen sich selbst ab, der erste braucht nur noch 10 Klicks, und ein Pfeil zeigt auf das erste Gebäude.','The first steps claim themselves, the first one needs only 10 clicks, and an arrow points at your first building.'],
+    ['change','Schon ein Konto? „Anmelden“ steht jetzt direkt unter den ersten Schritten.','Already have an account? “Sign in” now sits right under the first steps.']]},
   {v:67,sum:['Fair spielen und 6 neue Erfolge','Fair play and 6 new achievements'],items:[
     ['new','6 neue Erfolge: alle ersten Schritte, mit Konto in der Bestenliste, Profil gestalten, Profil teilen, neuer Benutzername und Top 10 in einer Bestenliste.','6 new achievements: all first steps, on the leaderboard with your account, style your profile, share your profile, a new username and top 10 on any leaderboard.'],
     ['new','Am Computer bleibt der große Keks beim Scrollen stehen.','On computers the big cookie stays in view while you scroll.'],
