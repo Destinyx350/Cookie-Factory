@@ -44,8 +44,14 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=65;
+const NEWS_VER=66;
 const NEWS=[
+  {v:66,sum:['Sanfter, ruhiger, heller','Smoother, calmer, lighter'],items:[
+    ['new','Fenster öffnen und schließen sanft, Knöpfe geben beim Tippen nach, Balken füllen sich weich, und Zahlen im Profil zählen hoch.','Windows open and close smoothly, buttons give a little when you tap, bars fill softly and numbers in profiles count up.'],
+    ['new','Meldungen kommen jetzt eine nach der anderen, gleiche werden zusammengezählt (×3). Am Computer erscheinen sie unten links. Tippen schließt sie.','Messages now come one at a time, and the same message is counted (×3). On computers they show bottom left. Tap to dismiss.'],
+    ['new','Die Glocke fasst gleiche Meldungen zusammen, zeigt „Neu“ und „Früher“, hat einen Filter „Wichtig“ und den Knopf „Alle gelesen“.','The bell groups the same messages, shows "New" and "Earlier", has an "Important" filter and a "Mark all read" button.'],
+    ['change','Heller Look überarbeitet: Einstellungen → Anzeige → Design → Hell.','Light look polished: Settings → Display → Theme → Light.'],
+    ['new','Neue Spieler bekommen einen Zeiger auf den Keks, den Abholen-Knopf und das erste Gebäude – und nach den ersten Schritten eine kurze Erklärung, was ein Gratis-Konto bringt.','New players get a pointer on the cookie, the Claim button and the first building – and after the first steps a short card about what a free account gives.']]},
   {v:65,sum:['Besser spielen auf itch.io','Better on itch.io'],items:[
     ['change','Auf itch.io und anderen Spieleseiten lässt sich das Spiel jetzt immer scrollen – auch bis zum letzten Gebäude.','On itch.io and other game sites the game can now always scroll – all the way down to the last building.'],
     ['change','Die Meldung „Update nötig“ blockiert das Spiel auf itch.io nicht mehr.','The "Update needed" message no longer blocks the game on itch.io.']]},

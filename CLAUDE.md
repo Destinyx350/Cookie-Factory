@@ -258,6 +258,15 @@ All player-facing text exists in German and English. Use `tt('Deutsch','English'
 - `maintRender()` never shows the "Update needed" lock when `KF_PORTAL` is set: portal copies can't update by reloading. The admin "Force update" card says so.
 - itch.io is now the biggest source of players (`kf_days.src = 'portal'`). Comments on the itch.io page can be read from a session (`destinyx350.itch.io` and `itch.io` are allowed in the Cookie-Factory environment).
 
+## Smoother UI, calmer messages, bell, light look, first minutes (version 66)
+
+- Player file `43u-v66-oberflaeche-sanft.js` (`v66Ready`). **Closing windows:** every `.overlay` gets its own `hidden` property: setting it to true adds `.ovout` (170 ms fade, `pointer-events:none`) and only then sets the attribute; the getter already returns true while it fades, so code can treat the window as closed at once. With `data-motion="off"` it closes instantly. Tests that check the `hidden` attribute right after closing must wait about 200 ms (`isVisible` sees it during the fade).
+- **Messages:** `toast()` is replaced: one toast at a time from a queue (`uiTQ`, max 5, gold ones kept), the same text merges into `×N`, the shown one gets shorter (2.2 s) while others wait, tap dismisses; on desktop the toast stack sits bottom left. Every message still goes into `NTF` for the bell.
+- **Bell:** `renderNtf()` is replaced: identical texts grouped with `×N`, "New" (newer than `ntfSeen`, `localStorage['keksfabrik-ntfseen']`) and "Earlier", filter All/Important (`[data-nf]`), `#ntfRead` "Mark all read"; closing the dialog marks everything read.
+- **Lively:** `uiCountUp(el)` counts a shown number up (profile tiles, reward dialog). `.cur.bump` when a currency rises. Button press scale, bar width transitions. `uiSwitchIn(el)` replays `.swin` on `#lbBody`/`#clubBody` after a tab click; admin panes and Goals sub-tabs fade in by CSS.
+- **Light look** (`S.opt.look`, Settings → Display → Theme) already existed; V66 CSS fixes the start title and the newer parts (skeletons, player chips, profile colors). Check new UI in both looks.
+- **First minutes:** `uiCoach()` (every 500 ms) sets `data-coach` = `cookie` (step 1, label `.coach` on the cookie), `claim` (pulses the tutorial Claim button `.coachbtn`), `buy` (glows the wanted building row `.coachrow`, `data-i`), only while `S.tut.i < 4` and `S.all < 20000`; `data-quiet="1"` hides `#hints` and `#curBar` during the first two steps. `uiAccHint()` shows `#accHint` once the guest finished 3 steps or has 5,000 cookies: at most 3 times, 3 days apart (`localStorage['keksfabrik-acchint']`), "Create account" opens sign-up (`lbAccGo`).
+
 ## Shipping changes
 
 - The owner asked Claude to **merge its own pull requests into `main`** without waiting for them, once all tests pass (including the GitHub `Tests` check). After merging, check the GitHub Pages deploy finished and that the live site serves the new `NEWS_VER`.

@@ -273,6 +273,53 @@ module.exports = async function browserTests(url) {
   }
   await ectx.close();
 
+  // v66: smoother UI, calmer messages, tidy bell, light mode, better first minutes
+  {
+    const f = await device('Fresh Bakery', '10.0.66.1');
+    await f.addStyleTag({ content: '#rwOv{display:none!important}' });
+    await f.waitForTimeout(800);
+    check(await f.evaluate(() => document.documentElement.dataset.coach === 'cookie' && !!document.querySelector('.coach') && document.documentElement.dataset.quiet === '1'), 'new players get a pointer on the cookie and a quiet start');
+    const ck = await f.locator('#cookie').boundingBox(), tap = async n => { for (let i = 0; i < n; i++) { await f.mouse.click(ck.x + ck.width / 2, ck.y + ck.height / 2); await f.waitForTimeout(60); } };
+    await tap(16); await f.waitForTimeout(700);
+    check(await f.evaluate(() => document.documentElement.dataset.coach === 'claim' && !!document.querySelector('#tutBox .coachbtn')), 'a finished first step makes the Claim button pulse');
+    await f.click('#tutBox [data-tut="claim"]'); await f.waitForTimeout(700);
+    check(await f.evaluate(() => document.documentElement.dataset.coach === 'buy' && !!document.querySelector('#buildList .row.coachrow[data-i="0"]')), 'then the pointer moves to the first building');
+    await f.click('#buildList .row[data-i="0"]'); await f.waitForTimeout(600); await f.click('#tutBox [data-tut="claim"]'); await f.waitForTimeout(400);
+    for (let k = 0; k < 8 && await f.evaluate(() => !document.querySelector('#tutBox [data-tut="claim"]') || document.documentElement.dataset.coach !== 'claim'); k++) {
+      await tap(20); await f.evaluate(() => { const r = document.querySelector('#buildList .row.can[data-i="0"]'); if (r) r.click(); }); await f.waitForTimeout(600);
+    }
+    await f.click('#tutBox [data-tut="claim"]').catch(() => {}); await f.waitForSelector('#accHint:not([hidden])', { timeout: 6000 }).catch(() => {});
+    check(await f.isVisible('#accHint') && /No email needed/.test(await text(f, '#accHint')), 'after the first steps, guests see one card that explains what an account gives');
+    await f.click('#accHint [data-ah="later"]'); await f.waitForTimeout(700);
+    check(!(await f.isVisible('#accHint')), '"Later" hides the account card');
+    // windows fade out when they close, but count as closed right away
+    await settings(f, 'save');
+    for (let i = 0; i < 3; i++) { await f.click('#saveBtn'); await f.waitForTimeout(50); }
+    await f.click('#setClose');
+    const cl = await f.evaluate(() => { const o = document.getElementById('setOv'); return [o.classList.contains('ovout'), o.hidden, o.hasAttribute('hidden')]; });
+    await f.waitForTimeout(300);
+    check(cl[0] && cl[1] && !cl[2] && await f.evaluate(() => document.getElementById('setOv').hasAttribute('hidden')), 'windows fade out when they close', cl);
+    // messages: one at a time, the same message counted
+    let most = 0, merged = false;
+    for (let k = 0; k < 40; k++) { const r = await f.evaluate(() => [document.querySelectorAll('#toasts .toast').length, document.querySelector('#toasts .toast .tn') ? document.querySelector('#toasts .toast').textContent : '']); most = Math.max(most, r[0]); if (/×3/.test(r[1])) merged = true; await f.waitForTimeout(200); }
+    check(most === 1 && merged, 'messages show one at a time and the same message is counted (×3)', { most, merged });
+    await f.click('#ntfBtn'); await f.waitForTimeout(300);
+    check(/×3/.test(await text(f, '#ntfBody')) && await f.locator('#ntfBody .nitem.new').count() > 0, 'the bell groups the same messages and marks new ones');
+    await f.click('#ntfRead'); await f.waitForTimeout(200);
+    check(await f.locator('#ntfBody .nitem.new').count() === 0 && await f.isVisible('#ntfBody [data-nf="imp"]'), '"Mark all read" clears the new marks, and there is an Important filter');
+    await f.click('#ntfClose');
+    // light mode
+    await settings(f, 'disp'); await f.click('#lookSeg [data-look="light"]'); await f.click('#setClose');
+    const lt = await f.evaluate(() => [document.documentElement.dataset.look, getComputedStyle(document.getElementById('stTitle')).color]);
+    check(lt[0] === 'light' && lt[1] !== 'rgb(255, 255, 255)', 'light mode works and the start title stays readable', lt);
+    await f.context().close();
+    // leaderboard categories fade in when switching
+    await goals(a); await a.click('#lbBar'); await a.waitForSelector('#lbBody [data-lbc="gold"]', { timeout: 8000 }).catch(() => {});
+    await a.click('#lbBody [data-lbc="gold"]'); await a.waitForTimeout(150);
+    check(await a.evaluate(() => document.getElementById('lbBody').classList.contains('swin')), 'switching leaderboard categories fades the list in');
+    await a.click('#lbBody [data-lbc="ck"]'); await a.click('#lbClose');
+  }
+
   // 5d. Push setting (v49)
   await settings(a, 'disp');
   check(await a.isVisible('#pushBtn') && /Push/.test(await text(a, '#pushT')), 'push notification switch shows in Settings → Display');

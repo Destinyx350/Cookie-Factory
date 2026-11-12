@@ -75,6 +75,7 @@ src/js/43q-v62-bestenliste-automatisch.js
 src/js/43r-v64-ein-name.js
 admin src/js/43s-admin-spieler.js
 src/js/43t-v65-itch-fixes.js
+src/js/43u-v66-oberflaeche-sanft.js
 admin src/js/44-v40-admin-bestenliste-verwalten.js
 src/js/45-v40-shop-navigation-welt-uebergaenge.js
 src/js/46-v39-geraet-layout.js
