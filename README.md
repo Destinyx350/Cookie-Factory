@@ -39,7 +39,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🤖 **Automation** | *Best buy* picks the smartest purchase, and you choose how much of your cookies automation may spend. |
 | 🧑‍🍳 **Helpers** | Helpers buy buildings, harvest, fight or trade, and level up with experience. |
 | 🌍 **World** | Adventure, stores, a lucky wheel, titles, a pass and a collection to complete. |
-| 🏆 **192 achievements** | Plus guided *First Steps* goals, detailed statistics and charts of your cookies and production over time. |
+| 🏆 **192 achievements** | Plus guided *First Steps* goals with a pointer for new players, detailed statistics and charts of your cookies and production over time. |
 | 📅 **Daily rewards** | A 7-day login streak and three daily tasks with a bonus chest. Coming back shows what happened while you were away, with one **Collect all** button, and after 3+ days a welcome-back gift. |
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
 | 🎵 **Soundtrack and 3D** | 7 music tracks with real instruments that adapt to what you do, and a real 3D cookie with lighting that tilts toward your finger. Golden cookies and icons have a 3D look too. |
@@ -48,7 +48,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🎁 **Secret codes** | Type a code under **Settings → Game** to get cookies, gems or a boost. Each code works once per save. |
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
-| 📐 **Fits every device** | A clean, modern design with separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. Reorder or hide tabs, and phones vibrate softly on taps and achievements. Options for high contrast, less motion and bigger text. |
+| 📐 **Fits every device** | A clean, modern design with a dark and a light look, smooth windows and calm one-at-a-time messages (all in the notification bell), with separate layouts for phones (upright and sideways), tablets and computers, picked automatically or in **Settings → Display**. Reorder or hide tabs, and phones vibrate softly on taps and achievements. Options for high contrast, less motion and bigger text. |
 | 👤 **Accounts** | Create an account with a username and password (no email needed). Your username is your name everywhere (leaderboard, chat, clubs, gifts) and can be changed every 30 days. Your bakery is saved to it automatically, so you can keep playing on any device. A one-time recovery code resets a forgotten password, and you can see and sign out each signed-in device. |
 | 👥 **Bakery clubs** | Start or join a club of up to 30 bakers, chat live with your club (with reactions, a 👋 button and a pinned message), and bake together for weekly prizes for the top 3 clubs. Clubs level up to level 10, and every level gives all members more production and bigger prizes. |
 | 🎁 **Gifts** | Send gems or star crumbs to friends with an account (daily limits keep it fair). |
@@ -84,7 +84,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🤖 **Automatik**: *Bester Kauf* und ein einstellbares Ausgabelimit
 - 🧑‍🍳 **Helfer**, die kaufen, ernten, kämpfen oder handeln und dabei aufsteigen
 - 🌍 **Welt** mit Abenteuer, Läden, Glücksrad, Titeln, Pass und Sammlung
-- 🏆 **192 Erfolge**, Ziele, Statistiken und Verlaufs-Diagramme deiner Kekse und Produktion
+- 🏆 **192 Erfolge**, Ziele mit Zeiger für neue Spieler, Statistiken und Verlaufs-Diagramme deiner Kekse und Produktion
 - 📅 **Tägliche Belohnungen**: 7-Tage-Serie, drei Tagesaufgaben, eine Zusammenfassung mit „Alles einsammeln“ nach jeder Pause und ein Willkommensgeschenk nach 3+ Tagen
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
 - 🎵 **Soundtrack und 3D**: 7 Musikstücke mit echten Instrumenten, die sich anpassen, und ein echter 3D-Keks mit Licht, der sich zum Finger neigt
@@ -92,7 +92,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🎁 **Geheime Codes** unter **Einstellungen → Spiel**: Kekse, Edelsteine oder ein Schub, einmal pro Spielstand
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
-- 📐 **Passt auf jedes Gerät**: klares, modernes Design mit eigenen Layouts für Handy (hochkant und quer), Tablet und Computer; eigene Tab-Reihenfolge, sanfte Vibration auf Handys, dazu hoher Kontrast, weniger Bewegung und größere Schrift
+- 📐 **Passt auf jedes Gerät**: klares, modernes Design mit dunklem und hellem Look, sanften Fenstern und ruhigen Meldungen (alle in der Glocke), mit eigenen Layouts für Handy (hochkant und quer), Tablet und Computer; eigene Tab-Reihenfolge, sanfte Vibration auf Handys, dazu hoher Kontrast, weniger Bewegung und größere Schrift
 - 👤 **Konten**: Benutzername und Passwort (ohne E-Mail), deine Bäckerei auf jedem Gerät, Wiederherstellungs-Code bei vergessenem Passwort und eine Liste aller angemeldeten Geräte
 - 👥 **Bäckerei-Clubs** mit bis zu 30 Mitgliedern, Live-Club-Chat mit Reaktionen und angehefteter Nachricht, Wochenpreisen für die Top 3 und Club-Stufen bis 10 mit Bonus für alle Mitglieder
 - 💬 **Feedback senden** unter Einstellungen → Spiel und eine [Datenschutz-Info](https://destinyx350.github.io/Cookie-Factory/privacy.html)
@@ -115,17 +115,25 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 65
-- **Better on itch.io:** the game now always scrolls inside the itch.io frame (also when the page doesn't allow scrolling), so every building is reachable, and the "Update needed" message no longer blocks copies on itch.io.
+### Version 66
+- **Smoother:** windows open and close smoothly, buttons give a little when you tap, bars fill softly, numbers in profiles count up, and leaderboard and club tabs fade in.
+- **Calmer messages:** one message at a time, the same message counted (×3), bottom left on computers, tap to dismiss.
+- **Tidy notification bell:** the same messages grouped, "New" and "Earlier", an "Important" filter and **Mark all read**.
+- **Light look polished:** **Settings → Display → Theme → Light**.
+- **Better first minutes:** new players get a pointer on the cookie, the Claim button and the first building, and after the first steps a short card about what a free account gives.
 
-Also new since version 64: one name for everything (your username), the leaderboard for accounts, username changes every 30 days, fair warnings, and a new To-do and Players tab for the admin.
+Also new since version 65: the game always scrolls on itch.io, and "Update needed" no longer blocks the itch.io copy.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Besser auf itch.io:** das Spiel lässt sich im itch.io-Rahmen jetzt immer scrollen (auch wenn die Seite selbst kein Scrollen erlaubt), so ist jedes Gebäude erreichbar, und die Meldung „Update nötig“ blockiert Kopien auf itch.io nicht mehr.
+- **Sanfter:** Fenster öffnen und schließen sanft, Knöpfe geben beim Tippen nach, Balken füllen sich weich, Zahlen im Profil zählen hoch, und die Tabs der Bestenliste und der Clubs blenden ein.
+- **Ruhigere Meldungen:** eine Meldung nach der anderen, gleiche werden gezählt (×3), am Computer unten links, Tippen schließt sie.
+- **Aufgeräumte Glocke:** gleiche Meldungen zusammengefasst, „Neu“ und „Früher“, ein Filter „Wichtig“ und **Alle gelesen**.
+- **Heller Look überarbeitet:** **Einstellungen → Anzeige → Design → Hell**.
+- **Bessere erste Minuten:** neue Spieler bekommen einen Zeiger auf den Keks, den Abholen-Knopf und das erste Gebäude, und nach den ersten Schritten eine kurze Karte, was ein Gratis-Konto bringt.
 
-Außerdem neu seit Version 64: ein Name für alles (dein Benutzername), die Bestenliste für Konten, Namensänderung alle 30 Tage, faire Verwarnungen und neue Tabs „Zu erledigen“ und „Spieler“ für den Admin.
+Außerdem neu seit Version 65: das Spiel scrollt auf itch.io immer, und „Update nötig“ blockiert die itch.io-Kopie nicht mehr.
 
 </details>
 

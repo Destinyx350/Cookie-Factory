@@ -392,3 +392,60 @@
 /* ===== V65: im Rahmen (itch.io) scrollt der Spielbereich statt der Seite ===== */
 :root[data-embed="1"],:root[data-embed="1"] body{height:100%;overflow:hidden}
 :root[data-embed="1"] .wrap{height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+
+/* ===== V66: sanfte Fenster, lebendige Zahlen und Knöpfe, sanftes Umschalten, ruhige Meldungen, Glocke, heller Look, erste Minuten ===== */
+/* 1. Fenster: Hintergrund blendet ein, beim Schließen blenden Hintergrund und Fenster aus */
+.overlay:not([hidden]):not(.ovout){animation:ovIn .18s ease backwards}
+.overlay.ovout{animation:ovOut .17s ease forwards;pointer-events:none}
+.overlay.ovout>.dlg{animation:dlgOut .17s ease forwards}
+@keyframes ovIn{from{opacity:0}to{opacity:1}}
+@keyframes ovOut{to{opacity:0}}
+@keyframes dlgOut{to{opacity:0;transform:translateY(10px) scale(.97)}}
+/* 3. Knöpfe geben beim Drücken nach, Balken füllen sich weich */
+.btn,.seg button,.tab,.cur,.row{transition:transform .09s ease,background-color .15s,border-color .15s,box-shadow .15s}
+.btn:active:not(:disabled),.seg button:active,.cur:active{transform:scale(.95)}
+.tab:active{transform:scale(.92)}
+.row:active:not(.dis){transform:scale(.985)}
+.obar i,.cbar i,.lvbar i{transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.cur.bump{animation:curBump .38s ease}
+@keyframes curBump{40%{transform:scale(1.14)}}
+/* 4. Listen blenden beim Umschalten ein, Zeilen rutschen nach */
+.swin{animation:swIn .2s ease backwards}
+.swin .lbrow{animation:rowSl .28s ease backwards;animation-delay:calc(var(--i,0) * 22ms)}
+@keyframes swIn{from{opacity:0}to{opacity:1}}
+@keyframes rowSl{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.admpane:not([hidden]),.gsub:not([hidden]){animation:swIn .18s ease backwards}
+/* 7. Meldungen: eine nach der anderen; am Computer unten links (über der Keks-Spalte, nicht über der Gebäudeliste) */
+:root[data-device="desktop"] .toasts{align-items:flex-start;right:auto;max-width:440px}
+.toast{cursor:pointer;pointer-events:auto}
+.toast .tn{display:inline-block;margin-left:8px;padding:0 7px;border-radius:999px;background:var(--accent);color:var(--accent-ink,#2a1a04);font-size:12px;font-weight:800}
+.toast.tout{animation:toastOut .2s ease forwards}
+@keyframes toastOut{to{opacity:0;transform:translateY(8px)}}
+/* 8. Glocke */
+.ntfseg{display:flex;margin:0 0 10px}.ntfseg button{flex:1 1 0}
+.nhead{margin:12px 0 6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.nitem.new{border-color:var(--accent)!important;box-shadow:inset 3px 0 0 var(--accent)}
+.nitem .nn{font-style:normal;font-weight:800;color:var(--accent);margin-left:4px}
+/* 9. Heller Look: neuere Teile passend machen */
+:root[data-look="light"] .sttitle{color:#3a2208}
+:root[data-look="light"] .skrow i,:root[data-look="light"] .skrow b{background:linear-gradient(90deg,rgba(70,35,0,.06),rgba(70,35,0,.14),rgba(70,35,0,.06));background-size:200% 100%}
+:root[data-look="light"] .plchip.bad{color:#b3263a;border-color:#e0566a}
+:root[data-look="light"] .plchip.warn{border-color:#c98a1a}
+:root[data-look="light"] .pav.pc-orange{background:#ffd8b0}:root[data-look="light"] .pav.pc-gold{background:#ffe9a8}:root[data-look="light"] .pav.pc-red{background:#ffc9c9}:root[data-look="light"] .pav.pc-pink{background:#ffd0e8}
+:root[data-look="light"] .pav.pc-purple{background:#e3d4ff}:root[data-look="light"] .pav.pc-blue{background:#cfe2ff}:root[data-look="light"] .pav.pc-teal{background:#c4f0ea}:root[data-look="light"] .pav.pc-green{background:#cdeccf}
+:root[data-look="light"] .toast .tn{color:#2a1a04}
+/* 10. Erste Minuten: Zeiger auf den Keks und das erste Gebäude, ruhiger Start, Konto-Karte */
+.coach{position:absolute;left:50%;bottom:12%;transform:translateX(-50%);z-index:5;padding:8px 14px;border-radius:999px;background:var(--accent);color:var(--accent-ink,#2a1a04);font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;box-shadow:var(--soft);animation:coachB 1.1s ease-in-out infinite}
+@keyframes coachB{50%{transform:translateX(-50%) translateY(-6px)}}
+.row.coachrow{animation:coachG 1.4s ease-in-out infinite;border-color:var(--accent)!important}
+@keyframes coachG{0%,100%{box-shadow:0 0 0 0 rgba(255,170,40,0)}50%{box-shadow:0 0 0 4px rgba(255,170,40,.45)}}
+:root[data-quiet="1"] #hints,:root[data-quiet="1"] #curBar{display:none!important}
+.acchint{position:fixed;right:16px;bottom:16px;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:var(--r-lg,18px);background:var(--panel);border:1px solid var(--edge-2);box-shadow:var(--soft);animation:swIn .25s ease backwards}
+.acchint b{display:block;margin-bottom:6px}
+.acchint ul{margin:0 0 10px;padding-left:18px;color:var(--muted);font-size:13px;line-height:1.5}
+.acchint[hidden]{display:none}
+:root[data-device="phone"] .acchint{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+[data-motion="off"] .coach,[data-motion="off"] .row.coachrow,[data-motion="off"] .cur.bump{animation:none}
+@media (prefers-reduced-motion:reduce){.coach,.row.coachrow{animation:none}}
+.coachbtn{animation:coachG 1.2s ease-in-out infinite}
+[data-motion="off"] .coachbtn{animation:none}

@@ -1851,6 +1851,63 @@ html{-webkit-tap-highlight-color:transparent}
 :root[data-embed="1"],:root[data-embed="1"] body{height:100%;overflow:hidden}
 :root[data-embed="1"] .wrap{height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 
+/* ===== V66: sanfte Fenster, lebendige Zahlen und Knöpfe, sanftes Umschalten, ruhige Meldungen, Glocke, heller Look, erste Minuten ===== */
+/* 1. Fenster: Hintergrund blendet ein, beim Schließen blenden Hintergrund und Fenster aus */
+.overlay:not([hidden]):not(.ovout){animation:ovIn .18s ease backwards}
+.overlay.ovout{animation:ovOut .17s ease forwards;pointer-events:none}
+.overlay.ovout>.dlg{animation:dlgOut .17s ease forwards}
+@keyframes ovIn{from{opacity:0}to{opacity:1}}
+@keyframes ovOut{to{opacity:0}}
+@keyframes dlgOut{to{opacity:0;transform:translateY(10px) scale(.97)}}
+/* 3. Knöpfe geben beim Drücken nach, Balken füllen sich weich */
+.btn,.seg button,.tab,.cur,.row{transition:transform .09s ease,background-color .15s,border-color .15s,box-shadow .15s}
+.btn:active:not(:disabled),.seg button:active,.cur:active{transform:scale(.95)}
+.tab:active{transform:scale(.92)}
+.row:active:not(.dis){transform:scale(.985)}
+.obar i,.cbar i,.lvbar i{transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.cur.bump{animation:curBump .38s ease}
+@keyframes curBump{40%{transform:scale(1.14)}}
+/* 4. Listen blenden beim Umschalten ein, Zeilen rutschen nach */
+.swin{animation:swIn .2s ease backwards}
+.swin .lbrow{animation:rowSl .28s ease backwards;animation-delay:calc(var(--i,0) * 22ms)}
+@keyframes swIn{from{opacity:0}to{opacity:1}}
+@keyframes rowSl{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.admpane:not([hidden]),.gsub:not([hidden]){animation:swIn .18s ease backwards}
+/* 7. Meldungen: eine nach der anderen; am Computer unten links (über der Keks-Spalte, nicht über der Gebäudeliste) */
+:root[data-device="desktop"] .toasts{align-items:flex-start;right:auto;max-width:440px}
+.toast{cursor:pointer;pointer-events:auto}
+.toast .tn{display:inline-block;margin-left:8px;padding:0 7px;border-radius:999px;background:var(--accent);color:var(--accent-ink,#2a1a04);font-size:12px;font-weight:800}
+.toast.tout{animation:toastOut .2s ease forwards}
+@keyframes toastOut{to{opacity:0;transform:translateY(8px)}}
+/* 8. Glocke */
+.ntfseg{display:flex;margin:0 0 10px}.ntfseg button{flex:1 1 0}
+.nhead{margin:12px 0 6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.nitem.new{border-color:var(--accent)!important;box-shadow:inset 3px 0 0 var(--accent)}
+.nitem .nn{font-style:normal;font-weight:800;color:var(--accent);margin-left:4px}
+/* 9. Heller Look: neuere Teile passend machen */
+:root[data-look="light"] .sttitle{color:#3a2208}
+:root[data-look="light"] .skrow i,:root[data-look="light"] .skrow b{background:linear-gradient(90deg,rgba(70,35,0,.06),rgba(70,35,0,.14),rgba(70,35,0,.06));background-size:200% 100%}
+:root[data-look="light"] .plchip.bad{color:#b3263a;border-color:#e0566a}
+:root[data-look="light"] .plchip.warn{border-color:#c98a1a}
+:root[data-look="light"] .pav.pc-orange{background:#ffd8b0}:root[data-look="light"] .pav.pc-gold{background:#ffe9a8}:root[data-look="light"] .pav.pc-red{background:#ffc9c9}:root[data-look="light"] .pav.pc-pink{background:#ffd0e8}
+:root[data-look="light"] .pav.pc-purple{background:#e3d4ff}:root[data-look="light"] .pav.pc-blue{background:#cfe2ff}:root[data-look="light"] .pav.pc-teal{background:#c4f0ea}:root[data-look="light"] .pav.pc-green{background:#cdeccf}
+:root[data-look="light"] .toast .tn{color:#2a1a04}
+/* 10. Erste Minuten: Zeiger auf den Keks und das erste Gebäude, ruhiger Start, Konto-Karte */
+.coach{position:absolute;left:50%;bottom:12%;transform:translateX(-50%);z-index:5;padding:8px 14px;border-radius:999px;background:var(--accent);color:var(--accent-ink,#2a1a04);font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;box-shadow:var(--soft);animation:coachB 1.1s ease-in-out infinite}
+@keyframes coachB{50%{transform:translateX(-50%) translateY(-6px)}}
+.row.coachrow{animation:coachG 1.4s ease-in-out infinite;border-color:var(--accent)!important}
+@keyframes coachG{0%,100%{box-shadow:0 0 0 0 rgba(255,170,40,0)}50%{box-shadow:0 0 0 4px rgba(255,170,40,.45)}}
+:root[data-quiet="1"] #hints,:root[data-quiet="1"] #curBar{display:none!important}
+.acchint{position:fixed;right:16px;bottom:16px;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:var(--r-lg,18px);background:var(--panel);border:1px solid var(--edge-2);box-shadow:var(--soft);animation:swIn .25s ease backwards}
+.acchint b{display:block;margin-bottom:6px}
+.acchint ul{margin:0 0 10px;padding-left:18px;color:var(--muted);font-size:13px;line-height:1.5}
+.acchint[hidden]{display:none}
+:root[data-device="phone"] .acchint{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+[data-motion="off"] .coach,[data-motion="off"] .row.coachrow,[data-motion="off"] .cur.bump{animation:none}
+@media (prefers-reduced-motion:reduce){.coach,.row.coachrow{animation:none}}
+.coachbtn{animation:coachG 1.2s ease-in-out infinite}
+[data-motion="off"] .coachbtn{animation:none}
+
 </style>
 
 <div class="wrap">
@@ -3079,8 +3136,14 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=65;
+const NEWS_VER=66;
 const NEWS=[
+  {v:66,sum:['Sanfter, ruhiger, heller','Smoother, calmer, lighter'],items:[
+    ['new','Fenster öffnen und schließen sanft, Knöpfe geben beim Tippen nach, Balken füllen sich weich, und Zahlen im Profil zählen hoch.','Windows open and close smoothly, buttons give a little when you tap, bars fill softly and numbers in profiles count up.'],
+    ['new','Meldungen kommen jetzt eine nach der anderen, gleiche werden zusammengezählt (×3). Am Computer erscheinen sie unten links. Tippen schließt sie.','Messages now come one at a time, and the same message is counted (×3). On computers they show bottom left. Tap to dismiss.'],
+    ['new','Die Glocke fasst gleiche Meldungen zusammen, zeigt „Neu“ und „Früher“, hat einen Filter „Wichtig“ und den Knopf „Alle gelesen“.','The bell groups the same messages, shows "New" and "Earlier", has an "Important" filter and a "Mark all read" button.'],
+    ['change','Heller Look überarbeitet: Einstellungen → Anzeige → Design → Hell.','Light look polished: Settings → Display → Theme → Light.'],
+    ['new','Neue Spieler bekommen einen Zeiger auf den Keks, den Abholen-Knopf und das erste Gebäude – und nach den ersten Schritten eine kurze Erklärung, was ein Gratis-Konto bringt.','New players get a pointer on the cookie, the Claim button and the first building – and after the first steps a short card about what a free account gives.']]},
   {v:65,sum:['Besser spielen auf itch.io','Better on itch.io'],items:[
     ['change','Auf itch.io und anderen Spieleseiten lässt sich das Spiel jetzt immer scrollen – auch bis zum letzten Gebäude.','On itch.io and other game sites the game can now always scroll – all the way down to the last building.'],
     ['change','Die Meldung „Update nötig“ blockiert das Spiel auf itch.io nicht mehr.','The "Update needed" message no longer blocks the game on itch.io.']]},
@@ -11942,6 +12005,182 @@ v64aReady=true;
   try{framed=window.self!==window.top;}catch(e){framed=true;}
   if(framed) document.documentElement.dataset.embed='1';
 })();
+
+/* ======================= V66: Sanfte Fenster, lebendige Zahlen, ruhige Meldungen, Glocke, heller Look, bessere erste Minuten ======================= */
+var v66Ready=false;
+const uiMotion=()=>document.documentElement.dataset.motion!=='off';
+
+/* ---------- 1. Fenster schließen sanft ----------
+   Jedes .overlay bekommt eine eigene hidden-Eigenschaft: Schließen spielt erst kurz eine Ausblende-Animation ab.
+   Für den Rest des Spiels gilt das Fenster sofort als geschlossen (hidden liefert true). */
+(function(){
+  const D=Object.getOwnPropertyDescriptor(HTMLElement.prototype,'hidden');if(!D||!D.set) return;
+  document.querySelectorAll('.overlay').forEach(ov=>{
+    let tm=0;
+    Object.defineProperty(ov,'hidden',{configurable:true,
+      get(){return D.get.call(this)||this.classList.contains('ovout');},
+      set(v){
+        v=!!v;
+        if(!v){if(tm){clearTimeout(tm);tm=0;}this.classList.remove('ovout');D.set.call(this,false);return;}
+        if(D.get.call(this)||this.classList.contains('ovout')) return;
+        if(!uiMotion()){D.set.call(this,true);return;}
+        this.classList.add('ovout');
+        tm=setTimeout(()=>{tm=0;this.classList.remove('ovout');D.set.call(this,true);},170);
+      }});
+  });
+})();
+
+/* ---------- 3. Lebendige Zahlen ---------- */
+/* Zählt eine angezeigte Zahl (z. B. „5 billion", „1.234", „#2") von 0 hoch; Text davor und danach bleibt. */
+function uiCountUp(el,ms){
+  if(!el||!uiMotion()||el._cu) return;
+  const t=el.textContent,m=t.match(/^([^\d]*)(\d[\d.,  ]*)(.*)$/);if(!m) return;
+  const de=LANG==='de',raw=m[2].replace(/[  ]/g,''),
+    num=parseFloat(de?raw.replace(/\./g,'').replace(',','.'):raw.replace(/,/g,'')),dec=(raw.split(de?',':'.')[1]||'').length;
+  if(!isFinite(num)||num===0) return;
+  const f=v=>v.toLocaleString(LOC[LANG],{minimumFractionDigits:dec,maximumFractionDigits:dec});
+  const t0=performance.now(),dur=ms||650;el._cu=1;
+  const step=n=>{const k=Math.min(1,(n-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=m[1]+f(num*e)+m[3];if(k<1&&el.isConnected) requestAnimationFrame(step);else{el.textContent=t;el._cu=0;}};
+  requestAnimationFrame(step);
+}
+/* Profil-Kacheln und Belohnungs-Fenster zählen beim Öffnen hoch */
+new MutationObserver(()=>{$id('profBody').querySelectorAll('.ptile b').forEach(b=>uiCountUp(b));}).observe($id('profBody'),{childList:true});
+new MutationObserver(()=>{$id('rwBody').querySelectorAll('b').forEach(b=>{if(/^\+?\d/.test(b.textContent.trim())) uiCountUp(b);});}).observe($id('rwBody'),{childList:true});
+/* Edelsteine & Co. oben: kurzer Hüpfer, wenn der Wert steigt */
+{
+  const cb=$id('curBar'),last={};
+  if(cb) new MutationObserver(()=>{
+    cb.querySelectorAll('[data-cur]').forEach(b=>{
+      const v=parseFloat(String(b.lastChild&&b.lastChild.textContent||'').replace(/[^\d.,]/g,'').replace(/[.,](?=\d{3}\b)/g,'').replace(',','.'))||0,k=b.dataset.cur;
+      if(last[k]!==undefined&&v>last[k]&&uiMotion()){b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump');}
+      last[k]=v;
+    });
+  }).observe(cb,{childList:true,subtree:true,characterData:true});
+}
+
+/* ---------- 4. Sanftes Umschalten von Listen ---------- */
+function uiSwitchIn(el){if(!el||!uiMotion()) return;el.classList.remove('swin');void el.offsetWidth;el.classList.add('swin');}
+{
+  const watch=(box,sel)=>{
+    const el=$id(box);if(!el) return;let pend=false;
+    el.closest('.overlay').addEventListener('click',e=>{if(e.target.closest(sel)) pend=true;},true);
+    new MutationObserver(()=>{if(pend){pend=false;uiSwitchIn(el);}}).observe(el,{childList:true});
+  };
+  watch('lbBody','[data-lbc],[data-lbk],[data-lbp],.seg button');
+  watch('clubBody','[data-clt]');
+}
+
+/* ---------- 7. Ruhige Meldungen: eine nach der anderen, gleiche zusammengefasst ---------- */
+let uiTQ=[],uiTCur=null,uiTTm=0;
+toast=function(text,gold,force){
+  NTF.push({t:Date.now(),text,gold:!!gold});if(NTF.length>60) NTF.shift();if(document.getElementById('ntfOv').hidden) ntfUnread++;
+  const O=(typeof S!=='undefined'&&S&&S.opt)||{},mode=O.ntf||'all';
+  if(!force&&(mode==='off'||(mode==='imp'&&!gold))) return;
+  if(uiTCur&&uiTCur.text===text){uiTCur.n++;uiTShowN(uiTCur);uiTPlan(uiTCur,true);return;}
+  const q=uiTQ.find(x=>x.text===text);if(q){q.n++;return;}
+  uiTQ.push({text,gold:!!gold,n:1});
+  if(uiTQ.length>5){const i=uiTQ.findIndex(x=>!x.gold);uiTQ.splice(i<0?0:i,1);}
+  if(uiTCur) uiTPlan(uiTCur,false);else uiTNext();
+};
+function uiTShowN(it){let s=it.el.querySelector('.tn');if(it.n>1){if(!s){s=document.createElement('span');s.className='tn';it.el.appendChild(s);}s.textContent='×'+it.n;}}
+/* Wie lange die aktuelle Meldung bleibt: kürzer, wenn weitere warten */
+function uiTPlan(it,reset){
+  const O=(S&&S.opt)||{},full=Math.max(1500,(O.ntfT||5)*1000-400),want=uiTQ.length?Math.min(full,2200):full;
+  const left=reset?want:Math.min(want,Math.max(0,it.end-Date.now()));
+  clearTimeout(uiTTm);it.end=Date.now()+left;uiTTm=setTimeout(uiTOut,left);
+}
+function uiTOut(){
+  const it=uiTCur;if(!it){uiTNext();return;}
+  if(uiMotion()){it.el.classList.add('tout');setTimeout(()=>{it.el.remove();uiTCur=null;uiTNext();},200);}
+  else{it.el.remove();uiTCur=null;uiTNext();}
+}
+function uiTNext(){
+  const it=uiTQ.shift();if(!it){uiTCur=null;return;}
+  const el=document.createElement('div');el.className='toast'+(it.gold?' gold':'');el.textContent=it.text;it.el=el;
+  els.toasts.querySelectorAll('.toast').forEach(x=>x.remove());
+  els.toasts.appendChild(el);uiTShowN(it);uiTCur=it;uiTPlan(it,true);
+}
+els.toasts.addEventListener('click',e=>{if(e.target.closest('.toast')){clearTimeout(uiTTm);uiTOut();}});
+
+/* ---------- 8. Aufgeräumte Glocke: gleiche Meldungen zusammen, Neu/Früher, Filter, „Alle gelesen" ---------- */
+let ntfSeen=+(lsGet('keksfabrik-ntfseen')||0),ntfSeenOpen=0,ntfFilt='all';
+document.getElementById('ntfBtn').addEventListener('click',()=>{ntfSeenOpen=ntfSeen;ntfSig='';updNtf();},true);
+function ntfMarkRead(){ntfSeen=Date.now();lsSet('keksfabrik-ntfseen',String(ntfSeen));}
+renderNtf=function(){
+  setTxt(document.getElementById('ntfT'),tt('Meldungen','Notifications'));
+  setTxt(document.getElementById('ntfClear'),tt('Leeren','Clear'));
+  setTxt(document.getElementById('ntfClose'),tt('Schließen','Close'));
+  let rd=$id('ntfRead');
+  if(!rd){rd=document.createElement('button');rd.type='button';rd.className='btn sm';rd.id='ntfRead';$id('ntfClear').before(rd);}
+  setTxt(rd,tt('Alle gelesen','Mark all read'));
+  const G=[],by={};
+  NTF.slice().reverse().forEach(n=>{if(ntfFilt==='imp'&&!n.gold) return;const g=by[n.text];if(g){g.n++;return;}const x={text:n.text,gold:n.gold,t:n.t,n:1};by[n.text]=x;G.push(x);});
+  const row=x=>'<div class="nitem'+(x.gold?' gold':'')+(x.t>ntfSeenOpen?' new':'')+'"><span>'+x.text.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[c])+(x.n>1?' <em class="nn">×'+x.n+'</em>':'')+'</span><time>'+agoTxt(x.t)+'</time></div>';
+  const nw=G.filter(x=>x.t>ntfSeenOpen),old=G.filter(x=>x.t<=ntfSeenOpen);
+  let h='<div class="seg ntfseg" role="group"><button type="button" data-nf="all" aria-pressed="'+(ntfFilt==='all')+'">'+tt('Alle','All')+'</button><button type="button" data-nf="imp" aria-pressed="'+(ntfFilt==='imp')+'">'+tt('Wichtig','Important')+'</button></div>';
+  if(!G.length) h+='<p class="small">'+(ntfFilt==='imp'?tt('Keine wichtigen Meldungen.','No important notifications.'):tt('Noch keine Meldungen.','No notifications yet.'))+'</p>';
+  else{
+    if(nw.length) h+='<h3 class="nhead">'+tt('Neu','New')+' <span class="todon">'+nw.length+'</span></h3><div class="nlist">'+nw.map(row).join('')+'</div>';
+    if(old.length) h+='<h3 class="nhead">'+tt('Früher','Earlier')+'</h3><div class="nlist">'+old.map(row).join('')+'</div>';
+  }
+  document.getElementById('ntfBody').innerHTML=h;
+};
+$id('ntfOv').addEventListener('click',e=>{
+  const f=e.target.closest('[data-nf]');if(f){ntfFilt=f.dataset.nf;ntfSig='';renderNtf();return;}
+  if(e.target.closest('#ntfRead')){ntfMarkRead();ntfSeenOpen=ntfSeen;ntfUnread=0;ntfSig='';updNtf();renderNtf();}
+});
+/* Schließen zählt als gelesen */
+new MutationObserver(()=>{if(ntfOv.hasAttribute('hidden')) ntfMarkRead();}).observe(ntfOv,{attributes:true,attributeFilter:['hidden']});
+
+/* ---------- 10. Bessere erste Minuten ---------- */
+/* Zeiger auf den Keks, dann auf das erste Gebäude; in den ersten Schritten keine zusätzlichen Hinweis-Knöpfe */
+let uiCoachEl=null;
+function uiCoach(){
+  const de=document.documentElement,st=typeof tutStep==='function'?tutStep():null,fresh=st&&S.tut.i<4&&S.all<20000;
+  let c='',done=false;
+  if(st){try{const [x,y]=st.p();done=x>=y;}catch(e){}}
+  if(fresh&&done) c='claim';
+  else if(fresh&&S.tut.i===0) c='cookie';
+  else if(fresh&&(S.tut.i===1||S.tut.i===2||S.tut.i===3)) c='buy';
+  const quiet=fresh&&S.tut.i<2?'1':'';
+  if((de.dataset.coach||'')!==c){if(c) de.dataset.coach=c;else delete de.dataset.coach;}
+  if((de.dataset.quiet||'')!==quiet){if(quiet) de.dataset.quiet=quiet;else delete de.dataset.quiet;}
+  if(c==='cookie'){
+    if(!uiCoachEl){uiCoachEl=document.createElement('div');uiCoachEl.className='coach';uiCoachEl.setAttribute('aria-hidden','true');const ck=$id('cookie');if(ck&&ck.parentElement) ck.parentElement.appendChild(uiCoachEl);}
+    setTxt(uiCoachEl,'👆 '+tt('Tipp auf den Keks!','Tap the cookie!')+' '+Math.min(15,S.clicks)+'/15');
+  }else if(uiCoachEl){uiCoachEl.remove();uiCoachEl=null;}
+  /* Fertiger Schritt: der „Abholen"-Knopf pulsiert */
+  document.querySelectorAll('#tutBox .coachbtn').forEach(b=>{if(c!=='claim') b.classList.remove('coachbtn');});
+  if(c==='claim'){const b=document.querySelector('#tutBox [data-tut]:not([data-tut="hide"])');if(b&&!b.classList.contains('coachbtn')) b.classList.add('coachbtn');}
+  /* Zeige auf das Gebäude, das der aktuelle Schritt will, sobald man es sich leisten kann */
+  const want=c==='buy'?(S.tut.i===3?1:0):-1;
+  document.querySelectorAll('#buildList .row.coachrow').forEach(r=>{if(+r.dataset.i!==want||!r.classList.contains('can')) r.classList.remove('coachrow');});
+  if(want>=0){const r=document.querySelector('#buildList .row[data-i="'+want+'"]');if(r&&r.classList.contains('can')) r.classList.add('coachrow');}
+}
+/* Konto-Karte: einmal zur richtigen Zeit erklären, was ein Konto bringt (höchstens 3-mal, mit 3 Tagen Abstand) */
+function uiAccHint(){
+  let box=$id('accHint');
+  const st=(()=>{try{return JSON.parse(lsGet('keksfabrik-acchint')||'{}')||{};}catch(e){return {};}})();
+  const due=lbOn()&&!accTok&&(S.tut.i>=3||S.all>=5000)&&(st.n||0)<3&&Date.now()-(st.t||0)>3*86400e3;
+  const show=due&&startOv.hidden&&!document.querySelector('.overlay:not([hidden])');
+  if(!show){if(box&&!due) box.remove();if(box) box.hidden=!due||!!document.querySelector('.overlay:not([hidden])');return;}
+  if(!box){
+    box=document.createElement('div');box.id='accHint';box.className='acchint';box.setAttribute('role','dialog');box.setAttribute('aria-label',tt('Gratis-Konto','Free account'));
+    box.innerHTML='<b>☁️ '+tt('Sichere deine Bäckerei – gratis','Keep your bakery safe – it’s free')+'</b><ul><li>'+tt('Auf jedem Gerät weiterspielen','Keep playing on every device')+'</li><li>'+tt('Bestenliste und eigenes Profil','Leaderboard and your own profile')+'</li><li>'+tt('Clubs, Freunde und Geschenke','Clubs, friends and gifts')+'</li><li>'+tt('Keine E-Mail nötig','No email needed')+'</li></ul><div class="btns"><button type="button" class="btn sm primary" data-ah="go">'+tt('Konto erstellen','Create account')+'</button><button type="button" class="btn sm" data-ah="later">'+tt('Später','Later')+'</button></div>';
+    document.body.appendChild(box);
+  }
+  box.hidden=false;
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('#accHint [data-ah]');if(!b) return;
+  let st={};try{st=JSON.parse(lsGet('keksfabrik-acchint')||'{}')||{};}catch(x){}
+  st.n=(st.n||0)+1;st.t=Date.now();lsSet('keksfabrik-acchint',JSON.stringify(st));
+  const box=$id('accHint');if(box) box.remove();
+  if(b.dataset.ah==='go'&&v64Ready) lbAccGo();
+});
+setInterval(()=>{if(!S) return;uiCoach();uiAccHint();},500);
+
+v66Ready=true;
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};
