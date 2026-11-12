@@ -102,7 +102,7 @@ $id('profOv').addEventListener('click',async e=>{
     else if(a==='cancel'){const box=$id('profEditBox');if(box) box.innerHTML='';const eb=$id('profBody').querySelector('[data-pe="edit"]');if(eb) eb.hidden=false;}
     else if(a==='share'){
       const nm=($id('profT').textContent||'').trim(),url=profShareUrl(nm),txt=tt('Schau dir meine Bäckerei in der Keksfabrik an!','Check out my bakery in Cookie Factory!');
-      try{if(navigator.share){await navigator.share({title:'Cookie Factory',text:txt,url});return;}await navigator.clipboard.writeText(url);toast(tt('Link kopiert!','Link copied!'));}
+      try{if(v67Ready) xfSet('share');if(navigator.share){await navigator.share({title:'Cookie Factory',text:txt,url});return;}await navigator.clipboard.writeText(url);toast(tt('Link kopiert!','Link copied!'));}
       catch(x){if(x&&x.name==='AbortError') return;toast(url);}
     }
     return;
@@ -117,7 +117,7 @@ $id('profOv').addEventListener('submit',async e=>{
   const motto=String(new FormData(f).get('motto')||'').trim().slice(0,60),err=$id('profEditErr');
   try{
     await lbApi('rpc/acc_style',{p_token:accTok,p_data:{av:profEdit.av,col:profEdit.col,motto,show}});
-    toast(tt('Profil gespeichert.','Profile saved.'),true);openProfile(accMe.username);
+    toast(tt('Profil gespeichert.','Profile saved.'),true);if(v67Ready) xfSet('style');openProfile(accMe.username);
   }catch(x){const m=String(x&&x.message||'');err.hidden=false;err.textContent=/blocked word/.test(m)?tt('Dieses Motto ist nicht erlaubt.','That motto isn’t allowed.'):/invalid motto/.test(m)?tt('Das Motto darf höchstens 60 Zeichen haben und kein < oder >.','The motto can have at most 60 characters and no < or >.'):/too many/.test(m)?tt('Zu oft geändert. Versuch es später nochmal.','Changed too often. Try again later.'):lbMissing(x)?tt('Das kommt mit dem nächsten Server-Update.','This arrives with the next server update.'):tt('Hat nicht geklappt.','Didn’t work.');}
 });
 /* ?p=name öffnet ein geteiltes Profil, sobald der Startbildschirm zu ist */

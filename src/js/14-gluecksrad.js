@@ -10,7 +10,7 @@ const WHEEL=[
   {id:'jp',w:3,c:'#f1b24a',l:['JACKPOT','JACKPOT'],n:['Jackpot: 4 Std Kekse, 25 Edelsteine, 2 Sternenkrümel','Jackpot: 4 h cookies, 25 gems, 2 star crumbs']}
 ];
 const WHEEL_TOT=WHEEL.reduce((a,s)=>a+s.w,0);
-function wheelState(){const W=S.wheel,today=dayKey(Date.now());if(W.d!==today){W.d=today;W.free=0;W.ext=0;}return W;}
+function wheelState(){const W=S.wheel,today=dayKey(tNow());if(W.d!==today){W.d=today;W.free=0;W.ext=0;}return W;}
 const wheelFree=()=>wheelState().free<1;
 const wheelExtCost=()=>20+10*S.wheel.ext;
 let wheelRot=0,wheelBusy=false,wheelSvgSig='',wheelWin=null;

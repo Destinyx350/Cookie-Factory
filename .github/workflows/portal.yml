@@ -19,10 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
       - name: Build the portal versions
         env:
           GD_GAME_ID: ${{ vars.GD_GAME_ID }}
@@ -30,17 +30,17 @@ jobs:
           node tools/portal.js
           node tools/portal.js --sdk crazygames
           node tools/portal.js --sdk gamedistribution
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: cookie-factory-portal
           path: dist/portal/
           retention-days: 90
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: cookie-factory-crazygames
           path: dist/portal-crazygames/
           retention-days: 90
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: cookie-factory-gamedistribution
           path: dist/portal-gamedistribution/

@@ -31,10 +31,10 @@ jobs:
       PGDATABASE: kfci
       TEST_ADMIN_PASS: ci-only-test-password
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
       - name: Check that index.html was built from src/
         run: node tools/build.js --check
       - name: Check that the game script parses

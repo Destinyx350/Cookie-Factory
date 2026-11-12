@@ -44,8 +44,14 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=66;
+const NEWS_VER=67;
 const NEWS=[
+  {v:67,sum:['Fair spielen und 6 neue Erfolge','Fair play and 6 new achievements'],items:[
+    ['new','6 neue Erfolge: alle ersten Schritte, mit Konto in der Bestenliste, Profil gestalten, Profil teilen, neuer Benutzername und Top 10 in einer Bestenliste.','6 new achievements: all first steps, on the leaderboard with your account, style your profile, share your profile, a new username and top 10 on any leaderboard.'],
+    ['new','Am Computer bleibt der große Keks beim Scrollen stehen.','On computers the big cookie stays in view while you scroll.'],
+    ['change','Fair spielen: Die Geräte-Uhr vorzustellen bringt keine Offline-Kekse und keine zusätzlichen Tages-Belohnungen mehr.','Fair play: moving the device clock forward no longer gives offline cookies or extra daily rewards.'],
+    ['change','Bestenliste: Neue Plätze wachsen in den ersten Stunden langsamer (niemand springt in einer Stunde nach oben), und die Klick-Liste zählt höchstens 20 Klicks pro Sekunde.','Leaderboard: new spots grow slower in the first hours (nobody jumps to the top in an hour), and the clicks board counts at most 20 clicks a second.'],
+    ['new','Auf itch.io zeigt das Spiel nach einem Update einmal, was neu ist.','On itch.io the game shows what is new once after an update.']]},
   {v:66,sum:['Sanfter, ruhiger, heller','Smoother, calmer, lighter'],items:[
     ['new','Fenster öffnen und schließen sanft, Knöpfe geben beim Tippen nach, Balken füllen sich weich, und Zahlen im Profil zählen hoch.','Windows open and close smoothly, buttons give a little when you tap, bars fill softly and numbers in profiles count up.'],
     ['new','Meldungen kommen jetzt eine nach der anderen, gleiche werden zusammengezählt (×3). Am Computer erscheinen sie unten links. Tippen schließt sie.','Messages now come one at a time, and the same message is counted (×3). On computers they show bottom left. Tap to dismiss.'],

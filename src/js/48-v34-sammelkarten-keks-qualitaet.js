@@ -144,11 +144,15 @@ if(hadSave){
     regenSta();
     awayRep={gap,gain,mana:S.w.mana-m0,pre,help,sta:Math.max(0,S.hero.sta-sta0)};
     /* V51: Willkommensgeschenk nach 3+ Tagen Pause (höchstens alle 3 Tage) */
+    let cbG=0,cbC=0;
     if(gap>=259200&&Date.now()-(S.cb||0)>=259200){
       const days=Math.floor(gap/86400),g=Math.min(50,10+5*days),mins=30;
-      S.w.mat.gem+=g;addCk(Math.max(10000*mins/60,C.kps0*60*mins));S.cb=Date.now();recalc();
+      cbG=g;cbC=Math.max(10000*mins/60,C.kps0*60*mins);
+      S.w.mat.gem+=g;addCk(cbC);S.cb=Date.now();recalc();
       awayRep.cb={g,mins};if(typeof kfTrackStep==='function') kfTrackStep('comeback');
     }
+    /* V67: später mit der Server-Zeit prüfen, ob die Geräte-Uhr vorging */
+    if(v67Ready) clkNote(gap,gain,cap,cbG,cbC);
   }
 }
 checkDay(true);

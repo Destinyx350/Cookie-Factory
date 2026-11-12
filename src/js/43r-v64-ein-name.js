@@ -55,7 +55,7 @@ $id('accBox').addEventListener('submit',async e=>{
   if(!/^[A-Za-z0-9_]{3,16}$/.test(nu)){accMsg=tt('Benutzername: 3–16 Buchstaben, Zahlen oder _.','Username: 3–16 letters, numbers or _.');accMsgOk=false;accRender();return;}
   try{
     const r=await lbApi('rpc/acc_rename',{p_token:accTok,p_new:nu});
-    accNI=r;accNIt=Date.now();accMe.username=r.username;accNIfor=r.username;f.reset();
+    accNI=r;accNIt=Date.now();accMe.username=r.username;accNIfor=r.username;f.reset();if(v67Ready) xfSet('rename');
     accMsg=tt('Dein Name ist jetzt ','Your name is now ')+escName(r.username)+'.';accMsgOk=true;toast(accMsg,true);
     lbLast=0;if(v61Ready) lbCatData={};
   }catch(x){

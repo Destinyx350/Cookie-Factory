@@ -49,7 +49,7 @@ jobs:
           echo "Encrypted backup: $(stat -c %s "$name.json.gz.enc") bytes"
       - name: Keep the encrypted copy for 90 days
         if: steps.b.outputs.skip != '1'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.b.outputs.name }}
           path: ${{ steps.b.outputs.name }}.json.gz.enc
