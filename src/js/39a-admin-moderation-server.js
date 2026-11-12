@@ -161,6 +161,7 @@ async function admSrvLoad(){
   if(v54aReady){admFbCall('list');admAlertState();}
   if(v56aReady){admUseDo('usage');admOffDo('status');}
   if(v57aReady) admV57Load();
+  if(v68aReady) admFunLoad();
   if(v58aReady) admHealthLoad();
   admSrvRender();
 }
@@ -179,6 +180,7 @@ function admSrvRender(){
     const St=admStats||{},L=St.live||{},C=admCfg||{},F=Object.assign({chat:true,gifts:true,clubs:true,lb:true},C.feat||{}),Mt=Object.assign({on:false,de:'',en:''},C.maint||{}),mv=+C.min_ver||0;
     const tile=(l,v)=>'<span><small>'+l+'</small><b>'+(v==null?'–':typeof v==='number'?fmt(v):escName(String(v)))+'</b></span>';
     if(v57aReady) h+=admDashHtml();
+    if(v68aReady) h+=admFunHtml();
     if(v58aReady) h+=admHealthHtml();
     if(v53Ready) h+=admWeekHtml();
     if(v57aReady) h+=admRepHtml();

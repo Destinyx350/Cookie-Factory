@@ -13,6 +13,12 @@ module.exports = async function browserTests(url) {
   // A stand-in for Supabase Realtime (v58 live club chat): answers joins and heartbeats; tests push broadcasts with rtPush().
   const rtSockets = [];
   const rtPush = () => rtSockets.forEach(s => s.topics.forEach(t => s.ws.send(JSON.stringify({ topic: t, event: 'broadcast', payload: { type: 'broadcast', event: 'chat', payload: { k: 'kf_club_msgs' } } }))));
+  // V68: a first visit has no start screen and no name window; the bakery gets a name by itself (renamed by tapping it at the top)
+  const firstPlay = async (p, name) => {
+    if (await p.isVisible('#stGo').catch(() => false)) { await p.locator('#startOv [data-lang=en]').click().catch(() => {}); await p.click('#stGo'); }
+    if (await p.isVisible('#nameOv').catch(() => false)) { await p.fill('#nameIn', name); await p.click('#nameOk'); }
+    else if (name && !(await p.evaluate(() => !!document.querySelector('.overlay:not([hidden])')))) { await p.click('#plName'); await p.fill('#nameIn', name); await p.click('#nameOk'); await p.waitForTimeout(250); }
+  };
   async function device(name, ip, opts = {}, admin = false, page = '') {
     const ctx = await browser.newContext(Object.assign({ viewport: { width: 1280, height: 820 }, extraHTTPHeaders: { 'x-test-ip': ip }, acceptDownloads: true }, opts));
     await ctx.route(LB + '/**', handle);
@@ -25,14 +31,14 @@ module.exports = async function browserTests(url) {
       });
     });
     await ctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    // no welcome chests on the long-running test devices (their once-a-day card would pop up mid-test; the v68 block tests them)
+    await ctx.addInitScript(() => { try { if (!localStorage.getItem('keksfabrik-chests')) localStorage.setItem('keksfabrik-chests', '3'); } catch (e) {} });
     if (admin) await ctx.addInitScript(h => { try { sessionStorage.setItem('keksfabrik-admin', h); if (!sessionStorage.getItem('keksfabrik-admsec')) sessionStorage.setItem('keksfabrik-admsec', JSON.stringify({ mod: 'all', srv: 'all' })); } catch (e) {} }, ADM_HASH);
     const p = await ctx.newPage();
     p.on('pageerror', e => errors.push(name + ': ' + e.message));
     p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|ERR_FAILED/.test(m.text())) errors.push(name + ': ' + m.text()); });
     await p.goto(page ? url + page : admin ? url + 'admin.html' : url);
-    await p.locator('#startOv [data-lang=en]').click();
-    await p.click('#stGo');
-    if (await p.isVisible('#nameOv')) { await p.fill('#nameIn', name); await p.click('#nameOk'); }
+    await firstPlay(p, /\?p=/.test(page) ? '' : name);   // a ?p= link opens a profile on top right away
     await p.addStyleTag({ content: '#introOv{display:none!important}' });
     return p;
   }
@@ -210,8 +216,7 @@ module.exports = async function browserTests(url) {
   await e.goto(url + '?ref=alpha_ci'); await e.waitForTimeout(800);
   check(/alpha_ci invited you/.test(await text(e, '#stRef')) || /alpha_ci hat dich/.test(await text(e, '#stRef')), 'an invite link shows who invited you');
   check(!/ref=/.test(e.url()), 'the invite code is removed from the address bar');
-  await e.locator('#startOv [data-lang=en]').click(); await e.click('#stGo');
-  if (await e.isVisible('#nameOv')) { await e.fill('#nameIn', 'Invited Bakery'); await e.click('#nameOk'); }
+  await firstPlay(e, 'Invited Bakery');
   await e.addStyleTag({ content: '#introOv{display:none!important}' });
   await signup(e, 'epsilon_ci'); await e.waitForTimeout(1200);
   check((await pool.query("select count(*)::int n from kf_referrals r join kf_accounts a on a.id = r.inviter where a.username = 'alpha_ci'")).rows[0].n === 1, 'signing up through an invite link records the invite');
@@ -283,15 +288,13 @@ module.exports = async function browserTests(url) {
     await f.waitForTimeout(800);
     check(await f.evaluate(() => document.documentElement.dataset.coach === 'cookie' && !!document.querySelector('.coach') && document.documentElement.dataset.quiet === '1'), 'new players get a pointer on the cookie and a quiet start');
     const ck = await f.locator('#cookie').boundingBox(), tap = async n => { for (let i = 0; i < n; i++) { await f.mouse.click(ck.x + ck.width / 2, ck.y + ck.height / 2); await f.waitForTimeout(60); } };
-    await tap(16); await f.waitForTimeout(700);
-    check(await f.evaluate(() => document.documentElement.dataset.coach === 'claim' && !!document.querySelector('#tutBox .coachbtn')), 'a finished first step makes the Claim button pulse');
-    await f.click('#tutBox [data-tut="claim"]'); await f.waitForTimeout(700);
-    check(await f.evaluate(() => document.documentElement.dataset.coach === 'buy' && !!document.querySelector('#buildList .row.coachrow[data-i="0"]')), 'then the pointer moves to the first building');
-    await f.click('#buildList .row[data-i="0"]'); await f.waitForTimeout(600); await f.click('#tutBox [data-tut="claim"]'); await f.waitForTimeout(400);
-    for (let k = 0; k < 8 && await f.evaluate(() => !document.querySelector('#tutBox [data-tut="claim"]') || document.documentElement.dataset.coach !== 'claim'); k++) {
-      await tap(20); await f.evaluate(() => { const r = document.querySelector('#buildList .row.can[data-i="0"]'); if (r) r.click(); }); await f.waitForTimeout(600);
+    await tap(10); await f.waitForTimeout(1600);
+    check(await f.evaluate(() => document.documentElement.dataset.coach === 'buy' && !!document.querySelector('#buildList .row.coachrow[data-i="0"]')), 'the first step claims itself, then the pointer moves to the first building');
+    await f.click('#buildList .row[data-i="0"]'); await f.waitForTimeout(1600);
+    for (let k = 0; k < 10 && !(await f.isVisible('#accHint')); k++) {
+      await tap(20); await f.evaluate(() => { const r = document.querySelector('#buildList .row.can[data-i="0"]'); if (r) r.click(); }); await f.waitForTimeout(900);
     }
-    await f.click('#tutBox [data-tut="claim"]').catch(() => {}); await f.waitForSelector('#accHint:not([hidden])', { timeout: 6000 }).catch(() => {});
+    await f.waitForSelector('#accHint:not([hidden])', { timeout: 6000 }).catch(() => {});
     check(await f.isVisible('#accHint') && /No email needed/.test(await text(f, '#accHint')), 'after the first steps, guests see one card that explains what an account gives');
     await f.click('#accHint [data-ah="later"]'); await f.waitForTimeout(700);
     check(!(await f.isVisible('#accHint')), '"Later" hides the account card');
@@ -332,8 +335,7 @@ module.exports = async function browserTests(url) {
       if (off) { const D = Date, n = D.now.bind(D); class FD extends D { constructor(...a) { super(...(a.length ? a : [n() + off])); } static now() { return n() + off; } } window.Date = FD; }
     });
     const c = await ctx.newPage(); c.on('pageerror', e => errors.push('v67: ' + e.message));
-    await c.goto(url); await c.locator('#startOv [data-lang=en]').click(); await c.click('#stGo');
-    if (await c.isVisible('#nameOv')) { await c.fill('#nameIn', 'Clock Bakery'); await c.click('#nameOk'); }
+    await c.goto(url); await firstPlay(c, 'Clock Bakery');
     await c.addStyleTag({ content: '#introOv,#tutBox,#rwOv,#accHint{display:none!important}' });
     const ck = await c.locator('#cookie').boundingBox();
     for (let i = 0; i < 20; i++) { await c.mouse.click(ck.x + ck.width / 2, ck.y + ck.height / 2); await c.waitForTimeout(60); }
@@ -359,6 +361,61 @@ module.exports = async function browserTests(url) {
     const pos = await st.evaluate(() => [Math.round(document.querySelector('.stage').getBoundingClientRect().top), Math.round(document.querySelector('.store').getBoundingClientRect().top), scrollY]);
     check(pos[2] > 300 && pos[0] >= 0 && pos[0] < 40 && pos[1] < 0, 'on computers the cookie stays in view while the buildings scroll', pos);
     await sctx.close();
+  }
+
+  // v68: no name window, no start screen the first time, first steps claim themselves, welcome chests, funnel data
+  {
+    // service workers blocked: requests they make would skip the kf_now stand-in below
+    const ctx = await browser.newContext({ viewport: { width: 960, height: 640 }, extraHTTPHeaders: { 'x-test-ip': '10.0.68.1' }, serviceWorkers: 'block' });
+    await ctx.route(LB + '/**', handle); await ctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    let srvOff = 0;   // pretend the server's clock is ahead too (registered last, so it wins over handle)
+    await ctx.route(/rpc\/kf_now/, r => r.fulfill({ contentType: 'application/json', body: String(Date.now() + srvOff) }));
+    await ctx.addInitScript(() => {
+      const off = +(sessionStorage.getItem('dtoff') || 0);
+      if (off) { const D = Date, n = D.now.bind(D); class FD extends D { constructor(...a) { super(...(a.length ? a : [n() + off])); } static now() { return n() + off; } } window.Date = FD; }
+    });
+    const w = await ctx.newPage(); w.on('pageerror', e => errors.push('v68: ' + e.message));
+    await w.goto(url); await w.waitForTimeout(900);
+    check(!(await w.isVisible('#startOv')) && !(await w.isVisible('#nameOv')) && (await text(w, '#plName')).length >= 2, 'v68: new players start right away with a bakery name and no name window', await text(w, '#plName'));
+    check(await w.isVisible('.v68in button'), 'v68: new guests see "Already have an account? Sign in" under the first steps');
+    await w.click('.v68in button'); await w.waitForTimeout(400);
+    check(await w.isVisible('#setOv') && await w.isVisible('#accF') && await w.evaluate(() => document.querySelector('[data-accm=login]').getAttribute('aria-pressed') === 'true'), 'v68: "Sign in" opens the sign-in form');
+    await w.click('#setClose'); await w.waitForTimeout(300);
+    await w.addStyleTag({ content: '#introOv{display:none!important}' });
+    const ck = await w.locator('#cookie').boundingBox();
+    for (let i = 0; i < 10; i++) { await w.mouse.click(ck.x + ck.width / 2, ck.y + ck.height / 2); await w.waitForTimeout(70); }
+    await w.waitForTimeout(1800);
+    check(/2 \/ /.test(await text(w, '#tutBox .tk')) && await w.evaluate(() => { const r = document.querySelector('#buildList .row.coachrow[data-i="0"]'); return !!r && /Buy/.test(r.dataset.ct || ''); }), 'v68: 10 clicks finish the first step by itself, and an arrow points at the first building');
+    await w.click('#buildList .row[data-i="0"]'); await w.waitForTimeout(1800);
+    check(/3 \/ /.test(await text(w, '#tutBox .tk')), 'v68: buying it finishes the second step by itself too');
+    check(await w.isVisible('#retChip') && !(await w.evaluate(() => document.getElementById('retChip').classList.contains('ready'))), 'v68: a 🎁 welcome chest countdown shows at the top');
+    await w.click('#retChip'); await w.waitForTimeout(400);
+    check(/Come back tomorrow/.test(await text(w, '#rwT')) && /Chest 1 of 3/.test(await text(w, '#rwBody')) && /Login streak: day 1/.test(await text(w, '#rwBody')), 'v68: the chest tells you what waits tomorrow', await text(w, '#rwBody'));
+    await w.click('#rwClose'); await w.waitForTimeout(300);
+    await w.click('#plName'); await w.fill('#nameIn', 'Chest Bakery'); await w.click('#nameOk'); await w.waitForTimeout(300);
+    check((await text(w, '#plName')) === 'Chest Bakery', 'v68: tapping the bakery name at the top renames it');
+    await settings(w, 'save'); await w.click('#saveBtn'); await w.click('#setClose'); await w.waitForTimeout(400);
+    // only the device clock is a day ahead: the chest stays closed
+    await w.evaluate(() => sessionStorage.setItem('dtoff', String(86400e3)));
+    await w.reload(); await w.waitForTimeout(600);
+    check(await w.isVisible('#stGo'), 'v68: the start screen shows again from the second visit');
+    await w.click('#stGo'); await w.addStyleTag({ content: '#introOv,#awayOv{display:none!important}' });
+    await w.waitForTimeout(5000);
+    check(!(await w.evaluate(() => document.getElementById('retChip').classList.contains('ready'))), 'v68: moving the device clock forward does not open the chest early');
+    // a real new day (server time agrees): the chest opens
+    srvOff = 86400e3;
+    await w.reload(); await w.waitForTimeout(600); await w.click('#stGo').catch(() => {});
+    await w.addStyleTag({ content: '#introOv,#awayOv{display:none!important}' });
+    for (let k = 0; k < 30 && !(await w.evaluate(() => document.getElementById('retChip').classList.contains('ready')).catch(() => false)); k++) await w.waitForTimeout(500);
+    await w.evaluate(() => document.querySelectorAll('.overlay').forEach(o => { if (o.id !== 'rwOv') o.hidden = true; }));
+    await w.click('#retChip'); await w.waitForTimeout(500);
+    check(/Chest opened/.test(await text(w, '#rwT')) && /\+10 gems/.test(await text(w, '#rwBody')), 'v68: the next day the chest opens and gives gems and cookies', await text(w, '#rwBody'));
+    await w.click('#rwClose'); await w.waitForTimeout(400);
+    check(await w.isVisible('#retChip') && !(await w.evaluate(() => document.getElementById('retChip').classList.contains('ready'))), 'v68: then the countdown to chest 2 starts');
+    await w.waitForTimeout(16000);   // journey steps are sent every 15 s
+    const st = (await pool.query("select step, ver, src from kf_steps where step in ('play', 'tut1', 'chest1') and ver >= 68")).rows;
+    check(['play', 'tut1', 'chest1'].every(k => st.some(r => r.step === k && r.src === 'web')), 'v68: journey steps are stored with the version and the source', st);
+    await ctx.close();
   }
 
   // 5d. Push setting (v49)
@@ -417,9 +474,8 @@ module.exports = async function browserTests(url) {
     const fp = await pctx.newPage(); fp.on('pageerror', x => errors.push('portal frame: ' + x.message));
     await fp.setViewportSize({ width: 1100, height: 520 });
     await fp.setContent('<!doctype html><body style="margin:0"><iframe id="g" scrolling="no" src="' + url + 'dist/portal/" width="1000" height="440" style="border:0"></iframe></body>');
-    const fr = await (await fp.$('#g')).contentFrame(); await fr.waitForSelector('#stGo', { timeout: 10000 }).catch(() => {});
-    await fr.locator('#startOv [data-lang=en]').click().catch(() => {}); await fr.click('#stGo').catch(() => {});
-    if (await fr.isVisible('#nameOv').catch(() => false)) { await fr.fill('#nameIn', 'Frame Bakery'); await fr.click('#nameOk'); }
+    const fr = await (await fp.$('#g')).contentFrame(); await fr.waitForSelector('#cookie', { timeout: 10000 }).catch(() => {}); await fr.waitForTimeout(800);
+    await firstPlay(fr, '');
     await fr.addStyleTag({ content: '#introOv,#tutBox{display:none!important}' });
     await fp.mouse.move(700, 300); for (let k = 0; k < 6; k++) { await fp.mouse.wheel(0, 300); await fp.waitForTimeout(80); }
     await fp.waitForTimeout(300);
@@ -519,8 +575,7 @@ module.exports = async function browserTests(url) {
   await actx.route(LB + '/**', handle); await actx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
   await actx.route('https://sdk.crazygames.com/**', r => r.fulfill({ contentType: 'text/javascript', body: 'window.__adCalls=0;window.CrazyGames={SDK:{init:async()=>{},game:{loadingStop(){}},ad:{requestAd(t,cb){window.__adCalls++;cb.adStarted&&cb.adStarted();setTimeout(()=>cb.adFinished&&cb.adFinished(),300);}}}};' }));
   const ap = await actx.newPage(); ap.on('pageerror', x => errors.push('ads: ' + x.message));
-  await ap.goto(url + 'dist/portal-crazygames/'); await ap.locator('#startOv [data-lang=en]').click(); await ap.click('#stGo');
-  if (await ap.isVisible('#nameOv')) { await ap.fill('#nameIn', 'Ad Bakery'); await ap.click('#nameOk'); }
+  await ap.goto(url + 'dist/portal-crazygames/'); await firstPlay(ap, 'Ad Bakery');
   await ap.addStyleTag({ content: '#introOv{display:none!important}' });
   await ap.waitForSelector('#adBtn:not([hidden])', { timeout: 10000 }).catch(() => {});
   check(await ap.isVisible('#adBtn'), 'the CrazyGames version shows the optional ad button');
@@ -633,6 +688,10 @@ module.exports = async function browserTests(url) {
   await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
   await d.waitForSelector('.dchart', { timeout: 10000 }).catch(() => {});
   check(await d.locator('#admSrv .dchart').count() === 4 && /Live dashboard/.test(await text(d, '#admSrv')) && /Devices/.test(await text(d, '#admSrv')), 'the Server tab shows the live dashboard with 4 charts');
+  await d.waitForFunction(() => !!document.querySelector('#admSrv .ftable tbody tr'), null, { timeout: 8000 }).catch(() => {});
+  check(/New players/.test(await text(d, '#admSrv')) && await d.locator('#admSrv .ftable tbody tr').count() === 10 && /Version 68 and later/.test(await text(d, '#admSrv .ftable')), 'v68: the Server tab shows the new-player funnel before and after version 68');
+  await d.click('#admSrv [data-fun="s:web"]'); await d.waitForTimeout(800);
+  check(await d.evaluate(() => document.querySelector('#admSrv [data-fun="s:web"]').getAttribute('aria-pressed') === 'true'), 'v68: the funnel can be filtered by source');
   check(await d.locator('#admSrv .dchart[data-chart=players] .dcols i').count() === 30, 'the dashboard shows 30 days');
   await d.click('[data-dash="7"]'); await d.waitForTimeout(1200);
   check(await d.locator('#admSrv .dchart[data-chart=players] .dcols i').count() === 7, 'the dashboard switches to 7 days');
@@ -712,7 +771,7 @@ module.exports = async function browserTests(url) {
   check(await a.evaluate(() => !document.getElementById('clubOv').dataset.rt), 'closing the club disconnects the live signal');
   await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
   await d.waitForSelector('[data-hlth]', { timeout: 10000 }).catch(() => {});
-  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–19 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 19 parts');
+  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–20 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 20 parts');
   await d.click('#setClose');
 
   // 5m. Tab bar, building cards, transitions, bakery start screen, vibration, history, welcome back (v59)
@@ -726,9 +785,9 @@ module.exports = async function browserTests(url) {
     });
     const v = await ctx.newPage();
     v.on('pageerror', e => errors.push('v59: ' + e.message)); v.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|ERR_FAILED/.test(m.text())) errors.push('v59: ' + m.text()); });
-    await v.goto(url); await v.locator('#startOv [data-lang=en]').click();
-    check(await v.isVisible('#stLogo svg.stbake') && (await text(v, '#stSign')) === 'Cookie Factory', 'the start screen shows a bakery with a name sign');
-    await v.click('#stGo'); if (await v.isVisible('#nameOv')) { await v.fill('#nameIn', 'Vibe Bakery'); await v.click('#nameOk'); }
+    await v.goto(url); await v.waitForTimeout(600);
+    check(!(await v.isVisible('#startOv')) && !(await v.isVisible('#nameOv')) && (await text(v, '#plName')).length >= 2, 'a first visit goes straight into the game: no start screen, no name window, the bakery already has a name');
+    await firstPlay(v, 'Vibe Bakery');
     await v.addStyleTag({ content: '#introOv,#tutBox{display:none!important}' });
     const ck = await v.locator('#cookie').boundingBox();
     for (let k = 0; k < 25; k++) { await v.touchscreen.tap(ck.x + ck.width / 2, ck.y + ck.height / 2); await v.waitForTimeout(80); }
@@ -758,7 +817,7 @@ module.exports = async function browserTests(url) {
     await v.click('#setSeg [data-sp=save]'); await v.click('#saveBtn'); await v.click('#setClose');
     await v.evaluate(() => sessionStorage.setItem('dtoff', String(3 * 3600e3)));
     await v.reload(); await v.locator('#startOv [data-lang=en]').click().catch(() => {});
-    check((await text(v, '#stSign')) === 'Vibe Bakery', 'the sign shows the bakery name');
+    check(await v.isVisible('#stLogo svg.stbake') && (await text(v, '#stSign')) === 'Vibe Bakery', 'the next visit shows the start screen with a bakery and its name on the sign');
     await v.click('#stGo'); await v.addStyleTag({ content: '#introOv,#tutBox{display:none!important}' });
     await v.waitForSelector('#awayOv:not([hidden])', { timeout: 8000 }).catch(() => {});
     check(await v.isVisible('#awayOv') && /\+\d/.test(await text(v, '#awayBody .awhero b')), 'the welcome-back screen counts up the cookies baked while away');

@@ -201,6 +201,20 @@ module.exports = async function sqlTests() {
   await q("insert into kf_days (id, day) values ($1, current_date - 1) on conflict do nothing", [pid]);
   const j = await rpc('admin_insights', { p_pass: tok, p_action: 'journey' });
   check(j.steps.open >= 1 && j.cohort >= 1 && j.back1 >= 1 && j.back7 >= 1 && j.daily.length === 14, 'admin sees the player journey and who came back', j);
+  // v68 (part 20): steps carry the game version and the source; the admin funnel splits new players by version
+  const pn = '44444444-4444-4444-4444-444444444444', po = '55555555-5555-5555-5555-555555555555';
+  for (const st of ['open', 'play', 'tut1', 'chest1', 'chest9']) await rpc('kf_track', { p_id: pn, p_step: st, p_ver: 68, p_src: 'portal' });
+  await rpc('kf_track', { p_id: po, p_step: 'open', p_ver: 67, p_src: 'nowhere' });
+  const sv = (await q('select step, ver, src from kf_steps where id in ($1, $2) order by step', [pn, po])).rows;
+  check(sv.length === 5 && sv.filter(r => r.ver === 68 && r.src === 'portal').length === 4 && sv.some(r => r.ver === 67 && r.src === null), 'journey steps store the version and only known sources and steps', sv);
+  await q("update kf_steps set at = now() - interval '3 days' where id = $1", [pn]);
+  await q("insert into kf_days (id, day) values ($1, current_date) on conflict do nothing", [pn]);
+  const fu = await rpc('admin_funnel', { p_pass: tok, p_days: 30, p_src: null });
+  const g68 = fu.groups.find(x => x.ver === 68), g67 = fu.groups.find(x => x.ver === 67);
+  check(g68 && g68.n === 1 && g68.steps.chest1 === 1 && g68.back_n === 1 && g68.back === 1 && g67 && g67.n === 1 && fu.srcs.portal === 1, 'admin funnel groups new players by version, with steps and who came back', fu);
+  const fp = await rpc('admin_funnel', { p_pass: tok, p_days: 30, p_src: 'portal' });
+  check(fp.groups.length === 1 && fp.groups[0].ver === 68, 'admin funnel can show one source only', fp);
+  await expectError(rpc('admin_funnel', { p_pass: 'nope', p_days: 30 }), /wrong admin password/, 'the funnel is for the owner only');
   await q("update kf_accounts set save_at = now() - interval '5 days', last_login = now() - interval '5 days', reminded_at = null where username = 'test_beta'");
   await rpc('push_subscribe', { p_token: b.token, p_sub: { endpoint: 'https://push.example.com/back', keys: { p256dh: 'x', auth: 'y' } } });
   await q('delete from kf_push_queue');

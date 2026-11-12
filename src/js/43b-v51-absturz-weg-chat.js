@@ -23,18 +23,24 @@ window.__kfErrFlush=()=>{setTimeout(errFlush,0);};
 const STEP_KEY='keksfabrik-steps';
 let stepOff=false,stepBusy=false;
 function stepsDone(){let o={};try{o=JSON.parse(localStorage.getItem(STEP_KEY)||'{}')||{};}catch(x){}if(o.id!==S.lb.id) o={id:S.lb.id,s:{}};if(!o.s) o.s={};return o;}
+/* V68: Version und Ort (Website, App, Spieleportal) gehen mit, damit man sieht, ob ein Update neuen Spielern hilft */
+var stepX=true;
+function kfSrc(){return window.KF_PORTAL?'portal':(matchMedia('(display-mode: standalone)').matches||navigator.standalone)?'app':'web';}
 async function kfTrackStep(step){
   if(stepOff||!lbOn()||S.adm) return;
   kfId();const o=stepsDone();if(o.s[step]) return;
   o.s[step]=1;try{localStorage.setItem(STEP_KEY,JSON.stringify(o));}catch(x){}
-  try{await lbApi('rpc/kf_track',{p_id:S.lb.id,p_step:step});}
-  catch(x){if(lbMissing(x)) stepOff=true;else{const p=stepsDone();delete p.s[step];try{localStorage.setItem(STEP_KEY,JSON.stringify(p));}catch(y){}}}
+  try{await lbApi('rpc/kf_track',stepX?{p_id:S.lb.id,p_step:step,p_ver:NEWS_VER,p_src:kfSrc()}:{p_id:S.lb.id,p_step:step});}
+  catch(x){if(stepX&&lbMissing(x)){stepX=false;const p=stepsDone();delete p.s[step];try{localStorage.setItem(STEP_KEY,JSON.stringify(p));}catch(y){}return kfTrackStep(step);}if(lbMissing(x)) stepOff=true;else{const p=stepsDone();delete p.s[step];try{localStorage.setItem(STEP_KEY,JSON.stringify(p));}catch(y){}}}
 }
 const STEPS=[
   ['open',()=>true],
+  ['play',()=>startDone&&nameOv.hidden],
+  ['tut1',()=>S.tut&&S.tut.i>=1],
   ['click50',()=>S.clicks>=50],
   ['build1',()=>S.b.some(n=>n>0)],
   ['up1',()=>Object.keys(S.up).length>0],
+  ['tut3',()=>S.tut&&S.tut.i>=3],
   ['tut5',()=>S.tut&&S.tut.i>=5],
   ['tutdone',()=>S.tut&&S.tut.i>=TUT.length],
   ['bld25',()=>S.b.reduce((a,n)=>a+n,0)>=25],
@@ -43,7 +49,10 @@ const STEPS=[
   ['acc',()=>!!accTok],
   ['club',()=>clubIn()],
   ['lb',()=>!!S.lb.on],
-  ['push',()=>pushOn===true]
+  ['push',()=>pushOn===true],
+  ['chest1',()=>S.ret&&S.ret.n>=1],
+  ['chest2',()=>S.ret&&S.ret.n>=2],
+  ['chest3',()=>S.ret&&S.ret.n>=3]
 ];
 async function stepCheck(){
   if(stepOff||stepBusy||!lbOn()||document.hidden) return;
