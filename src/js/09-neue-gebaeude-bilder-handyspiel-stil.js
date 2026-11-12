@@ -44,8 +44,11 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=64;
+const NEWS_VER=65;
 const NEWS=[
+  {v:65,sum:['Besser spielen auf itch.io','Better on itch.io'],items:[
+    ['change','Auf itch.io und anderen Spieleseiten lässt sich das Spiel jetzt immer scrollen – auch bis zum letzten Gebäude.','On itch.io and other game sites the game can now always scroll – all the way down to the last building.'],
+    ['change','Die Meldung „Update nötig“ blockiert das Spiel auf itch.io nicht mehr.','The "Update needed" message no longer blocks the game on itch.io.']]},
   {v:64,sum:['Ein Name für alles','One name for everything'],items:[
     ['new','Dein Benutzername ist jetzt dein Name überall: in der Bestenliste, im Chat, in Clubs, bei Freunden und Geschenken. Der Bäckerei-Name bleibt als Deko in deinem Spiel und Profil.','Your username is now your name everywhere: on the leaderboard, in chat, in clubs, with friends and gifts. The bakery name stays as decoration in your game and profile.'],
     ['change','Die Bestenliste ist jetzt für Spieler mit Konto. Ein Konto ist gratis und braucht keine E-Mail.','The leaderboard is now for players with an account. An account is free and needs no email.'],

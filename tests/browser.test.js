@@ -324,6 +324,26 @@ module.exports = async function browserTests(url) {
   check(await pp.evaluate(() => window.KF_PORTAL === 1 && !document.querySelector('link[rel=manifest]')), 'portal version: built with the portal flag and no app manifest');
   check(await pp.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length === 0), 'portal version: no offline service worker');
   check(await pp.evaluate(() => document.getElementById('appT').parentElement.hidden), 'portal version: the app install section is hidden');
+  // v65: in a frame that may not scroll (itch.io with "Enable scrollbars" off) the game area scrolls itself
+  {
+    const fp = await pctx.newPage(); fp.on('pageerror', x => errors.push('portal frame: ' + x.message));
+    await fp.setViewportSize({ width: 1100, height: 520 });
+    await fp.setContent('<!doctype html><body style="margin:0"><iframe id="g" scrolling="no" src="' + url + 'dist/portal/" width="1000" height="440" style="border:0"></iframe></body>');
+    const fr = await (await fp.$('#g')).contentFrame(); await fr.waitForSelector('#stGo', { timeout: 10000 }).catch(() => {});
+    await fr.locator('#startOv [data-lang=en]').click().catch(() => {}); await fr.click('#stGo').catch(() => {});
+    if (await fr.isVisible('#nameOv').catch(() => false)) { await fr.fill('#nameIn', 'Frame Bakery'); await fr.click('#nameOk'); }
+    await fr.addStyleTag({ content: '#introOv,#tutBox{display:none!important}' });
+    await fp.mouse.move(700, 300); for (let k = 0; k < 6; k++) { await fp.mouse.wheel(0, 300); await fp.waitForTimeout(80); }
+    await fp.waitForTimeout(300);
+    const em = await fr.evaluate(() => ({ embed: document.documentElement.dataset.embed, top: document.querySelector('.wrap').scrollTop, win: scrollY }));
+    check(em.embed === '1' && em.top > 0, 'in a frame that may not scroll, the game area still scrolls', em);
+    await fp.close();
+  }
+  // v65: a forced update never locks copies on game sites (they can't update by reloading)
+  await pctx.route(LB + '/rest/v1/rpc/kf_ping', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ online: 1, cfg: { min_ver: 999, maint: { on: false }, feat: {} } }) }));
+  const plk = await pctx.newPage(); await plk.goto(url + 'dist/portal/'); await plk.waitForTimeout(3000);
+  const wl = await pctx.newPage(); await wl.goto(url); await wl.waitForTimeout(3000);
+  check(!(await plk.isVisible('#maintOv')) && await wl.isVisible('#maintOv'), 'a forced update locks old web copies but never the itch.io copy');
   await pctx.close();
 
   // 5f. Player version has no admin code; account bans (v52)
