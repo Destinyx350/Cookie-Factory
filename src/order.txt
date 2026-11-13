@@ -19,6 +19,7 @@ src/js/07-boosts-items-designs-news.js
 src/js/08-endgame-daten-v30.js
 src/js/09-neue-gebaeude-bilder-handyspiel-stil.js
 src/js/09b-v67-erfolge.js
+src/js/09c-v70-erfolge.js
 src/js/10-spielstand.js
 src/js/11-berechnung.js
 src/js/12-oberflaeche.js
@@ -83,6 +84,7 @@ admin src/js/43x-admin-einstieg.js
 src/js/43y-v69-speicher-schutz.js
 admin src/js/43z-admin-spielzeit.js
 admin src/js/43za-admin-neuigkeiten.js
+src/js/43zb-v70-kundenbewertungen.js
 admin src/js/44-v40-admin-bestenliste-verwalten.js
 src/js/45-v40-shop-navigation-welt-uebergaenge.js
 src/js/46-v39-geraet-layout.js

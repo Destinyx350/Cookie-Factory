@@ -39,10 +39,11 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 🤖 **Automation** | *Best buy* picks the smartest purchase, and you choose how much of your cookies automation may spend. |
 | 🧑‍🍳 **Helpers** | Helpers buy buildings, harvest, fight or trade, and level up with experience. |
 | 🌍 **World** | Adventure, stores, a lucky wheel, titles, a pass and a collection to complete. |
-| 🏆 **198 achievements** | Plus guided *First Steps* goals with a pointer for new players, detailed statistics and charts of your cookies and production over time. |
+| 🏆 **200 achievements** | Plus guided *First Steps* goals with a pointer for new players, detailed statistics and charts of your cookies and production over time. |
 | 📅 **Daily rewards** | A welcome chest on each of your first 3 days, a 7-day login streak and three daily tasks with a bonus chest. Coming back shows what happened while you were away, with one **Collect all** button, and after 3+ days a welcome-back gift. |
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
 | 🎵 **Soundtrack and 3D** | 7 music tracks with real instruments that adapt to what you do, and a real 3D cookie with lighting that tilts toward your finger. Golden cookies and icons have a 3D look too. |
+| ⭐ **Customer reviews** | Customers review your bakery from 1 to 5 stars. A good rating gives up to +5% production, and the reviews window shows what they care about. |
 | ☀️ **Living world** | Time of day and weather change while you play. Combos and boosts speed things up. |
 | 💾 **Named saves** | Progress saves automatically in 3 save slots, and the game asks the browser to keep it for good. Every new bakery gets a name by itself, which shows at the top of the screen; tap it to rename it. |
 | 🎁 **Secret codes** | Type a code under **Settings → Game** to get cookies, gems or a boost. Each code works once per save. |
@@ -84,8 +85,9 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 🤖 **Automatik**: *Bester Kauf* und ein einstellbares Ausgabelimit
 - 🧑‍🍳 **Helfer**, die kaufen, ernten, kämpfen oder handeln und dabei aufsteigen
 - 🌍 **Welt** mit Abenteuer, Läden, Glücksrad, Titeln, Pass und Sammlung
-- 🏆 **198 Erfolge**, Ziele mit Zeiger für neue Spieler, Statistiken und Verlaufs-Diagramme deiner Kekse und Produktion
+- 🏆 **200 Erfolge**, Ziele mit Zeiger für neue Spieler, Statistiken und Verlaufs-Diagramme deiner Kekse und Produktion
 - 📅 **Tägliche Belohnungen**: an den ersten 3 Tagen je eine Willkommens-Truhe, 7-Tage-Serie, drei Tagesaufgaben, eine Zusammenfassung mit „Alles einsammeln“ nach jeder Pause und ein Willkommensgeschenk nach 3+ Tagen
+- ⭐ **Kundenbewertungen** von 1 bis 5 Sternen; eine gute Bewertung gibt bis zu +5 % Produktion
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
 - 🎵 **Soundtrack und 3D**: 7 Musikstücke mit echten Instrumenten, die sich anpassen, und ein echter 3D-Keks mit Licht, der sich zum Finger neigt
 - 💾 **Spielstände mit Namen**: 3 Speicherplätze (der Browser wird gebeten, sie dauerhaft zu behalten), jede neue Bäckerei bekommt gleich einen Namen (oben antippen zum Umbenennen)
@@ -115,19 +117,21 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 69
-- **Safer saves:** the game now asks your browser to keep your save for good, so it isn't deleted when space runs low or you don't play for a while. **Settings → Saving** shows whether it worked, with a button to ask again.
-- **What's New is for players:** changes to the owner's tools no longer show up in the game's list.
+### Version 70
+- **Customer reviews:** every few minutes a customer writes a short review of your bakery, from 1 to 5 stars. Tap **⭐** under the cookie to read them and see what customers care about.
+- **Good reviews pay off:** above 3 stars your bakery rating gives up to **+5% production**. Customers like lots of choice, finished orders, a growing bakery and a baker who drops by.
+- **2 new achievements:** Five Stars and Beloved Bakery.
 
-Also new since version 68: you start playing right away (no name window), the first steps claim themselves, and welcome chests wait on your first 3 days.
+Also new since version 69: the game asks your browser to keep your save for good (see **Settings → Saving**).
 
 <details>
 <summary>Deutsch</summary>
 
-- **Sicherer speichern:** das Spiel bittet deinen Browser jetzt, deinen Spielstand dauerhaft zu behalten, damit er nicht gelöscht wird, wenn Platz fehlt oder du länger nicht spielst. **Einstellungen → Speichern** zeigt, ob es geklappt hat, mit einem Knopf zum erneuten Fragen.
-- **Neuigkeiten für Spieler:** Änderungen an den Werkzeugen des Betreibers stehen nicht mehr in der Liste im Spiel.
+- **Kundenbewertungen:** alle paar Minuten schreibt ein Kunde eine kurze Bewertung deiner Bäckerei, von 1 bis 5 Sternen. Tipp auf **⭐** unter dem Keks, um sie zu lesen und zu sehen, worauf Kunden achten.
+- **Gute Bewertungen lohnen sich:** über 3 Sternen gibt deine Bewertung bis zu **+5 % Produktion**. Kunden mögen viel Auswahl, erledigte Aufträge, eine wachsende Bäckerei und einen Bäcker, der vorbeischaut.
+- **2 neue Erfolge:** Fünf Sterne und Lieblingsbäckerei.
 
-Außerdem neu seit Version 68: du legst sofort los (ohne Namens-Fenster), die ersten Schritte holen sich selbst ab, und an deinen ersten 3 Tagen warten Willkommens-Truhen.
+Außerdem neu seit Version 69: das Spiel bittet deinen Browser, deinen Spielstand dauerhaft zu behalten (siehe **Einstellungen → Speichern**).
 
 </details>
 

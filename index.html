@@ -1952,6 +1952,27 @@ html{-webkit-tap-highlight-color:transparent}
 .persline{margin-top:8px;color:var(--muted)}
 .ntag.k-adm{background:#8a63d2;color:#fff}
 
+/* ===== V70: Kundenbewertungen ===== */
+.rvchip{cursor:pointer;border:1px solid var(--edge-2);background:transparent;color:var(--fg);font:600 12px/1.4 var(--font-body);padding:3px 10px;border-radius:999px;margin-top:6px}
+.rvchip:hover{border-color:var(--accent)}
+.rvchip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.rvdlg{max-width:520px}
+.rvtop{display:flex;gap:14px;align-items:center;margin-bottom:6px}
+.rvbig{font:700 40px/1 var(--font-display);display:flex;flex-direction:column;align-items:center;min-width:96px}
+.rvst{color:#f6b73c;letter-spacing:1px;font-size:14px}
+.rvbig .rvst{font-size:16px;margin-top:4px}
+.rvf{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:2px 10px;align-items:center;margin:6px 0}
+.rvf small{grid-column:1/-1;color:var(--muted)}
+.rvfl{font-weight:600}
+.rvfb{height:8px;border-radius:4px;background:var(--edge);overflow:hidden}
+.rvfb i{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .3s}
+.rvlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rvlist li{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--edge);border-radius:var(--r-sm)}
+.rvav{font-size:22px;line-height:1}
+.rvtx{display:block;margin:2px 0}
+.rvlist small{color:var(--muted)}
+:root[data-look="light"] .rvst{color:#c27c00}
+
 </style>
 
 <div class="wrap">
@@ -2292,6 +2313,7 @@ html{-webkit-tap-highlight-color:transparent}
 <div class="overlay" id="awayOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="awayT"><div class="dhead"><h2 id="awayT"></h2><button type="button" class="btn sm primary" id="awayClose" data-i18n="away_close"></button></div><div id="awayBody"></div></div></div>
 <button type="button" class="btn undo" id="undoBtn" hidden></button>
 <div class="overlay" id="visOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="visT"><div class="dhead"><h2 id="visT"></h2><button type="button" class="btn sm" id="visClose"></button></div><div id="visBody"></div></div></div>
+<div class="overlay" id="rvOv" hidden><div class="dlg rvdlg" role="dialog" aria-modal="true" aria-labelledby="rvT"><div class="dhead"><h2 id="rvT"></h2><div class="btns"><button type="button" class="btn sm primary" id="rvClose"></button></div></div><div id="rvBody"></div></div></div>
 <div class="overlay" id="ntfOv" hidden><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="ntfT"><div class="dhead"><h2 id="ntfT"></h2><div class="btns"><button type="button" class="btn sm" id="ntfClear"></button><button type="button" class="btn sm primary" id="ntfClose"></button></div></div><div id="ntfBody"></div></div></div>
 <div class="curtip" id="curTip" hidden></div>
 <div class="overlay" id="helpOv" hidden><div class="dlg wide" role="dialog" aria-modal="true" aria-labelledby="helpT"><div class="dhead"><h2 id="helpT"></h2><button type="button" class="btn sm" id="helpClose"></button></div><input type="search" class="setq" id="helpQ" autocomplete="off"><div id="helpBody"></div></div></div>
@@ -3177,8 +3199,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=69;
+const NEWS_VER=70;
 const NEWS=[
+  {v:70,sum:['Neu: Kundenbewertungen!','New: customer reviews!'],items:[
+    ['new','Kundenbewertungen: Alle paar Minuten schreibt ein Kunde, wie ihm deine Bäckerei gefällt – von 1 bis 5 Sternen. Tipp auf ⭐ unter dem Keks, um alle Bewertungen zu lesen.','Customer reviews: every few minutes a customer writes how they like your bakery – from 1 to 5 stars. Tap ⭐ under the cookie to read them all.'],
+    ['new','Gute Bewertungen lohnen sich: Über 3 Sternen gibt es bis zu +5 % Produktion. Kunden mögen viel Auswahl, erledigte Aufträge, eine wachsende Bäckerei und einen Bäcker, der ab und zu vorbeischaut.','Good reviews pay off: above 3 stars you get up to +5% production. Customers like lots of choice, finished orders, a growing bakery and a baker who drops by now and then.'],
+    ['new','2 neue Erfolge: Fünf Sterne und Lieblingsbäckerei.','2 new achievements: Five Stars and Beloved Bakery.']]},
   {v:69,sum:['Deine Bäckerei ist sicherer gespeichert','Your bakery is saved more safely'],items:[
     ['change','Sicherer speichern: Das Spiel bittet deinen Browser, den Spielstand dauerhaft zu behalten. Ohne das dürfen manche Browser ihn löschen, wenn du länger nicht spielst. Unter Einstellungen → Speichern siehst du, ob es klappt.','Safer saves: the game asks your browser to keep your save for good. Without that, some browsers may delete it when you don’t play for a while. Settings → Saving shows whether it worked.'],
     ['change','„Neuigkeiten“ zeigt nur noch Änderungen, die dich als Spieler betreffen.','“What’s New” now only shows changes that matter to you as a player.']]},
@@ -3787,10 +3813,17 @@ A.push(
   {id:'x_top10',name:['Unter den Besten','Top Ten'],desc:()=>tt('Komm in einer Bestenliste unter die ersten 10.','Reach the top 10 on any leaderboard.'),test:()=>xfHas('top10')}
 );
 
+/* ======================= V70: Erfolge für Kundenbewertungen ======================= */
+/* Steht vor dem Laden des Spielstands, damit gespeicherte Erfolge erhalten bleiben. Die Bewertungen liegen in S.rv (siehe 43zb). */
+A.push(
+  {id:'x_rv5',name:['Fünf Sterne','Five Stars'],desc:()=>tt('Bekomm eine Bewertung mit 5 Sternen.','Get a 5-star review.'),test:()=>!!(S.rv&&S.rv.b5)},
+  {id:'x_rv45',name:['Lieblingsbäckerei','Beloved Bakery'],desc:()=>tt('Erreiche eine Bewertung von 4,5 Sternen mit 20 Bewertungen.','Reach a 4.5-star rating with 20 reviews.'),test:()=>!!(S.rv&&S.rv.l&&S.rv.l.length>=20&&rvAvg()>=4.5)}
+);
+
 /* ======================= Spielstand ======================= */
 const defAdmin=()=>({prod:1,click:1,cost:1,speed:1,gold:1,goldPow:1,growth:1.15,ac:0,b:{}});
 function fresh(){
-  return {ret:{n:0,a:'',s:''},xf:{},tz:null,ck:null,rr:null,hist:{h:[],d:[],a:[],ac:0},name:'',codes:{},lb:{on:0,id:'',t:0,ls:0,pb:null,ban:0},adm:0,tamp:0,cb:0,clv:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
+  return {rv:null,ret:{n:0,a:'',s:''},xf:{},tz:null,ck:null,rr:null,hist:{h:[],d:[],a:[],ac:0},name:'',codes:{},lb:{on:0,id:'',t:0,ls:0,pb:null,ban:0},adm:0,tamp:0,cb:0,clv:0,cookies:0,run:0,all:0,clicks:0,gold:0,b:B.map(()=>0),up:{},ach:{},chips:0,asc:0,buffs:[],tree:{},items:{},boostCd:{},rolls:0,bought:0,orders:sanOrders(null),w:freshWorld(),pc:{},work:{v:2,xp:{},cnt:{},log:[],face:{},cand:{},hired:{},on:{},lvl:{},autoB:0,autoU:0,budget:25,dest:'flour',spell:'bake'},day:{date:'',q:[],bonus:0,total:0,streak:0,best:0,last:'',lc:''},stat:{time:0,best:0,hist:[],since:Date.now()},reb:{pages:0,n:0,base:0,tree:{}},tut:{i:0,hide:0},sec:{},vis:{next:420,n:0},book:{mon:{},gear:{},pl:{},vis:{},b:{},cl:{}},pass:{m:'',pp:0,cl:{},gold:0,gcl:{},bx:0},cos:{},seen:{build:1,up:1,ach:1},hero:{lvl:1,xp:0,sk:{},gear:{w:null,a:null,t:null},bag:[],sta:5,staT:Date.now(),tower:{best:0},clr:{},auto:0,nid:1,run:null},fr:{s:{},earned:0},wheel:{d:'',free:0,ext:0,n:0,jp:0,last:'',pend:-1},ttl:{cur:'lehrling',got:{lehrling:1},b:{},init:0},eg:freshEG(),sys:{seen:{},init:0},cards:{own:{},dust:0,opened:0},qual:{flour:0,butter:0,sugar:0,choc:0},runT:0,inf:{p:0,c:0,g:0},admin:defAdmin(),goldT:rand(120,240),t:Date.now(),opt:{fx:true,lang:detectLang(),skin:'classic',news:0,vol:1,look:'dark',compact:false,cd:{d:0,c:0,g:0,t:0},...DEFOPT()}};
 }
 function sanitize(o){
   const s=fresh();
@@ -3905,7 +3938,7 @@ function sanitize(o){
   if(o.codes&&typeof o.codes==='object') Object.keys(o.codes).slice(0,200).forEach(k=>{if(/^[0-9a-f]{12}$/.test(k)) s.codes[k]=num(o.codes[k],1)||1;});
   s.hist=sanHist(o.hist);
   s.rr=sanRR(o.rr);
-  s.ret=sanRet(o.ret);s.xf=sanXF(o.xf);s.tz=sanTZ(o.tz);s.ck=sanCK(o.ck);
+  s.rv=sanRV(o.rv);s.ret=sanRet(o.ret);s.xf=sanXF(o.xf);s.tz=sanTZ(o.tz);s.ck=sanCK(o.ck);
   return s;
 }
 let storageOK=true;
@@ -4070,6 +4103,7 @@ function recalc(){
   gm*=1+Math.min(.15,.0006*S.orders.rep);
   gm*=GEV.prod;clickT*=GEV.click;goldRate/=GEV.gold;
   gm*=1+.01*Math.max(0,Math.min(9,(S.clv|0)-1));
+  gm*=rvMult();   /* V70: Kundenbewertungen, bis +5 % */
   WFX=calcWFX();gm*=WFX.prod;clickT*=WFX.click;goldRate*=WFX.gold;costMult*=WFX.cost;
   let frenzy=1,clickBuff=1,sugarM=1,spellM=1;
   for(const f of S.buffs){if(f.id==='frenzy') frenzy=7;if(f.id==='clickfrenzy') clickBuff=150;if(f.id==='b_sugar') sugarM=2;if(f.id==='b_turbo') clickBuff*=3;if(f.id==='b_sale') costMult*=.85;if(f.id==='b_magnet') goldRate*=.5;if(f.id==='s_click') clickBuff*=10;if(f.id==='s_sale') costMult*=.8;if(f.id==='s_time') spellM=5;}
@@ -5004,7 +5038,7 @@ function startEvent(id){
 function chalProgress(c){return Math.min(1,S.run/c.goal);}
 function resetRun(gain,chalId){
   const oldUp=S.up;
-  const keep={ret:S.ret,hist:S.hist,name:S.name,codes:S.codes,lb:S.lb,adm:S.adm,tamp:S.tamp,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
+  const keep={rv:S.rv,ret:S.ret,hist:S.hist,name:S.name,codes:S.codes,lb:S.lb,adm:S.adm,tamp:S.tamp,all:S.all,ach:S.ach,chips:S.chips+gain,asc:S.asc+(gain>0?1:0),opt:S.opt,gold:S.gold,clicks:S.clicks,tree:S.tree,admin:S.admin,items:S.items,rolls:S.rolls,orders:S.orders,bought:S.bought,w:S.w,work:S.work,day:S.day,stat:S.stat,reb:S.reb,tut:S.tut,seen:S.seen,sec:S.sec,pass:S.pass,cos:S.cos,vis:S.vis,book:S.book,hero:S.hero,fr:S.fr,wheel:S.wheel,ttl:S.ttl,eg:S.eg,sys:S.sys,cards:S.cards};
   S=Object.assign(fresh(),keep);
   S.orders.slots=[null,null,null];S.orders.heat=0;
   if(gain>0){S.eg.ascT++;if(egHas('c_keep')) S.up=oldUp;}
@@ -11004,6 +11038,124 @@ persCheck().then(()=>setTimeout(persAuto,3000));
 setInterval(()=>{persAuto();if(!$id('setOv').hidden) persLine();},30000);
 $id('setBtn').addEventListener('click',()=>setTimeout(persLine,0));
 v69Ready=true;
+
+/* ======================= V70: Kundenbewertungen ======================= */
+/* Alle paar Minuten schreibt ein Kunde eine kurze Bewertung (1–5 Sterne). Die Sterne hängen davon ab, wie die Bäckerei
+   gerade läuft: Auswahl (Gebäude-Arten), Aufträge, Wachstum der Produktion und Aufmerksamkeit (Klicks, Goldkekse).
+   Der Schnitt der letzten 20 Bewertungen gibt ab 3 Sternen einen kleinen Bonus: bis +5 % Produktion bei 5,0. */
+var v70Ready=false;
+const RV_MAX=20;   /* RV_NAMES hat 24 Namen; sanRV prüft das mit Literalen */
+const RV_TXT={
+  'var+':[['So viel Auswahl – ich konnte mich kaum entscheiden!','So much choice – I could hardly decide!'],['Jedes Mal gibt es etwas Neues zu probieren.','There’s something new to try every time.'],['Von {a} bis {b} – hier gibt es einfach alles.','From {a} to {b} – this place has it all.']],
+  'var-':[['Lecker, aber immer nur {b}. Mehr Auswahl wäre schön.','Tasty, but always just {b}. More choice would be nice.'],['Die Theke sieht ein bisschen leer aus.','The counter looks a bit empty.']],
+  'ord+':[['Meine Bestellung war blitzschnell fertig!','My order was ready in a flash!'],['Ich habe eine Torte bestellt, und sie war perfekt.','I ordered a cake and it was perfect.']],
+  'ord-':[['Ich habe etwas bestellt und warte immer noch …','I placed an order and I’m still waiting …'],['Bestellungen nehmen sie hier wohl nicht so ernst.','They don’t seem to take orders very seriously here.']],
+  'gro+':[['Jedes Mal, wenn ich komme, ist die Bäckerei größer!','Every time I visit, the bakery is bigger!'],['Hier geht es richtig voran – beeindruckend.','Things are really moving here – impressive.']],
+  'gro-':[['Seit letzter Woche hat sich hier nichts verändert.','Nothing has changed here since last week.'],['Gut, aber ein bisschen eingeschlafen.','Good, but a little sleepy.']],
+  'act+':[['Der Bäcker hat mir beim Kneten zugewinkt!','The baker waved at me while kneading!'],['So freundlich und so frisch – danke!','So friendly and so fresh – thank you!']],
+  'act-':[['Niemand war an der Theke.','Nobody was at the counter.'],['Die Kekse sind gut, aber der Laden wirkt verlassen.','The cookies are good, but the shop feels deserted.']],
+  'mid':[['Ganz okay. Ich komme wieder.','Pretty okay. I’ll be back.'],['Solide Kekse, nichts Besonderes.','Solid cookies, nothing special.'],['Gut, aber da geht noch mehr.','Good, but there’s room to grow.']]
+};
+const RV_NAMES=['Mia','Leo','Ava','Finn','Zoe','Noah','Lina','Max','Ella','Ben','Ida','Tom','Rosa','Jan','Nora','Emil','Sara','Paul','Lea','Omar','Yuki','Ana','Ravi','Ivy'];
+const RV_FACE=['','😞','😕','🙂','😋','🤩'];
+/* Spielstand-Teil (wird in sanitize() aufgerufen, darum als Funktions-Deklaration) */
+function sanRV(o){
+  /* Läuft beim Laden des Spielstands, also bevor die Konstanten dieser Datei gesetzt sind: darum nur Zahlen und Literale hier. */
+  if(!o||typeof o!=='object'||!Array.isArray(o.l)) return null;
+  const num=(v,lo,hi,d)=>{v=+v;return isFinite(v)?Math.max(lo,Math.min(hi,v)):d;},nb=B.length-1;
+  const l=o.l.slice(-20).filter(r=>Array.isArray(r)&&isFinite(+r[0])&&[1,2,3,4,5].includes(+r[1])&&/^(var|ord|gro|act)[+-]\d$|^mid\d$/.test(String(r[2]))&&+r[3]>=0&&+r[3]<24)
+    .map(r=>[+r[0],+r[1],String(r[2]),+r[3]|0,Array.isArray(r[4])?[num(r[4][0],0,nb,0)|0,num(r[4][1],0,nb,0)|0]:[0,0]]);
+  return {l,nx:num(o.nx,0,3600,90),kp:num(o.kp,0,1e300,0),ck:num(o.ck,0,1e300,0),gd:num(o.gd,0,1e300,0),b5:o.b5?1:0};
+}
+function rvAvg(){const L=S.rv&&S.rv.l;if(!L||!L.length) return 0;return L.reduce((a,r)=>a+r[1],0)/L.length;}
+/* Produktions-Bonus (in recalc): erst ab 3 Bewertungen, nur über 3 Sternen */
+function rvMult(){if(!S||!S.rv||!S.rv.l||S.rv.l.length<3) return 1;return 1+.025*Math.max(0,rvAvg()-3);}
+const rvOn=()=>S.all>=5000&&S.b.some(n=>n>0);
+/* Was die Kunden gerade merken, je 0–1 */
+function rvFactors(){
+  const R=S.rv||{},own=S.b.filter(n=>n>0).length,top=S.b.reduce((m,n,i)=>n>0?i:m,-1);
+  const vari=Math.min(1,own/Math.min(B.length,Math.max(3,top+1)));
+  const ordOn=S.all>=UNL.orders,ord=ordOn?.3+.7*Math.min(1,(S.orders.heat||0)/3):.6;
+  const g=R.kp>0?C.kps/R.kp:1.1,gro=g>=1.2?1:g>=1.02?.8:g>=.98?.5:.3;
+  const act=Math.max(.2,Math.min(1,(S.clicks-(R.ck||0))/60)*.7+(S.gold>(R.gd||0)?.3:0));
+  return {vari,ord,gro,act,ordOn};
+}
+function rvText(r){
+  const k=r[2],key=k.startsWith('mid')?'mid':k.slice(0,4),i=+k.slice(-1),L=RV_TXT[key]||RV_TXT.mid,t=L[Math.min(i,L.length-1)];
+  return tx(t).replace('{a}',tx(B[r[4][0]].name)).replace('{b}',tx(B[r[4][1]].name));
+}
+const rvQ=t=>tt('„','“')+t+tt('“','”');
+function rvAgo(t){const m=Math.max(1,Math.round((Date.now()-t)/60000)),v=m<60?m+' min':m<1440?Math.round(m/60)+' h':Math.round(m/1440)+tt(' Tg.',' d');return tt('vor '+v,v+' ago');}
+const rvStars=n=>'★'.repeat(n)+'☆'.repeat(5-n);
+function rvNew(){
+  if(!S.rv) S.rv={l:[],nx:90,kp:C.kps,ck:S.clicks,gd:S.gold,b5:0};
+  const R=S.rv,F=rvFactors(),sc=F.vari*.35+F.ord*.2+F.gro*.3+F.act*.15;
+  const st=Math.max(1,Math.min(5,Math.round(1.6+3.6*sc+(Math.random()-.5))));
+  const f=[['var',F.vari],['ord',F.ordOn?F.ord:.6],['gro',F.gro],['act',F.act]];
+  let k;
+  if(st>=4){const b=f.reduce((a,x)=>x[1]>a[1]?x:a);k=b[0]+'+';}
+  else if(st<=2){const w=f.reduce((a,x)=>x[1]<a[1]?x:a);k=w[0]+'-';}
+  else k='mid';
+  k+=Math.floor(Math.random()*RV_TXT[k].length);
+  const owned=S.b.map((n,i)=>[n,i]).filter(x=>x[0]>0),lo=owned.length?owned[0][1]:0,hi=owned.length?owned[owned.length-1][1]:0,most=owned.length?owned.reduce((a,x)=>x[0]>a[0]?x:a)[1]:0;
+  const r=[Date.now(),st,k,Math.floor(Math.random()*RV_NAMES.length),[lo,k.startsWith('var-')?most:hi]];
+  R.l.push(r);if(R.l.length>RV_MAX) R.l.splice(0,R.l.length-RV_MAX);
+  if(st===5) R.b5=1;
+  R.kp=C.kps;R.ck=S.clicks;R.gd=S.gold;R.nx=240+Math.floor(Math.random()*180);
+  recalc();checkAch(false);rvChip();
+  if(!$id('rvOv').hidden) rvRender();
+  if(document.documentElement.dataset.quiet!=='1') toast(rvStars(st)+' '+rvQ(rvText(r))+' – '+RV_NAMES[r[3]],st===5);
+  return r;
+}
+/* Chip unter der Qualität: ⭐ 4,3 · 12 */
+const rvBtn=document.createElement('button');
+rvBtn.type='button';rvBtn.className='qchip rvchip';rvBtn.id='rvChip';rvBtn.hidden=true;
+$id('qChip').insertAdjacentElement('afterend',rvBtn);
+function rvChip(){
+  const L=S.rv&&S.rv.l,on=!!(L&&L.length);
+  if(rvBtn.hidden===on) rvBtn.hidden=!on;
+  if(!on) return;
+  const t='⭐ '+rvAvg().toLocaleString(LOC[LANG],{minimumFractionDigits:1,maximumFractionDigits:1})+' · '+L.length;
+  if(rvBtn.textContent!==t) rvBtn.textContent=t;
+  const lb=tt('Kundenbewertungen ansehen','See customer reviews');if(rvBtn.getAttribute('aria-label')!==lb) rvBtn.setAttribute('aria-label',lb+': '+t);
+}
+function rvRender(){
+  setTxt($id('rvT'),tt('Kundenbewertungen','Customer reviews'));setTxt($id('rvClose'),tt('Schließen','Close'));
+  const L=(S.rv&&S.rv.l)||[],avg=rvAvg(),F=rvFactors(),pc=(rvMult()-1)*100;
+  const bar=(ic,l,v,tip)=>'<div class="rvf"><span class="rvfl">'+ic+' '+l+'</span><span class="rvfb"><i style="width:'+Math.round(v*100)+'%"></i></span><small>'+tip+'</small></div>';
+  let h='<div class="rvtop"><div class="rvbig">'+(L.length?avg.toLocaleString(LOC[LANG],{minimumFractionDigits:1,maximumFractionDigits:1}):'–')+'<span class="rvst" aria-hidden="true">'+rvStars(Math.round(avg))+'</span></div><p class="small">'
+    +(L.length<3?tt('Ab 3 Bewertungen gibt deine Bewertung einen Bonus.','From 3 reviews on, your rating gives a bonus.')
+      :pc>0?tt('Deine Bewertung gibt dir ','Your rating gives you ')+'<b>+'+pc.toLocaleString(LOC[LANG],{maximumFractionDigits:1})+' % '+tt('Produktion','production')+'</b>.'
+      :tt('Über 3 Sternen gibt deine Bewertung einen Bonus (bis +5 % Produktion).','Above 3 stars your rating gives a bonus (up to +5% production).'))
+    +' '+tt('Es zählen die letzten 20 Bewertungen.','The last 20 reviews count.')+'</p></div>'
+    +'<h3 class="wt">'+tt('Darauf achten die Kunden','What customers notice')+'</h3>'
+    +bar('🧁',tt('Auswahl','Variety'),F.vari,tt('Besitze viele Gebäude-Arten.','Own many kinds of buildings.'))
+    +bar('📜',tt('Aufträge','Orders'),F.ord,F.ordOn?tt('Erledige Kundenaufträge (Tab Aufträge).','Complete customer orders (Orders tab).'):tt('Aufträge kommen später dazu.','Orders unlock later.'))
+    +bar('📈',tt('Wachstum','Growth'),F.gro,tt('Lass deine Produktion weiter wachsen.','Keep your production growing.'))
+    +bar('👋',tt('Aufmerksamkeit','Attention'),F.act,tt('Klick ab und zu auf den Keks und fang Goldkekse.','Click the cookie now and then and catch golden cookies.'))
+    +'<h3 class="wt">'+tt('Neueste Bewertungen','Latest reviews')+'</h3>';
+  h+=L.length?'<ul class="rvlist">'+L.slice().reverse().map(r=>'<li><span class="rvav" aria-hidden="true">'+RV_FACE[r[1]]+'</span><span><b>'+RV_NAMES[r[3]]+'</b> <span class="rvst" aria-label="'+r[1]+' '+tt('von 5 Sternen','of 5 stars')+'">'+rvStars(r[1])+'</span><span class="rvtx">'+rvQ(escName(rvText(r)))+'</span><small>'+rvAgo(r[0])+'</small></span></li>').join('')+'</ul>'
+    :'<p class="small">'+tt('Noch keine Bewertungen. Die ersten Kunden kommen bald!','No reviews yet. The first customers are on their way!')+'</p>';
+  const b=$id('rvBody');if(b._h!==h){b._h=h;b.innerHTML=h;}
+}
+function rvOpen(){rvRender();$id('rvOv').hidden=false;$id('rvClose').focus();}
+function rvClose(){if($id('rvOv').hidden) return;$id('rvOv').hidden=true;rvBtn.focus();}
+rvBtn.addEventListener('click',rvOpen);
+$id('rvClose').addEventListener('click',rvClose);
+$id('rvOv').addEventListener('click',e=>{if(e.target===$id('rvOv')) rvClose();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$id('rvOv').hidden){e.preventDefault();e.stopImmediatePropagation();rvClose();}},true);
+/* Takt: Zeit zählt nur, während gespielt wird */
+setInterval(()=>{
+  try{
+    rvChip();
+    if(document.hidden||!startOv.hidden||!rvOn()) return;
+    if(!S.rv) S.rv={l:[],nx:90,kp:C.kps,ck:S.clicks,gd:S.gold,b5:0};
+    S.rv.nx-=1;
+    if(S.rv.nx<=0) rvNew();
+    if(!$id('rvOv').hidden&&Math.random()<.2) rvRender();
+  }catch(x){}
+},1000);
+v70Ready=true;
 
 /* ======================= V40: Shop-Navigation & Welt-Übergänge ======================= */
 const SHOPK=[['starShop','⭐','Sterne','Stars'],['artSec','⚒️','Schmiede','Forge'],['cardSec','🃏','Karten','Cards'],['boostList','⚡','Boosts','Boosts'],['boostListW','🌍','Welt','World'],['boxBtn','🎁','Keksbox','Cookie box'],['itemGrid','🎒','Gegenstände','Items'],['skinRow','🍪','Designs','Designs']];

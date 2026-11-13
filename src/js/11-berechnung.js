@@ -104,6 +104,7 @@ function recalc(){
   gm*=1+Math.min(.15,.0006*S.orders.rep);
   gm*=GEV.prod;clickT*=GEV.click;goldRate/=GEV.gold;
   gm*=1+.01*Math.max(0,Math.min(9,(S.clv|0)-1));
+  gm*=rvMult();   /* V70: Kundenbewertungen, bis +5 % */
   WFX=calcWFX();gm*=WFX.prod;clickT*=WFX.click;goldRate*=WFX.gold;costMult*=WFX.cost;
   let frenzy=1,clickBuff=1,sugarM=1,spellM=1;
   for(const f of S.buffs){if(f.id==='frenzy') frenzy=7;if(f.id==='clickfrenzy') clickBuff=150;if(f.id==='b_sugar') sugarM=2;if(f.id==='b_turbo') clickBuff*=3;if(f.id==='b_sale') costMult*=.85;if(f.id==='b_magnet') goldRate*=.5;if(f.id==='s_click') clickBuff*=10;if(f.id==='s_sale') costMult*=.8;if(f.id==='s_time') spellM=5;}
