@@ -44,8 +44,12 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=69;
+const NEWS_VER=70;
 const NEWS=[
+  {v:70,sum:['Neu: Kundenbewertungen!','New: customer reviews!'],items:[
+    ['new','Kundenbewertungen: Alle paar Minuten schreibt ein Kunde, wie ihm deine Bäckerei gefällt – von 1 bis 5 Sternen. Tipp auf ⭐ unter dem Keks, um alle Bewertungen zu lesen.','Customer reviews: every few minutes a customer writes how they like your bakery – from 1 to 5 stars. Tap ⭐ under the cookie to read them all.'],
+    ['new','Gute Bewertungen lohnen sich: Über 3 Sternen gibt es bis zu +5 % Produktion. Kunden mögen viel Auswahl, erledigte Aufträge, eine wachsende Bäckerei und einen Bäcker, der ab und zu vorbeischaut.','Good reviews pay off: above 3 stars you get up to +5% production. Customers like lots of choice, finished orders, a growing bakery and a baker who drops by now and then.'],
+    ['new','2 neue Erfolge: Fünf Sterne und Lieblingsbäckerei.','2 new achievements: Five Stars and Beloved Bakery.']]},
   {v:69,sum:['Deine Bäckerei ist sicherer gespeichert','Your bakery is saved more safely'],items:[
     ['change','Sicherer speichern: Das Spiel bittet deinen Browser, den Spielstand dauerhaft zu behalten. Ohne das dürfen manche Browser ihn löschen, wenn du länger nicht spielst. Unter Einstellungen → Speichern siehst du, ob es klappt.','Safer saves: the game asks your browser to keep your save for good. Without that, some browsers may delete it when you don’t play for a while. Settings → Saving shows whether it worked.'],
     ['change','„Neuigkeiten“ zeigt nur noch Änderungen, die dich als Spieler betreffen.','“What’s New” now only shows changes that matter to you as a player.']]},

@@ -429,9 +429,36 @@ module.exports = async function browserTests(url) {
     check(await k.isVisible('#persLine') && /browser/.test(pl), 'v69: Settings → Saving says whether the browser keeps the save', pl);
     if (!on) { await k.click('#persLine [data-pers]'); await k.waitForTimeout(1500); }
     await k.click('#setClose');
-    const ks = (await pool.query("select step from kf_steps where step in ('keep', 'nokeep') and ver = 69")).rows;
+    const ks = (await pool.query("select step from kf_steps where step in ('keep', 'nokeep') and ver >= 69")).rows;
     check(on || ks.length >= 1, 'v69: asking the browser is noted as a journey step', ks);
     await k.context().close();
+  }
+
+  // v70: customer reviews, rating bonus, the reviews window, and saves with reviews load fine
+  {
+    const rctx = await browser.newContext({ viewport: { width: 1100, height: 780 } });
+    await rctx.route(LB + '/**', handle); await rctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    const now = Date.now();
+    await rctx.addInitScript(s => { try { if (!localStorage.getItem('keksfabrik-save-v1')) localStorage.setItem('keksfabrik-save-v1', JSON.stringify(Object.assign(s, { t: Date.now() }))); localStorage.setItem('keksfabrik-chests', '3'); } catch (e) {} },
+      { name: 'Review Bakery', b: [30, 20, 12, 6, 3], cookies: 1e7, run: 1e8, all: 1e8, clicks: 400, gold: 3, t: now, opt: { lang: 'en', start: false },
+        rv: { l: [[now - 3600e3, 4, 'gro+0', 2, [0, 4]], [now - 2400e3, 3, 'mid1', 5, [0, 4]], [now - 1200e3, 5, 'var+2', 8, [0, 4]], [now - 600e3, 2, 'ord-0', 11, [0, 4]], [0, 9, 'bogus', 99, []]], nx: 3, kp: 1, ck: 0, gd: 0, b5: 1 } });
+    const rp = await rctx.newPage(); rp.on('pageerror', e => errors.push('v70: ' + e.message));
+    await rp.goto(url); await rp.waitForTimeout(800);
+    await rp.addStyleTag({ content: '#introOv,#awayOv,#tutBox,#accHint{display:none!important}' });
+    await rp.evaluate(() => document.querySelectorAll('.overlay').forEach(o => { o.hidden = true; }));
+    await rp.waitForTimeout(5000);
+    check(/⭐ \d\.\d · 5/.test(await text(rp, '#rvChip')), 'v70: a new customer review arrives and the chip shows the rating and 5 reviews (the broken one is dropped)', await text(rp, '#rvChip'));
+    await rp.click('#rvChip'); await rp.waitForTimeout(400);
+    check(await rp.isVisible('#rvOv') && /Customer reviews/.test(await text(rp, '#rvT')) && await rp.locator('#rvBody .rvf').count() === 4 && await rp.locator('#rvBody .rvlist li').count() === 5 && /production|bonus/.test(await text(rp, '#rvBody')), 'v70: the reviews window shows the rating, what customers notice and the latest reviews');
+    check(/“.+”/.test(await text(rp, '#rvBody .rvlist li')) && /ago/.test(await text(rp, '#rvBody .rvlist li')), 'v70: reviews are quoted in English and show how long ago');
+    await rp.keyboard.press('Escape'); await rp.waitForTimeout(300);
+    check(!(await rp.isVisible('#rvOv')), 'v70: Escape closes the reviews window');
+    await settings(rp, 'save'); await rp.click('#saveBtn'); await rp.click('#setClose'); await rp.waitForTimeout(300);
+    await rp.reload(); await rp.waitForTimeout(1200);
+    const kept = await rp.evaluate(() => { try { const o = JSON.parse(localStorage.getItem('keksfabrik-save-v1')); return [o.all, o.rv && o.rv.l.length, o.name, !!(o.ach && o.ach.x_rv5)]; } catch (e) { return ['x']; } });
+    check(kept[0] >= 1e8 && kept[1] === 5 && kept[2] === 'Review Bakery', 'v70: a save with reviews loads again with all its progress', kept);
+    check(kept[3] === true, 'v70: a 5-star review unlocks the Five Stars achievement', kept);
+    await rctx.close();
   }
 
   // 5d. Push setting (v49)
