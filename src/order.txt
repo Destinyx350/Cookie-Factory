@@ -80,6 +80,9 @@ src/js/43u-v66-oberflaeche-sanft.js
 src/js/43v-v67-fair.js
 src/js/43w-v68-erste-minuten.js
 admin src/js/43x-admin-einstieg.js
+src/js/43y-v69-speicher-schutz.js
+admin src/js/43z-admin-spielzeit.js
+admin src/js/43za-admin-neuigkeiten.js
 admin src/js/44-v40-admin-bestenliste-verwalten.js
 src/js/45-v40-shop-navigation-welt-uebergaenge.js
 src/js/46-v39-geraet-layout.js

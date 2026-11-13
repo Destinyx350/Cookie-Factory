@@ -490,3 +490,7 @@
 .ftable .fbar{display:inline-block;vertical-align:middle;width:70px;height:8px;border-radius:4px;background:var(--edge);overflow:hidden}
 .ftable .fbar i{display:block;height:100%;background:var(--viz-1);border-radius:4px}
 .ftable .fnone{color:var(--muted)}
+
+/* ===== V69: Speicher-Schutz, Admin-Neuigkeiten ===== */
+.persline{margin-top:8px;color:var(--muted)}
+.ntag.k-adm{background:#8a63d2;color:#fff}

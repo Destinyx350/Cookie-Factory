@@ -44,8 +44,11 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=68;
+const NEWS_VER=69;
 const NEWS=[
+  {v:69,sum:['Deine Bäckerei ist sicherer gespeichert','Your bakery is saved more safely'],items:[
+    ['change','Sicherer speichern: Das Spiel bittet deinen Browser, den Spielstand dauerhaft zu behalten. Ohne das dürfen manche Browser ihn löschen, wenn du länger nicht spielst. Unter Einstellungen → Speichern siehst du, ob es klappt.','Safer saves: the game asks your browser to keep your save for good. Without that, some browsers may delete it when you don’t play for a while. Settings → Saving shows whether it worked.'],
+    ['change','„Neuigkeiten“ zeigt nur noch Änderungen, die dich als Spieler betreffen.','“What’s New” now only shows changes that matter to you as a player.']]},
   {v:68,sum:['Schneller loslegen und Willkommens-Truhen','A quicker start and welcome chests'],items:[
     ['new','Willkommens-Truhen: An deinen ersten 3 Tagen wartet jeden Tag eine Truhe mit Edelsteinen, Keksen, einem Ei und einem Sternenkrümel. Oben zeigt 🎁, wann die nächste aufgeht.','Welcome chests: on your first 3 days a chest waits every day, with gems, cookies, an egg and a star crumb. 🎁 at the top shows when the next one opens.'],
     ['change','Neue Spieler legen sofort los: kein Namens-Fenster und beim ersten Mal kein Startbildschirm. Deine Bäckerei bekommt gleich einen Namen – tipp ihn oben an, um ihn zu ändern.','New players start right away: no name window and no start screen the first time. Your bakery gets a name by itself – tap it at the top to change it.'],
@@ -219,8 +222,7 @@ const NEWS=[
     ['new','Dein Platz steht direkt im Tab Ziele. Du kannst die Bestenliste jederzeit wieder verlassen.','Your rank shows right in the Goals tab. You can leave the leaderboard at any time.']
   ]},
   {v:35,sum:['Bald: Eine Bestenliste für alle Bäckereien.','Coming soon: a leaderboard for every bakery.'],items:[
-    ['new','Die Bestenliste ist fertig gebaut und wird bald eingeschaltet. Dann findest du sie im Tab Ziele und kannst mit deinem Bäckerei-Namen mitmachen.','The leaderboard is built and will be switched on soon. You’ll find it in the Goals tab and can join with your bakery name.'],
-    ['change','Spielstände, in denen das Admin-Panel benutzt wurde, können nicht in die Bestenliste. So bleibt sie fair.','Saves that used the admin panel can’t join the leaderboard. This keeps it fair.']
+    ['new','Die Bestenliste ist fertig gebaut und wird bald eingeschaltet. Dann findest du sie im Tab Ziele und kannst mit deinem Bäckerei-Namen mitmachen.','The leaderboard is built and will be switched on soon. You’ll find it in the Goals tab and can join with your bakery name.']
   ]},
   {v:34,sum:['Neu: Geheime Codes, Spielstand als Datei, die Keksfabrik als App und ein Teilen-Knopf.','New: Secret codes, save files, Cookie Factory as an app and a share button.'],items:[
     ['new','Codes: Gib unter Einstellungen → Spiel einen geheimen Code ein und hol dir eine Belohnung. Jeder Code geht einmal pro Spielstand.','Codes: Enter a secret code under Settings → Game to get a reward. Each code works once per save.'],
@@ -228,10 +230,9 @@ const NEWS=[
     ['new','Als App installieren: Die Keksfabrik läuft jetzt wie eine App auf dem Startbildschirm, auch ohne Internet.','Install as an app: Cookie Factory now runs like an app from your home screen, even without internet.'],
     ['new','Teilen-Knopf oben: Zeig deinen Freunden, wie viele Kekse deine Bäckerei schon gebacken hat.','Share button at the top: Show your friends how many cookies your bakery has baked.']
   ]},
-  {v:33,sum:['Neu: Namen für Spielstände und ein Passwort für das Admin-Panel.','New: Names for save files and a password for the admin panel.'],items:[
+  {v:33,sum:['Neu: Namen für Spielstände.','New: Names for save files.'],items:[
     ['new','Spielstände haben jetzt Namen. Beim ersten Start, bei „Neu starten“ und bei „Neues Spiel“ gibst du einen Namen ein.','Save files now have names. You enter one on first launch, with “Start new” and with “New game”.'],
-    ['new','Der Name steht oben neben dem Titel. Ändern kannst du ihn in den Einstellungen unter Spielstände.','The name shows at the top next to the title. You can change it in the settings under Save slots.'],
-    ['change','Das Admin-Panel ist jetzt mit einem Passwort geschützt.','The admin panel is now protected by a password.']
+    ['new','Der Name steht oben neben dem Titel. Ändern kannst du ihn in den Einstellungen unter Spielstände.','The name shows at the top next to the title. You can change it in the settings under Save slots.']
   ]},
   {v:32,sum:['Neuer Look für Aufträge, Welt, Abenteuer und Filialen. Dazu Kauf-Effekte und bessere Tipps für den Start.','New look for Orders, World, Adventure and Stores. Plus purchase effects and better tips for the start.'],items:[
     ['new','Aufträge: Auftragsbrett-Banner mit Ruf, Bonus und Anzahl als Chips. Jede Karte hat einen Farbstreifen für die Schwierigkeit.','Orders: order board banner with reputation, bonus and count as chips. Each card has a colour stripe for its difficulty.'],
@@ -271,14 +272,13 @@ const NEWS=[
     ['new','Alle 20 Gebäude neu gezeichnet und schönere Klick-Effekte mit Krümeln, Funken und Ringen.','All 20 buildings redrawn and nicer click effects with crumbs, sparks and rings.'],
     ['change','„Willkommen zurück“ zeigt jetzt mehr: was passiert ist und was jetzt bereit ist – mit Knöpfen zum direkt Hinspringen.','“Welcome back” now shows more: what happened and what is ready now – with buttons to jump right there.']
   ]},
-  {v:26,sum:['Neu: 8 Endgame-Systeme und ein neues Admin-Panel.','New: 8 endgame systems and a new admin panel.'],items:[
+  {v:26,sum:['Neu: 8 Endgame-Systeme.','New: 8 endgame systems.'],items:[
     ['new','Kosmischer Aufstieg (Tab Aufstieg): die 3. Prestige-Stufe mit Kosmos-Splittern und 10 kosmischen Kräften.','Cosmic ascension (Ascension tab): the 3rd prestige layer with cosmic shards and 10 cosmic powers.'],
     ['new','Paragon-Stufen: unendliche Stufen mit Punkten für Produktion, Klicks, Goldkekse und Preise.','Paragon levels: endless levels with points for production, clicks, golden cookies and prices.'],
     ['new','Gebäude-Evolution (Tab Bauen): Ab 500 Stück wird ein Gebäude golden und produziert ×10.','Building evolution (Build tab): From 500 owned a building turns golden and produces ×10.'],
     ['new','Prestige-Ränge von Bronze bis Legende mit Rahmen um den Keks.','Prestige ranks from bronze to legend with a frame around the cookie.'],
     ['new','Artefakt-Schmiede (Tab Shop) und Automatik-Zentrale (Tab Helfer).','Artifact forge (Shop tab) and automation center (Helpers tab).'],
-    ['new','4 mythische Gegenstände und 10 Platin-Erfolge (je Produktion ×1,25).','4 mythic items and 10 platinum achievements (production ×1.25 each).'],
-    ['new','Admin-Panel neu: Bereiche, Suche, Live-Werte, Spieltempo, Auto-Klicker, Endgame-Werkzeuge und Fehler-Scanner.','New admin panel: sections, search, live values, game speed, auto clicker, endgame tools and error scanner.']
+    ['new','4 mythische Gegenstände und 10 Platin-Erfolge (je Produktion ×1,25).','4 mythic items and 10 platinum achievements (production ×1.25 each).']
   ]},
   {v:25,sum:['Neu: Komplett neues Aussehen im Handyspiel-Stil.','New: A completely new look in mobile game style.'],items:[
     ['new','Neues Design: bunte Karten, 3D-Knöpfe zum Drücken, runde Schrift und Reiter mit Symbolen.','New design: colorful cards, 3D buttons you can press, a round font and tabs with icons.'],
@@ -379,7 +379,7 @@ const NEWS=[
   {v:10,sum:['Neu: Welt und Shop sind jetzt ein Tab, und die Einstellungen sind oben rechts.','New: World and Shop are now one tab, and settings are at the top right.'],items:[
     ['new','Welt & Shop: Boosts, Keksboxen, Gegenstände und die ganze Welt sind auf einer Seite.','World & Shop: Boosts, cookie boxes, items and the whole world are on one page.'],
     ['new','Gegenstände kaufen: Mit Edelsteinen aus Expeditionen kannst du jeden Gegenstand direkt kaufen. Jede Stufe kostet mehr.','Buy items: With gems from expeditions you can buy any item directly. Each level costs more.'],
-    ['change','Einstellungen: Das Zahnrad oben rechts öffnet Optionen und das Admin-Panel. Die beiden Reiter sind weg.','Settings: The gear at the top right opens options and the admin panel. The two tabs are gone.']
+    ['change','Einstellungen: Das Zahnrad oben rechts öffnet die Optionen.','Settings: The gear at the top right opens the options.']
   ]},
   {v:9,sum:['Neu: Ein modernes, ruhigeres Design.','New: A modern, calmer design.'],items:[
     ['change','Design: Alles ist jetzt flacher und übersichtlicher, mit weniger Rahmen und Schnörkeln.','Design: Everything is now flatter and cleaner, with fewer borders and decorations.'],
@@ -399,13 +399,13 @@ const NEWS=[
     ['new','Crafting: Baue Ausrüstung und Tränke aus Zähnen, Kräutern und Edelsteinen.','Crafting: Make gear and potions from teeth, herbs and gems.'],
     ['new','Ereignisse: Alle paar Minuten gibt es kurz einen Bonus, zum Beispiel Backwut.','Events: Every few minutes there is a short bonus, for example Baking Rush.'],
     ['new','Challenges: Spiele mit einer Erschwernis und bekomme dauerhafte Belohnungen.','Challenges: Play with a handicap and get permanent rewards.'],
-    ['new','9 neue Erfolge und ein Bereich im Admin-Panel.','9 new achievements and a section in the admin panel.']
+    ['new','9 neue Erfolge.','9 new achievements.']
   ]},
   {v:7,sum:['Neu: Kundenaufträge. Kunden bestellen Kekse und du bekommst Belohnungen.','New: customer orders. Customers order cookies and you get rewards.'],items:[
     ['new','Aufträge: Ein neuer Tab. Kunden wollen z. B. Kekse, Klicks oder neue Gebäude in kurzer Zeit.','Orders: A new tab. Customers want e.g. cookies, clicks or new buildings in a short time.'],
     ['new','Belohnung: Du bekommst Kekse. Schwere Aufträge geben sogar einen Gegenstand.','Reward: You get cookies. Hard orders even give an item.'],
     ['new','Ruf: Jeder erledigte Auftrag gibt Ruf. Mehr Ruf bedeutet bis zu +15 % Produktion.','Reputation: Every finished order gives reputation. More reputation means up to +15% production.'],
-    ['new','4 neue Erfolge für Aufträge und ein Bereich im Admin-Panel.','4 new achievements for orders and a section in the admin panel.']
+    ['new','4 neue Erfolge für Aufträge.','4 new achievements for orders.']
   ]},
   {v:6,sum:['Endgame: mehr Gebäude, mehr Upgrades und ein viel größerer Himmelsbaum.','Endgame: more buildings, more upgrades and a much bigger heavenly tree.'],items:[
     ['new','Gebäude: 3 neue ganz am Ende. Antimaterie-Kondensator, Prisma und Keks-Multiversum.','Buildings: 3 new ones at the very end. Antimatter Condenser, Prism and Cookie Multiverse.'],
@@ -432,8 +432,7 @@ const NEWS=[
     ['new','Keksbox: In jeder Box steckt ein zufälliger Gegenstand.','Cookie box: Every box holds a random item.'],
     ['new','Keks-Designs: Der große Keks hat 6 neue Looks.','Cookie designs: The big cookie has 6 new looks.']
   ]},
-  {v:3,sum:['Admin-Panel, mehr Inhalt, Bilder und zwei Sprachen.','Admin panel, more content, images and two languages.'],items:[
-    ['new','Admin-Panel: Hier kannst du fast alles ändern.','Admin panel: Here you can change almost everything.'],
+  {v:3,sum:['Mehr Inhalt, Bilder und zwei Sprachen.','More content, images and two languages.'],items:[
     ['new','{u} Upgrades und ein größerer Himmelsbaum mit 17 Knoten.','{u} upgrades and a bigger heavenly tree with 17 nodes.'],
     ['new','Bilder für Gebäude, Upgrades und den Himmelsbaum.','Images for buildings, upgrades and the heavenly tree.'],
     ['new','Deutsch und Englisch, dazu bessere Animationen.','German and English, plus better animations.']

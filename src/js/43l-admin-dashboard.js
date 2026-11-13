@@ -56,7 +56,8 @@ els.admin.addEventListener('click',e=>{
 /* Tooltip: die ganze Spalte ist das Ziel, nicht nur der Balken */
 function dashTip(e){
   const p=e.target.closest&&e.target.closest('.dplot');if(!p) return;
-  const fig=p.closest('.dchart'),c=p.querySelector('.dcols'),tip=p.querySelector('.dtip'),days=admDash&&admDash.days;if(!c||!tip||!days) return;
+  const fig=p.closest('.dchart');if(!fig||fig.dataset.src) return;   /* V69: Diagramme mit eigenen Daten zeigen ihren Tooltip selbst */
+  const c=p.querySelector('.dcols'),tip=p.querySelector('.dtip'),days=admDash&&admDash.days;if(!c||!tip||!days) return;
   const r=c.getBoundingClientRect(),i=Math.max(0,Math.min(days.length-1,Math.floor((e.clientX-r.left)/r.width*days.length))),key=fig.dataset.chart;
   c.querySelectorAll('i.hi').forEach(x=>x.classList.remove('hi'));const col=c.children[i];if(col) col.classList.add('hi');
   tip.hidden=false;tip.innerHTML='<b>'+fmt(+days[i][key]||0)+'</b> '+dashWd(days[i].day);

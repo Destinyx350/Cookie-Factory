@@ -158,7 +158,7 @@ els.admin.addEventListener('submit',e=>{
 /* ---------- Bereiche in den langen Tabs Moderation und Server ---------- */
 const ADM_SECS={
   mod:[['pl','👥',['Spieler','Players'],'🔎⛔🔇⚠📨'],['co','💬',['Gemeinschaft','Community'],'🚩✉🚫👮']],
-  srv:[['hl','🩺',['Server-Zustand','Server health'],'🩺📊🚪📈📅🧭🐞🗄💬'],['st','⚙️',['Einstellungen','Settings'],'🎚🛠⬆🏛💾🛰📱🔔📜']]};
+  srv:[['hl','🩺',['Server-Zustand','Server health'],'🩺📊🚪⏱📈📅🧭🐞🗄💬'],['st','⚙️',['Einstellungen','Settings'],'🎚🛠⬆🏛💾🛰📱🔔📜']]};
 let admSec={mod:'pl',srv:'hl'};
 try{Object.assign(admSec,JSON.parse(sessionStorage.getItem('keksfabrik-admsec')||'{}'));}catch(x){}
 function admSecSave(){try{sessionStorage.setItem('keksfabrik-admsec',JSON.stringify(admSec));}catch(x){}}

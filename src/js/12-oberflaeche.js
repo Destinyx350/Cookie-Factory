@@ -1277,7 +1277,7 @@ function evChip(){
 function ensureWorld(){if(!S.w.mkt.hist[0].length) seedMarket();}
 /* Neuigkeiten */
 function buildNews(){
-  const tag=k=>'<span class="ntag k-'+k+'">'+tr(k==='new'?'news_k_new':'news_k_change')+'</span>';
+  const tag=k=>'<span class="ntag k-'+k+'">'+(k==='adm'?'Admin':tr(k==='new'?'news_k_new':'news_k_change'))+'</span>';   /* 'adm': Admin-Einträge, die nur admin.html hinzufügt */
   els.newsBody.innerHTML=NEWS.map(n=>
     '<section class="nv"><h3>'+tr('version',{n:n.v})+(n.v===NEWS_VER?'<span class="newtag">'+tr('news_tag')+'</span>':'')+'</h3><p class="nsum">'+tx(n.sum)+'</p><ul>'
     +n.items.map(t=>{

@@ -215,6 +215,23 @@ module.exports = async function sqlTests() {
   const fp = await rpc('admin_funnel', { p_pass: tok, p_days: 30, p_src: 'portal' });
   check(fp.groups.length === 1 && fp.groups[0].ver === 68, 'admin funnel can show one source only', fp);
   await expectError(rpc('admin_funnel', { p_pass: 'nope', p_days: 30 }), /wrong admin password/, 'the funnel is for the owner only');
+  // v69 (part 21): play time from the minute pings, sessions, the admin play-time card and the keep/nokeep steps
+  const pp = '77777777-7777-7777-7777-777777777777';
+  await rpc('kf_ping', { p_id: pp, p_baked: 1, p_lang: 'en', p_dev: 'phone', p_src: 'web' });
+  await rpc('kf_track', { p_id: pp, p_step: 'open', p_ver: 69, p_src: 'web' });
+  await q("update kf_presence set seen_at = now() - interval '90 seconds' where id = $1", [pp]);
+  await rpc('kf_ping', { p_id: pp, p_baked: 2 });
+  await q("update kf_presence set seen_at = now() - interval '20 minutes' where id = $1", [pp]);
+  await rpc('kf_ping', { p_id: pp, p_baked: 3 });
+  const pd = (await q("select play_s, sess from kf_days where id = $1 and day = (now() at time zone 'UTC')::date", [pp])).rows[0];
+  check(pd && pd.play_s >= 89 && pd.play_s <= 91 && pd.sess === 2, 'pings a minute apart count as play time, a long break starts a new session', pd);
+  const pt = await rpc('admin_playtime', { p_pass: tok, p_days: 7, p_src: 'web' });
+  const f69 = (pt.first_day || []).find(x => x.ver === 69);
+  check(pt.total.player_days >= 1 && pt.total.avg_min > 0 && pt.per_day.length === 7 && pt.by_src.some(r => r.k === 'web') && f69 && f69.avg_min > 0, 'admin sees play time per day, by source and on the first day by version', pt);
+  await expectError(rpc('admin_playtime', { p_pass: 'nope' }), /wrong admin password/, 'play time is for the owner only');
+  await expectError(asAnon('select public.kf_play_note()'), /permission denied/, 'players cannot run the play-time trigger function');
+  await rpc('kf_track', { p_id: pp, p_step: 'keep', p_ver: 69, p_src: 'web' });
+  check((await q("select count(*)::int n from kf_steps where id = $1 and step = 'keep'", [pp])).rows[0].n === 1, 'the "browser keeps the save" step is stored');
   await q("update kf_accounts set save_at = now() - interval '5 days', last_login = now() - interval '5 days', reminded_at = null where username = 'test_beta'");
   await rpc('push_subscribe', { p_token: b.token, p_sub: { endpoint: 'https://push.example.com/back', keys: { p256dh: 'x', auth: 'y' } } });
   await q('delete from kf_push_queue');
