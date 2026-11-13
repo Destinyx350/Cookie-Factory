@@ -418,6 +418,22 @@ module.exports = async function browserTests(url) {
     await ctx.close();
   }
 
+  // v69: the browser is asked to keep the save; players see no admin changes in What's New
+  {
+    const k = await device('Keep Bakery', '10.0.69.1');
+    await k.evaluate(() => document.getElementById('newsBtn').click()); await k.waitForTimeout(400);
+    check(await k.locator('#newsBody .ntag.k-adm').count() === 0 && /Safer saves/.test(await text(k, '#newsBody')) && !/New admin panel/.test(await text(k, '#newsBody')), 'v69: players see no admin changes in What\'s New');
+    await k.keyboard.press('Escape'); await k.waitForTimeout(300);
+    await settings(k, 'save');
+    const pl = await text(k, '#persLine'), on = /keeps this save/.test(pl);
+    check(await k.isVisible('#persLine') && /browser/.test(pl), 'v69: Settings → Saving says whether the browser keeps the save', pl);
+    if (!on) { await k.click('#persLine [data-pers]'); await k.waitForTimeout(1500); }
+    await k.click('#setClose');
+    const ks = (await pool.query("select step from kf_steps where step in ('keep', 'nokeep') and ver = 69")).rows;
+    check(on || ks.length >= 1, 'v69: asking the browser is noted as a journey step', ks);
+    await k.context().close();
+  }
+
   // 5d. Push setting (v49)
   await settings(a, 'disp');
   check(await a.isVisible('#pushBtn') && /Push/.test(await text(a, '#pushT')), 'push notification switch shows in Settings → Display');
@@ -687,11 +703,16 @@ module.exports = async function browserTests(url) {
   await pool.query("insert into kf_week_reports (week, data) select '2026-W01', kf_week_data()");
   await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
   await d.waitForSelector('.dchart', { timeout: 10000 }).catch(() => {});
-  check(await d.locator('#admSrv .dchart').count() === 4 && /Live dashboard/.test(await text(d, '#admSrv')) && /Devices/.test(await text(d, '#admSrv')), 'the Server tab shows the live dashboard with 4 charts');
+  check(await d.locator('#admSrv .dchart:not([data-src])').count() === 4 && /Live dashboard/.test(await text(d, '#admSrv')) && /Devices/.test(await text(d, '#admSrv')), 'the Server tab shows the live dashboard with 4 charts');
   await d.waitForFunction(() => !!document.querySelector('#admSrv .ftable tbody tr'), null, { timeout: 8000 }).catch(() => {});
   check(/New players/.test(await text(d, '#admSrv')) && await d.locator('#admSrv .ftable tbody tr').count() === 10 && /Version 68 and later/.test(await text(d, '#admSrv .ftable')), 'v68: the Server tab shows the new-player funnel before and after version 68');
   await d.click('#admSrv [data-fun="s:web"]'); await d.waitForTimeout(800);
   check(await d.evaluate(() => document.querySelector('#admSrv [data-fun="s:web"]').getAttribute('aria-pressed') === 'true'), 'v68: the funnel can be filtered by source');
+  await d.waitForFunction(() => /Per player per day/.test(document.getElementById('admSrv').textContent), null, { timeout: 8000 }).catch(() => {});
+  check(/Play time/.test(await text(d, '#admSrv')) && /Per player per day/.test(await text(d, '#admSrv')) && /First day of new players/.test(await text(d, '#admSrv')), 'v69: the Server tab shows play time from the minute pings');
+  await d.evaluate(() => document.getElementById('newsBtn').click()); await d.waitForTimeout(400);
+  check(await d.locator('#newsBody .ntag.k-adm').count() >= 20 && /Play time/.test(await text(d, '#newsBody')) && /New admin panel/.test(await text(d, '#newsBody')), 'v69: admin.html shows the admin changes in What\'s New, marked Admin');
+  await d.click('#newsClose'); await d.waitForTimeout(300);
   check(await d.locator('#admSrv .dchart[data-chart=players] .dcols i').count() === 30, 'the dashboard shows 30 days');
   await d.click('[data-dash="7"]'); await d.waitForTimeout(1200);
   check(await d.locator('#admSrv .dchart[data-chart=players] .dcols i').count() === 7, 'the dashboard switches to 7 days');
@@ -771,7 +792,7 @@ module.exports = async function browserTests(url) {
   check(await a.evaluate(() => !document.getElementById('clubOv').dataset.rt), 'closing the club disconnects the live signal');
   await settings(d, 'admin'); await d.click('#admGrp [data-ag=online]'); await d.click('#admSeg [data-ap="srv"]');
   await d.waitForSelector('[data-hlth]', { timeout: 10000 }).catch(() => {});
-  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–20 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 20 parts');
+  check(/Server health/.test(await text(d, '#admSrv')) && /Server parts 1–21 installed/.test(await text(d, '#admSrv')) && /Live chat on/.test(await text(d, '#admSrv')), 'the Server tab shows server health with all 21 parts');
   await d.click('#setClose');
 
   // 5m. Tab bar, building cards, transitions, bakery start screen, vibration, history, welcome back (v59)

@@ -44,7 +44,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 👼 **Ascension** | Start over for heavenly chips and spend them in the ascension tree. |
 | 🎵 **Soundtrack and 3D** | 7 music tracks with real instruments that adapt to what you do, and a real 3D cookie with lighting that tilts toward your finger. Golden cookies and icons have a 3D look too. |
 | ☀️ **Living world** | Time of day and weather change while you play. Combos and boosts speed things up. |
-| 💾 **Named saves** | Progress saves automatically in 3 save slots. Every new bakery gets a name by itself, which shows at the top of the screen; tap it to rename it. |
+| 💾 **Named saves** | Progress saves automatically in 3 save slots, and the game asks the browser to keep it for good. Every new bakery gets a name by itself, which shows at the top of the screen; tap it to rename it. |
 | 🎁 **Secret codes** | Type a code under **Settings → Game** to get cookies, gems or a boost. Each code works once per save. |
 | 📁 **Save files** | Download your save as a file and load it on another device. |
 | 📱 **Install as an app** | Add the game to your home screen. It opens full-screen and works offline. |
@@ -61,7 +61,7 @@ Cookie Factory is a free idle game you play right in your browser, on desktop or
 | 📣 **Share button** | Show your friends how many cookies your bakery has baked. Shared links show a preview card. |
 | 🏆 **Leaderboard** | Tap the trophy at the top (or open the **Goals** tab), join with your account and see your rank under your username (creating an account joins automatically). Extra boards for most clicks, golden cookies, ascensions and the fastest billion this week. With an account, your spot follows you to every device. **This week** and **This month** boards give the top 3 gems, star crumbs and cookies. Updates every minute. |
 | 🛡️ **Anti-cheat and safety** | Saves are sealed: a save changed outside the game (browser tools or edited files) is flagged, the leaderboard rejects scores that grow too fast, and the server flags account saves that jump unrealistically. Flagged saves and saves that used the admin panel can't join the leaderboard. A word filter, a report button in club chat and per-device limits keep things friendly. |
-| 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries and optional two-step sign-in. Moderators get their own logins that can only handle reports and mutes. The admin starts on a To-do tab with everything that waits, has one card per player (all names, leaderboard, club, devices, warnings, bans and history), warns players with strikes (warning → 24 h → 7 days → forever) or uses one-tap ban presets, and can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player, who can appeal), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and player feedback, see how far new players get (day 2 and day 7 return rates), compare each week with the one before, get push alerts for new reports, appeals, feedback, crashes and suspicious saves, plan events and announcements (once or every week), see how full the database is, follow a live dashboard with charts, see how far new players get before and after each update (by version and by website, app or itch.io), get an automatic weekly report with to-dos every Monday, and see server health (installed server parts, server jobs, alarms for stuck push messages, crash spikes and a full database, plus an uptime check every 30 minutes). Old data is cleaned up automatically and an encrypted copy of the weekly backup is kept outside Supabase. |
+| 🔒 **Separate admin version** | Players get the game without any admin code. The owner uses a separate admin version that needs a password, and the online tools have a second password with a lockout after wrong tries and optional two-step sign-in. Moderators get their own logins that can only handle reports and mutes. The admin starts on a To-do tab with everything that waits, has one card per player (all names, leaderboard, club, devices, warnings, bans and history), warns players with strikes (warning → 24 h → 7 days → forever) or uses one-tap ban presets, and can moderate reports, find players, mute, ban accounts (for a while or for good, with the reason shown to the player, who can appeal), rename, send messages and gifts, switch features on and off, run maintenance mode, see statistics and an admin log, start new leaderboard seasons, download backups (made automatically every week), read crash reports and player feedback, see how far new players get (day 2 and day 7 return rates), compare each week with the one before, get push alerts for new reports, appeals, feedback, crashes and suspicious saves, plan events and announcements (once or every week), see how full the database is, follow a live dashboard with charts, see how far new players get before and after each update (by version and by website, app or itch.io), see how long people play (minutes per day, session length, first day by version), get an automatic weekly report with to-dos every Monday, and see server health (installed server parts, server jobs, alarms for stuck push messages, crash spikes and a full database, plus an uptime check every 30 minutes). Old data is cleaned up automatically and an encrypted copy of the weekly backup is kept outside Supabase. |
 | 💬 **Feedback and privacy** | Send bug reports and ideas from Settings → Game. The [privacy info](https://destinyx350.github.io/Cookie-Factory/privacy.html) explains what the game stores. |
 | 🇩🇪 🇬🇧 **Two languages** | Switch between German and English at any time. |
 
@@ -88,7 +88,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📅 **Tägliche Belohnungen**: an den ersten 3 Tagen je eine Willkommens-Truhe, 7-Tage-Serie, drei Tagesaufgaben, eine Zusammenfassung mit „Alles einsammeln“ nach jeder Pause und ein Willkommensgeschenk nach 3+ Tagen
 - 👼 **Aufstieg** für Himmelschips und den Himmelsbaum
 - 🎵 **Soundtrack und 3D**: 7 Musikstücke mit echten Instrumenten, die sich anpassen, und ein echter 3D-Keks mit Licht, der sich zum Finger neigt
-- 💾 **Spielstände mit Namen**: 3 Speicherplätze, jede neue Bäckerei bekommt gleich einen Namen (oben antippen zum Umbenennen)
+- 💾 **Spielstände mit Namen**: 3 Speicherplätze (der Browser wird gebeten, sie dauerhaft zu behalten), jede neue Bäckerei bekommt gleich einen Namen (oben antippen zum Umbenennen)
 - 🎁 **Geheime Codes** unter **Einstellungen → Spiel**: Kekse, Edelsteine oder ein Schub, einmal pro Spielstand
 - 📁 **Spielstand als Datei** herunterladen und auf einem anderen Gerät laden
 - 📱 **Als App installieren**: auf dem Startbildschirm, im Vollbild und ohne Internet
@@ -106,7 +106,7 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 - 📣 **Teilen-Knopf**: zeig deinen Freunden, wie viele Kekse du gebacken hast
 - 🏆 **Bestenliste**: tippe oben auf den Pokal (oder öffne den Tab **Ziele**) und mach mit deinem Konto mit, unter deinem Benutzernamen (mit einem neuen Konto bist du automatisch dabei); eigene Listen für Klicks, Goldkekse, Aufstiege und die schnellste Milliarde der Woche; Wochen- und Monatspreise für die Top 3, Updates jede Minute
 - 🛡️ **Schutz gegen Schummeln**: versiegelte Spielstände, die Bestenliste lehnt zu schnell wachsende Punkte ab, und der Server meldet unrealistische Sprünge in Konto-Spielständen; dazu Wortfilter, Melde-Knopf im Club-Chat und Limits pro Gerät
-- 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort, eigenem Server-Passwort und Zwei-Schritt-Anmeldung für die Online-Werkzeuge, dazu Moderatoren-Zugänge, ein Tab „Zu erledigen“, eine Karte pro Spieler mit Verlauf, Verwarnungen mit Stufen und Sperr-Vorlagen: Meldungen, Spielersuche, Stummschalten, Sperren mit Einspruch, Wochenbericht, Spieler-Feedback, Push-Alarme, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte, geplante Events und Ankündigungen, Live-Dashboard mit Diagrammen, Wochenbericht jeden Montag, Server-Gesundheit mit Alarmen und Uptime-Check, verdächtige Spielstände, Datenbank-Füllstand, automatisches Aufräumen und verschlüsselte Backups außerhalb von Supabase, Spieler-Weg und wie weit neue Spieler vor und nach einem Update kommen (nach Version und Herkunft)
+- 🔒 **Eigene Admin-Version** (das Spiel für Spieler enthält keinen Admin-Code) mit Passwort, eigenem Server-Passwort und Zwei-Schritt-Anmeldung für die Online-Werkzeuge, dazu Moderatoren-Zugänge, ein Tab „Zu erledigen“, eine Karte pro Spieler mit Verlauf, Verwarnungen mit Stufen und Sperr-Vorlagen: Meldungen, Spielersuche, Stummschalten, Sperren mit Einspruch, Wochenbericht, Spieler-Feedback, Push-Alarme, Nachrichten, Schalter, Wartungsmodus, Statistik, Protokoll, Saisons, Absturzberichte, geplante Events und Ankündigungen, Live-Dashboard mit Diagrammen, Wochenbericht jeden Montag, Server-Gesundheit mit Alarmen und Uptime-Check, verdächtige Spielstände, Datenbank-Füllstand, automatisches Aufräumen und verschlüsselte Backups außerhalb von Supabase, Spieler-Weg und wie weit neue Spieler vor und nach einem Update kommen (nach Version und Herkunft), Spielzeit (Minuten pro Tag, Sitzungslänge, erster Tag nach Version) und eigene Admin-Neuigkeiten
 - 🇩🇪 🇬🇧 **Deutsch und Englisch**
 
 **[▶ Jetzt spielen](https://destinyx350.github.io/Cookie-Factory/)**
@@ -115,23 +115,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 68
-- **Start playing right away:** new players no longer have to type a name, and the first visit skips the start screen. Your bakery gets a name by itself; tap it at the top to change it.
-- **A quicker first minute:** the first steps claim themselves, the first one needs only 10 clicks, and an arrow points at your first building.
-- **Welcome chests:** on your first 3 days a chest waits every day, with gems, cookies, an egg and a star crumb. 🎁 at the top counts down to the next one.
-- **Already have an account?** "Sign in" now sits right under the first steps.
+### Version 69
+- **Safer saves:** the game now asks your browser to keep your save for good, so it isn't deleted when space runs low or you don't play for a while. **Settings → Saving** shows whether it worked, with a button to ask again.
+- **What's New is for players:** changes to the owner's tools no longer show up in the game's list.
 
-Also new since version 67: 6 new achievements, the cookie stays in view on computers, and fair-play checks for the clock and the leaderboard.
+Also new since version 68: you start playing right away (no name window), the first steps claim themselves, and welcome chests wait on your first 3 days.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Sofort losspielen:** neue Spieler müssen keinen Namen mehr eintippen, und beim ersten Besuch gibt es keinen Startbildschirm. Deine Bäckerei bekommt gleich einen Namen; tipp ihn oben an, um ihn zu ändern.
-- **Eine schnellere erste Minute:** die ersten Schritte holen sich selbst ab, der erste braucht nur noch 10 Klicks, und ein Pfeil zeigt auf dein erstes Gebäude.
-- **Willkommens-Truhen:** an deinen ersten 3 Tagen wartet jeden Tag eine Truhe mit Edelsteinen, Keksen, einem Ei und einem Sternenkrümel. 🎁 oben zählt bis zur nächsten herunter.
-- **Schon ein Konto?** „Anmelden“ steht jetzt direkt unter den ersten Schritten.
+- **Sicherer speichern:** das Spiel bittet deinen Browser jetzt, deinen Spielstand dauerhaft zu behalten, damit er nicht gelöscht wird, wenn Platz fehlt oder du länger nicht spielst. **Einstellungen → Speichern** zeigt, ob es geklappt hat, mit einem Knopf zum erneuten Fragen.
+- **Neuigkeiten für Spieler:** Änderungen an den Werkzeugen des Betreibers stehen nicht mehr in der Liste im Spiel.
 
-Außerdem neu seit Version 67: 6 neue Erfolge, am Computer bleibt der Keks im Blick, und Fair-Play-Prüfungen für die Uhr und die Bestenliste.
+Außerdem neu seit Version 68: du legst sofort los (ohne Namens-Fenster), die ersten Schritte holen sich selbst ab, und an deinen ersten 3 Tagen warten Willkommens-Truhen.
 
 </details>
 

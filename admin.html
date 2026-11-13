@@ -1949,6 +1949,10 @@ html{-webkit-tap-highlight-color:transparent}
 .ftable .fbar i{display:block;height:100%;background:var(--viz-1);border-radius:4px}
 .ftable .fnone{color:var(--muted)}
 
+/* ===== V69: Speicher-Schutz, Admin-Neuigkeiten ===== */
+.persline{margin-top:8px;color:var(--muted)}
+.ntag.k-adm{background:#8a63d2;color:#fff}
+
 </style>
 
 <div class="wrap">
@@ -3177,8 +3181,11 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=68;
+const NEWS_VER=69;
 const NEWS=[
+  {v:69,sum:['Deine Bäckerei ist sicherer gespeichert','Your bakery is saved more safely'],items:[
+    ['change','Sicherer speichern: Das Spiel bittet deinen Browser, den Spielstand dauerhaft zu behalten. Ohne das dürfen manche Browser ihn löschen, wenn du länger nicht spielst. Unter Einstellungen → Speichern siehst du, ob es klappt.','Safer saves: the game asks your browser to keep your save for good. Without that, some browsers may delete it when you don’t play for a while. Settings → Saving shows whether it worked.'],
+    ['change','„Neuigkeiten“ zeigt nur noch Änderungen, die dich als Spieler betreffen.','“What’s New” now only shows changes that matter to you as a player.']]},
   {v:68,sum:['Schneller loslegen und Willkommens-Truhen','A quicker start and welcome chests'],items:[
     ['new','Willkommens-Truhen: An deinen ersten 3 Tagen wartet jeden Tag eine Truhe mit Edelsteinen, Keksen, einem Ei und einem Sternenkrümel. Oben zeigt 🎁, wann die nächste aufgeht.','Welcome chests: on your first 3 days a chest waits every day, with gems, cookies, an egg and a star crumb. 🎁 at the top shows when the next one opens.'],
     ['change','Neue Spieler legen sofort los: kein Namens-Fenster und beim ersten Mal kein Startbildschirm. Deine Bäckerei bekommt gleich einen Namen – tipp ihn oben an, um ihn zu ändern.','New players start right away: no name window and no start screen the first time. Your bakery gets a name by itself – tap it at the top to change it.'],
@@ -3352,8 +3359,7 @@ const NEWS=[
     ['new','Dein Platz steht direkt im Tab Ziele. Du kannst die Bestenliste jederzeit wieder verlassen.','Your rank shows right in the Goals tab. You can leave the leaderboard at any time.']
   ]},
   {v:35,sum:['Bald: Eine Bestenliste für alle Bäckereien.','Coming soon: a leaderboard for every bakery.'],items:[
-    ['new','Die Bestenliste ist fertig gebaut und wird bald eingeschaltet. Dann findest du sie im Tab Ziele und kannst mit deinem Bäckerei-Namen mitmachen.','The leaderboard is built and will be switched on soon. You’ll find it in the Goals tab and can join with your bakery name.'],
-    ['change','Spielstände, in denen das Admin-Panel benutzt wurde, können nicht in die Bestenliste. So bleibt sie fair.','Saves that used the admin panel can’t join the leaderboard. This keeps it fair.']
+    ['new','Die Bestenliste ist fertig gebaut und wird bald eingeschaltet. Dann findest du sie im Tab Ziele und kannst mit deinem Bäckerei-Namen mitmachen.','The leaderboard is built and will be switched on soon. You’ll find it in the Goals tab and can join with your bakery name.']
   ]},
   {v:34,sum:['Neu: Geheime Codes, Spielstand als Datei, die Keksfabrik als App und ein Teilen-Knopf.','New: Secret codes, save files, Cookie Factory as an app and a share button.'],items:[
     ['new','Codes: Gib unter Einstellungen → Spiel einen geheimen Code ein und hol dir eine Belohnung. Jeder Code geht einmal pro Spielstand.','Codes: Enter a secret code under Settings → Game to get a reward. Each code works once per save.'],
@@ -3361,10 +3367,9 @@ const NEWS=[
     ['new','Als App installieren: Die Keksfabrik läuft jetzt wie eine App auf dem Startbildschirm, auch ohne Internet.','Install as an app: Cookie Factory now runs like an app from your home screen, even without internet.'],
     ['new','Teilen-Knopf oben: Zeig deinen Freunden, wie viele Kekse deine Bäckerei schon gebacken hat.','Share button at the top: Show your friends how many cookies your bakery has baked.']
   ]},
-  {v:33,sum:['Neu: Namen für Spielstände und ein Passwort für das Admin-Panel.','New: Names for save files and a password for the admin panel.'],items:[
+  {v:33,sum:['Neu: Namen für Spielstände.','New: Names for save files.'],items:[
     ['new','Spielstände haben jetzt Namen. Beim ersten Start, bei „Neu starten“ und bei „Neues Spiel“ gibst du einen Namen ein.','Save files now have names. You enter one on first launch, with “Start new” and with “New game”.'],
-    ['new','Der Name steht oben neben dem Titel. Ändern kannst du ihn in den Einstellungen unter Spielstände.','The name shows at the top next to the title. You can change it in the settings under Save slots.'],
-    ['change','Das Admin-Panel ist jetzt mit einem Passwort geschützt.','The admin panel is now protected by a password.']
+    ['new','Der Name steht oben neben dem Titel. Ändern kannst du ihn in den Einstellungen unter Spielstände.','The name shows at the top next to the title. You can change it in the settings under Save slots.']
   ]},
   {v:32,sum:['Neuer Look für Aufträge, Welt, Abenteuer und Filialen. Dazu Kauf-Effekte und bessere Tipps für den Start.','New look for Orders, World, Adventure and Stores. Plus purchase effects and better tips for the start.'],items:[
     ['new','Aufträge: Auftragsbrett-Banner mit Ruf, Bonus und Anzahl als Chips. Jede Karte hat einen Farbstreifen für die Schwierigkeit.','Orders: order board banner with reputation, bonus and count as chips. Each card has a colour stripe for its difficulty.'],
@@ -3404,14 +3409,13 @@ const NEWS=[
     ['new','Alle 20 Gebäude neu gezeichnet und schönere Klick-Effekte mit Krümeln, Funken und Ringen.','All 20 buildings redrawn and nicer click effects with crumbs, sparks and rings.'],
     ['change','„Willkommen zurück“ zeigt jetzt mehr: was passiert ist und was jetzt bereit ist – mit Knöpfen zum direkt Hinspringen.','“Welcome back” now shows more: what happened and what is ready now – with buttons to jump right there.']
   ]},
-  {v:26,sum:['Neu: 8 Endgame-Systeme und ein neues Admin-Panel.','New: 8 endgame systems and a new admin panel.'],items:[
+  {v:26,sum:['Neu: 8 Endgame-Systeme.','New: 8 endgame systems.'],items:[
     ['new','Kosmischer Aufstieg (Tab Aufstieg): die 3. Prestige-Stufe mit Kosmos-Splittern und 10 kosmischen Kräften.','Cosmic ascension (Ascension tab): the 3rd prestige layer with cosmic shards and 10 cosmic powers.'],
     ['new','Paragon-Stufen: unendliche Stufen mit Punkten für Produktion, Klicks, Goldkekse und Preise.','Paragon levels: endless levels with points for production, clicks, golden cookies and prices.'],
     ['new','Gebäude-Evolution (Tab Bauen): Ab 500 Stück wird ein Gebäude golden und produziert ×10.','Building evolution (Build tab): From 500 owned a building turns golden and produces ×10.'],
     ['new','Prestige-Ränge von Bronze bis Legende mit Rahmen um den Keks.','Prestige ranks from bronze to legend with a frame around the cookie.'],
     ['new','Artefakt-Schmiede (Tab Shop) und Automatik-Zentrale (Tab Helfer).','Artifact forge (Shop tab) and automation center (Helpers tab).'],
-    ['new','4 mythische Gegenstände und 10 Platin-Erfolge (je Produktion ×1,25).','4 mythic items and 10 platinum achievements (production ×1.25 each).'],
-    ['new','Admin-Panel neu: Bereiche, Suche, Live-Werte, Spieltempo, Auto-Klicker, Endgame-Werkzeuge und Fehler-Scanner.','New admin panel: sections, search, live values, game speed, auto clicker, endgame tools and error scanner.']
+    ['new','4 mythische Gegenstände und 10 Platin-Erfolge (je Produktion ×1,25).','4 mythic items and 10 platinum achievements (production ×1.25 each).']
   ]},
   {v:25,sum:['Neu: Komplett neues Aussehen im Handyspiel-Stil.','New: A completely new look in mobile game style.'],items:[
     ['new','Neues Design: bunte Karten, 3D-Knöpfe zum Drücken, runde Schrift und Reiter mit Symbolen.','New design: colorful cards, 3D buttons you can press, a round font and tabs with icons.'],
@@ -3512,7 +3516,7 @@ const NEWS=[
   {v:10,sum:['Neu: Welt und Shop sind jetzt ein Tab, und die Einstellungen sind oben rechts.','New: World and Shop are now one tab, and settings are at the top right.'],items:[
     ['new','Welt & Shop: Boosts, Keksboxen, Gegenstände und die ganze Welt sind auf einer Seite.','World & Shop: Boosts, cookie boxes, items and the whole world are on one page.'],
     ['new','Gegenstände kaufen: Mit Edelsteinen aus Expeditionen kannst du jeden Gegenstand direkt kaufen. Jede Stufe kostet mehr.','Buy items: With gems from expeditions you can buy any item directly. Each level costs more.'],
-    ['change','Einstellungen: Das Zahnrad oben rechts öffnet Optionen und das Admin-Panel. Die beiden Reiter sind weg.','Settings: The gear at the top right opens options and the admin panel. The two tabs are gone.']
+    ['change','Einstellungen: Das Zahnrad oben rechts öffnet die Optionen.','Settings: The gear at the top right opens the options.']
   ]},
   {v:9,sum:['Neu: Ein modernes, ruhigeres Design.','New: A modern, calmer design.'],items:[
     ['change','Design: Alles ist jetzt flacher und übersichtlicher, mit weniger Rahmen und Schnörkeln.','Design: Everything is now flatter and cleaner, with fewer borders and decorations.'],
@@ -3532,13 +3536,13 @@ const NEWS=[
     ['new','Crafting: Baue Ausrüstung und Tränke aus Zähnen, Kräutern und Edelsteinen.','Crafting: Make gear and potions from teeth, herbs and gems.'],
     ['new','Ereignisse: Alle paar Minuten gibt es kurz einen Bonus, zum Beispiel Backwut.','Events: Every few minutes there is a short bonus, for example Baking Rush.'],
     ['new','Challenges: Spiele mit einer Erschwernis und bekomme dauerhafte Belohnungen.','Challenges: Play with a handicap and get permanent rewards.'],
-    ['new','9 neue Erfolge und ein Bereich im Admin-Panel.','9 new achievements and a section in the admin panel.']
+    ['new','9 neue Erfolge.','9 new achievements.']
   ]},
   {v:7,sum:['Neu: Kundenaufträge. Kunden bestellen Kekse und du bekommst Belohnungen.','New: customer orders. Customers order cookies and you get rewards.'],items:[
     ['new','Aufträge: Ein neuer Tab. Kunden wollen z. B. Kekse, Klicks oder neue Gebäude in kurzer Zeit.','Orders: A new tab. Customers want e.g. cookies, clicks or new buildings in a short time.'],
     ['new','Belohnung: Du bekommst Kekse. Schwere Aufträge geben sogar einen Gegenstand.','Reward: You get cookies. Hard orders even give an item.'],
     ['new','Ruf: Jeder erledigte Auftrag gibt Ruf. Mehr Ruf bedeutet bis zu +15 % Produktion.','Reputation: Every finished order gives reputation. More reputation means up to +15% production.'],
-    ['new','4 neue Erfolge für Aufträge und ein Bereich im Admin-Panel.','4 new achievements for orders and a section in the admin panel.']
+    ['new','4 neue Erfolge für Aufträge.','4 new achievements for orders.']
   ]},
   {v:6,sum:['Endgame: mehr Gebäude, mehr Upgrades und ein viel größerer Himmelsbaum.','Endgame: more buildings, more upgrades and a much bigger heavenly tree.'],items:[
     ['new','Gebäude: 3 neue ganz am Ende. Antimaterie-Kondensator, Prisma und Keks-Multiversum.','Buildings: 3 new ones at the very end. Antimatter Condenser, Prism and Cookie Multiverse.'],
@@ -3565,8 +3569,7 @@ const NEWS=[
     ['new','Keksbox: In jeder Box steckt ein zufälliger Gegenstand.','Cookie box: Every box holds a random item.'],
     ['new','Keks-Designs: Der große Keks hat 6 neue Looks.','Cookie designs: The big cookie has 6 new looks.']
   ]},
-  {v:3,sum:['Admin-Panel, mehr Inhalt, Bilder und zwei Sprachen.','Admin panel, more content, images and two languages.'],items:[
-    ['new','Admin-Panel: Hier kannst du fast alles ändern.','Admin panel: Here you can change almost everything.'],
+  {v:3,sum:['Mehr Inhalt, Bilder und zwei Sprachen.','More content, images and two languages.'],items:[
     ['new','{u} Upgrades und ein größerer Himmelsbaum mit 17 Knoten.','{u} upgrades and a bigger heavenly tree with 17 nodes.'],
     ['new','Bilder für Gebäude, Upgrades und den Himmelsbaum.','Images for buildings, upgrades and the heavenly tree.'],
     ['new','Deutsch und Englisch, dazu bessere Animationen.','German and English, plus better animations.']
@@ -5381,7 +5384,7 @@ function evChip(){
 function ensureWorld(){if(!S.w.mkt.hist[0].length) seedMarket();}
 /* Neuigkeiten */
 function buildNews(){
-  const tag=k=>'<span class="ntag k-'+k+'">'+tr(k==='new'?'news_k_new':'news_k_change')+'</span>';
+  const tag=k=>'<span class="ntag k-'+k+'">'+(k==='adm'?'Admin':tr(k==='new'?'news_k_new':'news_k_change'))+'</span>';   /* 'adm': Admin-Einträge, die nur admin.html hinzufügt */
   els.newsBody.innerHTML=NEWS.map(n=>
     '<section class="nv"><h3>'+tr('version',{n:n.v})+(n.v===NEWS_VER?'<span class="newtag">'+tr('news_tag')+'</span>':'')+'</h3><p class="nsum">'+tx(n.sum)+'</p><ul>'
     +n.items.map(t=>{
@@ -9808,6 +9811,7 @@ async function admSrvLoad(){
   if(v56aReady){admUseDo('usage');admOffDo('status');}
   if(v57aReady) admV57Load();
   if(v68aReady) admFunLoad();
+  if(v69aReady) admPtLoad();
   if(v58aReady) admHealthLoad();
   admSrvRender();
 }
@@ -9827,6 +9831,7 @@ function admSrvRender(){
     const tile=(l,v)=>'<span><small>'+l+'</small><b>'+(v==null?'–':typeof v==='number'?fmt(v):escName(String(v)))+'</b></span>';
     if(v57aReady) h+=admDashHtml();
     if(v68aReady) h+=admFunHtml();
+    if(v69aReady) h+=admPtHtml();
     if(v58aReady) h+=admHealthHtml();
     if(v53Ready) h+=admWeekHtml();
     if(v57aReady) h+=admRepHtml();
@@ -11122,7 +11127,8 @@ els.admin.addEventListener('click',e=>{
 /* Tooltip: die ganze Spalte ist das Ziel, nicht nur der Balken */
 function dashTip(e){
   const p=e.target.closest&&e.target.closest('.dplot');if(!p) return;
-  const fig=p.closest('.dchart'),c=p.querySelector('.dcols'),tip=p.querySelector('.dtip'),days=admDash&&admDash.days;if(!c||!tip||!days) return;
+  const fig=p.closest('.dchart');if(!fig||fig.dataset.src) return;   /* V69: Diagramme mit eigenen Daten zeigen ihren Tooltip selbst */
+  const c=p.querySelector('.dcols'),tip=p.querySelector('.dtip'),days=admDash&&admDash.days;if(!c||!tip||!days) return;
   const r=c.getBoundingClientRect(),i=Math.max(0,Math.min(days.length-1,Math.floor((e.clientX-r.left)/r.width*days.length))),key=fig.dataset.chart;
   c.querySelectorAll('i.hi').forEach(x=>x.classList.remove('hi'));const col=c.children[i];if(col) col.classList.add('hi');
   tip.hidden=false;tip.innerHTML='<b>'+fmt(+days[i][key]||0)+'</b> '+dashWd(days[i].day);
@@ -11326,7 +11332,7 @@ if(accTok&&accMe) accRender();
 /* Nur in admin.html (nicht im Spiel für Spieler). */
 /* ======================= V58: Server-Gesundheit (installierte Teile, Server-Jobs, Prüfungen, Alarme) ======================= */
 var v58aReady=false;
-const KF_SCHEMA_NEED=20;   /* the newest server part this admin version expects (docs/funnel-v20.sql) */
+const KF_SCHEMA_NEED=21;   /* the newest server part this admin version expects (docs/playtime-v21.sql) */
 var admHealth=null,admHealthErr='';
 async function admHealthLoad(){
   if(!admPass) return;
@@ -12029,7 +12035,7 @@ els.admin.addEventListener('submit',e=>{
 /* ---------- Bereiche in den langen Tabs Moderation und Server ---------- */
 const ADM_SECS={
   mod:[['pl','👥',['Spieler','Players'],'🔎⛔🔇⚠📨'],['co','💬',['Gemeinschaft','Community'],'🚩✉🚫👮']],
-  srv:[['hl','🩺',['Server-Zustand','Server health'],'🩺📊🚪📈📅🧭🐞🗄💬'],['st','⚙️',['Einstellungen','Settings'],'🎚🛠⬆🏛💾🛰📱🔔📜']]};
+  srv:[['hl','🩺',['Server-Zustand','Server health'],'🩺📊🚪⏱📈📅🧭🐞🗄💬'],['st','⚙️',['Einstellungen','Settings'],'🎚🛠⬆🏛💾🛰📱🔔📜']]};
 let admSec={mod:'pl',srv:'hl'};
 try{Object.assign(admSec,JSON.parse(sessionStorage.getItem('keksfabrik-admsec')||'{}'));}catch(x){}
 function admSecSave(){try{sessionStorage.setItem('keksfabrik-admsec',JSON.stringify(admSec));}catch(x){}}
@@ -12526,6 +12532,151 @@ els.admin.addEventListener('click',e=>{
 });
 v68aReady=true;
 admFunLoad();
+
+/* ======================= V69: Der Browser soll den Spielstand behalten ======================= */
+/* Ohne „dauerhaften Speicher“ darf der Browser die Daten einer Seite löschen, wenn Platz fehlt oder sie länger
+   nicht besucht wurde (Safari nach etwa einer Woche, auch im itch.io-Rahmen). navigator.storage.persist() bittet darum,
+   sie zu behalten. Chrome, Edge und Safari entscheiden still; Firefox fragt nach – dort nur auf Knopfdruck. */
+var v69Ready=false;
+let persOk=null,persBusy=false;
+const PERS_KEY='keksfabrik-persist';
+const persCan=()=>!!(navigator.storage&&navigator.storage.persist&&navigator.storage.persisted);
+const persAsks=()=>/Firefox\//.test(navigator.userAgent||'');   /* Firefox zeigt eine Frage */
+async function persCheck(){
+  if(!persCan()) return;
+  try{persOk=!!(await navigator.storage.persisted());}catch(x){}
+  persLine();
+}
+async function persAsk(){
+  if(!persCan()||persBusy) return persOk;
+  persBusy=true;
+  try{persOk=!!(await navigator.storage.persist());}catch(x){persOk=false;}
+  persBusy=false;
+  lsSet(PERS_KEY,JSON.stringify({t:Date.now(),ok:persOk?1:0}));
+  if(typeof kfTrackStep==='function') kfTrackStep(persOk?'keep':'nokeep');
+  persLine();
+  return persOk;
+}
+/* Automatisch fragen, sobald es etwas zu verlieren gibt – höchstens alle 7 Tage, nie in Firefox */
+function persAuto(){
+  if(!persCan()||persOk||persAsks()) return;
+  if(!(S.tut.i>=3||S.all>=5000)) return;
+  let st={};try{st=JSON.parse(lsGet(PERS_KEY)||'{}')||{};}catch(x){}
+  if(Date.now()-(st.t||0)<7*86400e3) return;
+  persAsk();
+}
+/* Zeile unter „Jetzt speichern“ */
+const persEl=document.createElement('p');
+persEl.className='small persline';persEl.id='persLine';persEl.hidden=true;
+{const sb=$id('saveBtn');if(sb&&sb.parentElement) sb.parentElement.insertAdjacentElement('afterend',persEl);}
+persEl.addEventListener('click',async e=>{
+  if(!e.target.closest('[data-pers]')) return;
+  const ok=await persAsk();
+  toast(ok?tt('Dein Browser behält diesen Spielstand jetzt.','Your browser now keeps this save.'):tt('Der Browser hat abgelehnt. Ein Konto oder eine Spielstand-Datei schützt deine Bäckerei trotzdem.','The browser said no. An account or a save file still keeps your bakery safe.'),!!ok);
+});
+function persLine(){
+  if(!persCan()){persEl.hidden=true;return;}
+  const h=persOk
+    ?'🛡️ '+tt('Dein Browser behält diesen Spielstand (dauerhafter Speicher ist an).','Your browser keeps this save (persistent storage is on).')
+    :'🛡️ '+tt('Dein Browser darf diesen Spielstand löschen, wenn Platz fehlt oder du länger nicht spielst.','Your browser may delete this save when space runs low or you don’t play for a while.')+' <button type="button" class="linkbtn" data-pers="1">'+tt('Behalten lassen','Ask it to keep it')+'</button>';
+  if(persEl._h!==h){persEl._h=h;persEl.innerHTML=h;}
+  persEl.hidden=false;
+}
+persCheck().then(()=>setTimeout(persAuto,3000));
+setInterval(()=>{persAuto();if(!$id('setOv').hidden) persLine();},30000);
+$id('setBtn').addEventListener('click',()=>setTimeout(persLine,0));
+v69Ready=true;
+
+/* Nur in admin.html (nicht im Spiel für Spieler). */
+/* ======================= V69: Spielzeit im Dashboard ======================= */
+var v69aReady=false;
+let admPt=null,admPtErr='',admPtDays=30,admPtSrc='';
+async function admPtLoad(){
+  if(!admPass) return;
+  try{admPt=await lbApi('rpc/admin_playtime',{p_pass:admPass,p_days:admPtDays,p_src:admPtSrc||null});admPtErr='';}
+  catch(x){admPtErr=lbMissing(x)?tt('Braucht zuerst docs/playtime-v21.sql in Supabase.','Needs docs/playtime-v21.sql in Supabase first.'):admErrTxt(x);}
+  admSrvRender();
+}
+const ptMin=v=>(Math.round((+v||0)*10)/10).toLocaleString(LOC[LANG])+' min';
+/* Vor und ab Version 68 zusammenfassen (gewichtet nach Spielerzahl) */
+function ptGroup(G,keep){
+  let n=0,m=0;(G||[]).filter(g=>keep(+g.ver||0)).forEach(g=>{n+=+g.n||0;m+=(+g.n||0)*(+g.avg_min||0);});
+  return {n,avg:n?m/n:0};
+}
+function admPtHtml(){
+  let b='<p class="small">'+tt('Wie lange gespielt wird: Das Spiel meldet sich jede Minute, solange es offen und sichtbar ist. Eine Pause von mehr als 3 Minuten beginnt eine neue Sitzung.','How long people play: the game checks in every minute while it is open and visible. A break of more than 3 minutes starts a new session.')+'</p>'
+    +'<div class="drange" role="group" aria-label="'+tt('Zeitraum','Time range')+'">'+[7,30,90].map(n=>'<button type="button" class="btn sm'+(admPtDays===n?' on':'')+'" data-pt="d:'+n+'" aria-pressed="'+(admPtDays===n)+'">'+n+' '+tt('Tage','days')+'</button>').join('')+'</div>'
+    +'<div class="drange" role="group" aria-label="'+tt('Herkunft','Source')+'">'+FUN_SRC.map(([k,l])=>'<button type="button" class="btn sm'+(admPtSrc===k?' on':'')+'" data-pt="s:'+k+'" aria-pressed="'+(admPtSrc===k)+'">'+tx(l)+'</button>').join('')+'</div>';
+  const P=admPt;
+  if(admPtErr) b+='<p class="nameerr">'+admPtErr+'</p>';
+  else if(!P) b+=skelRows(3);
+  else if(!P.since) b+='<p class="small">'+tt('Noch keine Spielzeit gemessen – die Zahlen kommen, sobald Spieler mit diesem Server-Teil spielen.','No play time measured yet – numbers appear as soon as players play with this server part.')+'</p>';
+  else{
+    const T=P.total||{},tile=(l,v,s)=>'<span><small>'+l+'</small><b>'+v+'</b>'+(s?'<small>'+s+'</small>':'')+'</span>';
+    b+='<div class="admstats">'+tile(tt('Pro Spieler und Tag','Per player per day'),ptMin(T.avg_min))+tile(tt('Pro Sitzung','Per session'),ptMin(T.sess_min))
+      +tile(tt('Sitzungen pro Tag','Sessions per day'),(+T.sess_per_day||0).toLocaleString(LOC[LANG]))+tile(tt('10+ Minuten','10+ minutes'),(T.ten_plus==null?'–':T.ten_plus+' %'),tt('der Spieler-Tage','of player-days'))+'</div>';
+    const days=(P.per_day||[]).slice(-Math.min(60,(P.per_day||[]).length));
+    if(days.length&&v57aReady) b+=dashBars('avg_min',tt('Minuten pro Spieler und Tag','Minutes per player per day'),days,'avg_min').replace('<figure class="dchart"','<figure class="dchart" data-src="pt"');
+    const o=ptGroup(P.first_day,v=>v<68),nw=ptGroup(P.first_day,v=>v>=68);
+    b+='<div class="admtwo"><div><h5 class="admh5">'+tt('Erster Tag neuer Spieler','First day of new players')+'</h5>'
+      +'<div class="dsr"><span>'+tt('Vor Version 68','Before version 68')+'</span><b>'+(o.n?ptMin(o.avg):'–')+'</b><small>'+fmt(o.n)+' '+tt('Spieler','players')+'</small></div>'
+      +'<div class="dsr"><span>'+tt('Ab Version 68','Version 68 and later')+'</span><b>'+(nw.n?ptMin(nw.avg):'–')+'</b><small>'+fmt(nw.n)+' '+tt('Spieler','players')+'</small></div></div>'
+      +'<div><h5 class="admh5">'+tt('Nach Herkunft','By source')+'</h5>'+((P.by_src||[]).length?(P.by_src||[]).map(r=>'<div class="dsr"><span>'+escName(tx(DASH_NAME[r.k]||[r.k,r.k]))+'</span><b>'+ptMin(r.avg_min)+'</b><small>'+fmt(+r.n)+' '+tt('Spieler-Tage','player-days')+'</small></div>').join(''):'<p class="small">–</p>')+'</div></div>'
+      +'<p class="small">'+tt('Gemessen seit ','Measured since ')+new Date(P.since+'T12:00:00Z').toLocaleDateString(LOC[LANG],{day:'numeric',month:'long',year:'numeric'})+'.</p>';
+  }
+  return admCardH('⏱️ '+tt('Spielzeit','Play time'),b+'<div class="btns"><button type="button" class="btn sm" data-pt="r:1">'+tt('Aktualisieren','Refresh')+'</button></div>');
+}
+els.admin.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pt]');if(!b) return;
+  const [k,v]=b.dataset.pt.split(':');
+  if(k==='d') admPtDays=+v;else if(k==='s') admPtSrc=v;
+  admPtLoad();
+});
+/* Tooltip für das eigene Diagramm */
+function ptTip(e){
+  const p=e.target.closest&&e.target.closest('.dchart[data-src="pt"] .dplot');if(!p||!admPt) return;
+  const c=p.querySelector('.dcols'),tip=p.querySelector('.dtip'),days=(admPt.per_day||[]).slice(-Math.min(60,(admPt.per_day||[]).length));if(!c||!tip||!days.length) return;
+  const r=c.getBoundingClientRect(),i=Math.max(0,Math.min(days.length-1,Math.floor((e.clientX-r.left)/r.width*days.length)));
+  c.querySelectorAll('i.hi').forEach(x=>x.classList.remove('hi'));const col=c.children[i];if(col) col.classList.add('hi');
+  tip.hidden=false;tip.innerHTML='<b>'+ptMin(days[i].avg_min)+'</b> · '+fmt(+days[i].players||0)+' '+tt('Spieler','players')+' · '+dashWd(days[i].day);
+  const x=(i+.5)/days.length*r.width;tip.style.left=Math.max(4,Math.min(r.width-tip.offsetWidth-4,x-tip.offsetWidth/2))+'px';
+}
+els.admin.addEventListener('pointermove',ptTip);
+els.admin.addEventListener('pointerdown',ptTip);
+v69aReady=true;
+admPtLoad();
+
+/* Nur in admin.html (nicht im Spiel für Spieler). */
+/* ======================= V69: Admin-Neuigkeiten ======================= */
+/* Änderungen, die nur das Admin-Panel betreffen, stehen hier statt in NEWS. So sehen Spieler sie nie (nicht einmal im
+   Code von index.html), und in admin.html erscheinen sie unter der passenden Version mit dem Etikett „Admin“.
+   Neue Admin-Änderungen: hier unter der Versionsnummer eintragen, [Deutsch, Englisch]. */
+const NEWS_ADM={
+  69:[['Neue Karte „⏱️ Spielzeit“ im Server-Tab: Minuten pro Spieler und Tag, Sitzungslänge, erster Tag vor und ab Version 68, nach Herkunft (braucht docs/playtime-v21.sql).','New “⏱️ Play time” card in the Server tab: minutes per player per day, session length, first day before and from version 68, by source (needs docs/playtime-v21.sql).'],
+      ['„Neuigkeiten“ ist jetzt getrennt: Admin-Änderungen siehst nur du hier, Spieler sehen nur ihre eigenen.','“What’s New” is split now: only you see admin changes here, players only see theirs.'],
+      ['Die Schritte „Speicher behalten“ und „abgelehnt“ zeigen, ob Browser den Spielstand dauerhaft speichern.','The journey steps “keep” and “nokeep” show whether browsers agree to keep saves.']],
+  68:[['Neue Karte „🚪 Neue Spieler“ im Server-Tab: Wie weit neue Spieler kommen, vor und ab Version 68, nach Herkunft (docs/funnel-v20.sql).','New “🚪 New players” card in the Server tab: how far new players get, before and from version 68, by source (docs/funnel-v20.sql).']],
+  64:[['Tab „Zu erledigen“ und Tab „Spieler“ mit Spielerkarte, Verlauf, Verwarnungen mit Stufen und Sperr-Vorlagen. Jeder Name im Panel öffnet die Karte.','“To-do” and “Players” tabs with a player card, history, warnings with strikes and ban presets. Any name in the panel opens the card.'],
+      ['Moderation und Server sind in Bereiche aufgeteilt (Spieler · Gemeinschaft, Server-Zustand · Einstellungen).','Moderation and Server are split into sections (Players · Community, Server health · Settings).']],
+  58:[['Karte „Server-Zustand“: installierte Server-Teile, Server-Jobs, Alarme für Push, Abstürze und volle Datenbank, dazu ein Uptime-Check.','“Server health” card: installed server parts, server jobs, alarms for push, crashes and a full database, plus an uptime check.']],
+  57:[['Live-Dashboard mit Diagrammen und ein Wochenbericht jeden Montag.','Live dashboard with charts and a weekly report every Monday.']],
+  56:[['Datenbank-Füllstand, verdächtige Spielstände, Planer für Events und Ankündigungen und verschlüsselte Backups außerhalb von Supabase.','Database usage, suspicious saves, a planner for events and announcements, and encrypted backups outside Supabase.']],
+  54:[['Spieler-Feedback im Server-Tab und Push-Alarme für Meldungen, Einsprüche, Feedback und neue Abstürze.','Player feedback in the Server tab and push alerts for reports, appeals, feedback and new crashes.']],
+  53:[['Moderatoren-Zugänge, Einsprüche gegen Sperren, Zwei-Schritt-Anmeldung und eine Wochenübersicht.','Moderator accounts, ban appeals, two-step sign-in and a weekly summary.']],
+  52:[['Das Admin-Panel gibt es nur noch in admin.html. Neu: Konten sperren (auch Geräte), mit Grund und Dauer.','The admin panel now lives only in admin.html. New: ban accounts (and devices), with a reason and duration.']],
+  46:[['Backups der Server-Daten mit Wiederherstellung einzelner Konten.','Backups of the server data, with restoring single accounts.']],
+  45:[['Tabs „Moderation“ und „Server“: Meldungen, Stummschalten, Wortfilter, Funktionsschalter, Wartungsmodus, Mindestversion und ein eigenes Server-Passwort.','“Moderation” and “Server” tabs: reports, mutes, word filter, feature switches, maintenance mode, minimum version and a separate server password.']],
+  42:[['Tab „Online“: Server-Codes, Ankündigungen, globale Events und der Live-Zähler.','“Online” tab: server codes, announcements, global events and the live counter.']],
+  40:[['Bestenliste verwalten: Plätze entfernen, sperren und zurücksetzen, Preise ansehen.','Manage the leaderboard: remove, ban and reset spots, see prizes.']],
+  35:[['Spielstände, in denen das Admin-Panel benutzt wurde, können nicht in die Bestenliste. So bleibt sie fair.','Saves that used the admin panel can’t join the leaderboard. This keeps it fair.']],
+  33:[['Das Admin-Panel ist jetzt mit einem Passwort geschützt.','The admin panel is now protected by a password.']],
+  26:[['Admin-Panel neu: Bereiche, Suche, Live-Werte, Spieltempo, Auto-Klicker, Endgame-Werkzeuge und Fehler-Scanner.','New admin panel: sections, search, live values, game speed, auto clicker, endgame tools and error scanner.']],
+  10:[['Das Zahnrad öffnet auch das Admin-Panel.','The gear also opens the admin panel.']],
+  8:[['Ein Bereich „Welt“ im Admin-Panel.','A “World” section in the admin panel.']],
+  7:[['Ein Bereich „Aufträge“ im Admin-Panel.','An “Orders” section in the admin panel.']],
+  3:[['Admin-Panel: Hier kannst du fast alles ändern.','Admin panel: here you can change almost everything.']]
+};
+NEWS.forEach(n=>{(NEWS_ADM[n.v]||[]).forEach(([de,en])=>n.items.push(['adm',de,en]));});
 
 /* ======================= V40: Admin – Bestenliste verwalten ======================= */
 let admLbData=null,admLbErr='',admLbBusy=false,admLbArm={k:'',t:0};

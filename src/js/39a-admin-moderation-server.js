@@ -162,6 +162,7 @@ async function admSrvLoad(){
   if(v56aReady){admUseDo('usage');admOffDo('status');}
   if(v57aReady) admV57Load();
   if(v68aReady) admFunLoad();
+  if(v69aReady) admPtLoad();
   if(v58aReady) admHealthLoad();
   admSrvRender();
 }
@@ -181,6 +182,7 @@ function admSrvRender(){
     const tile=(l,v)=>'<span><small>'+l+'</small><b>'+(v==null?'–':typeof v==='number'?fmt(v):escName(String(v)))+'</b></span>';
     if(v57aReady) h+=admDashHtml();
     if(v68aReady) h+=admFunHtml();
+    if(v69aReady) h+=admPtHtml();
     if(v58aReady) h+=admHealthHtml();
     if(v53Ready) h+=admWeekHtml();
     if(v57aReady) h+=admRepHtml();
