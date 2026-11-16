@@ -3203,8 +3203,11 @@ const SKINS=[
   {id:'custom',need:0,custom:1,name:['Eigenes Design','My design']},
   {id:'void',need:1e24,name:['Leere','Void'],c:['#4a4a58','#1c1c24','#08080c'],stroke:'#000000',chip:'#c8a2ff',chipS:'#7a52c4',hi:'#ffffff',speck:'#5a5a72'}
 ];
-const NEWS_VER=70;
+const NEWS_VER=71;
 const NEWS=[
+  {v:71,sum:['Neuer Trailer und eine kleine Korrektur','A new trailer and a small fix'],items:[
+    ['change','Behoben: Beim Öffnen einer Belohnung (zum Beispiel einer Truhe) konnte kurz eine negative Zahl erscheinen.','Fixed: opening a reward (like a chest) could flash a negative number for a moment.'],
+    ['new','Neuer Trailer und neue Bilder mit Kundenbewertungen und Willkommens-Truhen – auf der Website und bei itch.io.','New trailer and screenshots with customer reviews and welcome chests – on the website and on itch.io.']]},
   {v:70,sum:['Neu: Kundenbewertungen!','New: customer reviews!'],items:[
     ['new','Kundenbewertungen: Alle paar Minuten schreibt ein Kunde, wie ihm deine Bäckerei gefällt – von 1 bis 5 Sternen. Tipp auf ⭐ unter dem Keks, um alle Bewertungen zu lesen.','Customer reviews: every few minutes a customer writes how they like your bakery – from 1 to 5 stars. Tap ⭐ under the cookie to read them all.'],
     ['new','Gute Bewertungen lohnen sich: Über 3 Sternen gibt es bis zu +5 % Produktion. Kunden mögen viel Auswahl, erledigte Aufträge, eine wachsende Bäckerei und einen Bäcker, der ab und zu vorbeischaut.','Good reviews pay off: above 3 stars you get up to +5% production. Customers like lots of choice, finished orders, a growing bakery and a baker who drops by now and then.'],
@@ -12156,7 +12159,8 @@ function uiCountUp(el,ms){
   if(!isFinite(num)||num===0) return;
   const f=v=>v.toLocaleString(LOC[LANG],{minimumFractionDigits:dec,maximumFractionDigits:dec});
   const t0=performance.now(),dur=ms||650;el._cu=1;
-  const step=n=>{const k=Math.min(1,(n-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=m[1]+f(num*e)+m[3];if(k<1&&el.isConnected) requestAnimationFrame(step);else{el.textContent=t;el._cu=0;}};
+  const step=n=>{const k=Math.max(0,Math.min(1,(n-t0)/dur)),   /* the first frame's time can be a little before t0 */
+    e=1-Math.pow(1-k,3);el.textContent=m[1]+f(num*e)+m[3];if(k<1&&el.isConnected) requestAnimationFrame(step);else{el.textContent=t;el._cu=0;}};
   requestAnimationFrame(step);
 }
 /* Profil-Kacheln und Belohnungs-Fenster zählen beim Öffnen hoch */

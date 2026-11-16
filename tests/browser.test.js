@@ -409,7 +409,8 @@ module.exports = async function browserTests(url) {
     for (let k = 0; k < 30 && !(await w.evaluate(() => document.getElementById('retChip').classList.contains('ready')).catch(() => false)); k++) await w.waitForTimeout(500);
     await w.evaluate(() => document.querySelectorAll('.overlay').forEach(o => { if (o.id !== 'rwOv') o.hidden = true; }));
     await w.click('#retChip'); await w.waitForTimeout(500);
-    check(/Chest opened/.test(await text(w, '#rwT')) && /\+10 gems/.test(await text(w, '#rwBody')), 'v68: the next day the chest opens and gives gems and cookies', await text(w, '#rwBody'));
+    await w.waitForTimeout(800);
+    check(/Chest opened/.test(await text(w, '#rwT')) && /\+10 gems/.test(await text(w, '#rwBody')) && !/\+-|−/.test(await text(w, '#rwBody')), 'v68: the next day the chest opens and gives gems and cookies', await text(w, '#rwBody'));
     await w.click('#rwClose'); await w.waitForTimeout(400);
     check(await w.isVisible('#retChip') && !(await w.evaluate(() => document.getElementById('retChip').classList.contains('ready'))), 'v68: then the countdown to chest 2 starts');
     await w.waitForTimeout(16000);   // journey steps are sent every 15 s
