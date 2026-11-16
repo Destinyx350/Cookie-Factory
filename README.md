@@ -117,21 +117,19 @@ Keksfabrik ist ein kostenloses Idle-Spiel, das direkt im Browser läuft, am Comp
 
 ## 📝 What's new · Neuigkeiten
 
-### Version 70
-- **Customer reviews:** every few minutes a customer writes a short review of your bakery, from 1 to 5 stars. Tap **⭐** under the cookie to read them and see what customers care about.
-- **Good reviews pay off:** above 3 stars your bakery rating gives up to **+5% production**. Customers like lots of choice, finished orders, a growing bakery and a baker who drops by.
-- **2 new achievements:** Five Stars and Beloved Bakery.
+### Version 71
+- **New trailer and screenshots:** a smoother trailer that shows customer reviews, the welcome chest and the world, plus fresh screenshots.
+- **Fixed:** opening a reward (like a chest) could flash a negative number for a moment.
 
-Also new since version 69: the game asks your browser to keep your save for good (see **Settings → Saving**).
+Also new since version 70: customers review your bakery from 1 to 5 stars, and a good rating gives up to +5% production.
 
 <details>
 <summary>Deutsch</summary>
 
-- **Kundenbewertungen:** alle paar Minuten schreibt ein Kunde eine kurze Bewertung deiner Bäckerei, von 1 bis 5 Sternen. Tipp auf **⭐** unter dem Keks, um sie zu lesen und zu sehen, worauf Kunden achten.
-- **Gute Bewertungen lohnen sich:** über 3 Sternen gibt deine Bewertung bis zu **+5 % Produktion**. Kunden mögen viel Auswahl, erledigte Aufträge, eine wachsende Bäckerei und einen Bäcker, der vorbeischaut.
-- **2 neue Erfolge:** Fünf Sterne und Lieblingsbäckerei.
+- **Neuer Trailer und neue Bilder:** ein flüssigerer Trailer mit Kundenbewertungen, der Willkommens-Truhe und der Welt, dazu neue Screenshots.
+- **Behoben:** beim Öffnen einer Belohnung (zum Beispiel einer Truhe) konnte kurz eine negative Zahl erscheinen.
 
-Außerdem neu seit Version 69: das Spiel bittet deinen Browser, deinen Spielstand dauerhaft zu behalten (siehe **Einstellungen → Speichern**).
+Außerdem neu seit Version 70: Kunden bewerten deine Bäckerei mit 1 bis 5 Sternen, und eine gute Bewertung gibt bis zu +5 % Produktion.
 
 </details>
 
@@ -149,7 +147,7 @@ python3 -m http.server 8000
 
 Then open http://localhost:8000.
 
-A gameplay trailer is recorded automatically with `node tools/trailer.js` (writes `docs/trailer.mp4`, `docs/trailer.jpg` and `docs/trailer.gif`; `--phone` makes an upright version for social media). The game website is `welcome.html`.
+A gameplay trailer is recorded automatically with `node tools/trailer.js` (writes `docs/trailer.mp4`, `docs/trailer.jpg` and `docs/trailer.gif`; `--phone` makes an upright version for social media, `--shots` retakes `docs/gameplay.png` and `docs/start-screen.png`). The game website is `welcome.html`.
 
 For game portals (itch.io, CrazyGames, …) `node tools/portal.js` builds an upload folder in `dist/portal/`. GitHub also builds it as a download after every update; see [docs/PORTALS.md](docs/PORTALS.md) for the steps and store texts.
 

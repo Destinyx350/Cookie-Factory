@@ -32,7 +32,8 @@ function uiCountUp(el,ms){
   if(!isFinite(num)||num===0) return;
   const f=v=>v.toLocaleString(LOC[LANG],{minimumFractionDigits:dec,maximumFractionDigits:dec});
   const t0=performance.now(),dur=ms||650;el._cu=1;
-  const step=n=>{const k=Math.min(1,(n-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=m[1]+f(num*e)+m[3];if(k<1&&el.isConnected) requestAnimationFrame(step);else{el.textContent=t;el._cu=0;}};
+  const step=n=>{const k=Math.max(0,Math.min(1,(n-t0)/dur)),   /* the first frame's time can be a little before t0 */
+    e=1-Math.pow(1-k,3);el.textContent=m[1]+f(num*e)+m[3];if(k<1&&el.isConnected) requestAnimationFrame(step);else{el.textContent=t;el._cu=0;}};
   requestAnimationFrame(step);
 }
 /* Profil-Kacheln und Belohnungs-Fenster zählen beim Öffnen hoch */
